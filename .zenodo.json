@@ -12,6 +12,7 @@
   "license": "mit-license",
   "version": "1.0.0",
   "publication_date": "2026-08-07",
+  "doi": "10.5281/zenodo.21841459",
   "keywords": [
     "governance drift",
     "configuration drift",

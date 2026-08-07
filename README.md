@@ -1,6 +1,7 @@
 # Governance Drift
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21841459.svg)](https://doi.org/10.5281/zenodo.21841459)
 
 Reproducibility package for the manuscript:
 
@@ -69,8 +70,8 @@ tectonic -X compile main.tex
 ## Citation and release
 
 Citation metadata is provided in `CITATION.cff`; Zenodo deposit metadata is in
-`.zenodo.json`. The DOI field will be added after the first Zenodo release is
-published.
+`.zenodo.json`. Version 1.0.0 is permanently archived at
+<https://doi.org/10.5281/zenodo.21841459>.
 
 ## License
 

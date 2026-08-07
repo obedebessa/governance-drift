@@ -4,6 +4,7 @@ type: software
 title: "Governance Drift: Reproducibility Package"
 version: 1.0.0
 date-released: 2026-08-07
+doi: "10.5281/zenodo.21841459"
 authors:
   - family-names: "Bessa Rocha da Silva"
     given-names: "Obede"
