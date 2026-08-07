@@ -16,6 +16,7 @@ spec:
         any:
           - resources:
               kinds: [Deployment]
+              namespaces: [payments]
       validate:
         message: "team-owner label required by pi-8"
         pattern:
@@ -27,6 +28,7 @@ spec:
         any:
           - resources:
               kinds: [Deployment]
+              namespaces: [payments]
       validate:
         message: "images must be pinned by digest under pi-8"
         pattern:

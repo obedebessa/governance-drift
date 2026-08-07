@@ -2,9 +2,9 @@ cff-version: 1.2.0
 message: "If you use this artifact, please cite it as below."
 type: software
 title: "Governance Drift: Reproducibility Package"
-version: 1.0.0
+version: 1.1.0
 date-released: 2026-08-07
-doi: "10.5281/zenodo.21841459"
+doi: "10.5281/zenodo.21842722"
 authors:
   - family-names: "Bessa Rocha da Silva"
     given-names: "Obede"
@@ -13,8 +13,8 @@ license: MIT
 repository-code: "https://github.com/obedebessa/governance-drift"
 url: "https://github.com/obedebessa/governance-drift"
 abstract: >
-  Manuscript source, closed-world detector study, canonical results, and a
-  Kubernetes/GitOps laboratory protocol for measuring divergence between
+  Manuscript source, closed-world detector study, canonical results, and an
+  executed bounded Kubernetes/GitOps laboratory measuring divergence between
   operational reality and the basis under which infrastructure was approved.
 keywords:
   - "governance drift"

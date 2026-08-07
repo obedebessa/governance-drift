@@ -24,7 +24,8 @@ def main() -> int:
     for name in OUTPUTS:
         if (DATA / name).read_bytes() != before[name]:
             raise SystemExit(f"canonical output changed: data/{name}")
-    print("PASS: all canonical CSV and LaTeX outputs reproduced byte-for-byte")
+    subprocess.run([sys.executable, "scripts/verify_lab_results.py"], cwd=ROOT, check=True)
+    print("PASS: modeled and live-laboratory artifacts verified")
     return 0
 
 

@@ -1,5 +1,14 @@
 # Release notes
 
+## v1.1.0 — 2026-08-07
+
+- Executes the bounded Kind/Flux/Kyverno laboratory over S1–S9.
+- Reports 9/9 consistent baselines and expected class-resolved outcomes, with observed injection-to-verdict latencies of 0.137–8.571 seconds.
+- Preserves the evidence boundary: one execution per scenario demonstrates feasibility and occurrence, not prevalence, reliability, or latency distributions.
+- Adds a class-resolved risk-channel and severity taxonomy.
+- Adds a comparative matrix showing which adjacent lines of work natively check configuration, policy, authorization, intent, evidence, environment, and the admitted-basis join.
+- Adds executable manifests, pinned bootstrap assets, live evaluator, scenario harness, frozen observations, and integrity verification.
+
 ## v1.0.0 — 2026-08-07
 
 - Incorporates the complete simulated Reviewer #2 revision.

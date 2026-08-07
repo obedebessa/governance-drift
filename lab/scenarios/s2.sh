@@ -6,10 +6,11 @@
 # expiry instant; nothing on the configuration plane changes at onset.
 set -euo pipefail
 LAB="$(cd "$(dirname "$0")/.." && pwd)"
+RUNTIME="$LAB/runtime"
 NOW=$(date -u +%s)
-EXPIRY=$((NOW + 4*3600))
+EXPIRY=$((NOW + ${EXPIRY_SECONDS:-14400}))
 
-cat > "$LAB/approvals/EXC-1.json" <<EOF
+cat > "$RUNTIME/approvals/EXC-1.json" <<EOF
 {
   "id": "EXC-1",
   "kind": "emergency-exception",
@@ -20,12 +21,11 @@ cat > "$LAB/approvals/EXC-1.json" <<EOF
   "revoked": false
 }
 EOF
-echo "$(date -u +%FT%TZ) INJECT s2 grant EXC-1 expires=$EXPIRY" >> "$LAB/log/injections.log"
+echo "$(date -u +%FT%TZ) INJECT s2 grant EXC-1 expires=$EXPIRY" >> "$RUNTIME/log/injections.log"
 
 # the emergency change the exception covers (privileged debug sidecar):
-kubectl -n payments patch deployment payments --type=json -p '[
-  {"op":"add","path":"/spec/template/metadata/annotations/emergency-debug",
-   "value":"EXC-1"}]'
+kubectl -n payments patch deployment payments --type=merge -p \
+  '{"spec":{"template":{"metadata":{"annotations":{"emergency-debug":"EXC-1"}}}}}'
 
-echo "NOTE: drift onset is at expiry ($(date -u -d @$EXPIRY +%FT%TZ))."
+echo "NOTE: drift onset epoch is $EXPIRY."
 echo "measure.sh records first alarm from each tier evaluator after onset."

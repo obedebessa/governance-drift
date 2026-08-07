@@ -1,6 +1,47 @@
 \section{Related Work}
 \label{sec:related}
 
+\subsection{The Missing Join}
+The closest systems do observe many of the ingredients of governance drift,
+but they organize them around plane-local questions: desired versus observed
+configuration, state versus current policy, artifact versus admission rule,
+or environment versus benchmark. \Cref{tab:scope-comparison} makes the gap
+explicit. The table compares each line of work by its \emph{native decision
+object}, not by every integration a commercial product might expose. A
+triangle means that the line carries a useful slice but does not natively join
+that slice to the time-indexed admitted basis.
+
+\begin{table*}[t]
+\centering
+\caption{Representative Native Decision Scope of Adjacent Work. \cmark{} =
+Native Decision Object; $\triangle$ = Partial Input or Slice; -- = Not Native.
+The Comparison Is Not an Exhaustive Product Feature Audit.}
+\label{tab:scope-comparison}
+\scriptsize
+\setlength{\tabcolsep}{3.2pt}
+\begin{tabular}{@{}lccccccc@{}}
+\toprule
+Line of work & Config. & Policy & Auth. & Intent & Evidence & Environ. & Joins admitted basis \\
+\midrule
+Desired-state/GitOps reconciliation~\cite{argocd,fluxcd,opengitops} & \cmark & -- & -- & -- & -- & -- & -- \\
+IaC drift/configuration recorders~\cite{awsconfig,driftctl} & \cmark & -- & -- & -- & -- & $\triangle$ & -- \\
+Policy-as-code/background scans~\cite{opa,kyverno} & -- & \cmark & -- & -- & -- & -- & -- \\
+Posture and hardening scans~\cite{cspm,nsacisa2022} & $\triangle$ & \cmark & -- & -- & -- & \cmark & -- \\
+Supply-chain attestations~\cite{slsa,newman2022} & -- & $\triangle$ & $\triangle$ & $\triangle$ & \cmark & -- & -- \\
+Continuous artifact validation~\cite{binauthz} & -- & \cmark & \cmark & -- & $\triangle$ & -- & -- \\
+\textbf{Governance drift (this work)} & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+This fragmentation explains why the aggregate relation remained easy to
+miss: a deployment can be green in each available local view while the join
+among present state, current context, and the recorded admitted basis is
+broken. The contribution is not the claim that no existing mechanism can be
+composed to cover several columns. It is the explicit temporal three-way
+relation, the class-resolved verdicts it yields, and the evidence coverage
+required to decide it.
+
 \subsection{Configuration Drift and Desired-State Systems}
 Configuration drift detection is mature practice: reconciler status in
 GitOps~\cite{argocd,fluxcd,opengitops,beetz2022}, cloud configuration

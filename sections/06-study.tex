@@ -173,7 +173,9 @@ member of a multi-component drift is reported, not correctness. Scenario S6's tr
 (before the reconciler converges) is not credited to T0n because the
 comparison evaluates post-convergence state in our event ordering; on real
 clusters a fast comparator might glimpse it---a cadence question for the lab.
-\emph{External}: no claim transfers quantitatively; the laboratory protocol
-(\cref{sec:lab}) exists precisely to measure the same matrix with real
-components, wall-clock latencies, and noisy streams, and its refutation
-conditions are stated there.
+\emph{External}: the bounded laboratory (\cref{sec:lab}) establishes that the
+nine classes can be induced and correctly distinguished through real
+Kubernetes/GitOps interfaces on one pinned stack. It does not transfer the
+closed-world rates quantitatively or estimate field prevalence, reliability,
+stream loss, or performance under load; the repeated, churn-controlled
+protocol and its refutation conditions remain necessary for those questions.

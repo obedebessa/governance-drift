@@ -1,5 +1,14 @@
 # Reviewer #2 Simulation — Report and Point-by-Point Response
 
+> **Post-review v1.1.0 amendment (2026-08-07).** The previously unexecuted
+> Kubernetes/GitOps laboratory has now been completed once for each of S1–S9
+> on a pinned Kind/Flux/Kyverno stack. All baselines were consistent and all
+> class-resolved verdicts matched expectation; observed injection-to-verdict
+> latency was 0.137–8.571 seconds. The manuscript scopes this as bounded
+> feasibility/occurrence evidence, not a reliability, prevalence, or latency-
+> distribution study. It also adds a class-resolved severity table and a
+> comparative native-decision-scope matrix.
+
 **Manuscript:** *Governance Drift: Measuring Divergence Between Approved Intent and Operational Reality in Cloud-Native Systems*
 **Process:** the compiled draft — including the executed detector study (`code/detector_study.py`), its data (`data/*.csv`), and the laboratory artifact (`lab/`) — went to an independent adversarial review (simulated Reviewer #2, editor-assigned mission: *reject this as "just configuration drift"*). The reviewer verified every quoted number against the data, re-executed the study, audited the code against the paper's definitions, and audited the lab directory against the paper's claims about it. The review was severe and largely correct; the revision required a rewritten study (v2), text repositioning, and completion of the lab artifact — not cosmetics. §1 summarizes the review; §2 the disposition of every item.
 

@@ -1,0 +1,126 @@
+{
+  "started_utc": "2026-08-07T18:26:16.988231+00:00",
+  "completed_utc": "2026-08-07T18:27:14.048227+00:00",
+  "platform": {
+    "kind": "kind v0.32.0 go1.26.3 darwin/arm64",
+    "kubernetes_server": "v1.36.1",
+    "flux_images": [
+      "ghcr.io/fluxcd/helm-controller:v1.6.3",
+      "ghcr.io/fluxcd/image-automation-controller:v1.2.4",
+      "ghcr.io/fluxcd/image-reflector-controller:v1.2.4",
+      "ghcr.io/fluxcd/kustomize-controller:v1.9.4",
+      "ghcr.io/fluxcd/notification-controller:v1.9.3",
+      "ghcr.io/fluxcd/source-controller:v1.9.4",
+      "ghcr.io/fluxcd/source-watcher:v2.2.3"
+    ],
+    "kyverno_images": [
+      "reg.kyverno.io/kyverno/background-controller:v1.18.2",
+      "reg.kyverno.io/kyverno/cleanup-controller:v1.18.2",
+      "reg.kyverno.io/kyverno/kyverno:v1.18.2",
+      "reg.kyverno.io/kyverno/reports-controller:v1.18.2"
+    ],
+    "evaluator_poll_seconds": 0.5,
+    "design": "one bounded execution per scenario; no prevalence or reliability estimate"
+  },
+  "rows": [
+    {
+      "scenario": "S1",
+      "injection": "manual in-cluster change",
+      "expected_class": "configuration",
+      "evaluator_tier": "T0n",
+      "baseline_consistent": true,
+      "observed_verdict": "drift",
+      "observed_class": "configuration",
+      "latency_seconds": "0.137",
+      "correct": true
+    },
+    {
+      "scenario": "S2",
+      "injection": "expired exception",
+      "expected_class": "authorization",
+      "evaluator_tier": "T2",
+      "baseline_consistent": true,
+      "observed_verdict": "drift",
+      "observed_class": "authorization",
+      "latency_seconds": "0.179",
+      "correct": true
+    },
+    {
+      "scenario": "S3",
+      "injection": "policy supersession",
+      "expected_class": "policy",
+      "evaluator_tier": "T1",
+      "baseline_consistent": true,
+      "observed_verdict": "drift",
+      "observed_class": "policy",
+      "latency_seconds": "8.571",
+      "correct": true
+    },
+    {
+      "scenario": "S4",
+      "injection": "artifact substitution",
+      "expected_class": "authorization",
+      "evaluator_tier": "T3",
+      "baseline_consistent": true,
+      "observed_verdict": "drift",
+      "observed_class": "authorization",
+      "latency_seconds": "3.535",
+      "correct": true
+    },
+    {
+      "scenario": "S5",
+      "injection": "IAM expansion",
+      "expected_class": "environment",
+      "evaluator_tier": "T4",
+      "baseline_consistent": true,
+      "observed_verdict": "drift",
+      "observed_class": "environment",
+      "latency_seconds": "0.229",
+      "correct": true
+    },
+    {
+      "scenario": "S6",
+      "injection": "unapproved Git rollback",
+      "expected_class": "intent",
+      "evaluator_tier": "T2",
+      "baseline_consistent": true,
+      "observed_verdict": "drift",
+      "observed_class": "intent",
+      "latency_seconds": "6.915",
+      "correct": true
+    },
+    {
+      "scenario": "S7",
+      "injection": "out-of-band LB change",
+      "expected_class": "environment",
+      "evaluator_tier": "T4",
+      "baseline_consistent": true,
+      "observed_verdict": "drift",
+      "observed_class": "environment",
+      "latency_seconds": "0.265",
+      "correct": true
+    },
+    {
+      "scenario": "S8",
+      "injection": "approval subject mismatch",
+      "expected_class": "authorization",
+      "evaluator_tier": "T3",
+      "baseline_consistent": true,
+      "observed_verdict": "drift",
+      "observed_class": "authorization",
+      "latency_seconds": "0.194",
+      "correct": true
+    },
+    {
+      "scenario": "S9",
+      "injection": "approval-record deletion",
+      "expected_class": "evidence",
+      "evaluator_tier": "T2",
+      "baseline_consistent": true,
+      "observed_verdict": "undecidable",
+      "observed_class": "evidence",
+      "latency_seconds": "0.146",
+      "correct": true
+    }
+  ]
+}
