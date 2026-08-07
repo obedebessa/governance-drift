@@ -98,6 +98,50 @@ leaves the runtime on digests no valid approval covers), which is one reason
 the model of \cref{sec:model} keeps them as a vector.
 \end{definition}
 
+\subsection{Risk Channels and Severity}
+\label{sec:severity}
+
+The six components are equivalent only as coordinates of the governance
+distance vector; they are \emph{not} equivalent in consequence. A raw count
+therefore cannot stand in for severity. Each class opens a different primary
+risk channel and implies a different default disposition, as summarized in
+\cref{tab:severity}. Configuration drift first threatens operational
+integrity; policy drift threatens compliance with the currently governing
+control; authorization drift threatens security legitimacy; intent drift
+threatens the legitimacy of the change itself; evidence drift threatens audit
+and forensic decidability; and environment drift changes the exposure or
+assumption boundary around the approved system.
+
+\begin{table*}[t]
+\centering
+\caption{Class-Resolved Risk Channels and Default Response Families. These
+Rows Are Not a Scalar Ranking: Actual Severity Depends on Blast Radius,
+Exposure Duration, Reversibility, Consequence, and Evidence Coverage.}
+\label{tab:severity}
+\footnotesize
+\begin{tabular}{@{}p{0.14\textwidth}p{0.23\textwidth}p{0.28\textwidth}p{0.25\textwidth}@{}}
+\toprule
+Drift class & Primary risk channel & Governance question & Default response family \\
+\midrule
+Configuration & Operational availability and integrity & Does observed state still match the managed desired state? & Reconcile, contain, or accept an explicit runtime exception \\
+Policy & Compliance and control validity & Would the running state satisfy the policy governing it now? & Re-evaluate, migrate under an SLA, or document a current exception \\
+Authorization & Security and privilege legitimacy & Is the running subject still covered by valid authority? & Revoke, block, contain, or page the accountable owner \\
+Intent & Governance and change legitimacy & Does the deployed revision implement the change that was approved? & Halt propagation, restore the authorized revision, or obtain new approval \\
+Evidence & Audit and forensic decidability & Can the approval basis and lineage still be established? & Preserve records, escalate, and report \emph{undecidable} rather than compliant \\
+Environment & Assumption and exposure boundary & Do unmanaged surroundings still satisfy the recorded risk assumptions? & Contain exposure and reassess the approval in the changed environment \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+This mapping is causal, not ordinal: drift class $\rightarrow$ risk channel
+$\rightarrow$ response family. Within a class, severity must still be
+conditioned on asset criticality, affected subjects, exposure time,
+reversibility, and the confidence permitted by surviving evidence. Across
+classes, a low-impact authorization mismatch can be less severe than a
+configuration fault that stops a safety-critical service. The taxonomy thus
+supports class-specific prioritization without pretending that one universal
+weight orders every incident.
+
 \begin{figure}[t]
 \centering
 \resizebox{\columnwidth}{!}{\input{figs/fig-taxonomy}}

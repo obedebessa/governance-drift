@@ -8,7 +8,7 @@ spec:
   validationFailureAction: Audit
   rules:
     - name: require-prod-env-label
-      match: { any: [ { resources: { kinds: [Deployment] } } ] }
+      match: { any: [ { resources: { kinds: [Deployment], namespaces: [payments] } } ] }
       validate:
         message: "env label required by pi-7"
         pattern: { metadata: { labels: { env: "prod" } } }

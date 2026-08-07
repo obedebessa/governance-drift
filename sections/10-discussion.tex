@@ -35,7 +35,10 @@ consistent with the evidence that indiscriminate heavyweight gating harms
 delivery without improving stability~\cite{forsgren2018,dora2019}---turning
 the taxonomy into an operating policy rather than an alarm firehose. What the
 model deliberately does not decide---and no measurement can---is the
-disposition itself.
+disposition itself. \Cref{tab:severity} makes the distinction systematic:
+class selects a primary risk channel and response family, while blast radius,
+duration, reversibility, consequence, and evidence coverage determine actual
+severity. The vector must not be collapsed into a universal danger ranking.
 
 \subsection{Limitations}
 \emph{The approved-state prerequisite.} Everything downstream of
@@ -44,10 +47,13 @@ not, verdicts degrade to undecidable, and the honest headline is GCC, not
 drift rates. This is a real adoption constraint, not a footnote: estates
 without durable approval evidence cannot measure their governance drift, and
 discovering that is arguably the measurement's first value.
-\emph{Closed-world empirics.} The staircase's exactness is a property of
-noiseless modeled streams; only the laboratory can show how much of it
-survives real cadence, loss, and ambiguity, and \cref{sec:lab} states the
-refutation conditions. \emph{Single-deployment granularity.} The model is
+\emph{Bounded live empirics.} The laboratory executed each scenario once on
+one Kind/Flux/Kyverno stack. Its 9/9 class agreement establishes feasibility
+and occurrence under controlled injections, but cannot estimate reliability,
+noise, prevalence, tail latency, stream loss, or production transfer. The
+closed-world staircase remains exact by construction, and the full repeated,
+churn-controlled protocol in \cref{sec:lab} is required to test how much of
+that shape survives real ambiguity. \emph{Single-deployment granularity.} The model is
 per-deployment; estate-level aggregation (fleet drift, correlated policy
 supersessions) raises weighting questions we defer to the metrics'
 published-composite discipline. \emph{Environment scope.} $\denv$ is bounded

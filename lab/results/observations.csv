@@ -1,0 +1,10 @@
+scenario,injection,expected_class,evaluator_tier,baseline_consistent,observed_verdict,observed_class,latency_seconds,correct
+S1,manual in-cluster change,configuration,T0n,True,drift,configuration,0.137,True
+S2,expired exception,authorization,T2,True,drift,authorization,0.179,True
+S3,policy supersession,policy,T1,True,drift,policy,8.571,True
+S4,artifact substitution,authorization,T3,True,drift,authorization,3.535,True
+S5,IAM expansion,environment,T4,True,drift,environment,0.229,True
+S6,unapproved Git rollback,intent,T2,True,drift,intent,6.915,True
+S7,out-of-band LB change,environment,T4,True,drift,environment,0.265,True
+S8,approval subject mismatch,authorization,T3,True,drift,authorization,0.194,True
+S9,approval-record deletion,evidence,T2,True,undecidable,evidence,0.146,True

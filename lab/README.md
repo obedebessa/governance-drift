@@ -1,46 +1,74 @@
-# Governance-Drift Laboratory (designed; not executed in the paper)
+# Governance-Drift Laboratory
 
-A reproducible Kubernetes/GitOps laboratory for measuring governance drift
-with real components and wall-clock latencies. The paper (Sec. VII) specifies
-the protocol; this directory contains the build and scenario scaffolding.
+This directory contains the executed Kubernetes/GitOps laboratory reported in
+Sec. VII. It is a bounded feasibility and occurrence demonstration: one
+controlled execution per scenario, not a prevalence, reliability, or
+production-performance study.
 
-## Stack (all pinned in the scripts)
-- kind (Kubernetes-in-Docker) single-node cluster  [kind-cluster.yaml]
-- Flux v2 reconciling a local Git remote           [bootstrap.sh]
-- Kyverno as policy engine; two policy versions    [policies/]
-- Local OCI registry (registry:2) for tag/digest scenarios
-- Approved-state recorder: snapshot.sh writes G_app (manifest digest,
-  resolved image digest, policy version, approval JSON with window,
-  git revision, environment assumptions) to an append-only directory
-- Evaluator: evaluate.sh recomputes the six component distances each cycle
-  from: kubectl (observed), git (desired+revision), policies/ (P(t)),
-  approvals/ (A(t) with expiry), registry API (lineage), and a mock cloud
-  inventory file (environment)
+## Executed stack
 
-## Scenarios (scenarios/s1.sh ... s9.sh)
-s1 kubectl patch deployment (manual change)
-s2 grant exception with expiry=+4h; do nothing at expiry
-s3 apply policy v8 (supersedes v7) without redeploying
-s4 re-tag image in registry to a new digest; trigger rollout
-s5 broaden a mock IAM binding in cloud-inventory.json
-s6 git revert to previous revision; let Flux converge
-s7 modify mock cloud LB config out of band
-s8 replace approval subject digest in approvals/ with a mismatched digest
-s9 delete approval records (evidence drift; evaluator returns undecidable)
+- Kind v0.32.0 with Kubernetes v1.36.1 on darwin/arm64
+- Flux v2.9.4 components (source/kustomize controller v1.9.4)
+- Kyverno v1.18.2
+- local smart-HTTP Git remote
+- local OCI registry for tag/digest scenarios
+- approved-state snapshot and mock environment inventory
+- dependency-free tier evaluator polling every 0.5 seconds
 
-## Measurement (measure.sh)
-For each scenario: record injection wall-clock time; poll the evaluator and
-each tier-restricted evaluator (T0n..T4) at its natural cadence; record
-first-alarm times and classes; compute time-to-detection per tier and
-time-to-evidence (time to assemble the supporting records for the verdict).
-Repeat N times; report distributions. Controls: churn generator
-(HPA min/max flapping + rollout restarts) runs throughout; false-alarm rates
-are measured on drift-free windows.
+`bootstrap.sh` pins the upstream Flux and Kyverno manifests by SHA-256 and
+preloads the required arm64 images. `snapshot.sh` records the approved state.
+`evaluator.py` reads Kubernetes, Git, Kyverno PolicyReports, approvals, pod
+image IDs, and the environment inventory, restricting inputs by tier T0n–T4.
 
-## Refutation conditions (what would falsify the paper's claims)
-- Any scenario detected reliably by T0n that the matrix assigns to a higher
-  tier (would refute the tier-dependency analysis, Prop. 2).
-- Tier-appropriate detectors failing to detect their scenarios for reasons
-  other than stream fidelity (would refute tier sufficiency).
-- Wall-clock TTD dominated by factors other than evaluation cadence for
-  event-carried classes (would refute Finding F3's transfer).
+## Scenarios
+
+| ID | Injection | Expected class | Deciding tier |
+|---|---|---|---|
+| S1 | Manual in-cluster change | configuration | T0n |
+| S2 | Expired exception | authorization | T2 |
+| S3 | Policy supersession | policy | T1 |
+| S4 | Artifact substitution and rollout | authorization | T3 |
+| S5 | IAM expansion | environment | T4 |
+| S6 | Unapproved Git rollback and Flux convergence | intent | T2 |
+| S7 | Out-of-band load-balancer change | environment | T4 |
+| S8 | Approval subject mismatch | authorization | T3 |
+| S9 | Approval-record deletion | evidence (`undecidable`) | T2 |
+
+## Reproduce
+
+Prerequisites: Docker, Kind, `kubectl`, Git, Python 3.10+, `curl`, and a host
+with enough memory for the single-node cluster. Then run:
+
+```bash
+lab/bootstrap.sh
+python3 lab/run_experiment.py
+```
+
+The harness restores and verifies a governance-consistent baseline before
+every injection, executes S1–S9, polls the minimum deciding tier, writes the
+observations, and restores the baseline at the end. Generated outputs are:
+
+- `results/observations.csv`
+- `results/observations.json`
+- `results/platforms.json`
+- `results/table_lab.tex`
+
+Verify the frozen outputs without a live cluster:
+
+```bash
+python3 scripts/verify_lab_results.py
+```
+
+## Measurement semantics
+
+Latency is wall-clock time from injection initiation to the first
+tier-appropriate verdict. S2 starts at exception expiry. S4 includes registry
+mutation and rollout; S6 includes Git commit and Flux convergence; S3 includes
+Kyverno background evaluation. Each scenario was executed once (`n=1`), so
+the reported values are observations rather than a latency distribution.
+
+The stronger follow-on protocol is to repeat every scenario at least twenty
+times with randomized injection phase, benign runtime and governance churn,
+drift-free controls, multiple evaluator cadences, and separate
+time-to-detection/time-to-evidence measures. That repeated design has not yet
+been executed.

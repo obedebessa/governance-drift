@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 # S9: approval-record deletion (evidence drift -> undecidable verdict).
-LAB="$(cd "$(dirname "$0")/.." && pwd)"
-mkdir -p "$LAB/_deleted" && mv "$LAB"/approvals/APR-*.json "$LAB/_deleted/"
+LAB="$(cd "$(dirname "$0")/.." && pwd)"; RUNTIME="$LAB/runtime"
+mkdir -p "$RUNTIME/_deleted" && mv "$RUNTIME"/approvals/APR-*.json "$RUNTIME/_deleted/"

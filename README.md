@@ -1,7 +1,7 @@
 # Governance Drift
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21841459.svg)](https://doi.org/10.5281/zenodo.21841459)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21842722.svg)](https://doi.org/10.5281/zenodo.21842722)
 
 Reproducibility package for the manuscript:
 
@@ -10,15 +10,19 @@ Reproducibility package for the manuscript:
 > Obede Bessa Rocha da Silva — Independent Researcher
 
 The package contains the complete LaTeX source, a dependency-free closed-world
-detector study, canonical outputs, and a Kubernetes/GitOps laboratory protocol.
-Version 1.0.0 incorporates the full simulated Reviewer #2 revision.
+detector study, canonical outputs, and an executed Kubernetes/GitOps
+laboratory. Version 1.1.0 adds the live nine-scenario experiment, a
+class-resolved severity taxonomy, and a comparative scope matrix.
 
 ## Evidence boundary
 
-The executed study validates detector semantics and evidence-tier dependencies
-inside a modeled world. It is not field evidence for the taxonomy. The `lab/`
-directory specifies a real-infrastructure protocol but no cluster measurements
-are reported or claimed.
+The closed-world study validates detector semantics and evidence-tier
+dependencies. The bounded live laboratory executes one controlled injection
+per scenario on a pinned Kind/Flux/Kyverno stack: 9/9 baselines were
+consistent, 9/9 verdicts matched the expected class, and observed
+injection-to-verdict latencies ranged from 0.137 to 8.571 seconds. These are
+feasibility and occurrence observations, not estimates of production
+prevalence, reliability, false-alarm rates, or latency distributions.
 
 ## Repository map
 
@@ -27,7 +31,8 @@ are reported or claimed.
 | `main.tex`, `sections/`, `figs/`, `refs.bib` | Complete manuscript source |
 | `code/detector_study.py` | Closed-world detector study over nine scenarios |
 | `data/` | Canonical results and programmatically generated table |
-| `lab/` | Kubernetes/GitOps field-execution protocol and scenario scripts |
+| `lab/` | Executed Kubernetes/GitOps lab, scenario scripts, evaluator, and results |
+| `scripts/verify_lab_results.py` | Integrity check for frozen live-lab outputs |
 | `reviewer2-response.md` | Adversarial review and point-by-point disposition |
 | `scripts/verify_artifact.py` | Exact re-execution check |
 | `output/pdf/` | Verified compiled manuscript |
@@ -47,11 +52,21 @@ python3 scripts/verify_artifact.py
 The verifier re-executes the study and requires byte-identical canonical CSV
 and LaTeX outputs.
 
-## Laboratory protocol
+## Reproduce or inspect the live laboratory
 
-The `lab/README.md` describes the additional tools needed for a Kind/Kubernetes
-execution. The laboratory remains an unexecuted protocol in this release; do
-not interpret its presence as a reported experiment.
+The `lab/README.md` lists prerequisites and exact commands. The frozen results
+can be verified without recreating a cluster:
+
+```bash
+python3 scripts/verify_lab_results.py
+```
+
+With Docker, Kind, and `kubectl` available, rebuild and execute the live stack:
+
+```bash
+lab/bootstrap.sh
+python3 lab/run_experiment.py
+```
 
 ## Compile the manuscript
 
@@ -73,8 +88,10 @@ tectonic -X compile main.tex
 ## Citation and release
 
 Citation metadata is provided in `CITATION.cff`; Zenodo deposit metadata is in
-`.zenodo.json`. Version 1.0.0 is permanently archived at
-<https://doi.org/10.5281/zenodo.21841459>.
+`.zenodo.json`. Version 1.0.0 remains permanently archived at
+<https://doi.org/10.5281/zenodo.21841459>; version 1.1.0 is archived at
+<https://doi.org/10.5281/zenodo.21842722>. The concept DOI
+<https://doi.org/10.5281/zenodo.21841458> resolves to the latest version.
 
 ## License
 

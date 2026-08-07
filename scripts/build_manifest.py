@@ -4,11 +4,12 @@
 from __future__ import annotations
 
 import hashlib
+import subprocess
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EXCLUDED_PARTS = {".git", "__pycache__", ".pytest_cache", "tmp"}
+EXCLUDED_PARTS = {".git", "__pycache__", ".pytest_cache", "runtime", "tmp"}
 EXCLUDED_SUFFIXES = {".aux", ".bbl", ".blg", ".log", ".out", ".xdv"}
 
 
@@ -26,9 +27,21 @@ def included(path: Path) -> bool:
 
 def main() -> None:
     lines = []
-    for path in sorted(p for p in ROOT.rglob("*") if included(p)):
+    result = subprocess.run(
+        ["git", "ls-files", "-co", "--exclude-standard", "-z"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+    )
+    relative_paths = sorted(
+        Path(item.decode("utf-8")) for item in result.stdout.split(b"\0") if item
+    )
+    for relative in relative_paths:
+        path = ROOT / relative
+        if not included(path):
+            continue
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
-        lines.append(f"{digest}  {path.relative_to(ROOT).as_posix()}")
+        lines.append(f"{digest}  {relative.as_posix()}")
     (ROOT / "MANIFEST.sha256").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 

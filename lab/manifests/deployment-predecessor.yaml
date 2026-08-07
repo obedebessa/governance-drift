@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payments
+  namespace: payments
+  labels:
+    app: payments
+    env: prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payments
+  template:
+    metadata:
+      labels:
+        app: payments
+    spec:
+      containers:
+        - name: payments
+          image: localhost:5001/governance-demo:1.0
+          imagePullPolicy: Always
+          env:
+            - name: APP_VERSION
+              value: v1-predecessor
+          resources:
+            limits:
+              cpu: 100m
+              memory: 64Mi
+            requests:
+              cpu: 25m
+              memory: 16Mi

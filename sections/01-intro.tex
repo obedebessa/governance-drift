@@ -73,9 +73,9 @@ comparison alone, and which require authorization or evidence context?
 
 RQ1 is answered by the taxonomy and scenario catalog
 (\cref{sec:taxonomy,sec:study}); RQ2 and RQ4 by the dependency result (\cref{prop:impossible}), the tiered architecture (\cref{sec:architecture}),
-and the executed detectability study (\cref{sec:study}); RQ3 by the study's
-latency measurements in event time and by the laboratory protocol
-(\cref{sec:lab}) that measures it in wall-clock time on real clusters.
+the executed detectability study (\cref{sec:study}), and the bounded live
+laboratory (\cref{sec:lab}); RQ3 by the study's event-time measurements and
+the laboratory's injection-to-verdict wall-clock observations.
 
 \subsection{Contributions and Epistemic Status}
 \begin{enumerate}[label=\textbf{C\arabic*.},leftmargin=2.2em,itemsep=1.5pt,topsep=2pt]
@@ -105,15 +105,18 @@ matrix generated programmatically (\cref{sec:study}). Its role is precisely
 scoped: it validates that the reference semantics realize the model's
 dependency structure and quantifies noise behavior; it is not field evidence,
 and it makes no claim about any real cluster.
-\item \textbf{Laboratory protocol} (methodological, not executed): a fully
-specified Kubernetes/GitOps laboratory---cluster build, scenario scripts,
-measurement procedures for wall-clock time-to-detection and
-time-to-evidence---for field execution (\cref{sec:lab}).
+\item \textbf{Bounded Kubernetes/GitOps laboratory} (empirical, executed): a
+pinned Kind/Flux/Kyverno stack, local Git and OCI services, approved-state
+recorder, tiered evaluator, and executable injections for S1--S9. In one
+run per scenario, all nine baselines were consistent and all nine verdicts
+matched the expected class, with 0.137--8.571~s injection-to-verdict latency
+(\cref{sec:lab}). The run establishes feasibility and occurrence on this
+stack, not prevalence, reliability, or a latency distribution.
 \end{enumerate}
 
-Established results are cited; analytic claims are proved in the model;
-empirical claims are scoped to the executed closed-world study; the laboratory
-and its hypotheses are labeled as designed, not run.
+Established results are cited; analytic claims are proved in the model; the
+closed-world and live-stack empirical claims are separated explicitly; and
+the larger repeated-trial laboratory protocol remains a future extension.
 
 \subsection{Scope and Non-Goals}
 We address drift \emph{after} an approved deployment; admission-time
