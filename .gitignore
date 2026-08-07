@@ -12,3 +12,6 @@ main.pdf
 .pytest_cache/
 governance-drift-paper.pdf
 tmp/
+build/
+qa/
+originais/

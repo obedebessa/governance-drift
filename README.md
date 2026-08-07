@@ -31,6 +31,9 @@ are reported or claimed.
 | `reviewer2-response.md` | Adversarial review and point-by-point disposition |
 | `scripts/verify_artifact.py` | Exact re-execution check |
 | `output/pdf/` | Verified compiled manuscript |
+| `originais/archive_3/` | Unmodified incoming PDF, source ZIP, and original review memo (local only) |
+| `build/latex/` | Local LaTeX intermediates (local only) |
+| `qa/renders/` | Page renders and contact sheets used for visual QA (local only) |
 
 ## Reproduce the detector study
 
