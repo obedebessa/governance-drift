@@ -1,0 +1,34 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+Reconciliation solved configuration drift so well that its green status has
+come to stand for a property it does not check. This paper named the
+difference: governance drift, the divergence of operational reality from the
+state, policy context, authorization basis, intent, and assumptions under
+which it was approved. We separated six drift classes formally; established,
+by constructed counterexample and by a definitional-dependency argument,
+that configuration equality does not imply governance consistency and that
+no configuration-pair detector can decide it; modeled governance distance as
+an irreducibly component-wise vector anchored to a recorded approval event;
+organized detection as cumulative evidence tiers; and checked, in an
+executed and fully reproducible closed-world study with class-set ground
+truth and benign governance churn in its control, that a
+definition-faithful reference implementation realizes the model's
+detectability staircase: configuration comparison decides exactly one of
+nine drift scenarios; each governance tier detects precisely the scenarios
+whose deciding facts it carries, earning zero false alarms against
+governance noise; and an unnormalized comparator alarms on 71\% of benign
+control events. The umbrella research question is thereby answered with its
+conditions stated: governance drift is formally representable (the vector
+$\GD$), measurable exactly where the admitted basis was recorded (coverage,
+GCC, bounds everything else), and detectable to the depth of the evidence
+tiers an estate maintains. The Kubernetes/GitOps laboratory that would carry
+these results to wall-clock reality is specified to the script level, with
+stated refutation conditions, and awaits execution.
+
+The definitions are offered for reuse; the matrix is offered as a template
+for evaluating any governance-drift detector; and the central lesson is
+offered to practice in one sentence: a system can match its manifest
+perfectly and still be running outside everything that made it legitimate---%
+and whether an organization can \emph{see} that is an architectural choice,
+made tier by tier, that this paper makes explicit.

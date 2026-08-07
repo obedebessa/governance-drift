@@ -1,0 +1,35 @@
+% Approved intent vs runtime reality (single column, resized)
+\begin{tikzpicture}[node distance=3.2mm and 4mm]
+  % approval event
+  \node[human, minimum width=20mm] (appr) at (0,0)
+    {approval event $t_0$\\{\smlbl snapshot $\Gapp(t_0)$}};
+  \node[attn, below=2.5mm of appr, minimum width=20mm] (snap)
+    {$m_0$, $\delta_0$, $\dig(\pi_0)$, $A_0$, $\iota_0$, $\sigma_0$};
+
+  % runtime plane
+  \node[stage, right=8mm of appr, minimum width=17mm] (r1)
+    {observed\\{\smlbl config $m_t$}};
+  \node[stage, right=3.5mm of r1, minimum width=15mm] (r2)
+    {running\\{\smlbl digests $\delta_t$}};
+  \node[stage, right=3.5mm of r2, minimum width=15mm] (r3)
+    {environment\\{\smlbl $\varepsilon_t$}};
+  \node[lbl, above=1mm of r2] {\textbf{runtime plane}};
+  \draw[flow] (r1) to[out=-25,in=205] node[lbl, below]{reconciler loop} (r3);
+  \draw[flow] (r3) to[out=155,in=25] (r1);
+
+  % governance plane
+  \node[evid, below=11mm of r1, minimum width=17mm] (g1)
+    {policy\\{\smlbl $\Pol(t)$}};
+  \node[evid, below=11mm of r2, minimum width=15mm] (g2)
+    {authorization\\{\smlbl $\Auth(t)$}};
+  \node[evid, below=11mm of r3, minimum width=15mm] (g3)
+    {intent\\{\smlbl $\Int(t)$}};
+  \node[lbl, below=1mm of g2] {\textbf{governance plane}};
+
+  \draw[eflow] (appr.east) -- (r1.west);
+  \draw[eflow] (snap.east) -- (g1.west);
+
+  % the gap
+  \draw[bflow] ($(r2.south)+(0,-1mm)$) -- node[lbl, right=1mm, text=red!70]
+    {unchecked: governance drift} ($(g2.north)+(0,1mm)$);
+\end{tikzpicture}

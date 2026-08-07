@@ -1,0 +1,37 @@
+# Policy version pi-8: supersedes pi-7 by additionally requiring a
+# team-owner label and a pinned (digest) image reference. Deployments
+# admitted under pi-7 with tag references violate this version: applying it
+# without redeploying is scenario s3 (policy drift).
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: governance-baseline
+  labels:
+    policy-version: pi-8
+spec:
+  validationFailureAction: Audit   # evaluator reads reports; no enforcement
+  rules:
+    - name: require-owner-label
+      match:
+        any:
+          - resources:
+              kinds: [Deployment]
+      validate:
+        message: "team-owner label required by pi-8"
+        pattern:
+          metadata:
+            labels:
+              team-owner: "?*"
+    - name: require-digest-references
+      match:
+        any:
+          - resources:
+              kinds: [Deployment]
+      validate:
+        message: "images must be pinned by digest under pi-8"
+        pattern:
+          spec:
+            template:
+              spec:
+                containers:
+                  - image: "*@sha256:*"

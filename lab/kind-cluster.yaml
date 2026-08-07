@@ -1,0 +1,12 @@
+# Pinned single-node kind cluster for the governance-drift laboratory.
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: govdrift-lab
+nodes:
+  - role: control-plane
+    image: kindest/node:v1.30.0
+containerdConfigPatches:
+  # local registry for tag/digest scenarios (s4)
+  - |-
+    [plugins."io.containerd.grpc.v1.cri".registry.mirrors."localhost:5001"]
+      endpoint = ["http://kind-registry:5000"]

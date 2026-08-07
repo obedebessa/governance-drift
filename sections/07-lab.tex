@@ -1,0 +1,56 @@
+\section{The Kubernetes/GitOps Laboratory (Designed, Not Executed)}
+\label{sec:lab}
+
+The closed-world study fixes semantics; only real components can supply
+wall-clock latencies, stream fidelity effects, and operational noise. We
+specify the laboratory to implementable detail---the build scaffolding,
+policies, scenario scripts, and measurement harness ship in the released
+artifact (\texttt{lab/})---and we state plainly that this paper reports no
+measurements from it: executing it requires container infrastructure that our
+authoring environment does not provide, and we fabricate nothing.
+
+\subsection{Build}
+A pinned kind cluster~\cite{kind} runs a Flux~v2 reconciler~\cite{fluxcd}
+against a local Git remote; Kyverno~\cite{kyverno} serves as policy engine in
+audit mode with two policy versions ($\pi_7$; $\pi_8$ adds an ownership label
+and digest-pinning requirement); a local OCI registry enables tag/digest
+scenarios; a mock cloud-inventory file stands in for unmanaged environment
+properties (substitutable by a real cloud account where available). An
+\emph{approved-state recorder} snapshots $\Gapp$ at admission (manifest and
+resolved digests, policy pin, approval records with windows as JSON, Git
+revision, environment assumptions) into an append-only directory; a
+reference \emph{evaluator} recomputes the six component distances each cycle
+from live sources (cluster API, Git, policy directory, approvals, registry
+API, inventory), with tier-restricted variants T0n--T4 whose inputs are
+mechanically limited to their tier.
+
+\subsection{Protocol}
+For each scenario S1--S8 (scripts mirror \cref{sec:study}'s injections on the
+real stack): record injection wall-clock time; run the churn generator
+throughout (autoscaler flapping, rollout restarts); poll every
+tier-restricted evaluator at its natural cadence; record per tier the first
+alarm, its class, \emph{time-to-detection} (alarm minus onset, with S2's
+onset at expiry), and \emph{time-to-evidence} (time to assemble the records
+supporting the verdict---the quantity that separates ``alarmed'' from
+``defensible''). Repeat $N \ge 20$ times per scenario with randomized
+injection phase; measure false-alarm rates on drift-free windows. Design and reporting follow standard experimentation
+guidance~\cite{wohlin2012}. Report
+distributions, not means, and repeat the whole matrix at three evaluator
+cadences to expose the cadence dependence \cref{fnd:latency} predicts.
+
+\subsection{Hypotheses and Refutation Conditions}
+\textbf{LH1} (staircase transfer): the detect/miss \emph{shape} of
+\cref{tab:matrix} reproduces on the real stack; any scenario reliably
+detected by T0n that the matrix assigns to a higher tier refutes the
+dependency analysis of \cref{prop:tiers}. \textbf{LH2} (cadence-bounded
+visibility): for event-carried classes, wall-clock TTD is dominated by
+evaluator cadence, not scenario identity; strong scenario-dependent residuals
+refute \cref{fnd:latency}'s transfer. \textbf{LH3} (noise): naive T0's
+false-alarm rate on real churn is high enough to be operationally unusable,
+and normalization recovers usability without losing S1; failure of either
+half refutes \cref{fnd:naive}'s transfer. \textbf{LH4} (evidence gap):
+time-to-evidence exceeds time-to-detection substantially wherever approval
+records live in platform-bound stores, motivating durable approved-state
+recording as a precondition rather than an optimization. Each hypothesis is
+falsifiable by the stated measurement, and negative results would be
+informative about exactly which closed-world idealizations fail.

@@ -1,0 +1,69 @@
+\section{Discussion and Limitations}
+\label{sec:discussion}
+
+\subsection{The Reviewer's Objection, Taken Seriously}
+``This is just configuration drift with more inputs.'' The objection deserves
+a precise answer beyond \cref{sec:related}'s. Configuration drift is a
+\emph{two-place, memoryless} relation between present states; governance
+drift is a \emph{three-place, history-anchored} relation among present state,
+evolving context, and a recorded past event. The difference is not input count but relation type. Mechanically, we
+concede, every detector at every tier is a comparison---monitoring always
+is; the question is what is compared with what. Configuration drift compares
+two present configurations; governance drift compares present state and
+present context against a \emph{recorded past event}---the admitted
+basis---under validity clocks. That relational difference has observable
+consequences the study exhibits: (i)~a detector of the first relation can be perfectly correct and
+carry zero information about the second (\cref{fnd:blind}); (ii)~the second
+relation can change value with \emph{no event on either configuration}
+(policy supersession, window expiry)---nothing a comparison could ever
+register, however frequently it runs; and (iii)~the first relation's repair
+action (reconcile) can be the very mechanism that consummates a violation of
+the second (S6: convergence to unapproved content). A phenomenon whose
+detectors, event sources, and remediations are all disjoint from
+configuration drift's is a different research object; what they share is the
+word ``drift'' and the ambient system.
+
+\subsection{Legitimacy, Blame, and the Policy-Drift Question}
+Measuring divergence is not assigning fault. Policy drift in particular is
+usually the \emph{organization's own} motion; flagging a deployment as
+governance-inconsistent under $\pi_8$ says migration or re-approval is due,
+not that anyone erred. We consider this a feature of the vector semantics:
+because classes are separated, an estate can adopt distinct dispositions per
+class (auto-reconcile configuration drift; ticket policy drift with a
+migration SLA; page on authorization drift; block on intent drift)---%
+consistent with the evidence that indiscriminate heavyweight gating harms
+delivery without improving stability~\cite{forsgren2018,dora2019}---turning
+the taxonomy into an operating policy rather than an alarm firehose. What the
+model deliberately does not decide---and no measurement can---is the
+disposition itself.
+
+\subsection{Limitations}
+\emph{The approved-state prerequisite.} Everything downstream of
+\cref{sec:architecture} assumes $\Gapp$ was recorded durably; where it was
+not, verdicts degrade to undecidable, and the honest headline is GCC, not
+drift rates. This is a real adoption constraint, not a footnote: estates
+without durable approval evidence cannot measure their governance drift, and
+discovering that is arguably the measurement's first value.
+\emph{Closed-world empirics.} The staircase's exactness is a property of
+noiseless modeled streams; only the laboratory can show how much of it
+survives real cadence, loss, and ambiguity, and \cref{sec:lab} states the
+refutation conditions. \emph{Single-deployment granularity.} The model is
+per-deployment; estate-level aggregation (fleet drift, correlated policy
+supersessions) raises weighting questions we defer to the metrics'
+published-composite discipline. \emph{Environment scope.} $\denv$ is bounded
+by what $\sigma_0$ declared; assumptions never written down cannot drift
+detectably---an instance of the general dependence of governance measurement
+on capture discipline. \emph{Remediation dynamics.} We model detection, not
+the control loop that acts on it; closing the loop (auto-re-approval
+workflows, drift-driven migration) is future work with its own stability
+questions.
+
+\subsection{Outlook}
+The machinery this work presupposes---durable approval evidence, and an
+account of how such evidence decays---and the drift semantics defined here
+compose naturally: approved-state snapshots are exactly the
+artifacts durable approval linkage produces, and evidence drift is evidence
+debt manifesting inside the drift vector. We have kept this manuscript
+self-contained, but the research program is one: make the relationship
+between what organizations approve and what their systems do continuously
+demonstrable---at admission, over time, and after the fact.

@@ -1,0 +1,17 @@
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+\textbf{Scenario} & \textbf{T0} & \textbf{T0n} & \textbf{T1} & \textbf{T2} & \textbf{T3} & \textbf{T4} \\
+ & {\scriptsize naive cfg} & {\scriptsize norm.\ cfg} & {\scriptsize $+$policy} & {\scriptsize $+$authz} & {\scriptsize $+$lineage} & {\scriptsize $+$env} \\
+\midrule
+S0 control (churn only) & FP: 285.4 & FP: 0.0 & FP: 0.0 & FP: 0.0 & FP: 0.0 & FP: 0.0 \\
+S1 & \cmark$^{+22.6}$ & \cmark & \cmark & \cmark & \cmark & \cmark \\
+S2 & \xmark & \xmark & \xmark & \cmark & \cmark & \cmark \\
+S3 & \xmark & \xmark & \cmark & \cmark & \cmark & \cmark \\
+S4 & \xmark & \xmark & \xmark & \xmark & \cmark & \cmark \\
+S5 & \xmark & \xmark & \xmark & \xmark & \xmark & \cmark \\
+S6 & \xmark & \xmark & \xmark & \cmark & \cmark & \cmark \\
+S7 & \xmark & \xmark & \xmark & \xmark & \xmark & \cmark \\
+S8 & \xmark & \xmark & \xmark & \xmark & \cmark & \cmark \\
+S9 & \xmark & \xmark & \xmark & \cmark & \cmark & \cmark \\
+\bottomrule
+\end{tabular}

@@ -1,0 +1,125 @@
+\section{Introduction}
+\label{sec:intro}
+
+Reconciliation-based delivery gave cloud operations a powerful invariant:
+the running system converges to a declared desired state, and divergence---%
+\emph{configuration drift}---is detected and repaired
+continuously~\cite{opengitops,beetz2022,argocd,fluxcd,burns2016}. The invariant
+is so useful that it has quietly become a proxy for a much stronger claim. When
+the reconciler reports \textsc{Synced} and the drift detector reports clean,
+operators, auditors, and dashboards read: \emph{the system is in the state we
+approved}. This paper is about the gap between those two statements.
+
+Consider a payments service whose deployment was approved on March~3rd: the
+manifest matched revision \texttt{rev-42}, satisfied policy version
+$\pi_7$, carried a service-owner approval bound to image digest
+\texttt{sha256:aaa\ldots}, and traced to ticket \texttt{TKT-99}. Months later
+the cluster still matches its Git manifest byte for byte. Meanwhile: the
+security team superseded $\pi_7$ with $\pi_8$, which the running configuration
+violates; an emergency exception granted during an incident expired
+after four hours and has now been silently in force for six weeks; the registry
+re-tagged \texttt{svc:1.4.2} so the pods run a digest no approval ever
+referenced; and a well-meaning rollback reverted Git to \texttt{rev-37},
+content whose approval belongs to a different change. Configuration drift:
+zero. Every governance fact that made the deployment legitimate on
+March~3rd: gone. We call this condition \emph{governance drift}: the
+operational state has diverged not from its manifest but from the state,
+policy context, authorization basis, and intent \emph{under which it was
+approved}.
+
+The distinction is not terminological. Configuration drift is a relation
+between two configurations---desired and observed---and is therefore decidable
+by comparison, which is exactly what reconcilers and drift
+tools~\cite{awsconfig,driftctl} implement. Governance drift is a relation
+between the present state and a \emph{past approval event together with its
+evolving context}, and we establish the separation in two complementary
+forms: constructed, tool-realizable counterexamples, and a
+definitional-dependency result showing that no detector whose inputs are
+configuration pairs---however sophisticated its diffing---can decide
+governance consistency, because the deciding facts are not functions of those
+inputs (\cref{prop:impossible}). Worse, reconciliation can \emph{manufacture}
+governance drift while eliminating configuration drift: the rollback scenario
+above is converged by the reconciler into a state that no current approval
+covers (\cref{sec:taxonomy}).
+
+Our executed study makes the separation concrete. We implement a
+governance-drift detector evaluated at cumulative evidence tiers---%
+configuration comparison; plus policy re-evaluation; plus authorization
+records with validity semantics; plus artifact lineage; plus environment
+inventory against recorded assumptions---against nine injected drift
+scenarios (including evidence decay) and a no-drift control containing both
+runtime churn and \emph{benign governance churn} (satisfied policy
+revisions, approved updates, hygienic exceptions), under a counterfactual
+scoring rule that credits information rather than alarm volume. The result is
+a strict detectability staircase (\cref{tab:matrix}): normalized
+configuration comparison detects exactly one scenario of nine; each evidence
+tier detects precisely the scenarios whose deciding facts it carries; the
+governance tiers achieve zero false alarms \emph{earned against} governance
+churn; and an unnormalized comparator alarms on 71\% of benign control
+events while carrying no information about seven of the nine governance
+scenarios.
+
+\subsection{Research Questions}
+\begin{description}[leftmargin=3.2em,itemsep=1pt,topsep=2pt]
+\item[RQ:] Can divergence between approved intent and operational reality be
+formally represented and measured as governance drift?
+\item[RQ1:] Which forms of governance drift occur in cloud-native systems?
+\item[RQ2:] Can governance drift be detected using existing control-plane
+evidence?
+\item[RQ3:] How quickly does governance drift become visible?
+\item[RQ4:] Which forms of drift are detectable through configuration
+comparison alone, and which require authorization or evidence context?
+\end{description}
+
+RQ1 is answered by the taxonomy and scenario catalog
+(\cref{sec:taxonomy,sec:study}); RQ2 and RQ4 by the dependency result (\cref{prop:impossible}), the tiered architecture (\cref{sec:architecture}),
+and the executed detectability study (\cref{sec:study}); RQ3 by the study's
+latency measurements in event time and by the laboratory protocol
+(\cref{sec:lab}) that measures it in wall-clock time on real clusters.
+
+\subsection{Contributions and Epistemic Status}
+\begin{enumerate}[label=\textbf{C\arabic*.},leftmargin=2.2em,itemsep=1.5pt,topsep=2pt]
+\item \textbf{Taxonomy} (conceptual): formal definitions separating
+configuration, policy, authorization, intent, evidence, and environment
+drift, with governance drift as their aggregate---and with the explicit
+commitment that governance drift must not, and provably does not, reduce to
+configuration drift (\cref{sec:taxonomy}).
+\item \textbf{Formal model} (conceptual/analytic): approved-state snapshot
+$\Gapp(t_0)$, observed state $\Gobs(t)$, time-indexed governance contexts
+$\Pol(t), \Auth(t), \Int(t)$, and a component-wise governance-distance vector
+$\GD(t)$, with a reasoned rejection of a primitive scalar distance
+(\cref{sec:model}).
+\item \textbf{Separation results} (analytic): constructed counterexamples and
+a definitional-dependency proposition establishing that configuration
+equality does not imply governance consistency and that no configuration-pair
+detector decides it---deliberately elementary, and billed as such
+(\cref{sec:taxonomy,sec:model}).
+\item \textbf{Detection architecture} (design): a vendor-neutral tiered
+architecture mapping each drift class to the minimal evidence tier that
+decides it (\cref{sec:architecture}).
+\item \textbf{Executed detector study} (empirical, closed-world): nine
+scenarios $\times$ six detector tiers $\times$ twenty seeds, with
+counterfactual scoring, class-set ground truth, and a control containing
+runtime \emph{and} benign governance churn; all code and data released,
+matrix generated programmatically (\cref{sec:study}). Its role is precisely
+scoped: it validates that the reference semantics realize the model's
+dependency structure and quantifies noise behavior; it is not field evidence,
+and it makes no claim about any real cluster.
+\item \textbf{Laboratory protocol} (methodological, not executed): a fully
+specified Kubernetes/GitOps laboratory---cluster build, scenario scripts,
+measurement procedures for wall-clock time-to-detection and
+time-to-evidence---for field execution (\cref{sec:lab}).
+\end{enumerate}
+
+Established results are cited; analytic claims are proved in the model;
+empirical claims are scoped to the executed closed-world study; the laboratory
+and its hypotheses are labeled as designed, not run.
+
+\subsection{Scope and Non-Goals}
+We address drift \emph{after} an approved deployment; admission-time
+enforcement~\cite{k8sadmission,opa,kyverno,binauthz} is complementary and
+assumed imperfect (break-glass paths exist by design). We propose no product;
+the detector logic we release is a reference semantics, not a system. And we
+take no position on \emph{which} governance controls organizations should
+impose---the model makes drift relative to whatever was approved under
+whatever policy; the choice of policy is the organization's.

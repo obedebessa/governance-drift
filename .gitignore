@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.xdv
+*.synctex.gz
+main.pdf
+.DS_Store
+.pytest_cache/
+governance-drift-paper.pdf
+tmp/

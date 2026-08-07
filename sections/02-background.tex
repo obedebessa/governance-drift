@@ -1,0 +1,65 @@
+\section{Background: The Reconciliation Blind Spot}
+\label{sec:background}
+
+\subsection{Desired-State Delivery and Its Invariant}
+GitOps-style delivery declares desired state in a versioned repository and
+runs controllers that continuously converge the runtime toward
+it~\cite{opengitops,beetz2022,argocd,fluxcd}; operational practice treats the
+resulting convergence signal as a primary health indicator~\cite{beyer2016}. The reconciler's contract is a
+fixed-point property over \emph{configurations}: $\Gobs \to$ desired. Drift
+detection in current practice---reconciler status, cloud configuration
+recorders, IaC drift tools~\cite{awsconfig,driftctl}, posture
+management~\cite{cspm}---implements variations of the same comparison, and
+configuration-management guidance institutionalizes it as the control
+objective~\cite{nist800128,nist80053}.
+
+Three properties of this regime matter here. First, the comparison's
+\emph{reference} is the current desired state, not the approved state: if the
+desired state itself changes illegitimately, the reconciler converges to the
+illegitimate state and reports health. Second, the comparison's
+\emph{vocabulary} is configuration: facts that are not configuration---policy
+versions, approval windows, artifact lineage---are outside its type. Third,
+the comparison is \emph{memoryless}: it relates two present states and
+consults no past event, whereas approval is precisely a past event.
+
+\subsection{The Governance Context Moves}
+Meanwhile, the context that made a deployment legitimate evolves on its own
+clocks. Policy-as-code is versioned and revised
+continuously~\cite{opa,kyverno}; organizations supersede controls without
+redeploying workloads, under regulatory regimes that presume change remains
+authorized over time~\cite{sox2002,nist80053}. Authorizations are temporal by nature---emergency
+exceptions with windows, approvals with scopes, roles that are granted and
+revoked~\cite{sandhu1996,itil4}; their validity changes with no configuration
+event at all. Artifact references are mutable (tags move; registries re-tag),
+so the binding between an approval's subject and the running binary can rot
+while every manifest byte stays fixed~\cite{slsa,torres2019}. And parts of the
+environment that govern a workload's risk (IAM scope, network exposure,
+cloud-resource settings) are frequently \emph{unmanaged}: no desired state
+exists for them, so no comparison can flag their change.
+
+\subsection{Why This Produces a Blind Spot, Not a Bug}
+None of the mechanisms above is broken. Each does exactly what it is specified
+to do; the blind spot is an emergent property of their composition: the only
+continuously-checked invariant in the system is configuration equality, while the property stakeholders actually care about---\emph{this running
+state is one that current policy, valid authorization, and recorded intent
+still cover}---is checked jointly exactly once, at admission, and thereafter
+only in fragments: policy engines background-scan existing resources against
+\emph{current} policy~\cite{kyverno,opa}, configuration recorders track
+unmanaged resources against their own baselines~\cite{awsconfig}, and
+continuous-validation features re-check artifact policy~\cite{binauthz}---%
+each against its own reference, none against the admitted basis, and no
+component checking validity clocks on the authorization itself. The general property---joint consistency of running state with current
+context \emph{and} the admitted basis, with class-resolved verdicts---has,
+to our knowledge, neither a name, a model, nor a detector semantics, although
+each fragment above supplies detection machinery one tier of it can reuse
+(\cref{sec:architecture}). Naming and
+modeling it is this paper's job; \cref{sec:taxonomy} begins with the
+vocabulary.
+
+A terminological note to prevent collisions: ``drift'' is also used for
+statistical distribution change in learning systems (concept
+drift~\cite{gama2014}); our subject is unrelated. Industry writing on ``cloud
+governance and drift'' uses governance as the \emph{program} that manages
+configuration drift~\cite{industrydrift}; our subject is drift \emph{of
+governance itself}---a relation the configuration vocabulary cannot express,
+as \cref{sec:taxonomy} now makes precise.

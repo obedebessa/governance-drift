@@ -1,0 +1,149 @@
+\section{A Formal Model of Governance Drift (RQ2, RQ4)}
+\label{sec:model}
+
+\subsection{States and Contexts}
+\label{sec:model-states}
+
+Fix a deployment $x$ into environment $e$, approved at $t_0$.
+
+\textbf{Approved snapshot.} Per \cref{def:approved},
+\[
+\Gapp(t_0) = \bigl(m_0,\; \delta_0,\; \dig(\pi_0),\; A_0,\; \iota_0,\;
+\sigma_0\bigr):
+\]
+the approved manifest content $m_0$ and the artifact digests $\delta_0$ it
+resolved to at approval; the pinned policy version; the authorization basis
+$A_0$ (a set of approval and exception records, each with subject digest,
+scope, window, and revocation status); the intent linkage $\iota_0$ (change
+record, revision); and the environment assumptions $\sigma_0$ (the declared
+properties of $e$---identity scopes, exposure---under which risk was
+assessed). $\Gapp(t_0)$ is immutable by construction: it is a record of an
+event.
+
+\textbf{Observed state.} $\Gobs(t) = (m_t, \delta_t, \varepsilon_t)$: the
+observed configuration, the digests actually executing, and the observed
+environment properties corresponding to $\sigma_0$.
+
+\textbf{Contexts.} Three time-indexed context streams:
+$\Pol(t)$, the policy version(s) governing $e$ at $t$ with their evaluation
+semantics; $\Auth(t)$, the authorization records valid at $t$ (windows
+elapsed, revocations applied); and $\Int(t)$, the intent records and the
+desired-state revision currently driving delivery. Evidence availability,
+where needed, is a fourth stream $\Evd(t)$ (the records from which the above
+can be established).
+
+\subsection{The Governance-Distance Vector}
+\label{sec:model-distance}
+
+We define one distance per taxonomy class; each is a function of exactly the
+inputs its class needs, which is what makes the detectability results of
+\cref{sec:study} possible to state.
+
+\begin{itemize}[leftmargin=1.5em,itemsep=1.5pt,topsep=2pt]
+\item $\dconf(t)$: a normalized difference over the managed configuration
+graph between desired$(t)$ and $m_t$ (field-level graph diff with
+runtime-owned fields factored out; \cref{sec:study} shows the normalization
+is not cosmetic but the difference between signal and noise).
+\item $\dpol(t)$: the set of controls in $\Pol(t)$ that the running state
+violates although $\Gapp$ was compliant at $t_0$---empty iff admission would
+re-succeed under today's policy. Reported as a violated-control set, not a
+number: policy versions form a revision structure, not a metric space, and
+``how far'' is policy-weighted judgment, not geometry.
+\item $\dauth(t)$: the validity gap of the authorization basis: expired-but-%
+effective exceptions, revoked approvals still relied on, and the digest
+mismatch $\delta_t \not\subseteq \mathrm{subjects}(\Auth(t))$.
+\item $\dint(t)$: the mismatch between the revision driving delivery and the
+revision the valid authorization covers ($\Int(t)$ versus $\iota_0$ and its
+legitimate successors).
+\item $\denv(t)$: divergence $\varepsilon_t \ne \sigma_0$ on the assumed
+environment properties.
+\item $\devd(t)$: the undecidability gap---components of the above that
+cannot be evaluated from $\Evd(t)$; a three-valued semantics
+(consistent / inconsistent / undecidable-at-$\ell$) rather than a magnitude.
+\end{itemize}
+
+\begin{definition}[Governance Distance; Consistency]
+\label{def:gd}
+$\GD(t) = \bigl(\dconf, \dpol, \dauth, \dint, \denv, \devd\bigr)(t)$, and
+$\Cons(x, t)$ holds iff every component is empty/zero and none is
+undecidable. Onset of governance drift is
+$\inf\{t > t_0 : \lnot\Cons(x,t)\}$; \emph{dwell time} is the duration of
+inconsistency; \emph{detection latency} is detection time minus onset.
+\end{definition}
+
+\begin{figure}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{figs/fig-lifecycle}}
+\caption{The drift lifecycle and its temporal quantities
+(\cref{def:gd}). Onset is class-specific---an organizational event (policy
+revision), a clock crossing (exception expiry), an exogenous event
+(registry re-tag), or a reconciler convergence (rollback). Detection latency
+is the tier-dependent quantity measured in \cref{sec:study}; dwell time is
+the exposure window that remediation closes, with the remediation family
+determined by the drifted component (\cref{sec:model-vector}).}
+\label{fig:lifecycle}
+\end{figure}
+
+\subsection{Why the Distance Is a Vector, Not a Scalar}
+\label{sec:model-vector}
+
+A scalar $\GD$ was the natural first proposal, and we reject it as primitive
+for three reasons. \emph{Incommensurability}: the components take values in
+different structures (graph diffs, control sets, validity states,
+three-valued verdicts); any scalarization imports policy weights, and those
+weights are governance choices, not properties of the system.
+\emph{Remediation asymmetry}: the components have different remediations---%
+reconcile ($\dconf$), re-evaluate and re-approve or migrate ($\dpol$),
+re-authorize or terminate the exception ($\dauth$), restore or re-approve
+intent ($\dint$), restore assumptions or re-assess ($\denv$), repair evidence
+($\devd$)---so collapsing them destroys exactly the information an operator
+needs. \emph{Temporal structure}: components drift on different clocks
+(policy revisions are discrete organizational events; exception expiry is a
+scheduled instant; registry re-tags are exogenous), so a scalar time series
+conflates processes that must be attributed separately. A weighted composite
+for reporting is legitimate \emph{on top of} the vector (\cref{sec:metrics}),
+with published weights, exactly as a risk score summarizes but does not
+replace findings.
+
+\subsection{Detectability, Formally}
+\label{sec:model-detect}
+
+Each component distance is a function of specific streams:
+$\dconf$ of (desired, $\Gobs$); $\dpol$ additionally of $\Pol(t)$ and
+$\Gapp$'s pin; $\dauth$ of $\Auth(t)$, $\Gapp$, and $\delta_t$; $\dint$ of
+$\Int(t)$ and $\Gapp$; $\denv$ of $\varepsilon_t$ and $\sigma_0$; $\devd$ of
+$\Evd(t)$. \Cref{prop:impossible} is the negative direction of this
+dependency structure; the positive direction is equally direct:
+
+\begin{proposition}[Tier sufficiency]
+\label{prop:tiers}
+A detector with access to the streams a component depends on decides that
+component's consistency (in the closed-world model, exactly; in the field, up
+to the fidelity of the streams). Consequently the minimal detector for full
+governance consistency is one that joins the configuration comparison with
+the policy, authorization, intent/lineage, and environment streams---the tiered architecture of \cref{sec:architecture}, whose scenario-to-tier realization \cref{sec:study} checks cell by cell.
+\end{proposition}
+\begin{proof}
+Each component distance in \cref{sec:model-distance} is defined as a
+computable function of the named streams; providing the streams provides the
+function's inputs.
+\end{proof}
+
+The proposition is an input-enumeration result; whether a concrete
+implementation realizes it is a separate, checkable question---%
+\cref{sec:study} performs exactly that check on our released reference
+semantics, and \emph{only} that check: agreement there validates the
+implementation, not the model.
+
+Two modeling notes bound the claims. First, \emph{granularity}: whether the
+registry re-tag scenario is ``configuration'' drift depends on reference
+semantics---under tag semantics the configuration is unchanged; under digest
+semantics it changed. The model takes no side: it requires only that
+$\Gapp$ record resolved digests, which relocates the question from metaphysics
+to evidence (what did the approval bind?), where \cref{sec:study} shows it is
+decidable at the lineage tier. Second, \emph{legitimate context change}:
+policy supersession does not make drift \emph{culpable}---the deployment was
+legitimate under $\pi_7$ and the organization changed the rules. The model
+deliberately measures divergence, not blame; whether policy drift triggers
+migration, exemption, or re-approval is a governance decision the vector
+informs (\cref{sec:discussion}).

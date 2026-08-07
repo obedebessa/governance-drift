@@ -1,0 +1,197 @@
+\section{A Taxonomy of Drift (RQ1)}
+\label{sec:taxonomy}
+
+\begin{figure}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{figs/fig-planes}}
+\caption{Approved intent versus runtime reality. The approval event at $t_0$
+freezes a snapshot: configuration, policy version, authorization basis, intent
+linkage, and environment assumptions. Afterward, two planes evolve
+independently: the runtime plane (observed configuration, running artifacts,
+environment) and the governance plane (policy versions, authorization
+validity, intent records). Reconcilers continuously compare within the runtime
+plane (solid loop); nothing in standard practice compares the runtime plane
+against the \emph{evolved} governance plane (dashed gap)---the space in which
+governance drift lives.}
+\label{fig:planes}
+\end{figure}
+
+We fix vocabulary relative to an \emph{approval event}: the moment a change
+was legitimized for an environment. \Cref{fig:planes} shows the two planes
+that subsequently evolve. All definitions are made precise in the model of
+\cref{sec:model}; here we give their content and their separations.
+
+\begin{definition}[Approved State]
+\label{def:approved}
+The \emph{approved state} $\Gapp(t_0)$ of a deployment is the snapshot, at
+approval time $t_0$, of: the approved configuration (manifest content and the
+artifact digests it resolves to), the policy version under which it was
+evaluated, the authorization basis (approvals, exceptions, their subjects,
+scopes, and windows), the intent linkage (the change record and revision the
+approval covers), and the declared environment assumptions within which the
+risk assessment was made.
+\end{definition}
+
+\begin{definition}[Configuration Drift]
+\label{def:confdrift}
+Divergence between the \emph{current desired} configuration and the
+\emph{observed} configuration: $\Gobs(t) \ne$ desired$(t)$. This is the
+classical notion~\cite{awsconfig,driftctl,nist800128}, decidable by
+comparison of present states.
+\end{definition}
+
+\begin{definition}[Policy Drift]
+\label{def:poldrift}
+Divergence between the policy version pinned in $\Gapp(t_0)$ and the policy
+context now governing the environment, \emph{as it bears on this deployment}:
+$\Pol(t)$ has changed such that the running configuration would not be
+admitted under it today, although it was compliant when approved.
+\end{definition}
+
+\begin{definition}[Authorization Drift]
+\label{def:authdrift}
+Invalidation or mismatch of the authorization basis without any configuration
+event: an approval's window lapsed while its effect persists (expired
+emergency exception); an approval was revoked; or the running artifact's
+digest is not the subject any valid approval refers to.
+\end{definition}
+
+\begin{definition}[Intent Drift]
+\label{def:intdrift}
+Divergence between the content now driving the runtime and the intent record
+the authorization covers: the desired state was changed (e.g., rolled back)
+to content whose approval basis is absent or belongs to a different change,
+and reconciliation faithfully executes it.
+\end{definition}
+
+\begin{definition}[Evidence Drift]
+\label{def:evddrift}
+Decay of the records connecting the running state to its approval basis: the
+chain (revision $\to$ artifact $\to$ deployment $\to$ approval) can no longer
+be established from surviving evidence, so governance consistency becomes
+\emph{undecidable} rather than false. Evidence drift converts governance
+questions from answerable to unanswerable and is therefore tracked as its own
+class rather than folded into the others.
+\end{definition}
+
+\begin{definition}[Environment Drift]
+\label{def:envdrift}
+Change, outside the managed configuration's scope, of environment properties
+that the approval's risk assessment assumed: IAM scope broadened,
+network exposure altered, an adjacent cloud resource modified out of
+band---no desired state exists for the changed property, so no
+configuration comparison can even represent the divergence.
+\end{definition}
+
+\begin{definition}[Governance Drift]
+\label{def:govdrift}
+The condition in which the operational state of an environment diverges from
+the state, policy context, authorization basis, intent, or environment
+assumptions under which it was approved: the componentwise condition over
+\cref{def:poldrift,def:authdrift,def:intdrift,def:evddrift,def:envdrift},
+together with those configuration divergences (\cref{def:confdrift}) that
+bear on approved properties. A deployment is \emph{governance-consistent} at
+$t$ when every component distance of \cref{sec:model} is zero and none is
+undecidable. The components are not mutually exclusive: one incident may
+drift several at once (an unapproved rollback drifts intent \emph{and}
+leaves the runtime on digests no valid approval covers), which is one reason
+the model of \cref{sec:model} keeps them as a vector.
+\end{definition}
+
+\begin{figure}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{figs/fig-taxonomy}}
+\caption{The drift taxonomy. Configuration drift (left) is a relation between
+two present configurations. The governance-drift classes (right) each relate
+the present state to a component of the approved snapshot or its evolved
+context; their aggregate is governance drift (\cref{def:govdrift}). Annotated
+under each class: the evidence tier of \cref{sec:architecture} that first
+decides it, as measured in \cref{sec:study}.}
+\label{fig:taxonomy}
+\end{figure}
+
+\subsection{The Central Separation}
+\label{sec:separation}
+
+The taxonomy's load-bearing claim is that \cref{def:govdrift} does not reduce
+to \cref{def:confdrift}. We establish it constructively and then in general
+form.
+
+\subsubsection{Constructed counterexamples}
+\Cref{fig:example} presents the canonical scenario in full: a deployment
+whose observed configuration equals its desired configuration at every instant
+shown, and which passes from governance-consistent to governance-inconsistent
+three separate times---at the policy supersession (policy drift), at the
+exception expiry (authorization drift), and at the registry re-tag
+(authorization drift at digest granularity). In the fourth panel the desired
+state itself is rolled back and the reconciler \emph{eliminates} the
+transient configuration drift by converging to content with no valid approval
+basis: reconciliation manufactures intent drift while restoring configuration
+consistency. Each panel is realizable with standard tooling, and each is one
+of the executed scenarios of \cref{sec:study}.
+
+\begin{figure*}[t]
+\centering
+\resizebox{\textwidth}{!}{\input{figs/fig-example}}
+\caption{Configuration-consistent but governance-inconsistent, in four
+panels. Timeline of one deployment: observed configuration (bottom band)
+remains equal to desired configuration throughout---configuration drift is
+zero at every instant after reconciliation---while governance consistency
+(top band) is broken successively by (a)~policy supersession
+$\pi_7 \to \pi_8$, (b)~expiry of emergency exception \textsc{exc-1} whose
+effect persists, (c)~registry re-tag moving \texttt{svc:1.4.2} to a digest no
+approval references, and (d)~a Git rollback that the reconciler faithfully
+converges to, eliminating transient configuration drift while stranding the
+runtime on content whose approval belongs to a different change. Panels
+correspond to Scenarios S3, S2, S4, and S6 of \cref{sec:study}.}
+\label{fig:example}
+\end{figure*}
+
+\subsubsection{The dependency form}
+\begin{proposition}[Configuration equality does not decide governance
+consistency]
+\label{prop:impossible}
+Let $D$ be any detector whose inputs are configuration pairs
+$(\mathit{desired}(t), \Gobs(t))$---including their full histories. There
+exist worlds $w_1, w_2$ with identical configuration-pair histories in which
+the same deployment is governance-consistent in $w_1$ and
+governance-inconsistent in $w_2$. Hence no such $D$ decides governance
+consistency, for any diffing sophistication.
+\end{proposition}
+\begin{proof}
+Take $w_1$ and $w_2$ to agree on all configurations at all times and differ
+only in the governance plane: in $w_2$ the policy version governing the
+environment was superseded after $t_0$ by one the running configuration
+violates (or: an exception's window elapsed; or: a valid approval in $w_1$ is
+absent in $w_2$ for the same content). These differences live in
+$\Pol(t), \Auth(t), \Int(t)$, which are not functions of the configuration
+pair; both worlds present $D$ with identical inputs, and
+\cref{def:govdrift} assigns them different values. $D$ outputs the same answer
+in both, so it errs in one.
+\end{proof}
+
+The proposition is elementary---a definitional-dependency observation, and
+we bill it as such rather than as a deep impossibility theorem. Its force is
+architectural: it says deployed drift detectors are not approximations of
+governance-drift detectors but detectors \emph{of a different relation}, and
+no incremental improvement of configuration diffing closes the gap
+\emph{as a decision procedure}. Two bounds on what it claims: it rules out
+\emph{deciding}, not statistical \emph{hinting}---in real estates,
+governance-plane events often correlate with configuration-plane events
+(policy revisions ship alongside config pushes; rollbacks are visible in Git
+history), so configuration histories may carry probabilistic signal about
+governance state; how much is an empirical question for the laboratory, which
+our closed world deliberately does not answer. And it says nothing against
+comparison as a \emph{mechanism}: the governance tiers of
+\cref{sec:architecture} are themselves comparisons---against recorded
+bases, validity clocks, and coverage sets---which is precisely the point:
+the input vocabulary, not the mechanism, is what must widen.
+
+\subsubsection{What configuration drift remains}
+The separation does not demote configuration drift: unauthorized manual
+change (\cref{sec:study}, S1) is both configuration and governance drift, and
+configuration comparison is its right detector. The taxonomy's point is
+containment, not replacement: configuration drift is one class among six, the
+only one decidable in the configuration vocabulary---which the study confirms
+empirically as a detectability staircase whose first step is exactly that one
+class.

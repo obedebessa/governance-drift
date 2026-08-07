@@ -1,0 +1,29 @@
+{
+  "title": "Governance Drift: Reproducibility Package",
+  "upload_type": "software",
+  "description": "Manuscript source, closed-world detector study, canonical results, and Kubernetes/GitOps laboratory protocol for Governance Drift.",
+  "creators": [
+    {
+      "name": "Bessa Rocha da Silva, Obede",
+      "affiliation": "Independent Researcher"
+    }
+  ],
+  "access_right": "open",
+  "license": "mit-license",
+  "version": "1.0.0",
+  "publication_date": "2026-08-07",
+  "keywords": [
+    "governance drift",
+    "configuration drift",
+    "GitOps",
+    "cloud governance",
+    "reproducibility"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/obedebessa/governance-drift",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this artifact, please cite it as below."
+type: software
+title: "Governance Drift: Reproducibility Package"
+version: 1.0.0
+date-released: 2026-08-07
+authors:
+  - family-names: "Bessa Rocha da Silva"
+    given-names: "Obede"
+    affiliation: "Independent Researcher, Clermont, Florida, United States"
+license: MIT
+repository-code: "https://github.com/obedebessa/governance-drift"
+url: "https://github.com/obedebessa/governance-drift"
+abstract: >
+  Manuscript source, closed-world detector study, canonical results, and a
+  Kubernetes/GitOps laboratory protocol for measuring divergence between
+  operational reality and the basis under which infrastructure was approved.
+keywords:
+  - "governance drift"
+  - "configuration drift"
+  - "GitOps"
+  - "cloud governance"
+  - "reproducibility"

@@ -1,0 +1,28 @@
+% Tiered detection architecture (single column, resized)
+\begin{tikzpicture}[node distance=2.6mm and 4mm]
+  \node[attn, minimum width=22mm] (snap) at (0,0)
+    {\textbf{approved-state}\\\textbf{recorder}\\{\smlbl $\Gapp(t_0)$: $m_0$, $\delta_0$,}\\{\smlbl $\dig(\pi_0)$, $A_0$, $\iota_0$, $\sigma_0$}};
+
+  % tiers stack
+  \node[stage, right=9mm of snap, minimum width=26mm, yshift=13mm] (t0)
+    {T0/T0n: config comparison\\{\smlbl reconciler loop \; $\to$ S1}};
+  \node[stage, below=2mm of t0, minimum width=26mm] (t1)
+    {T1: $+$ policy stream $\Pol(t)$\\{\smlbl policy repo \; $\to$ S3}};
+  \node[stage, below=2mm of t1, minimum width=26mm] (t2)
+    {T2: $+$ authorization $\Auth(t)$\\{\smlbl windows, revocation, coverage \; $\to$ S2, S6, S9}};
+  \node[stage, below=2mm of t2, minimum width=26mm] (t3)
+    {T3: $+$ artifact lineage\\{\smlbl digests, attestations \; $\to$ S4, S8}};
+  \node[stage, below=2mm of t3, minimum width=26mm] (t4)
+    {T4: $+$ environment inventory\\{\smlbl cloud audit/inventory \; $\to$ S5, S7}};
+
+  % evaluator
+  \node[evid, right=9mm of t2, minimum width=22mm] (eval)
+    {\textbf{evaluator}\\{\smlbl computes $\GD(t)$ per}\\{\smlbl deployment, event-driven}};
+  \node[brok, below=3mm of eval, minimum width=22mm] (out)
+    {classed verdicts\\{\smlbl class $\to$ remediation family}\\{\smlbl $\unk$ where evidence fails}};
+
+  \draw[eflow] (snap.east) to[out=0,in=180] (eval.west);
+  \foreach \n in {t0,t1,t2,t3,t4}
+    \draw[flow] (\n.east) to[out=0,in=180] (eval.west);
+  \draw[flow] (eval) -- (out);
+\end{tikzpicture}

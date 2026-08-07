@@ -1,0 +1,155 @@
+% =====================================================================
+% Governance Drift: Measuring Divergence Between Approved Intent and
+% Operational Reality in Cloud-Native Systems
+%
+% Journal-length manuscript, IEEE-Transactions-style formatting on the
+% base article class (content transplants directly into IEEEtran /
+% llncs / elsarticle for submission).
+% =====================================================================
+\documentclass[10pt,twocolumn]{article}
+\PassOptionsToPackage{hyphens}{url}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}
+\usepackage[scaled=0.90]{helvet}
+\usepackage{courier}
+\usepackage[letterpaper,left=0.66in,right=0.66in,top=0.73in,bottom=0.95in]{geometry}
+\setlength{\columnsep}{0.25in}
+\usepackage{microtype}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric,fit,backgrounds,decorations.pathreplacing,matrix}
+\usepackage{flushend}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+\usepackage[capitalize,noabbrev]{cleveref}
+
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\thesection-\Alph{subsection}}
+\renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
+\titleformat{\section}{\centering\normalsize\scshape}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\itshape}{\Alph{subsection}.}{0.5em}{}
+\titleformat{\subsubsection}{\normalsize\itshape}{\arabic{subsubsection})}{0.5em}{}
+\titlespacing*{\section}{0pt}{2.2ex plus .6ex minus .2ex}{1.2ex plus .3ex}
+\titlespacing*{\subsection}{0pt}{1.8ex plus .5ex minus .2ex}{0.8ex plus .2ex}
+\titlespacing*{\subsubsection}{0pt}{1.4ex plus .4ex minus .2ex}{0.6ex plus .2ex}
+
+\captionsetup[figure]{font=footnotesize,labelsep=period,name=Fig.}
+\captionsetup[table]{font=footnotesize,labelsep=newline,justification=centering,labelfont=sc,textfont=sc}
+\renewcommand{\thetable}{\Roman{table}}
+
+\newtheoremstyle{ieeedef}{0.7em}{0.7em}{\itshape}{\parindent}{\itshape}{:}{0.4em}{}
+\theoremstyle{ieeedef}
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{metricdef}{Metric}
+\renewcommand{\themetricdef}{M\arabic{metricdef}}
+\newtheorem{finding}{Finding}
+\renewcommand{\thefinding}{F\arabic{finding}}
+\newtheorem{scenario}{Scenario}
+\renewcommand{\thescenario}{S\arabic{scenario}}
+\crefname{definition}{Definition}{Definitions}
+\crefname{proposition}{Proposition}{Propositions}
+\crefname{metricdef}{Metric}{Metrics}
+\crefname{finding}{Finding}{Findings}
+\crefname{scenario}{Scenario}{Scenarios}
+
+\definecolor{lstbg}{gray}{0.97}
+\lstset{
+  basicstyle=\ttfamily\fontsize{7.2}{8.6}\selectfont,
+  breaklines=true, breakatwhitespace=true,
+  frame=single, framerule=0.3pt, rulecolor=\color{black!50},
+  backgroundcolor=\color{lstbg},
+  xleftmargin=4pt, xrightmargin=4pt,
+  aboveskip=6pt, belowskip=4pt,
+  showstringspaces=false, columns=fullflexible, keepspaces=true
+}
+
+% ------------------------- math macros -------------------------------
+\newcommand{\Gapp}{G_{\mathrm{app}}}
+\newcommand{\Gobs}{G_{\mathrm{obs}}}
+\newcommand{\Pol}{\mathcal{P}}
+\newcommand{\Auth}{\mathcal{A}}
+\newcommand{\Int}{\mathcal{I}}
+\newcommand{\Evd}{\mathcal{E}}
+\newcommand{\GD}{\mathsf{GD}}
+\newcommand{\dconf}{d_{\mathrm{conf}}}
+\newcommand{\dpol}{d_{\mathrm{pol}}}
+\newcommand{\dauth}{d_{\mathrm{auth}}}
+\newcommand{\dint}{d_{\mathrm{int}}}
+\newcommand{\denv}{d_{\mathrm{env}}}
+\newcommand{\devd}{d_{\mathrm{evd}}}
+\newcommand{\Cons}{\mathsf{Consistent}}
+\newcommand{\dig}{h}
+\newcommand{\unk}{\bot}
+
+\tikzset{
+  stage/.style={draw=black!70, rounded corners=1.5pt, fill=black!4,
+    minimum height=6.5mm, minimum width=14mm, align=center,
+    font=\fontsize{7.2}{8.2}\selectfont},
+  human/.style={stage, fill=blue!8},
+  attn/.style={draw=black!70, fill=green!9, rounded corners=1.5pt,
+    minimum height=5mm, align=center, font=\fontsize{6.8}{7.9}\selectfont},
+  evid/.style={draw=black!70, fill=orange!12, rounded corners=1.5pt,
+    minimum height=5mm, align=center, font=\fontsize{6.8}{7.9}\selectfont},
+  brok/.style={draw=red!70, fill=red!8, rounded corners=1.5pt,
+    minimum height=5mm, align=center, font=\fontsize{6.8}{7.9}\selectfont},
+  lbl/.style={font=\fontsize{6.8}{7.9}\selectfont},
+  flow/.style={-{Stealth[length=2mm]}, thick},
+  eflow/.style={-{Stealth[length=1.6mm]}, densely dashed, black!60},
+  bflow/.style={-{Stealth[length=1.6mm]}, red!70, densely dotted, thick}
+}
+\newcommand{\smlbl}{\fontsize{6.8}{7.9}\selectfont\color{black!70}}
+\newcommand{\cmark}{\ensuremath{\checkmark}}
+\newcommand{\xmark}{\ensuremath{\times}}
+
+% =====================================================================
+\begin{document}
+
+\twocolumn[{%
+\begin{center}
+{\fontsize{21}{25}\selectfont
+Governance Drift: Measuring Divergence Between Approved\\[2pt]
+Intent and Operational Reality in Cloud-Native Systems\par}
+\vspace{14pt}
+{\fontsize{11}{13}\selectfont Obede Bessa\par}
+\vspace{2pt}
+{\fontsize{9}{11}\selectfont Independent Researcher \;---\; obedebessa@gmail.com\par}
+\vspace{16pt}
+\end{center}
+}]
+
+% ------------------------- abstract ----------------------------------
+\noindent\textbf{\textit{Abstract}---Configuration drift is the divergence between desired and observed configuration. We identify a broader relation that reconciliation does not decide and can even create: \emph{governance drift}, the divergence between operational reality and the state, policy context, authorization basis, intent, or environment assumptions under which that reality was approved. A resource may match Git exactly while violating a superseding policy, relying on an expired exception, running an unapproved artifact, or reflecting an unauthorized rollback. We contribute (i)~a taxonomy separating configuration, policy, authorization, intent, evidence, and environment drift, with governance consistency expressed componentwise; (ii)~a model based on an approved-state snapshot, time-indexed governance contexts, and a governance-distance vector; (iii)~counterexamples and a dependency result showing why configuration equality cannot decide governance consistency; (iv)~a vendor-neutral, cumulative evidence-tier architecture; (v)~an executed, reproducible closed-world study over nine scenarios, including evidence decay, with runtime and benign governance churn in the control; and (vi)~a specified but unexecuted Kubernetes/GitOps field protocol. In the modeled world, normalized configuration comparison detects one scenario of nine. Adding policy re-evaluation, authorization validity, artifact lineage, and environment inventory produces a strict detectability staircase, with each tier detecting the scenarios whose deciding facts it carries and no false alarms under the modeled benign governance churn. An unnormalized comparator alarms on 71\% of control events in our churn model. The study validates detector semantics, not production effectiveness: no cluster or field measurements are reported or claimed.}
+
+\vspace{4pt}
+\noindent\textbf{\textit{Index Terms}---Governance drift, configuration drift, GitOps, policy as code, cloud governance, Kubernetes, continuous compliance, DevOps, distributed systems.}
+\vspace{8pt}
+
+\input{sections/01-intro}
+\input{sections/02-background}
+\input{sections/03-taxonomy}
+\input{sections/04-model}
+\input{sections/05-architecture}
+\input{sections/06-study}
+\input{sections/07-lab}
+\input{sections/08-metrics}
+\input{sections/09-related}
+\input{sections/10-discussion}
+\input{sections/11-conclusion}
+
+\bibliographystyle{ieeetr}
+\bibliography{refs}
+
+\end{document}

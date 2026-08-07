@@ -1,0 +1,95 @@
+\section{Related Work}
+\label{sec:related}
+
+\subsection{Configuration Drift and Desired-State Systems}
+Configuration drift detection is mature practice: reconciler status in
+GitOps~\cite{argocd,fluxcd,opengitops,beetz2022}, cloud configuration
+recorders~\cite{awsconfig}, IaC drift tools~\cite{driftctl}, and the
+configuration-management control tradition~\cite{nist800128,nist80053} that
+institutionalizes baseline comparison. IaC research studies the quality and
+smells of the configuration artifacts themselves~\cite{rahman2019mapping,
+rahman2019,sharma2016}. All of it operates in the configuration vocabulary
+and against the \emph{current} desired state; \cref{prop:impossible} bounds
+what that vocabulary can decide, and \cref{fnd:blind} measures the bound. Our
+claim is containment: this literature solves one class of six, and solves it
+well---T0n in our architecture \emph{is} this literature.
+
+\subsection{Policy-as-Code, Admission, and Continuous Compliance}
+Policy engines~\cite{opa,kyverno} and admission
+control~\cite{k8sadmission} evaluate governance predicates at a point in
+time; posture management~\cite{cspm} and hardening baselines~\cite{nsacisa2022}
+scan environments against benchmark policy; continuous-validation features in
+attestation-gated deployment~\cite{binauthz} re-check the artifact-policy
+slice after admission. These supply, respectively, our T1 evaluation
+semantics, part of T4's observation, and a one-tier precedent for continuous
+re-evaluation. What none provides is the \emph{approved-state reference}:
+they compare state against current policy, not against the basis under which
+the state was admitted, so they cannot distinguish ``was never compliant''
+from ``was admitted legitimately and the world moved''---the distinction
+carrying the remediation semantics of \cref{sec:model-vector}, and the
+defining relation of governance drift.
+
+\subsection{Supply-Chain Integrity and Authorization Evidence}
+Attestation frameworks bind artifacts to build and review
+facts~\cite{slsa,torres2019,newman2022}; they are T3's substrate and make
+S4/S8-class drift decidable. Their orientation is admission-time
+verification; governance drift adds the post-admission temporal dimension
+(validity windows, revocation, supersession) and the join against
+$\Gapp$. Records-side, durable approval evidence and transparency
+services~\cite{scitt2025,provdm,cloudtrail} determine whether the evaluator's
+verdicts are decidable at all---our $\devd$ component and GCC metric make
+that dependence explicit rather than assumed.
+
+\subsection{Access Control, Runtime Verification, and Drift Theory}
+Temporal validity of authorization has deep roots in access-control
+theory~\cite{sandhu1996,clark1987} and zero-trust's continuous-evaluation
+stance~\cite{nist800207}; governance drift operationalizes ``continuous''
+for the deployment-governance plane. Runtime
+verification~\cite{leucker2009,pnueli1977} monitors executions against
+temporal specifications; our evaluator is kin---governance consistency is a
+safety-style property over joined state and context streams---but the
+specification here is not a given formula: it is reconstructed per deployment
+from the approved snapshot, which is why recording $\Gapp$ is the
+architecture's prerequisite rather than an optimization. Concept
+drift~\cite{gama2014} shares only the word: it names distribution change in
+data streams, not divergence from an approval basis; we flag it to prevent
+terminological import of its detectors, which answer a statistical question
+ours does not ask. Industry usage of ``governance'' alongside drift
+management~\cite{industrydrift} treats governance as the program that
+suppresses configuration drift; we are aware of no prior formal treatment of
+drift \emph{of} the governance relation itself, and a term search (queries \texttt{"governance drift"} alone and with
+\texttt{cloud}, \texttt{infrastructure}, \texttt{configuration}; ACM DL,
+IEEE Xplore, general scholarly indices; August 2026) found the compound used
+in internet-governance and organizational senses unrelated to this object.
+
+\subsection{Novelty, Answered Directly}
+\emph{Is this just configuration drift?} No---with the argument's weight
+placed where it belongs. The load-bearing evidence is analytic: constructed,
+tool-realizable counterexamples in which configuration equality and
+governance inconsistency coexist (\cref{fig:example}), and the dependency
+result that no configuration-pair detector decides the property
+(\cref{prop:impossible}). The executed staircase (\cref{tab:matrix})
+supports these as an implementation-validation and noise study, not as
+independent field evidence. And we concede the mechanical point a skeptic
+will press: every governance-tier detector is itself a comparison---against
+a recorded basis, a validity clock, or a coverage set. The claim is not a
+new mechanism but a different \emph{relation}: three-place
+(state, current context, admitted basis) where configuration drift is
+two-place and memoryless, with the consequences \cref{sec:discussion}
+enumerates. \emph{Is it policy compliance scanning?} Scanning
+evaluates current state against current policy; governance drift is
+three-way---state, current context, \emph{and approved basis}---and the third
+term changes both the verdicts (legitimately-admitted-since-superseded
+$\ne$ never-compliant) and the remediations. \emph{Is it continuous compliance scanning or continuous validation?}
+Per tier, largely yes---and we credit it: Kyverno-style background scanning
+continuously re-evaluates resources against current policy (T1);
+configuration recorders and posture management watch unmanaged resources
+(much of T4); continuous validation re-checks artifact policy (part of
+T3)~\cite{kyverno,awsconfig,cspm,binauthz}. Six of our nine scenarios
+trigger \emph{some} existing detector. What no deployed mechanism provides
+is the join against the admitted basis with validity clocks and
+class-resolved verdicts---the increment that turns ``a scanner fired'' into
+``this running state is no longer covered by what admitted it, for this
+reason, with this remediation family.'' That increment is architectural and,
+we argue, decision-relevant; quantifying its operational value on real
+estates is exactly what the laboratory and its LH1--LH4 exist to test.
