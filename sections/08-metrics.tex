@@ -20,9 +20,20 @@ distance and is the suite's structural decision.)
 \label{met:ddl}
 Per class and tier: detection time minus drift onset---in events for
 closed-world evaluation (measured in \cref{sec:study}: 0--1 events at the
-correct tier; 15.5 for naive comparison on S1), in wall-clock for the
-laboratory. \emph{Verdict: adopted.} Onset must be defined per class (e.g.,
-expiry instant for exception drift); the definition ships with the metric.
+correct tier; 22.6 for naive comparison on S1), in wall-clock for the
+laboratory. \emph{Verdict: adopted.} Let $t_{\mathrm{inject}}$ be command
+initiation, $t_{\mathrm{onset}}$ the instant the operational relation first
+becomes inconsistent, $t_{\mathrm{detect}}$ the first correct verdict, and
+$t_{\mathrm{evidence}}$ completion of the evidence bundle supporting that
+verdict. We report actuation latency
+$t_{\mathrm{onset}}-t_{\mathrm{inject}}$, DDL
+$t_{\mathrm{detect}}-t_{\mathrm{onset}}$, end-to-end latency
+$t_{\mathrm{detect}}-t_{\mathrm{inject}}$, and time-to-evidence (TTE)
+$t_{\mathrm{evidence}}-t_{\mathrm{onset}}$ separately. Onset must be defined
+per class (e.g., expiry instant for exception drift); the definition ships
+with the metric. The original one-pass table measured injection-to-verdict
+and is retained only as a legacy observation in the artifact, not relabeled
+as DDL.
 \end{metricdef}
 
 \begin{metricdef}[Unapproved Change Ratio, UCR]

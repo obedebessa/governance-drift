@@ -17,23 +17,23 @@
 
   % configuration-consistency band
   \node[lbl, left] at (0,-8) {config.\ equality};
-  \draw[line width=2.2pt, green!55!black] (8,-8) -- (130,-8);
-  \draw[line width=2.2pt, orange] (130,-8) -- (136,-8);
-  \draw[line width=2.2pt, green!55!black] (136,-8) -- (\W-4,-8);
+  \draw[line width=2.2pt, black] (8,-8) -- (130,-8);
+  \draw[line width=2.2pt, black, densely dotted] (130,-8) -- (136,-8);
+  \draw[line width=2.2pt, black] (136,-8) -- (\W-4,-8);
   \node[lbl, below] at (70,-9.5) {equal throughout (transient divergence at (d) until reconciler converges)};
 
   % governance-consistency band
   \node[lbl, left] at (0,-17) {governance cons.};
-  \draw[line width=2.2pt, green!55!black] (8,-17) -- (42,-17);
-  \draw[line width=2.2pt, red!75] (42,-17) -- (\W-4,-17);
+  \draw[line width=2.2pt, black] (8,-17) -- (42,-17);
+  \draw[line width=2.2pt, black, dashed] (42,-17) -- (\W-4,-17);
   \node[lbl, below] at (25,-18.5) {consistent};
-  \node[lbl, below, text=red!75] at (60,-18.5) {policy drift};
-  \node[lbl, below, text=red!75] at (87,-18.5) {$+$ authz drift};
-  \node[lbl, below, text=red!75] at (116,-18.5) {$+$ digest mismatch};
-  \node[lbl, below, text=red!75] at (140,-18.5) {$+$ intent drift};
+  \node[lbl, below] at (60,-18.5) {policy drift};
+  \node[lbl, below] at (87,-18.5) {$+$ authz drift};
+  \node[lbl, below] at (116,-18.5) {$+$ digest mismatch};
+  \node[lbl, below] at (140,-18.5) {$+$ intent drift};
 
   % reconciler annotation at (d)
   \draw[bflow] (133,-8) to[out=-90,in=90] (136,-15.5);
-  \node[lbl, text=red!70, align=left] at (143,-12.5)
+  \node[lbl, text=black, align=left] at (143,-12.5)
     {reconciler restores\\config equality,\\consummating (d)};
 \end{tikzpicture}

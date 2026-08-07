@@ -1,13 +1,13 @@
 # Reviewer #2 Simulation — Report and Point-by-Point Response
 
-> **Post-review v1.1.0 amendment (2026-08-07).** The previously unexecuted
-> Kubernetes/GitOps laboratory has now been completed once for each of S1–S9
-> on a pinned Kind/Flux/Kyverno stack. All baselines were consistent and all
-> class-resolved verdicts matched expectation; observed injection-to-verdict
-> latency was 0.137–8.571 seconds. The manuscript scopes this as bounded
-> feasibility/occurrence evidence, not a reliability, prevalence, or latency-
-> distribution study. It also adds a class-resolved severity table and a
-> comparative native-decision-scope matrix.
+> **Post-review v1.2.0 amendment (2026-08-07).** The Kubernetes/GitOps
+> laboratory now executes 20 repetitions of S1–S9 at three evaluator cadences
+> on a pinned Kind/Flux/Kyverno stack, plus 20 benign windows. It produced
+> 538/540 detections, 538/538 correct classifications conditional on
+> detection, and zero alarms in 543 benign-control polls. Injection, onset,
+> detection, and evidence-completion clocks are separated. The manuscript
+> scopes this as bounded realizability and within-laboratory behavior, not
+> evidence of natural occurrence, field prevalence, or production behavior.
 
 **Manuscript:** *Governance Drift: Measuring Divergence Between Approved Intent and Operational Reality in Cloud-Native Systems*
 **Process:** the compiled draft — including the executed detector study (`code/detector_study.py`), its data (`data/*.csv`), and the laboratory artifact (`lab/`) — went to an independent adversarial review (simulated Reviewer #2, editor-assigned mission: *reject this as "just configuration drift"*). The reviewer verified every quoted number against the data, re-executed the study, audited the code against the paper's definitions, and audited the lab directory against the paper's claims about it. The review was severe and largely correct; the revision required a rewritten study (v2), text repositioning, and completion of the lab artifact — not cosmetics. §1 summarizes the review; §2 the disposition of every item.
@@ -34,9 +34,9 @@
 
 **M4 — Taxonomy inconsistency.** *Resolved.* The code's class set now equals the taxonomy's six classes exactly. S4's ground truth is `authorization` (running digest not covered by any valid approval — Def. 4's third clause), matching the paper's own text; the ad-hoc artifact/authorization disambiguation rule is gone. Ground truth is a **class set** per scenario (Def. 8 now states component non-exclusivity; S6 = {intent, authorization}), classification is correct iff the reported class is in the set, and the declared evaluation order is documented as an implementation choice that affects only which member of a multi-component drift is reported first. **S9 (approval-record deletion) is added**, exercising evidence drift with the explicit undecidable verdict — all six classes now tested. Figure annotations reconciled (authorization: S2, S4, S8; evidence: S9 at T2; intent: S6 "jointly authz"); the abstract's "unlocks exactly the classes" reduced to the scenario-level statement the data supports.
 
-**M5 — Existing tools already detect per tier.** *Resolved by explicit credit and honest repositioning.* §II now names the fragments (Kyverno background scanning re-evaluates against current policy; configuration recorders track unmanaged resources; continuous validation re-checks artifact policy) and locates the gap precisely: no joint check against the admitted basis, no validity clocks on the authorization itself. §V's "Relation to Existing Mechanisms" and §IX-D restate novelty as the join + class-resolved verdicts, state that six of nine scenarios trigger *some* existing detector, and assign the operational-value question of the increment to LH1–LH4. **[open — requires execution]** Field evaluation of the increment cannot be produced by revision.
+**M5 — Existing tools already detect per tier.** *Resolved by explicit credit and honest repositioning.* §II now names the fragments (Kyverno background scanning re-evaluates against current policy; configuration recorders track unmanaged resources; continuous validation re-checks artifact policy) and locates the gap precisely: no joint check against the admitted basis, no validity clocks on the authorization itself. §V's "Relation to Existing Mechanisms" and §IX-D restate novelty as the join + class-resolved verdicts, state that six of nine scenarios trigger *some* existing detector, and assign the operational-value question of the increment to LH1–LH4. The repeated live laboratory now checks the joined evaluator on a controlled stack; field prevalence and operational value in a natural estate remain open.
 
-**M6 — Incomplete lab; thin paper.** *Partially resolved; remainder out of this environment's reach.* The `lab/` artifact is now complete as described: `kind-cluster.yaml`, `bootstrap.sh`, `snapshot.sh` (approved-state recorder), `evaluate.sh` (tier-restricted evaluator, exit-code semantics incl. the undecidable verdict), `measure.sh` (TTD/TTE harness), both policy versions (π₇, π₈), all nine scenario scripts, mock inventory and approvals. Executing it requires container infrastructure this authoring environment does not provide (no Docker daemon); the paper states this plainly and reports nothing from it. **[open — requires execution]** The reviewer's top-ranked mandate — run the lab, then measure at least one real estate — is the necessary next step and no text change substitutes for it.
+**M6 — Incomplete lab; thin paper.** *Resolved for the controlled laboratory; field evidence remains open.* The complete Kind/Flux/Kyverno stack was executed with 20 repetitions of S1–S9, randomized scenario order, three evaluator cadences, four timestamps, and 20 benign-control windows. The run produced 538/540 detections and 538/538 correct classifications conditional on detection; zero of 543 benign-control polls alarmed. The two S1 misses at slower cadences are retained and explained by Flux reconciliation before the first scheduled poll. Raw observations, summaries, tables, manifests, versions, seed, and verification scripts ship in `lab/`. Measuring a natural estate remains a separate next step; the manuscript does not present the controlled injections as evidence of natural occurrence.
 
 ### Minor
 
@@ -57,4 +57,4 @@
 
 ## 3. Residual state
 
-The revised manuscript compiles to 13 two-column pages, zero undefined references, zero overfull boxes ≥10pt, no dead or missing bibliography entries; the detector study (v2, 338 lines) exercises all six taxonomy classes over nine scenarios with class-set scoring, definition-faithful tier semantics, benign governance churn in the control, and a fully programmatic results table; and the laboratory artifact is complete as described. The two items no revision can close — executing the laboratory on real infrastructure, and measuring at least one real estate — are the explicit next steps, and the paper now describes itself accordingly: a concept-and-architecture paper with a validated reference semantics and a field program, not an empirical claim about production systems.
+The revised manuscript and package include the definition-faithful closed-world study and an executed repeated live laboratory. The latter covers 180 positive injections observed at three cadences and 20 benign windows, preserves all timeout outcomes, reports S6's full expected class set, and separates actuation, DDL, end-to-end latency, and TTE. The remaining empirical boundary is explicit: no natural repository or production estate has yet been measured. The paper therefore claims bounded realizability and within-laboratory behavior, not natural occurrence, field prevalence, or production effectiveness.

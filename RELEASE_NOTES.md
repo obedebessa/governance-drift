@@ -1,5 +1,14 @@
 # Release notes
 
+## v1.2.0 — 2026-08-07
+
+- Executes 20 repetitions of S1–S9 at 0.5-, 2-, and 10-second evaluator cadences: 538/540 detections and 538/538 correct classifications conditional on detection.
+- Separates injection, drift onset, detection, and evidence-completion timestamps; reports actuation, DDL, end-to-end latency, and TTE without relabeling the legacy one-pass values.
+- Executes 20 benign live-stack windows across six change families, producing zero alarms in 543 evaluator polls.
+- Represents S6 ground truth explicitly as `{intent, authorization}` and reports the evaluator's first-priority verdict separately.
+- Reframes live evidence as bounded realizability and within-laboratory behavior, not evidence of natural occurrence or production performance.
+- Adds formal Data and Code Availability, exact reproduction commands, release DOI, source snapshot, and checksums.
+
 ## v1.1.0 — 2026-08-07
 
 - Executes the bounded Kind/Flux/Kyverno laboratory over S1–S9.

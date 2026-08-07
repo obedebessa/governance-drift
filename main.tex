@@ -98,17 +98,17 @@
   stage/.style={draw=black!70, rounded corners=1.5pt, fill=black!4,
     minimum height=6.5mm, minimum width=14mm, align=center,
     font=\fontsize{7.2}{8.2}\selectfont},
-  human/.style={stage, fill=blue!8},
-  attn/.style={draw=black!70, fill=green!9, rounded corners=1.5pt,
+  human/.style={stage, fill=black!5},
+  attn/.style={draw=black!70, fill=black!4, rounded corners=1.5pt,
     minimum height=5mm, align=center, font=\fontsize{6.8}{7.9}\selectfont},
-  evid/.style={draw=black!70, fill=orange!12, rounded corners=1.5pt,
+  evid/.style={draw=black!70, fill=black!10, rounded corners=1.5pt,
     minimum height=5mm, align=center, font=\fontsize{6.8}{7.9}\selectfont},
-  brok/.style={draw=red!70, fill=red!8, rounded corners=1.5pt,
+  brok/.style={draw=black, densely dashed, fill=black!8, rounded corners=1.5pt,
     minimum height=5mm, align=center, font=\fontsize{6.8}{7.9}\selectfont},
   lbl/.style={font=\fontsize{6.8}{7.9}\selectfont},
   flow/.style={-{Stealth[length=2mm]}, thick},
   eflow/.style={-{Stealth[length=1.6mm]}, densely dashed, black!60},
-  bflow/.style={-{Stealth[length=1.6mm]}, red!70, densely dotted, thick}
+  bflow/.style={-{Stealth[length=1.6mm]}, black, densely dotted, thick}
 }
 \newcommand{\smlbl}{\fontsize{6.8}{7.9}\selectfont\color{black!70}}
 \newcommand{\cmark}{\ensuremath{\checkmark}}
@@ -131,7 +131,7 @@ Intent and Operational Reality in Cloud-Native Systems\par}
 }]
 
 % ------------------------- abstract ----------------------------------
-\noindent\textbf{\textit{Abstract}---Configuration drift is the divergence between desired and observed configuration. We identify a broader relation that reconciliation does not decide and can even create: \emph{governance drift}, the divergence between operational reality and the state, policy context, authorization basis, intent, evidence, or environment assumptions under which that reality was approved. A resource may match Git exactly while violating a superseding policy, relying on an expired exception, running an unapproved artifact, or reflecting an unauthorized rollback. We contribute (i)~a taxonomy separating configuration, policy, authorization, intent, evidence, and environment drift, with governance consistency expressed componentwise; (ii)~a model based on an approved-state snapshot, time-indexed governance contexts, and a governance-distance vector; (iii)~counterexamples and a dependency result showing why configuration equality cannot decide governance consistency; (iv)~a vendor-neutral, cumulative evidence-tier architecture; (v)~an executed, reproducible closed-world study over nine scenarios, including evidence decay, with runtime and benign governance churn in the control; and (vi)~a bounded execution on a pinned Kind/Flux/Kyverno stack, one run per scenario. In the modeled world, normalized configuration comparison detects one scenario of nine. Adding policy re-evaluation, authorization validity, artifact lineage, and environment inventory produces a strict detectability staircase, with each tier detecting the scenarios whose deciding facts it carries and no false alarms under modeled benign governance churn. An unnormalized comparator alarms on 71\% of control events in our churn model. In the live laboratory, all nine injections began from a consistent baseline and produced the expected class-resolved verdict, with injection-to-verdict latencies of 0.137--8.571 seconds. This bounded execution demonstrates feasibility and occurrence on one real stack; it does not estimate prevalence, reliability, production effectiveness, or latency distributions.}
+\noindent\textbf{\textit{Abstract}---Configuration drift compares desired and observed configuration. We define \emph{governance drift}: divergence between operational reality and the state, policy context, authorization basis, intent, evidence, or environment assumptions under which that reality was approved. A resource can match Git while violating superseding policy, relying on expired authority, running an unapproved artifact, or reflecting an unauthorized rollback. We contribute a six-class taxonomy; an approved-snapshot model with time-indexed contexts and a governance-distance vector; counterexamples and a dependency result showing why configuration equality cannot decide governance consistency; a cumulative evidence-tier architecture; an executed closed-world study; and a repeated Kubernetes/GitOps laboratory. In the modeled world, normalized configuration comparison detects one of nine scenarios. Adding policy, authorization, lineage, and environment evidence yields a strict detectability staircase, while an unnormalized comparator alarms on 71\% of control events. In the pinned Kind/Flux/Kyverno laboratory, we repeated each scenario 20 times with randomized polling phase at 0.5-, 2-, and 10-second cadences. The evaluator detected 538 of 540 cadence runs; both misses were transient S1 configuration drift at slower cadences. Conditional classification accuracy was 100\% (538/538). Across 20 balanced benign-change windows and 543 polls, it raised no alarm. Actuation, onset-to-detection, injection-to-detection, and time-to-evidence are reported separately. This bounded execution demonstrates the realizability of the proposed classes and evaluator on one pinned Kubernetes/GitOps laboratory with file-backed approval and environment streams; it does not estimate prevalence, production effectiveness, stream-loss reliability, or transfer beyond this stack.}
 
 \vspace{4pt}
 \noindent\textbf{\textit{Index Terms}---Governance drift, configuration drift, GitOps, policy as code, cloud governance, Kubernetes, continuous compliance, DevOps, distributed systems.}
@@ -147,6 +147,7 @@ Intent and Operational Reality in Cloud-Native Systems\par}
 \input{sections/08-metrics}
 \input{sections/09-related}
 \input{sections/10-discussion}
+\input{sections/10a-availability}
 \input{sections/11-conclusion}
 
 \bibliographystyle{ieeetr}

@@ -47,13 +47,15 @@ not, verdicts degrade to undecidable, and the honest headline is GCC, not
 drift rates. This is a real adoption constraint, not a footnote: estates
 without durable approval evidence cannot measure their governance drift, and
 discovering that is arguably the measurement's first value.
-\emph{Bounded live empirics.} The laboratory executed each scenario once on
-one Kind/Flux/Kyverno stack. Its 9/9 class agreement establishes feasibility
-and occurrence under controlled injections, but cannot estimate reliability,
-noise, prevalence, tail latency, stream loss, or production transfer. The
-closed-world staircase remains exact by construction, and the full repeated,
-churn-controlled protocol in \cref{sec:lab} is required to test how much of
-that shape survives real ambiguity. \emph{Single-deployment granularity.} The model is
+\emph{Bounded live empirics.} The laboratory executed 20 repetitions of each
+scenario at three evaluator cadences on one Kind/Flux/Kyverno stack, plus 20
+benign control windows. Its 538/540 detection observations, 538/538
+conditional class agreement, and zero alarms in 543 benign-control polls
+establish bounded realizability and within-laboratory behavior. They do not
+establish natural occurrence, field prevalence, production reliability,
+universal false-alarm rates, stream-loss tolerance, or transfer across
+organizations. The two cadence misses are retained because they expose a
+real observability boundary for transient drift. \emph{Single-deployment granularity.} The model is
 per-deployment; estate-level aggregation (fleet drift, correlated policy
 supersessions) raises weighting questions we defer to the metrics'
 published-composite discipline. \emph{Environment scope.} $\denv$ is bounded

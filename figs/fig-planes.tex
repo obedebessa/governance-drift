@@ -14,7 +14,7 @@
   \node[stage, right=3.5mm of r2, minimum width=15mm] (r3)
     {environment\\{\smlbl $\varepsilon_t$}};
   \node[lbl, above=1mm of r2] {\textbf{runtime plane}};
-  \draw[flow] (r1) to[out=-25,in=205] node[lbl, below]{reconciler loop} (r3);
+  \draw[flow] (r1) to[out=-25,in=205] node[lbl, below, pos=0.22]{reconciler} (r3);
   \draw[flow] (r3) to[out=155,in=25] (r1);
 
   % governance plane
@@ -30,6 +30,6 @@
   \draw[eflow] (snap.east) -- (g1.west);
 
   % the gap
-  \draw[bflow] ($(r2.south)+(0,-1mm)$) -- node[lbl, right=1mm, text=red!70]
-    {unchecked: governance drift} ($(g2.north)+(0,1mm)$);
+  \draw[bflow] ($(r2.south)+(0,-1mm)$) -- node[lbl, right=1mm, text=black, align=left]
+    {unchecked:\\governance drift} ($(g2.north)+(0,1mm)$);
 \end{tikzpicture}
