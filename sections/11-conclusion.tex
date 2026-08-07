@@ -22,13 +22,16 @@ control events. The umbrella research question is thereby answered with its
 conditions stated: governance drift is formally representable (the vector
 $\GD$), measurable exactly where the admitted basis was recorded (coverage,
 GCC, bounds everything else), and detectable to the depth of the evidence
-tiers an estate maintains. The Kubernetes/GitOps laboratory was executed once
-per scenario on a pinned Kind/Flux/Kyverno stack: all nine injections began
-from a consistent baseline, all nine yielded the expected class-resolved
-verdict, and observed injection-to-verdict latency ranged from 0.137 to
-8.571~s. This establishes feasibility and occurrence on one controlled live
-stack, while deliberately leaving prevalence, reliability, production noise,
-and latency distributions to the released repeated-trial protocol.
+tiers an estate maintains. The repeated Kubernetes/GitOps laboratory executed
+20 repetitions of all nine scenarios at 0.5-, 2-, and 10-s cadences on a
+pinned Kind/Flux/Kyverno stack. It detected 538 of 540 observations; all 538
+detected verdicts belonged to the expected class sets. Twenty benign windows
+covering six change families produced zero alarms in 543 polls. Separate
+injection, onset, detection, and evidence clocks show that actuation and DDL
+are distinct: for example, S6's median actuation was 10.05~s while median DDL
+was 0.47~s at the default cadence. These results establish bounded
+realizability and within-laboratory behavior, not natural occurrence,
+prevalence, production reliability, or universal latency distributions.
 
 The definitions are offered for reuse; the matrix is offered as a template
 for evaluating any governance-drift detector; and the central lesson is

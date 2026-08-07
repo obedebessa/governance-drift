@@ -1,0 +1,15 @@
+# Benign policy revision used by control C1. It changes the declared policy
+# version while preserving a rule that the baseline deployment satisfies.
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: governance-baseline
+  labels: { policy-version: pi-7b }
+spec:
+  validationFailureAction: Audit
+  rules:
+    - name: require-prod-env-label-revised
+      match: { any: [ { resources: { kinds: [Deployment], namespaces: [payments] } } ] }
+      validate:
+        message: "env label required by benign pi-7b revision"
+        pattern: { metadata: { labels: { env: "prod" } } }

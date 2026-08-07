@@ -102,7 +102,17 @@ def evaluate(tier: str) -> dict:
         return result("consistent")
 
     pods = kubectl_json("-n", "payments", "get", "pod", "-l", "app=payments")
-    image_id = pods["items"][0]["status"]["containerStatuses"][0]["imageID"]
+    candidates = []
+    for pod in pods.get("items", []):
+        if pod.get("metadata", {}).get("deletionTimestamp"):
+            continue
+        statuses = pod.get("status", {}).get("containerStatuses", [])
+        if not statuses or not statuses[0].get("ready") or not statuses[0].get("imageID"):
+            continue
+        candidates.append(statuses[0]["imageID"])
+    if not candidates:
+        raise RuntimeError("no active ready payments pod has a materialized imageID")
+    image_id = sorted(candidates)[0]
     digest = image_id.split("@", 1)[-1]
     if not any(digest in approval.get("subjects", []) for approval in current_approvals):
         return result("drift", "authorization", f"running digest {digest} is not approved")

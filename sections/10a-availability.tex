@@ -1,0 +1,24 @@
+\section{Data and Code Availability}
+\label{sec:availability}
+
+The complete manuscript source, reference implementation, canonical
+closed-world data, repeated live-stack observations, benign-control records,
+and generated tables are archived as version~1.2.0 at
+\url{https://doi.org/10.5281/zenodo.21843860}; the concept DOI is
+\url{https://doi.org/10.5281/zenodo.21841458}. Development history and the
+tagged release are at
+\url{https://github.com/obedebessa/governance-drift} (tag
+\texttt{v1.2.0}). The exact scientific source-and-data snapshot commit and
+the released ZIP's SHA-256 digest are reported with the archived release.
+
+The dependency-free closed-world study is regenerated with
+\texttt{python3 code/detector\_study.py};
+\texttt{python3 scripts/verify\_artifact.py} checks its canonical outputs and
+the frozen laboratory results. With Docker, Kind, \texttt{kubectl}, Git, and
+the pinned images available, \texttt{lab/bootstrap.sh} creates the cluster
+and \texttt{python3 lab/run\_repeated\_experiment.py} executes the seeded
+20-by-9 protocol and benign controls. Finally,
+\texttt{python3 scripts/verify\_lab\_results.py} verifies the raw CSV/JSON
+observations and the generated summary tables. Platform versions, seed,
+cadences, raw timestamps, timeout outcomes, expected class sets, first
+verdicts, and evidence-completion times are retained in \texttt{lab/results/}.

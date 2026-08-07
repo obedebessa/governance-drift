@@ -75,7 +75,8 @@ RQ1 is answered by the taxonomy and scenario catalog
 (\cref{sec:taxonomy,sec:study}); RQ2 and RQ4 by the dependency result (\cref{prop:impossible}), the tiered architecture (\cref{sec:architecture}),
 the executed detectability study (\cref{sec:study}), and the bounded live
 laboratory (\cref{sec:lab}); RQ3 by the study's event-time measurements and
-the laboratory's injection-to-verdict wall-clock observations.
+the laboratory's separated actuation, onset-to-detection, end-to-end, and
+time-to-evidence observations across three polling cadences.
 
 \subsection{Contributions and Epistemic Status}
 \begin{enumerate}[label=\textbf{C\arabic*.},leftmargin=2.2em,itemsep=1.5pt,topsep=2pt]
@@ -105,18 +106,21 @@ matrix generated programmatically (\cref{sec:study}). Its role is precisely
 scoped: it validates that the reference semantics realize the model's
 dependency structure and quantifies noise behavior; it is not field evidence,
 and it makes no claim about any real cluster.
-\item \textbf{Bounded Kubernetes/GitOps laboratory} (empirical, executed): a
+\item \textbf{Repeated Kubernetes/GitOps laboratory} (empirical, executed): a
 pinned Kind/Flux/Kyverno stack, local Git and OCI services, approved-state
 recorder, tiered evaluator, and executable injections for S1--S9. In one
-run per scenario, all nine baselines were consistent and all nine verdicts
-matched the expected class, with 0.137--8.571~s injection-to-verdict latency
-(\cref{sec:lab}). The run establishes feasibility and occurrence on this
-stack, not prevalence, reliability, or a latency distribution.
+hundred eighty controlled injections (20 per scenario), three randomized-phase
+polling cadences produced 538/540 detections and 100\% conditional
+classification accuracy; 20 balanced benign-change windows produced zero
+alarms in 543 polls (\cref{sec:lab}). The execution establishes bounded
+realizability and within-laboratory behavior, not natural occurrence,
+prevalence, production effectiveness, stream-loss reliability, or transfer.
 \end{enumerate}
 
 Established results are cited; analytic claims are proved in the model; the
 closed-world and live-stack empirical claims are separated explicitly; and
-the larger repeated-trial laboratory protocol remains a future extension.
+the repeated live-stack protocol is reported with its negative controls and
+misses rather than presented as production evidence.
 
 \subsection{Scope and Non-Goals}
 We address drift \emph{after} an approved deployment; admission-time

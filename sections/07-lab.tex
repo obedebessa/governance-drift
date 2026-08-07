@@ -1,91 +1,149 @@
-\section{Bounded Kubernetes/GitOps Laboratory}
+\section{Repeated Kubernetes/GitOps Laboratory}
 \label{sec:lab}
 
 The closed-world study fixes semantics; a live stack tests whether the
-defined deficit classes can be induced and distinguished through real
-control-plane interfaces. We therefore executed a bounded laboratory over
-all nine scenarios. Its epistemic purpose is deliberately narrow: it is a
-feasibility and occurrence demonstration on one reproducible stack, not a
-field-prevalence study, reliability estimate, production benchmark, or
-latency distribution.
+declared classes and evidence dependencies are concretely realizable through
+control-plane interfaces. We therefore executed a repeated laboratory over
+all nine scenarios and six benign controls. Its purpose is deliberately
+bounded: realizability and within-laboratory detector behavior on one pinned
+stack. It is not evidence of natural occurrence, field prevalence,
+production effectiveness, or transfer across organizations.
 
 \subsection{Build and Reproducibility Boundary}
 A single-node Kind~v0.32.0 cluster running Kubernetes~v1.36.1~\cite{kind}
 hosts Flux~v2.9.4~\cite{fluxcd} and Kyverno~v1.18.2~\cite{kyverno}. A local
-smart-HTTP Git remote drives Flux; a local OCI registry enables tag/digest
-substitution; and a versioned inventory file represents environment
-properties outside the managed manifest. Bootstrap pins release manifests
-by SHA-256, preloads the required arm64 images, and records platform versions.
-An approved-state recorder snapshots $\Gapp$---manifest, resolved pod-image
-digest, policy pin, approval JSON with validity window, Git revision, and
-environment assumptions. A dependency-free evaluator reads the live
-Kubernetes API, Git, Kyverno PolicyReports, approval records, pod image IDs,
-and the inventory, with tier-restricted entry points T0n--T4. The complete
-bootstrap, injections, evaluator, raw observations, and generated table ship
+smart-HTTP Git service drives Flux and a local OCI registry supports
+tag/digest substitution. Approval records and the environment inventory are
+versioned JSON files, not production approval or cloud-inventory services.
+Bootstrap pins upstream manifests by SHA-256, preloads the required arm64
+images, and records platform versions. An approved-state recorder snapshots
+$\Gapp$: manifest, resolved pod-image digest, policy pin, approval JSON with
+validity window, Git revision, and declared environment assumptions. The
+dependency-free evaluator reads Kubernetes, Git, Kyverno PolicyReports,
+file-backed approvals, pod image IDs, and the file-backed inventory through
+tier-restricted entry points T0n--T4. The bootstrap, injections, repeated
+harness, evaluator, raw observations, controls, and generated tables ship
 under \texttt{lab/}.
 
-\subsection{Bounded Protocol}
-The harness first restores the approved Git revision, policy~$\pi_7$,
-approval record, artifact tag, deployment, and environment inventory. It
-requires the highest-tier evaluator to return \emph{consistent} before each
-injection. It then executes S1--S9 once each, polls every 0.5~s until the
-minimum deciding tier returns a non-consistent verdict, and records expected
-class, observed verdict and class, and elapsed wall-clock time. Latency is
-measured from injection initiation to the first tier-appropriate verdict;
-for S2 it begins at exception expiry. Thus S4 includes registry mutation and
-rollout, S6 includes Git commit and Flux convergence, and S3 includes
-Kyverno's background-policy evaluation. The harness resets and verifies the
-baseline after every scenario. This is $n=1$ per scenario: the values below
-are observations, not estimates of a distribution.
+\subsection{Protocol and Four Clocks}
+For each repetition, a seeded shuffle changes scenario order. Before every
+injection, the harness restores the approved Git revision, policy $\pi_7$,
+approval record, artifact tag, deployment, and inventory, and requires T4 to
+return \emph{consistent}. Each S1--S9 scenario is executed 20 times. Three
+logical evaluators observe the same injection at cadences 0.5, 2, and 10~s;
+their first post-onset phase is sampled independently and deterministically
+from $[0,c)$ for cadence $c$, after which they poll every $c$ seconds. Thus a
+latency below 0.5~s is possible when the first scheduled poll falls shortly
+after onset; 0.5~s is a cadence, not a measurement-resolution floor. We
+report two decimal places and retain higher-resolution raw clocks only for
+recalculation.
+
+The harness records four timestamps: command initiation
+$t_{\mathrm{inject}}$, operational inconsistency
+$t_{\mathrm{onset}}$, first tier-appropriate verdict
+$t_{\mathrm{detect}}$, and completion of the minimal JSON evidence bundle
+$t_{\mathrm{evidence}}$. It reports actuation, DDL, end-to-end latency, and
+TTE exactly as defined in \cref{met:ddl}. For command-carried mutations,
+onset is conservatively operationalized as successful command completion.
+For S2 it is exception expiry; for S4, successful rollout of the substituted
+artifact; and for S6, successful Flux convergence to the unapproved revision.
+Consequently, S6's Git commit and reconciliation belong to actuation and
+end-to-end time, not DDL. S3 begins at successful policy supersession, so its
+DDL includes waiting for Kyverno's background PolicyReport. Evidence
+assembly in this reference implementation is synchronous with verdict
+serialization, so TTE and DDL are nearly identical; this does not estimate
+retrieval delay for a platform-scale evidence service.
+
+Ground truth is a set. S6 is $\{\text{intent},\text{authorization}\}$; the T2
+evaluator's first-priority verdict is intent, which is scored as a member of
+that set rather than by simplifying the ground truth. Detection rate (DR)
+counts a non-consistent verdict before the 180-s timeout. Classification
+accuracy (CA) is conditional on detection.
 
 \begin{table*}[t]
 \centering
-\caption{Observed Results from the Bounded Kind/Flux/Kyverno Execution.
-Latency Is Injection-to-Verdict Wall-Clock Time in Seconds; S2 Starts at
-Expiry. ``U'' Denotes an Explicit Undecidable Verdict. One Execution per
-Scenario; No Reliability or Prevalence Inference Is Made.}
+\caption{Repeated Live-Stack Results at the Default 0.5-s Cadence (20 Runs
+per Scenario). Expected Is a Class Set; ``First Verdict'' Is the Evaluator's
+Priority-Ordered Output. DR and CA Are Percentages. Act., DDL, P95 DDL,
+End-to-End (E2E), and TTE Are Seconds; All Except P95 Are Medians.}
 \label{tab:lab-results}
-\footnotesize
-\resizebox{\textwidth}{!}{\input{lab/results/table_lab}}
+\scriptsize
+\resizebox{\textwidth}{!}{\input{lab/results/table_repeated}}
 \end{table*}
 
-\subsection{Observations}
-\Cref{tab:lab-results} reports all runs. Every scenario began from a
-governance-consistent baseline, and all nine outcomes matched the expected
-class (9/9). S9 correctly returned \emph{undecidable/evidence}, rather than
-misstating missing evidence as compliance or violation. Observed latencies
-ranged from 0.137 to 8.571~s. The policy-supersession path was slowest
-(8.571~s), followed by the Flux-mediated rollback (6.915~s) and artifact
-substitution with rollout (3.535~s); the remaining six scenarios were
-observed within 0.265~s. These differences are consistent with the real
-control loops traversed by each injection, but one observation cannot support
-causal or distributional claims.
+\subsection{Detection, Classification, and Cadence}
+At the default 0.5-s cadence, all 180 injections were detected and all
+detected verdicts belonged to their expected class sets
+(\cref{tab:lab-results}). The separation of clocks changes the interpretation
+materially. For S6, median actuation was 10.05~s, median DDL 0.47~s, and
+median end-to-end latency 10.52~s. The former one-pass value around 7~s was
+therefore not detector latency. Conversely, S3 had median actuation 0.15~s
+but median DDL 7.98~s (P95 10.25~s), exposing the background-policy path.
 
-The live run materially strengthens the evidence boundary of the paper. It
-shows that the deficit classes are not artifacts of a Python world alone:
-manual mutation, exception expiry, policy supersession, artifact
-substitution, IAM expansion, unapproved rollback, out-of-band exposure
-change, approval mismatch, and approval-record loss can all be represented
-and decided through real Kubernetes/GitOps interfaces. It does \emph{not}
-show how frequently they arise in production, how often a detector will miss
-them under loss or load, or whether these latencies generalize.
+Across all cadences, 538 of 540 observations produced a verdict, and all 538
+detected observations were classified correctly. Both misses were S1 in the
+same repetition: the 0.5-s evaluator observed the manual mutation, but Flux
+reconciled it before the first 2-s and 10-s polls. This is not discarded as
+an outlier. It demonstrates the cadence limit predicted by \textbf{LH2}:
+polling a transient relation can miss it even when classification is perfect
+when observed.
 
-\subsection{Full Protocol and Refutation Conditions}
-The released protocol retains the stronger follow-on design: repeat each
-scenario at least twenty times with randomized phase, run benign runtime and
-governance churn, measure drift-free false alarms, report latency
-distributions at multiple evaluator cadences, and separate
-time-to-detection from time-to-evidence. Standard experimentation guidance
-applies~\cite{wohlin2012}.
+\begin{table}[t]
+\centering
+\caption{Cadence Sensitivity Across Nine Scenarios and 20 Repetitions. CA Is
+Conditional on Detection; DDL Values Are Seconds.}
+\label{tab:lab-cadence}
+\footnotesize
+\resizebox{\columnwidth}{!}{\input{lab/results/table_cadence}}
+\end{table}
 
-The bounded pass supports the feasibility part of \textbf{LH1}: the expected
-tier/class shape appeared for every scenario. It cannot establish reliable
-transfer, and any repeated scenario detected by T0n despite requiring a
-higher tier would refute the dependency analysis of \cref{prop:tiers}.
-\textbf{LH2} predicts cadence-bounded visibility for event-carried classes;
-strong repeatable scenario residuals after controlling for cadence would
-refute it. \textbf{LH3} predicts that normalization suppresses false alarms
-under real churn without losing S1. \textbf{LH4} predicts a material
-time-to-evidence gap where approval records reside in platform-bound stores.
-LH2--LH4 remain open because this bounded run did not execute the repeated,
-churn-controlled design.
+\Cref{tab:lab-cadence} reports the aggregate effect. DR was 100.0\% at 0.5~s
+and 99.4\% at both 2 and 10~s. Conditional CA remained 100.0\%. Median DDL
+rose from 0.46 to 1.46 and 6.11~s as cadence widened; P95 rose from 8.06 to
+8.37 and 12.36~s. P95 is dominated partly by S3's PolicyReport delay rather
+than cadence alone, so these are distributions of the complete deciding
+paths on this laboratory, not calibrated evaluator-service times.
+
+\subsection{Benign Live-Stack Controls}
+The positive scenarios do not establish specificity. We therefore ran 20
+10.5-s drift-free windows, balanced round-robin across six controls:
+satisfied policy revision (C1), rollback accompanied by approval for the new
+revision (C2), exception removal at expiry (C3), re-tag accompanied by
+approval for the new digest (C4), autoscaling replica change outside the
+managed projection (C5), and a legitimate rollout restart (C6). Every window
+was evaluated at all three cadences.
+
+\begin{table}[t]
+\centering
+\caption{Benign Live-Stack Controls. ``Polls'' Sums All Three Cadences;
+Alarm Windows Counts Windows with at Least One Non-Consistent Verdict.}
+\label{tab:lab-controls}
+\footnotesize
+\resizebox{\columnwidth}{!}{\input{lab/results/table_controls}}
+\end{table}
+
+The controls produced 543 evaluator polls and zero alarms
+(\cref{tab:lab-controls}). This supports \textbf{LH3} within the declared
+projection: the evaluator did not simply classify every change as drift.
+It does not bound false-positive rates under untested production churn; with
+zero observed alarms, the defensible statement is $0/543$ polls and $0/20$
+windows, not a claim of zero population probability.
+
+\subsection{Evidence Boundary and Refutation Conditions}
+The repeated execution strengthens the earlier one-pass realizability check
+but remains controlled and single-cluster. It uses injected scenarios,
+file-backed approval and environment streams, a single deployment, no
+concurrent workload churn during positive injections, and no induced stream
+loss or API saturation. It estimates a distribution only for this pinned
+laboratory protocol.
+
+The expected tier/class shape appeared whenever an injection was observed,
+supporting the realizability part of \textbf{LH1}. The two S1 misses support
+the cadence-bounded qualification in \textbf{LH2} and refute any stronger
+claim of cadence-independent detection. Zero alarms in the six benign change
+families support \textbf{LH3} within scope. \textbf{LH4} remains open: the
+minimal evidence bundle is constructed synchronously after verdict, so this
+laboratory does not test a separate, platform-bound evidence retrieval path.
+Misclassification of an observed higher-tier scenario, alarms under these
+benign controls, or a repeatable class requiring less evidence than
+\cref{prop:tiers} states would refute the corresponding claims.

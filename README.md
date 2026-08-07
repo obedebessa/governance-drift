@@ -1,7 +1,7 @@
 # Governance Drift
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21842722.svg)](https://doi.org/10.5281/zenodo.21842722)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21843860.svg)](https://doi.org/10.5281/zenodo.21843860)
 
 Reproducibility package for the manuscript:
 
@@ -11,18 +11,21 @@ Reproducibility package for the manuscript:
 
 The package contains the complete LaTeX source, a dependency-free closed-world
 detector study, canonical outputs, and an executed Kubernetes/GitOps
-laboratory. Version 1.1.0 adds the live nine-scenario experiment, a
-class-resolved severity taxonomy, and a comparative scope matrix.
+laboratory. Version 1.2.0 adds a repeated nine-scenario experiment at three
+evaluator cadences, benign live-stack controls, and separate actuation,
+detection, end-to-end, and evidence clocks.
 
 ## Evidence boundary
 
 The closed-world study validates detector semantics and evidence-tier
-dependencies. The bounded live laboratory executes one controlled injection
-per scenario on a pinned Kind/Flux/Kyverno stack: 9/9 baselines were
-consistent, 9/9 verdicts matched the expected class, and observed
-injection-to-verdict latencies ranged from 0.137 to 8.571 seconds. These are
-feasibility and occurrence observations, not estimates of production
-prevalence, reliability, false-alarm rates, or latency distributions.
+dependencies. The bounded live laboratory executes 20 repetitions of each of
+nine scenarios at 0.5-, 2-, and 10-second cadences on a pinned
+Kind/Flux/Kyverno stack. It recorded 538 detections in 540 observations; every
+detected verdict belonged to its expected class set. Twenty benign windows
+spanning six change families produced zero alarms in 543 polls. These data
+establish bounded realizability and within-laboratory behavior—not natural
+occurrence, field prevalence, production reliability, or universal
+false-alarm and latency distributions.
 
 ## Repository map
 
@@ -65,7 +68,7 @@ With Docker, Kind, and `kubectl` available, rebuild and execute the live stack:
 
 ```bash
 lab/bootstrap.sh
-python3 lab/run_experiment.py
+python3 lab/run_repeated_experiment.py
 ```
 
 ## Compile the manuscript
@@ -90,7 +93,8 @@ tectonic -X compile main.tex
 Citation metadata is provided in `CITATION.cff`; Zenodo deposit metadata is in
 `.zenodo.json`. Version 1.0.0 remains permanently archived at
 <https://doi.org/10.5281/zenodo.21841459>; version 1.1.0 is archived at
-<https://doi.org/10.5281/zenodo.21842722>. The concept DOI
+<https://doi.org/10.5281/zenodo.21842722>; version 1.2.0 is archived at
+<https://doi.org/10.5281/zenodo.21843860>. The concept DOI
 <https://doi.org/10.5281/zenodo.21841458> resolves to the latest version.
 
 ## License

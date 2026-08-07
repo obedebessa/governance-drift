@@ -1,0 +1,193 @@
+{
+  "scenario_default_cadence": [
+    {
+      "scenario": "S1",
+      "expected_class_set": "configuration",
+      "observed_first_priority": "configuration",
+      "n": 20,
+      "detection_rate": 1.0,
+      "classification_accuracy": 1.0,
+      "actuation_median_seconds": 0.05114395800046623,
+      "ddl_median_seconds": 0.34302285430021584,
+      "ddl_p95_seconds": 0.5679904171265662,
+      "end_to_end_median_seconds": 0.3938049173448235,
+      "tte_median_seconds": 0.3430838962085545
+    },
+    {
+      "scenario": "S2",
+      "expected_class_set": "authorization",
+      "observed_first_priority": "authorization",
+      "n": 20,
+      "detection_rate": 1.0,
+      "classification_accuracy": 1.0,
+      "actuation_median_seconds": 2.6042821248993278,
+      "ddl_median_seconds": 0.41922783362679183,
+      "ddl_p95_seconds": 0.6510441252030432,
+      "end_to_end_median_seconds": 2.890052666887641,
+      "tte_median_seconds": 0.41927316691726446
+    },
+    {
+      "scenario": "S3",
+      "expected_class_set": "policy",
+      "observed_first_priority": "policy",
+      "n": 20,
+      "detection_rate": 1.0,
+      "classification_accuracy": 1.0,
+      "actuation_median_seconds": 0.14592049946077168,
+      "ddl_median_seconds": 7.983183104312047,
+      "ddl_p95_seconds": 10.247139875311404,
+      "end_to_end_median_seconds": 8.123485604301095,
+      "tte_median_seconds": 7.983231395948678
+    },
+    {
+      "scenario": "S4",
+      "expected_class_set": "authorization",
+      "observed_first_priority": "authorization",
+      "n": 20,
+      "detection_rate": 1.0,
+      "classification_accuracy": 1.0,
+      "actuation_median_seconds": 1.649302521487698,
+      "ddl_median_seconds": 0.9542868959251791,
+      "ddl_p95_seconds": 1.7781928330659866,
+      "end_to_end_median_seconds": 2.4827513329219073,
+      "tte_median_seconds": 0.9543527504429221
+    },
+    {
+      "scenario": "S5",
+      "expected_class_set": "environment",
+      "observed_first_priority": "environment",
+      "n": 20,
+      "detection_rate": 1.0,
+      "classification_accuracy": 1.0,
+      "actuation_median_seconds": 0.031037604436278343,
+      "ddl_median_seconds": 0.44068127148784697,
+      "ddl_p95_seconds": 0.6005397909320891,
+      "end_to_end_median_seconds": 0.47991908341646194,
+      "tte_median_seconds": 0.44072675006464124
+    },
+    {
+      "scenario": "S6",
+      "expected_class_set": "intent|authorization",
+      "observed_first_priority": "intent",
+      "n": 20,
+      "detection_rate": 1.0,
+      "classification_accuracy": 1.0,
+      "actuation_median_seconds": 10.045440374873579,
+      "ddl_median_seconds": 0.4662211034446955,
+      "ddl_p95_seconds": 0.6751700830645859,
+      "end_to_end_median_seconds": 10.517886604182422,
+      "tte_median_seconds": 0.4662888541352004
+    },
+    {
+      "scenario": "S7",
+      "expected_class_set": "environment",
+      "observed_first_priority": "environment",
+      "n": 20,
+      "detection_rate": 1.0,
+      "classification_accuracy": 1.0,
+      "actuation_median_seconds": 0.029273291118443012,
+      "ddl_median_seconds": 0.4682341036386788,
+      "ddl_p95_seconds": 0.5924099157564342,
+      "end_to_end_median_seconds": 0.510038478532806,
+      "tte_median_seconds": 0.4682797291316092
+    },
+    {
+      "scenario": "S8",
+      "expected_class_set": "authorization",
+      "observed_first_priority": "authorization",
+      "n": 20,
+      "detection_rate": 1.0,
+      "classification_accuracy": 1.0,
+      "actuation_median_seconds": 0.03377520805224776,
+      "ddl_median_seconds": 0.42267954139970243,
+      "ddl_p95_seconds": 0.6638720002956688,
+      "end_to_end_median_seconds": 0.4782508327625692,
+      "tte_median_seconds": 0.42273364611901343
+    },
+    {
+      "scenario": "S9",
+      "expected_class_set": "evidence",
+      "observed_first_priority": "evidence",
+      "n": 20,
+      "detection_rate": 1.0,
+      "classification_accuracy": 1.0,
+      "actuation_median_seconds": 0.014326229458674788,
+      "ddl_median_seconds": 0.38408825010992587,
+      "ddl_p95_seconds": 0.6135946246795356,
+      "end_to_end_median_seconds": 0.3972161249257624,
+      "tte_median_seconds": 0.38414627127349377
+    }
+  ],
+  "cadence": [
+    {
+      "cadence_seconds": 0.5,
+      "runs": 180,
+      "detection_rate": 1.0,
+      "classification_accuracy": 1.0,
+      "ddl_median_seconds": 0.4649515626952052,
+      "ddl_p95_seconds": 8.06157295871526
+    },
+    {
+      "cadence_seconds": 2.0,
+      "runs": 180,
+      "detection_rate": 0.9944444444444445,
+      "classification_accuracy": 1.0,
+      "ddl_median_seconds": 1.4598910207860172,
+      "ddl_p95_seconds": 8.366217582952231
+    },
+    {
+      "cadence_seconds": 10.0,
+      "runs": 180,
+      "detection_rate": 0.9944444444444445,
+      "classification_accuracy": 1.0,
+      "ddl_median_seconds": 6.112346499459818,
+      "ddl_p95_seconds": 12.361864042002708
+    }
+  ],
+  "controls": [
+    {
+      "control": "C1",
+      "control_name": "satisfied policy revision",
+      "windows": 4,
+      "polls": 108,
+      "alarm_windows": 0
+    },
+    {
+      "control": "C2",
+      "control_name": "approved rollback",
+      "windows": 4,
+      "polls": 108,
+      "alarm_windows": 0
+    },
+    {
+      "control": "C3",
+      "control_name": "exception removed at expiry",
+      "windows": 3,
+      "polls": 84,
+      "alarm_windows": 0
+    },
+    {
+      "control": "C4",
+      "control_name": "approved artifact re-tag",
+      "windows": 3,
+      "polls": 81,
+      "alarm_windows": 0
+    },
+    {
+      "control": "C5",
+      "control_name": "autoscaling replica change",
+      "windows": 3,
+      "polls": 81,
+      "alarm_windows": 0
+    },
+    {
+      "control": "C6",
+      "control_name": "legitimate rollout restart",
+      "windows": 3,
+      "polls": 81,
+      "alarm_windows": 0
+    }
+  ],
+  "total_positive_observations": 540,
+  "total_control_observations": 60
+}

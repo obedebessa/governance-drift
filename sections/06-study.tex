@@ -173,9 +173,10 @@ member of a multi-component drift is reported, not correctness. Scenario S6's tr
 (before the reconciler converges) is not credited to T0n because the
 comparison evaluates post-convergence state in our event ordering; on real
 clusters a fast comparator might glimpse it---a cadence question for the lab.
-\emph{External}: the bounded laboratory (\cref{sec:lab}) establishes that the
-nine classes can be induced and correctly distinguished through real
+\emph{External}: the repeated laboratory (\cref{sec:lab}) shows that the nine
+scenario classes can be induced and usually observed through real
 Kubernetes/GitOps interfaces on one pinned stack. It does not transfer the
-closed-world rates quantitatively or estimate field prevalence, reliability,
-stream loss, or performance under load; the repeated, churn-controlled
-protocol and its refutation conditions remain necessary for those questions.
+closed-world rates quantitatively or estimate natural occurrence, field
+prevalence, stream-loss reliability, multi-cluster behavior, or performance
+under load. Its two cadence misses are direct evidence against assuming that
+polling necessarily observes transient configuration drift.

@@ -42,7 +42,30 @@ def kubectl(*args: str) -> str:
     return run("kubectl", *args)
 
 
+def ensure_git_server() -> None:
+    """Repair a stale macOS bind mount and wait for the local Git CGI."""
+    url = "http://govdrift-git:8000/cgi-bin/git/remote.git/info/refs?service=git-upload-pack"
+    checks = (
+        "docker", "exec", "govdrift-lab-control-plane", "curl", "-fsS", url,
+    )
+    probe = subprocess.run(checks, text=True, capture_output=True)
+    script = subprocess.run(
+        ["docker", "exec", "govdrift-git", "test", "-x", "/srv/cgi-bin/git"],
+        text=True, capture_output=True,
+    )
+    if probe.returncode == 0 and script.returncode == 0:
+        return
+    run("docker", "restart", "govdrift-git")
+    deadline = time.monotonic() + 30
+    while time.monotonic() < deadline:
+        if subprocess.run(checks, text=True, capture_output=True).returncode == 0:
+            return
+        time.sleep(1)
+    raise RuntimeError("local Git CGI did not become ready after restart")
+
+
 def trigger_flux() -> None:
+    ensure_git_server()
     requested = str(time.time_ns())
     kubectl(
         "-n", "flux-system", "annotate", "gitrepository", "lab",
