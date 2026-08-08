@@ -9,6 +9,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -249,7 +250,18 @@ class CrossStackAdapterTests(unittest.TestCase):
             def kubectl_json(self, *args: str, check: bool = True) -> dict:  # type: ignore[override]
                 raise ExperimentError("synthetic API read failure")
 
-        with tempfile.TemporaryDirectory() as temporary:
+        synthetic_provenance = {
+            "head": "0" * 40,
+            "branch": "UNIT-TEST",
+            "detached": False,
+            "dirty": False,
+            "modified_or_untracked_files": [],
+            "capture_boundary": "campaign initialization before output mutation",
+        }
+        with tempfile.TemporaryDirectory() as temporary, patch(
+            "run_cross_stack_experiment.capture_git_provenance",
+            return_value=synthetic_provenance,
+        ):
             experiment = FailingReadExperiment(output_dir=Path(temporary))
             self.assertEqual(experiment.safe_json("get", "deployment", "payments"), {})
             self.assertEqual(experiment.api_read_errors, 1)
