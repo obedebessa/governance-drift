@@ -20,6 +20,7 @@ class TemporalCutContract(unittest.TestCase):
         self.contracts = {
             source: {
                 "watermark": 101.0,
+                "watermark_basis": "capture_start",
                 "freshness_seconds": 2.0,
                 "clock_error_bound_seconds": 0.05,
             }
@@ -54,6 +55,12 @@ class TemporalCutContract(unittest.TestCase):
         admitted, reason, _ = self.select()
         self.assertFalse(admitted)
         self.assertIn("has not closed", reason)
+
+    def test_capture_upper_bound_watermark_is_rejected(self) -> None:
+        self.contracts["policy"]["watermark_basis"] = "capture_end"
+        admitted, reason, _ = self.select()
+        self.assertFalse(admitted)
+        self.assertIn("watermark basis", reason)
 
     def test_straddling_capture_is_rejected(self) -> None:
         self.records["policy"].append({

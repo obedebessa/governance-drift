@@ -1,4 +1,4 @@
-scenario,scenario_label,expected_class_set,cadence_seconds,observer_id,pid,polls,pre_cause_polls,post_cause_polls,adapter_error_polls,cause_to_first_alert_seconds,cause_to_first_exact_seconds,cause_to_stable_exact_seconds,effect_to_first_exact_seconds,exact_correct
+scenario,scenario_label,expected_class_set,cadence_seconds,observer_id,pid,polls,pre_cause_polls,post_cause_polls,adapter_error_polls,cause_to_first_alert_seconds,cause_to_first_exact_seconds,cause_to_two_poll_exact_seconds,effect_to_first_exact_seconds,exact_correct
 S1,manual in-cluster configuration change,configuration,1.0,14130085-7439-4f0e-9d71-9062f38c80ce,66353,21,1,20,0,0.4619809999130666,1.4893691656179726,2.514237249735743,0.711253915913403,True
 S1,manual in-cluster configuration change,configuration,5.0,65e80936-1a4d-4061-ab29-5b03bb40ca7f,66354,5,1,4,0,4.478262249846011,4.478262249846011,9.500850207637995,3.700147000141442,True
 S1,manual in-cluster configuration change,configuration,10.0,68150b05-8fa2-4408-9ba7-09449dc9863b,66355,3,1,2,0,9.500680207740515,9.500680207740515,19.479959500022233,8.722564958035946,True

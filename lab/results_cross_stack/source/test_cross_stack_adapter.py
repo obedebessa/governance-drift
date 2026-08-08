@@ -144,9 +144,7 @@ class CrossStackAdapterTests(unittest.TestCase):
     def test_raw_timing_recomputes_epistemic_substantive_and_exact(self) -> None:
         marker, polls = self.timing_fixture()
         timing = recompute_scenario_timing(marker, polls, {"policy"})
-        self.assertEqual(
-            timing["operational_onset_to_first_honest_seconds"], 0.2
-        )
+        self.assertEqual(timing["ddl_seconds"], 0.2)
         self.assertEqual(timing["first_honest_verdict_kind"], "epistemic-only")
         self.assertEqual(timing["first_epistemic_alert_seconds"], 0.2)
         self.assertEqual(timing["first_substantive_alert_seconds"], 1.3)

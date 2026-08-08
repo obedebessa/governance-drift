@@ -4,7 +4,7 @@
     "cadence_seconds": 1.0,
     "cause_to_first_alert_seconds": 0.4619809999130666,
     "cause_to_first_exact_seconds": 1.4893691656179726,
-    "cause_to_stable_exact_seconds": 2.514237249735743,
+    "cause_to_two_poll_exact_seconds": 2.514237249735743,
     "effect_to_first_exact_seconds": 0.711253915913403,
     "exact_correct": true,
     "expected_class_set": [
@@ -43,7 +43,7 @@
     "raw_path": "raw/S1/observer-01s.ndjson",
     "scenario": "S1",
     "scenario_label": "manual in-cluster configuration change",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734181.04429625,
       "actual_start_utc": "2026-08-08T08:56:07.619906+00:00",
       "class_set": [
@@ -61,7 +61,7 @@
     "cadence_seconds": 5.0,
     "cause_to_first_alert_seconds": 4.478262249846011,
     "cause_to_first_exact_seconds": 4.478262249846011,
-    "cause_to_stable_exact_seconds": 9.500850207637995,
+    "cause_to_two_poll_exact_seconds": 9.500850207637995,
     "effect_to_first_exact_seconds": 3.700147000141442,
     "exact_correct": true,
     "expected_class_set": [
@@ -99,7 +99,7 @@
     "raw_path": "raw/S1/observer-05s.ndjson",
     "scenario": "S1",
     "scenario_label": "manual in-cluster configuration change",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734188.036562875,
       "actual_start_utc": "2026-08-08T08:56:14.612245+00:00",
       "class_set": [
@@ -117,7 +117,7 @@
     "cadence_seconds": 10.0,
     "cause_to_first_alert_seconds": 9.500680207740515,
     "cause_to_first_exact_seconds": 9.500680207740515,
-    "cause_to_stable_exact_seconds": 19.479959500022233,
+    "cause_to_two_poll_exact_seconds": 19.479959500022233,
     "effect_to_first_exact_seconds": 8.722564958035946,
     "exact_correct": true,
     "expected_class_set": [
@@ -155,7 +155,7 @@
     "raw_path": "raw/S1/observer-10s.ndjson",
     "scenario": "S1",
     "scenario_label": "manual in-cluster configuration change",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734198.037803833,
       "actual_start_utc": "2026-08-08T08:56:24.613612+00:00",
       "class_set": [
@@ -173,7 +173,7 @@
     "cadence_seconds": 1.0,
     "cause_to_first_alert_seconds": 0.5217690421268344,
     "cause_to_first_exact_seconds": 0.5217690421268344,
-    "cause_to_stable_exact_seconds": 1.5710450829938054,
+    "cause_to_two_poll_exact_seconds": 1.5710450829938054,
     "effect_to_first_exact_seconds": 0.5190897919237614,
     "exact_correct": true,
     "expected_class_set": [
@@ -211,7 +211,7 @@
     "raw_path": "raw/S2/observer-01s.ndjson",
     "scenario": "S2",
     "scenario_label": "expired temporary exception with persistent effect",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734209.891915041,
       "actual_start_utc": "2026-08-08T08:56:36.467801+00:00",
       "class_set": [
@@ -229,7 +229,7 @@
     "cadence_seconds": 5.0,
     "cause_to_first_alert_seconds": 2.614408750087023,
     "cause_to_first_exact_seconds": 2.614408750087023,
-    "cause_to_stable_exact_seconds": 7.591322417370975,
+    "cause_to_two_poll_exact_seconds": 7.591322417370975,
     "effect_to_first_exact_seconds": 2.6117294998839498,
     "exact_correct": true,
     "expected_class_set": [
@@ -267,7 +267,7 @@
     "raw_path": "raw/S2/observer-05s.ndjson",
     "scenario": "S2",
     "scenario_label": "expired temporary exception with persistent effect",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734215.890470041,
       "actual_start_utc": "2026-08-08T08:56:42.466420+00:00",
       "class_set": [
@@ -285,7 +285,7 @@
     "cadence_seconds": 10.0,
     "cause_to_first_alert_seconds": 2.6144388751126826,
     "cause_to_first_exact_seconds": 2.6144388751126826,
-    "cause_to_stable_exact_seconds": 12.612919582985342,
+    "cause_to_two_poll_exact_seconds": 12.612919582985342,
     "effect_to_first_exact_seconds": 2.6117596249096096,
     "exact_correct": true,
     "expected_class_set": [
@@ -323,7 +323,7 @@
     "raw_path": "raw/S2/observer-10s.ndjson",
     "scenario": "S2",
     "scenario_label": "expired temporary exception with persistent effect",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734220.886044416,
       "actual_start_utc": "2026-08-08T08:56:47.462070+00:00",
       "class_set": [
@@ -341,7 +341,7 @@
     "cadence_seconds": 1.0,
     "cause_to_first_alert_seconds": 0.4847245002165437,
     "cause_to_first_exact_seconds": 0.4847245002165437,
-    "cause_to_stable_exact_seconds": 1.5829357909969985,
+    "cause_to_two_poll_exact_seconds": 1.5829357909969985,
     "effect_to_first_exact_seconds": 0.36954712495207787,
     "exact_correct": true,
     "expected_class_set": [
@@ -379,7 +379,7 @@
     "raw_path": "raw/S3/observer-01s.ndjson",
     "scenario": "S3",
     "scenario_label": "policy supersession",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734225.532547458,
       "actual_start_utc": "2026-08-08T08:56:52.108579+00:00",
       "class_set": [
@@ -397,7 +397,7 @@
     "cadence_seconds": 5.0,
     "cause_to_first_alert_seconds": 4.528380958363414,
     "cause_to_first_exact_seconds": 4.528380958363414,
-    "cause_to_stable_exact_seconds": 9.551730582956225,
+    "cause_to_two_poll_exact_seconds": 9.551730582956225,
     "effect_to_first_exact_seconds": 4.413203583098948,
     "exact_correct": true,
     "expected_class_set": [
@@ -435,7 +435,7 @@
     "raw_path": "raw/S3/observer-05s.ndjson",
     "scenario": "S3",
     "scenario_label": "policy supersession",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734233.528110541,
       "actual_start_utc": "2026-08-08T08:57:00.104222+00:00",
       "class_set": [
@@ -453,7 +453,7 @@
     "cadence_seconds": 10.0,
     "cause_to_first_alert_seconds": 9.550965750124305,
     "cause_to_first_exact_seconds": 9.550965750124305,
-    "cause_to_stable_exact_seconds": 19.552514208015054,
+    "cause_to_two_poll_exact_seconds": 19.552514208015054,
     "effect_to_first_exact_seconds": 9.43578837485984,
     "exact_correct": true,
     "expected_class_set": [
@@ -491,7 +491,7 @@
     "raw_path": "raw/S3/observer-10s.ndjson",
     "scenario": "S3",
     "scenario_label": "policy supersession",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734243.534395416,
       "actual_start_utc": "2026-08-08T08:57:10.110637+00:00",
       "class_set": [
@@ -509,7 +509,7 @@
     "cadence_seconds": 1.0,
     "cause_to_first_alert_seconds": 0.6753414575941861,
     "cause_to_first_exact_seconds": 1.70191245758906,
-    "cause_to_stable_exact_seconds": 2.6909422078169882,
+    "cause_to_two_poll_exact_seconds": 2.6909422078169882,
     "effect_to_first_exact_seconds": 0.9879579995758832,
     "exact_correct": true,
     "expected_class_set": [
@@ -547,7 +547,7 @@
     "raw_path": "raw/S4/observer-01s.ndjson",
     "scenario": "S4",
     "scenario_label": "admission-time artifact substitution",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734250.385598916,
       "actual_start_utc": "2026-08-08T08:57:16.961862+00:00",
       "class_set": [
@@ -565,7 +565,7 @@
     "cadence_seconds": 5.0,
     "cause_to_first_alert_seconds": 3.7428575418889523,
     "cause_to_first_exact_seconds": 3.7428575418889523,
-    "cause_to_stable_exact_seconds": 8.734106166753918,
+    "cause_to_two_poll_exact_seconds": 8.734106166753918,
     "effect_to_first_exact_seconds": 3.0289030838757753,
     "exact_correct": true,
     "expected_class_set": [
@@ -603,7 +603,7 @@
     "raw_path": "raw/S4/observer-05s.ndjson",
     "scenario": "S4",
     "scenario_label": "admission-time artifact substitution",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734256.384533291,
       "actual_start_utc": "2026-08-08T08:57:22.960854+00:00",
       "class_set": [
@@ -621,7 +621,7 @@
     "cadence_seconds": 10.0,
     "cause_to_first_alert_seconds": 8.734104041941464,
     "cause_to_first_exact_seconds": 8.734104041941464,
-    "cause_to_stable_exact_seconds": 18.778162207920104,
+    "cause_to_two_poll_exact_seconds": 18.778162207920104,
     "effect_to_first_exact_seconds": 8.020149583928287,
     "exact_correct": true,
     "expected_class_set": [
@@ -659,7 +659,7 @@
     "raw_path": "raw/S4/observer-10s.ndjson",
     "scenario": "S4",
     "scenario_label": "admission-time artifact substitution",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734266.379815041,
       "actual_start_utc": "2026-08-08T08:57:32.956244+00:00",
       "class_set": [
@@ -677,7 +677,7 @@
     "cadence_seconds": 1.0,
     "cause_to_first_alert_seconds": 0.4715793328359723,
     "cause_to_first_exact_seconds": 0.4715793328359723,
-    "cause_to_stable_exact_seconds": 1.4986188751645386,
+    "cause_to_two_poll_exact_seconds": 1.4986188751645386,
     "effect_to_first_exact_seconds": 0.47114524990320206,
     "exact_correct": true,
     "expected_class_set": [
@@ -715,7 +715,7 @@
     "raw_path": "raw/S5/observer-01s.ndjson",
     "scenario": "S5",
     "scenario_label": "IAM authorization-surface expansion",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734271.366601875,
       "actual_start_utc": "2026-08-08T08:57:37.943074+00:00",
       "class_set": [
@@ -733,7 +733,7 @@
     "cadence_seconds": 5.0,
     "cause_to_first_alert_seconds": 4.464629833120853,
     "cause_to_first_exact_seconds": 4.464629833120853,
-    "cause_to_stable_exact_seconds": 9.522095125168562,
+    "cause_to_two_poll_exact_seconds": 9.522095125168562,
     "effect_to_first_exact_seconds": 4.4641957501880825,
     "exact_correct": true,
     "expected_class_set": [
@@ -771,7 +771,7 @@
     "raw_path": "raw/S5/observer-05s.ndjson",
     "scenario": "S5",
     "scenario_label": "IAM authorization-surface expansion",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734279.363008083,
       "actual_start_utc": "2026-08-08T08:57:45.939566+00:00",
       "class_set": [
@@ -789,7 +789,7 @@
     "cadence_seconds": 10.0,
     "cause_to_first_alert_seconds": 9.523719583172351,
     "cause_to_first_exact_seconds": 9.523719583172351,
-    "cause_to_stable_exact_seconds": 19.507925250101835,
+    "cause_to_two_poll_exact_seconds": 19.507925250101835,
     "effect_to_first_exact_seconds": 9.52328550023958,
     "exact_correct": true,
     "expected_class_set": [
@@ -827,7 +827,7 @@
     "raw_path": "raw/S5/observer-10s.ndjson",
     "scenario": "S5",
     "scenario_label": "IAM authorization-surface expansion",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734289.371655333,
       "actual_start_utc": "2026-08-08T08:57:55.948288+00:00",
       "class_set": [
@@ -845,7 +845,7 @@
     "cadence_seconds": 1.0,
     "cause_to_first_alert_seconds": 0.4935862082056701,
     "cause_to_first_exact_seconds": 1.4706835001707077,
-    "cause_to_stable_exact_seconds": 2.4887599172070622,
+    "cause_to_two_poll_exact_seconds": 2.4887599172070622,
     "effect_to_first_exact_seconds": -4.092311542015523,
     "exact_correct": true,
     "expected_class_set": [
@@ -886,7 +886,7 @@
     "raw_path": "raw/S6/observer-01s.ndjson",
     "scenario": "S6",
     "scenario_label": "unapproved Git rollback followed by Flux convergence",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734295.052147958,
       "actual_start_utc": "2026-08-08T08:58:01.628835+00:00",
       "class_set": [
@@ -905,7 +905,7 @@
     "cadence_seconds": 5.0,
     "cause_to_first_alert_seconds": 4.539520208258182,
     "cause_to_first_exact_seconds": 4.539520208258182,
-    "cause_to_stable_exact_seconds": 9.547788083087653,
+    "cause_to_two_poll_exact_seconds": 9.547788083087653,
     "effect_to_first_exact_seconds": -1.0234748339280486,
     "exact_correct": true,
     "expected_class_set": [
@@ -946,7 +946,7 @@
     "raw_path": "raw/S6/observer-05s.ndjson",
     "scenario": "S6",
     "scenario_label": "unapproved Git rollback followed by Flux convergence",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734302.057016041,
       "actual_start_utc": "2026-08-08T08:58:08.633776+00:00",
       "class_set": [
@@ -965,7 +965,7 @@
     "cadence_seconds": 10.0,
     "cause_to_first_alert_seconds": 9.547744458075613,
     "cause_to_first_exact_seconds": 9.547744458075613,
-    "cause_to_stable_exact_seconds": 19.499972583260387,
+    "cause_to_two_poll_exact_seconds": 19.499972583260387,
     "effect_to_first_exact_seconds": 3.9847494158893824,
     "exact_correct": true,
     "expected_class_set": [
@@ -1006,7 +1006,7 @@
     "raw_path": "raw/S6/observer-10s.ndjson",
     "scenario": "S6",
     "scenario_label": "unapproved Git rollback followed by Flux convergence",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734312.050007833,
       "actual_start_utc": "2026-08-08T08:58:18.626896+00:00",
       "class_set": [
@@ -1025,7 +1025,7 @@
     "cadence_seconds": 1.0,
     "cause_to_first_alert_seconds": 0.4380972501821816,
     "cause_to_first_exact_seconds": 0.4380972501821816,
-    "cause_to_stable_exact_seconds": 1.40113729191944,
+    "cause_to_two_poll_exact_seconds": 1.40113729191944,
     "effect_to_first_exact_seconds": 0.43765000021085143,
     "exact_correct": true,
     "expected_class_set": [
@@ -1063,7 +1063,7 @@
     "raw_path": "raw/S7/observer-01s.ndjson",
     "scenario": "S7",
     "scenario_label": "out-of-band load-balancer change",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734322.325314666,
       "actual_start_utc": "2026-08-08T08:58:28.902263+00:00",
       "class_set": [
@@ -1081,7 +1081,7 @@
     "cadence_seconds": 5.0,
     "cause_to_first_alert_seconds": 4.397787000052631,
     "cause_to_first_exact_seconds": 4.397787000052631,
-    "cause_to_stable_exact_seconds": 9.406706917099655,
+    "cause_to_two_poll_exact_seconds": 9.406706917099655,
     "effect_to_first_exact_seconds": 4.397339750081301,
     "exact_correct": true,
     "expected_class_set": [
@@ -1119,7 +1119,7 @@
     "raw_path": "raw/S7/observer-05s.ndjson",
     "scenario": "S7",
     "scenario_label": "out-of-band load-balancer change",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734330.326487625,
       "actual_start_utc": "2026-08-08T08:58:36.903515+00:00",
       "class_set": [
@@ -1137,7 +1137,7 @@
     "cadence_seconds": 10.0,
     "cause_to_first_alert_seconds": 9.406711167190224,
     "cause_to_first_exact_seconds": 9.406711167190224,
-    "cause_to_stable_exact_seconds": 19.463604500051588,
+    "cause_to_two_poll_exact_seconds": 19.463604500051588,
     "effect_to_first_exact_seconds": 9.406263917218894,
     "exact_correct": true,
     "expected_class_set": [
@@ -1175,7 +1175,7 @@
     "raw_path": "raw/S7/observer-10s.ndjson",
     "scenario": "S7",
     "scenario_label": "out-of-band load-balancer change",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734340.326758,
       "actual_start_utc": "2026-08-08T08:58:46.903882+00:00",
       "class_set": [
@@ -1193,7 +1193,7 @@
     "cadence_seconds": 1.0,
     "cause_to_first_alert_seconds": 0.7549060420133173,
     "cause_to_first_exact_seconds": 0.7549060420133173,
-    "cause_to_stable_exact_seconds": 1.775371250230819,
+    "cause_to_two_poll_exact_seconds": 1.775371250230819,
     "effect_to_first_exact_seconds": 0.7544259577989578,
     "exact_correct": true,
     "expected_class_set": [
@@ -1231,7 +1231,7 @@
     "raw_path": "raw/S8/observer-01s.ndjson",
     "scenario": "S8",
     "scenario_label": "live authorization identity mismatch",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734345.147787833,
       "actual_start_utc": "2026-08-08T08:58:51.724954+00:00",
       "class_set": [
@@ -1249,7 +1249,7 @@
     "cadence_seconds": 5.0,
     "cause_to_first_alert_seconds": 4.754514084197581,
     "cause_to_first_exact_seconds": 4.754514084197581,
-    "cause_to_stable_exact_seconds": 9.76486233389005,
+    "cause_to_two_poll_exact_seconds": 9.76486233389005,
     "effect_to_first_exact_seconds": 4.754033999983221,
     "exact_correct": true,
     "expected_class_set": [
@@ -1287,7 +1287,7 @@
     "raw_path": "raw/S8/observer-05s.ndjson",
     "scenario": "S8",
     "scenario_label": "live authorization identity mismatch",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734353.144097208,
       "actual_start_utc": "2026-08-08T08:58:59.721340+00:00",
       "class_set": [
@@ -1305,7 +1305,7 @@
     "cadence_seconds": 10.0,
     "cause_to_first_alert_seconds": 9.764251166954637,
     "cause_to_first_exact_seconds": 9.764251166954637,
-    "cause_to_stable_exact_seconds": 19.81145262531936,
+    "cause_to_two_poll_exact_seconds": 19.81145262531936,
     "effect_to_first_exact_seconds": 9.763771082740277,
     "exact_correct": true,
     "expected_class_set": [
@@ -1343,7 +1343,7 @@
     "raw_path": "raw/S8/observer-10s.ndjson",
     "scenario": "S8",
     "scenario_label": "live authorization identity mismatch",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734363.149730958,
       "actual_start_utc": "2026-08-08T08:59:09.727096+00:00",
       "class_set": [
@@ -1361,7 +1361,7 @@
     "cadence_seconds": 1.0,
     "cause_to_first_alert_seconds": 0.7849837499670684,
     "cause_to_first_exact_seconds": 0.7849837499670684,
-    "cause_to_stable_exact_seconds": 1.8734812079928815,
+    "cause_to_two_poll_exact_seconds": 1.8734812079928815,
     "effect_to_first_exact_seconds": 0.784407916944474,
     "exact_correct": true,
     "expected_class_set": [
@@ -1399,7 +1399,7 @@
     "raw_path": "raw/S9/observer-01s.ndjson",
     "scenario": "S9",
     "scenario_label": "missing live continuing-authorization status",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734367.868998125,
       "actual_start_utc": "2026-08-08T08:59:14.446374+00:00",
       "class_set": [
@@ -1417,7 +1417,7 @@
     "cadence_seconds": 5.0,
     "cause_to_first_alert_seconds": 4.8318962077610195,
     "cause_to_first_exact_seconds": 4.8318962077610195,
-    "cause_to_stable_exact_seconds": 9.828374207951128,
+    "cause_to_two_poll_exact_seconds": 9.828374207951128,
     "effect_to_first_exact_seconds": 4.831320374738425,
     "exact_correct": true,
     "expected_class_set": [
@@ -1455,7 +1455,7 @@
     "raw_path": "raw/S9/observer-05s.ndjson",
     "scenario": "S9",
     "scenario_label": "missing live continuing-authorization status",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734375.875479791,
       "actual_start_utc": "2026-08-08T08:59:22.452936+00:00",
       "class_set": [
@@ -1473,7 +1473,7 @@
     "cadence_seconds": 10.0,
     "cause_to_first_alert_seconds": 9.826962042134255,
     "cause_to_first_exact_seconds": 9.826962042134255,
-    "cause_to_stable_exact_seconds": 19.823323416989297,
+    "cause_to_two_poll_exact_seconds": 19.823323416989297,
     "effect_to_first_exact_seconds": 9.82638620911166,
     "exact_correct": true,
     "expected_class_set": [
@@ -1511,7 +1511,7 @@
     "raw_path": "raw/S9/observer-10s.ndjson",
     "scenario": "S9",
     "scenario_label": "missing live continuing-authorization status",
-    "stable_exact": {
+    "two_poll_exact": {
       "actual_start_mono": 2734385.868093041,
       "actual_start_utc": "2026-08-08T08:59:32.445669+00:00",
       "class_set": [

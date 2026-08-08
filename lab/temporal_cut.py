@@ -35,9 +35,12 @@ def select_admissible_cut(
 ) -> tuple[bool, str, dict[str, dict[str, Any]]]:
     """Select the unique latest record per source at an admissible cut.
 
-    Each contract must publish ``watermark``, ``freshness_seconds``, and a
-    non-negative ``clock_error_bound_seconds``.  Record capture intervals are
-    assumed already expanded by that bound and use ``capture_start`` and
+    Each contract must publish ``watermark`` with
+    ``watermark_basis == "capture_start"``, ``freshness_seconds``, and a
+    non-negative ``clock_error_bound_seconds``.  The watermark is therefore a
+    conservative lower-end frontier: no later-arriving record may have a
+    capture start at or before it.  Record capture intervals are assumed
+    already expanded by the clock bound and use ``capture_start`` and
     ``capture_end`` in one reference-time domain.
     """
 
@@ -70,6 +73,8 @@ def select_admissible_cut(
             return False, f"{source}: missing {exc.args[0]}", {}
         except ValueError as exc:
             return False, str(exc), {}
+        if contract.get("watermark_basis") != "capture_start":
+            return False, f"{source}: watermark basis must be capture_start", {}
         if freshness < 0 or clock_bound < 0:
             return False, f"{source}: negative temporal bound", {}
         if watermark < cut:

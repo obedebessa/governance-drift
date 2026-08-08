@@ -1,6 +1,6 @@
 {
   "all_exact": true,
-  "all_stable": true,
+  "all_two_poll_exact": true,
   "cause_started_mono": 2734343.616576166,
   "cause_started_utc": "2026-08-08T08:58:50.193725+00:00",
   "distinct_observer_ids": 3,
@@ -15,14 +15,14 @@
   "observer_processes": 3,
   "scenario": "S8",
   "scenario_label": "live authorization identity mismatch",
-  "schema": "govdrift-trace-scenario-summary/v1",
+  "schema": "govdrift-trace-scenario-summary/v2",
   "trajectories": [
     {
       "adapter_error_polls": 0,
       "cadence_seconds": 1.0,
       "cause_to_first_alert_seconds": 0.7549060420133173,
       "cause_to_first_exact_seconds": 0.7549060420133173,
-      "cause_to_stable_exact_seconds": 1.775371250230819,
+      "cause_to_two_poll_exact_seconds": 1.775371250230819,
       "effect_to_first_exact_seconds": 0.7544259577989578,
       "exact_correct": true,
       "expected_class_set": [
@@ -60,7 +60,7 @@
       "raw_path": "raw/S8/observer-01s.ndjson",
       "scenario": "S8",
       "scenario_label": "live authorization identity mismatch",
-      "stable_exact": {
+      "two_poll_exact": {
         "actual_start_mono": 2734345.147787833,
         "actual_start_utc": "2026-08-08T08:58:51.724954+00:00",
         "class_set": [
@@ -78,7 +78,7 @@
       "cadence_seconds": 5.0,
       "cause_to_first_alert_seconds": 4.754514084197581,
       "cause_to_first_exact_seconds": 4.754514084197581,
-      "cause_to_stable_exact_seconds": 9.76486233389005,
+      "cause_to_two_poll_exact_seconds": 9.76486233389005,
       "effect_to_first_exact_seconds": 4.754033999983221,
       "exact_correct": true,
       "expected_class_set": [
@@ -116,7 +116,7 @@
       "raw_path": "raw/S8/observer-05s.ndjson",
       "scenario": "S8",
       "scenario_label": "live authorization identity mismatch",
-      "stable_exact": {
+      "two_poll_exact": {
         "actual_start_mono": 2734353.144097208,
         "actual_start_utc": "2026-08-08T08:58:59.721340+00:00",
         "class_set": [
@@ -134,7 +134,7 @@
       "cadence_seconds": 10.0,
       "cause_to_first_alert_seconds": 9.764251166954637,
       "cause_to_first_exact_seconds": 9.764251166954637,
-      "cause_to_stable_exact_seconds": 19.81145262531936,
+      "cause_to_two_poll_exact_seconds": 19.81145262531936,
       "effect_to_first_exact_seconds": 9.763771082740277,
       "exact_correct": true,
       "expected_class_set": [
@@ -172,7 +172,7 @@
       "raw_path": "raw/S8/observer-10s.ndjson",
       "scenario": "S8",
       "scenario_label": "live authorization identity mismatch",
-      "stable_exact": {
+      "two_poll_exact": {
         "actual_start_mono": 2734363.149730958,
         "actual_start_utc": "2026-08-08T08:59:09.727096+00:00",
         "class_set": [

@@ -1,6 +1,6 @@
 {
   "all_exact": true,
-  "all_stable": true,
+  "all_two_poll_exact": true,
   "cause_started_mono": 2734270.122727708,
   "cause_started_utc": "2026-08-08T08:57:36.699180+00:00",
   "distinct_observer_ids": 3,
@@ -15,14 +15,14 @@
   "observer_processes": 3,
   "scenario": "S5",
   "scenario_label": "IAM authorization-surface expansion",
-  "schema": "govdrift-trace-scenario-summary/v1",
+  "schema": "govdrift-trace-scenario-summary/v2",
   "trajectories": [
     {
       "adapter_error_polls": 0,
       "cadence_seconds": 1.0,
       "cause_to_first_alert_seconds": 0.4715793328359723,
       "cause_to_first_exact_seconds": 0.4715793328359723,
-      "cause_to_stable_exact_seconds": 1.4986188751645386,
+      "cause_to_two_poll_exact_seconds": 1.4986188751645386,
       "effect_to_first_exact_seconds": 0.47114524990320206,
       "exact_correct": true,
       "expected_class_set": [
@@ -60,7 +60,7 @@
       "raw_path": "raw/S5/observer-01s.ndjson",
       "scenario": "S5",
       "scenario_label": "IAM authorization-surface expansion",
-      "stable_exact": {
+      "two_poll_exact": {
         "actual_start_mono": 2734271.366601875,
         "actual_start_utc": "2026-08-08T08:57:37.943074+00:00",
         "class_set": [
@@ -78,7 +78,7 @@
       "cadence_seconds": 5.0,
       "cause_to_first_alert_seconds": 4.464629833120853,
       "cause_to_first_exact_seconds": 4.464629833120853,
-      "cause_to_stable_exact_seconds": 9.522095125168562,
+      "cause_to_two_poll_exact_seconds": 9.522095125168562,
       "effect_to_first_exact_seconds": 4.4641957501880825,
       "exact_correct": true,
       "expected_class_set": [
@@ -116,7 +116,7 @@
       "raw_path": "raw/S5/observer-05s.ndjson",
       "scenario": "S5",
       "scenario_label": "IAM authorization-surface expansion",
-      "stable_exact": {
+      "two_poll_exact": {
         "actual_start_mono": 2734279.363008083,
         "actual_start_utc": "2026-08-08T08:57:45.939566+00:00",
         "class_set": [
@@ -134,7 +134,7 @@
       "cadence_seconds": 10.0,
       "cause_to_first_alert_seconds": 9.523719583172351,
       "cause_to_first_exact_seconds": 9.523719583172351,
-      "cause_to_stable_exact_seconds": 19.507925250101835,
+      "cause_to_two_poll_exact_seconds": 19.507925250101835,
       "effect_to_first_exact_seconds": 9.52328550023958,
       "exact_correct": true,
       "expected_class_set": [
@@ -172,7 +172,7 @@
       "raw_path": "raw/S5/observer-10s.ndjson",
       "scenario": "S5",
       "scenario_label": "IAM authorization-surface expansion",
-      "stable_exact": {
+      "two_poll_exact": {
         "actual_start_mono": 2734289.371655333,
         "actual_start_utc": "2026-08-08T08:57:55.948288+00:00",
         "class_set": [

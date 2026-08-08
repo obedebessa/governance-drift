@@ -106,8 +106,9 @@ join across unrelated capture times. A record $r$ from source $s$ carries a
 capture interval $I(r)=[c_r^-,c_r^+]$ in a common reference-time domain. The
 interval includes capture duration and expands the source timestamp by its
 declared clock-error bound $\kappa_s$. At evaluator observation time $T$, a
-source watermark $w_s(T)$ promises that no record with capture upper bound at
-or before $w_s(T)$ will arrive later. For component $j$, let $S_j$ be its
+source watermark $w_s(T)$ is a conservative capture-lower-bound frontier: it
+promises that no later-arriving record can have $c_r^-\leq w_s(T)$. For
+component $j$, let $S_j$ be its
 required sources, $F_s$ their published source-freshness bounds, $\Delta_j$ its
 maximum permitted cross-source temporal spread, and $F_j^{\mathrm{cur}}$ the
 maximum age of a cut that may be labeled current. For logical cut $\theta$, let
@@ -148,6 +149,9 @@ For later definitions, write
 \]
 Thus watermarks close the prefix, capture intervals make clock skew explicit,
 and $\Delta_j$ prevents a verdict from mixing evidence too far apart in time.
+A source that exposes only a capture-upper-bound watermark cannot establish
+this closure: a later interval could still straddle $\theta$, so the affected
+cut is undecidable.
 A missing clock bound, record, unique latest record, or watermark---or an
 interval that straddles the requested cut---makes the affected component
 undecidable. An evaluation that satisfies only $\mathrm{AdmCut}$ is explicitly

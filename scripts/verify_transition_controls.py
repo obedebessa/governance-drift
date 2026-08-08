@@ -53,7 +53,7 @@ if len(grouped) != 60:
 if any(rows_for_observer[-1]["verdict"] != "consistent" for rows_for_observer in grouped.values()):
     fail("at least one observer did not recover to a consistent final poll")
 
-substantive_governance = sum(
+non_configuration_governance_plane = sum(
     row["verdict"] == "drift"
     and any(label in {"policy", "authorization", "intent", "environment"}
             for label in row.get("class_set", []))
@@ -61,13 +61,15 @@ substantive_governance = sum(
 )
 configuration = sum("configuration" in row.get("class_set", []) for row in rows)
 epistemic = sum(row["verdict"] == "undecidable" for row in rows)
-if substantive_governance != summary.get("substantive_governance_alarm_polls"):
-    fail("substantive governance count is not reproducible")
+if non_configuration_governance_plane != summary.get(
+    "non_configuration_governance_plane_drift_polls"
+):
+    fail("non-configuration governance-plane count is not reproducible")
 if configuration != summary.get("configuration_convergence_polls"):
     fail("configuration convergence count is not reproducible")
 if epistemic != summary.get("epistemic_warning_polls"):
     fail("epistemic warning count is not reproducible")
-if (substantive_governance, configuration, epistemic) != (0, 7, 36):
+if (non_configuration_governance_plane, configuration, epistemic) != (0, 7, 36):
     fail("canonical transition outcome changed")
 if any(
     "active pod lacks a complete ready-container digest set" not in row.get("detail", "")
@@ -77,6 +79,7 @@ if any(
 
 print(
     "PASS: 20 transition-inclusive controls reconstructed from 60 append-only "
-    "observer logs (777 polls; 0 governance drift, 7 convergence signals, "
+    "observer logs (777 polls; 0 non-configuration governance-plane drift, "
+    "7 configuration-convergence signals, "
     "36 fail-safe epistemic warnings; every observer recovered)"
 )

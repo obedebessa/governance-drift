@@ -12,7 +12,7 @@
     "minimum": 0.4380972501821816,
     "p95_nearest_rank": 9.764251166954637
   },
-  "cause_to_stable_exact_seconds": {
+  "cause_to_two_poll_exact_seconds": {
     "maximum": 19.823323416989297,
     "median": 9.522095125168562,
     "minimum": 1.40113729191944,
@@ -44,7 +44,7 @@
   "scenario_summaries": [
     {
       "all_exact": true,
-      "all_stable": true,
+      "all_two_poll_exact": true,
       "distinct_pids": 3,
       "expected_class_set": [
         "configuration"
@@ -53,7 +53,7 @@
     },
     {
       "all_exact": true,
-      "all_stable": true,
+      "all_two_poll_exact": true,
       "distinct_pids": 3,
       "expected_class_set": [
         "authorization"
@@ -62,7 +62,7 @@
     },
     {
       "all_exact": true,
-      "all_stable": true,
+      "all_two_poll_exact": true,
       "distinct_pids": 3,
       "expected_class_set": [
         "policy"
@@ -71,7 +71,7 @@
     },
     {
       "all_exact": true,
-      "all_stable": true,
+      "all_two_poll_exact": true,
       "distinct_pids": 3,
       "expected_class_set": [
         "authorization"
@@ -80,7 +80,7 @@
     },
     {
       "all_exact": true,
-      "all_stable": true,
+      "all_two_poll_exact": true,
       "distinct_pids": 3,
       "expected_class_set": [
         "environment"
@@ -89,7 +89,7 @@
     },
     {
       "all_exact": true,
-      "all_stable": true,
+      "all_two_poll_exact": true,
       "distinct_pids": 3,
       "expected_class_set": [
         "authorization",
@@ -99,7 +99,7 @@
     },
     {
       "all_exact": true,
-      "all_stable": true,
+      "all_two_poll_exact": true,
       "distinct_pids": 3,
       "expected_class_set": [
         "environment"
@@ -108,7 +108,7 @@
     },
     {
       "all_exact": true,
-      "all_stable": true,
+      "all_two_poll_exact": true,
       "distinct_pids": 3,
       "expected_class_set": [
         "authorization"
@@ -117,7 +117,7 @@
     },
     {
       "all_exact": true,
-      "all_stable": true,
+      "all_two_poll_exact": true,
       "distinct_pids": 3,
       "expected_class_set": [
         "evidence"
@@ -127,7 +127,7 @@
   ],
   "scenarios": 9,
   "scenarios_all_exact": 9,
-  "schema": "govdrift-trace-campaign-summary/v1",
-  "stable_trajectories": 27,
+  "schema": "govdrift-trace-campaign-summary/v2",
+  "two_poll_exact_trajectories": 27,
   "trajectories": 27
 }

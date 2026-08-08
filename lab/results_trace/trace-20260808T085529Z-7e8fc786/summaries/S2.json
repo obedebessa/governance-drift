@@ -1,6 +1,6 @@
 {
   "all_exact": true,
-  "all_stable": true,
+  "all_two_poll_exact": true,
   "cause_started_mono": 2734208.572119333,
   "cause_started_utc": "2026-08-08T08:56:35.147926+00:00",
   "distinct_observer_ids": 3,
@@ -15,14 +15,14 @@
   "observer_processes": 3,
   "scenario": "S2",
   "scenario_label": "expired temporary exception with persistent effect",
-  "schema": "govdrift-trace-scenario-summary/v1",
+  "schema": "govdrift-trace-scenario-summary/v2",
   "trajectories": [
     {
       "adapter_error_polls": 0,
       "cadence_seconds": 1.0,
       "cause_to_first_alert_seconds": 0.5217690421268344,
       "cause_to_first_exact_seconds": 0.5217690421268344,
-      "cause_to_stable_exact_seconds": 1.5710450829938054,
+      "cause_to_two_poll_exact_seconds": 1.5710450829938054,
       "effect_to_first_exact_seconds": 0.5190897919237614,
       "exact_correct": true,
       "expected_class_set": [
@@ -60,7 +60,7 @@
       "raw_path": "raw/S2/observer-01s.ndjson",
       "scenario": "S2",
       "scenario_label": "expired temporary exception with persistent effect",
-      "stable_exact": {
+      "two_poll_exact": {
         "actual_start_mono": 2734209.891915041,
         "actual_start_utc": "2026-08-08T08:56:36.467801+00:00",
         "class_set": [
@@ -78,7 +78,7 @@
       "cadence_seconds": 5.0,
       "cause_to_first_alert_seconds": 2.614408750087023,
       "cause_to_first_exact_seconds": 2.614408750087023,
-      "cause_to_stable_exact_seconds": 7.591322417370975,
+      "cause_to_two_poll_exact_seconds": 7.591322417370975,
       "effect_to_first_exact_seconds": 2.6117294998839498,
       "exact_correct": true,
       "expected_class_set": [
@@ -116,7 +116,7 @@
       "raw_path": "raw/S2/observer-05s.ndjson",
       "scenario": "S2",
       "scenario_label": "expired temporary exception with persistent effect",
-      "stable_exact": {
+      "two_poll_exact": {
         "actual_start_mono": 2734215.890470041,
         "actual_start_utc": "2026-08-08T08:56:42.466420+00:00",
         "class_set": [
@@ -134,7 +134,7 @@
       "cadence_seconds": 10.0,
       "cause_to_first_alert_seconds": 2.6144388751126826,
       "cause_to_first_exact_seconds": 2.6144388751126826,
-      "cause_to_stable_exact_seconds": 12.612919582985342,
+      "cause_to_two_poll_exact_seconds": 12.612919582985342,
       "effect_to_first_exact_seconds": 2.6117596249096096,
       "exact_correct": true,
       "expected_class_set": [
@@ -172,7 +172,7 @@
       "raw_path": "raw/S2/observer-10s.ndjson",
       "scenario": "S2",
       "scenario_label": "expired temporary exception with persistent effect",
-      "stable_exact": {
+      "two_poll_exact": {
         "actual_start_mono": 2734220.886044416,
         "actual_start_utc": "2026-08-08T08:56:47.462070+00:00",
         "class_set": [

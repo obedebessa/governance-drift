@@ -238,7 +238,7 @@ def summarize(rows: list[dict], windows: list[dict]) -> dict:
                 "polls_total": len(subset),
                 "polls_transition_and_post": len(after_start),
                 "polls_during_action": len(during),
-                "substantive_governance_alarm_polls": len(governance),
+                "non_configuration_governance_plane_drift_polls": len(governance),
                 "configuration_convergence_polls": len(configuration),
                 "epistemic_warning_polls": len(epistemic),
                 "max_scheduler_lag_seconds": max((r["scheduler_lag_seconds"] for r in subset), default=0.0),
@@ -250,8 +250,8 @@ def summarize(rows: list[dict], windows: list[dict]) -> dict:
         "cadences_seconds": list(CADENCES),
         "windows": len(windows),
         "polls": len(rows),
-        "substantive_governance_alarm_polls": sum(
-            r["substantive_governance_alarm_polls"] for r in records
+        "non_configuration_governance_plane_drift_polls": sum(
+            r["non_configuration_governance_plane_drift_polls"] for r in records
         ),
         "configuration_convergence_polls": sum(r["configuration_convergence_polls"] for r in records),
         "epistemic_warning_polls": sum(r["epistemic_warning_polls"] for r in records),
@@ -358,7 +358,7 @@ def main() -> int:
     write_csv(args.output / "transition_observations.csv", rows)
     (args.output / "transition_summary.json").write_text(json.dumps(summary, indent=2) + "\n")
     print(json.dumps({key: summary[key] for key in (
-        "windows", "polls", "substantive_governance_alarm_polls",
+        "windows", "polls", "non_configuration_governance_plane_drift_polls",
         "configuration_convergence_polls", "epistemic_warning_polls",
     )}, indent=2))
     return 0

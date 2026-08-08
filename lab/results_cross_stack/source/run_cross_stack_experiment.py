@@ -1482,9 +1482,7 @@ class CrossStackExperiment:
                     "exact_set": True,
                     "polls_to_exact": poll_index,
                     "actuation_seconds": round(injection.actuation_seconds, 6),
-                    "operational_onset_to_first_honest_seconds": round(
-                        first_honest_time - injection.t_onset, 6
-                    ),
+                    "ddl_seconds": round(first_honest_time - injection.t_onset, 6),
                     "first_honest_verdict_kind": first_honest_verdict_kind,
                     "first_epistemic_alert_seconds": (
                         round(first_epistemic_time - injection.t_onset, 6)
@@ -1555,9 +1553,7 @@ class CrossStackExperiment:
                 self.rows.append(row)
                 print(
                     f"[{schedule_index:02d}/15] {scenario} r{repetition}: "
-                    "set="
-                    f"{row['final_observed_set']} honest="
-                    f"{row['operational_onset_to_first_honest_seconds']:.3f}s",
+                    f"set={row['final_observed_set']} ddl={row['ddl_seconds']:.3f}s",
                     flush=True,
                 )
 

@@ -32,16 +32,18 @@ it does not claim continuation-safe identity across resource recreation.
 The comparison with the primary Flux + Kyverno laboratory is descriptive. It
 tests bounded realizability of corresponding evidence paths; it is not an
 equivalence, non-inferiority, prevalence, reliability, or production-latency
-study. First-honest DDL is time from operational onset to the first honest
+study. Operational-onset-to-first-honest latency ends at the first completed
 non-consistent or undecidable verdict, so it may be epistemic rather than a
-substantive class detection. First-substantive latency is reported separately.
+substantive class detection. It is not DDL, whose onset is class-specific.
+First-substantive latency is reported separately.
 ESC ends at the first exact projected classification over the declared
 evaluated components; it is not watermark-qualified Stable-VCL.
 
 The raw trace preserves injection/onset and baseline reference markers plus
 evaluation-start, evaluation-completion, duration, and completion-classification
-fields for every poll. The analyzer reconstructs DDL, first epistemic alert,
-first substantive alert, and exact-classification latency from those fields.
+fields for every poll. The analyzer reconstructs operational-onset-to-first-
+honest, first-epistemic, first-substantive, and exact-classification latencies
+from those fields.
 
 The resource stop rule was 80% sustained for three five-second samples on host
 CPU, host memory-pressure utilization, normalized Kind-node CPU, or Kind-node
@@ -51,10 +53,14 @@ capture.
 
 - `cross_stack_raw.ndjson`: every baseline and scenario poll.
 - `cross_stack_observations.json` / `.csv`: one result per repetition.
+- `cross_stack_profile_summary.csv`: one validated aggregate row per slice.
 - `install_events.ndjson`: manifest, readiness, and setup provenance.
 - `resource_samples.ndjson`: stop-rule inputs.
 - `manifest_checksums.csv`: upstream, local-stack, and campaign-source SHA-256 inventory.
+- `source/`: immutable source snapshots used for the executed campaign; the
+  current analyzer is hashed separately as the derived-output source.
 - `platform.json`: exact platform, source state, images, clock, and validation boundary.
+- `run_status.json`: campaign completion, stop-rule, API-error, and cleanup state.
 - `cross_stack_summary.json`: validated descriptive summary.
 - `table_cross_stack.tex`: manuscript-ready table.
 - `cleanup.json`: deletion command plus pre/post verification stdout, stderr,

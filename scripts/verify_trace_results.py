@@ -37,6 +37,12 @@ EXPECTED_FINAL_COMPONENTS = {
     "S8": {"configuration": "consistent", "policy": "consistent", "authorization": "inconsistent", "intent": "consistent", "environment": "consistent"},
     "S9": {"configuration": "consistent", "policy": "consistent", "authorization": "undecidable", "intent": "consistent", "environment": "consistent"},
 }
+LEGACY_DERIVED_FIELDS = {
+    "stable_exact",
+    "stable_trajectories",
+    "all_stable",
+    "cause_to_stable_exact_seconds",
+}
 
 
 def canonical_bytes(value: Any) -> bytes:
@@ -71,6 +77,17 @@ def load_ndjson(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
+def assert_no_legacy_derived_fields(value: Any, location: str) -> None:
+    if isinstance(value, dict):
+        legacy = LEGACY_DERIVED_FIELDS.intersection(value)
+        assert not legacy, (location, "legacy two-poll field names", sorted(legacy))
+        for key, nested in value.items():
+            assert_no_legacy_derived_fields(nested, f"{location}.{key}")
+    elif isinstance(value, list):
+        for index, nested in enumerate(value):
+            assert_no_legacy_derived_fields(nested, f"{location}[{index}]")
+
+
 def exact(row: dict[str, Any], expected: list[str]) -> bool:
     verdict = "undecidable" if expected == ["evidence"] else "drift"
     return row.get("verdict") == verdict and sorted(row.get("class_set", [])) == sorted(expected)
@@ -80,13 +97,17 @@ def markers(rows: list[dict[str, Any]], cause: float, expected: list[str]) -> di
     post = [row for row in rows if float(row["completed_mono"]) >= cause]
     first_alert = next((row for row in post if row["verdict"] != "consistent"), None)
     first_exact = next((row for row in post if exact(row, expected)), None)
-    stable = next(
+    two_poll_exact = next(
         (current for previous, current in zip(post, post[1:]) if exact(previous, expected) and exact(current, expected)),
         None,
     )
-    if not first_alert or not first_exact or not stable:
-        raise AssertionError("trajectory lacks first-alert, exact, or stable marker")
-    return {"first_alert": first_alert, "first_exact": first_exact, "stable_exact": stable}
+    if not first_alert or not first_exact or not two_poll_exact:
+        raise AssertionError("trajectory lacks first-alert, exact, or two-poll exact marker")
+    return {
+        "first_alert": first_alert,
+        "first_exact": first_exact,
+        "two_poll_exact": two_poll_exact,
+    }
 
 
 def verify_poll_chain(path: Path, ready: dict[str, Any]) -> list[dict[str, Any]]:
@@ -134,6 +155,8 @@ def verify_campaign(root: Path) -> dict[str, Any]:
     campaign = load_json(root / "campaign.json")
     summary = load_json(root / "campaign_summary.json")
     cleanup = load_json(root / "cleanup.json")
+    assert_no_legacy_derived_fields(summary, "campaign_summary.json")
+    assert summary["schema"] == "govdrift-trace-campaign-summary/v2"
     assert campaign["campaign_id"] == summary["campaign_id"]
     assert summary["scenario_ids"] == list(EXPECTED)
     assert [float(value) for value in summary["cadences_seconds"]] == list(CADENCES)
@@ -147,7 +170,7 @@ def verify_campaign(root: Path) -> dict[str, Any]:
     all_pids: set[tuple[str, int]] = set()
     trajectory_count = 0
     exact_count = 0
-    stable_count = 0
+    two_poll_exact_count = 0
     verified_trajectory_rows: list[dict[str, Any]] = []
     verified_scenario_projections: list[dict[str, Any]] = []
     injection_command_sequences: dict[str, list[int]] = {}
@@ -168,6 +191,8 @@ def verify_campaign(root: Path) -> dict[str, Any]:
         )
 
         scenario_summary = load_json(root / "summaries" / f"{scenario}.json")
+        assert_no_legacy_derived_fields(scenario_summary, f"summaries/{scenario}.json")
+        assert scenario_summary["schema"] == "govdrift-trace-scenario-summary/v2"
         assert scenario_summary["injection_sha256"] == recorded
         assert scenario_summary["injection_id"] == injection["injection_id"]
         assert scenario_summary["observer_processes"] == 3
@@ -193,22 +218,22 @@ def verify_campaign(root: Path) -> dict[str, Any]:
             verified_trajectory_rows.append(reported)
             assert reported["first_alert"]["poll_sha256"] == observed["first_alert"]["poll_sha256"]
             assert reported["first_exact"]["poll_sha256"] == observed["first_exact"]["poll_sha256"]
-            assert reported["stable_exact"]["poll_sha256"] == observed["stable_exact"]["poll_sha256"]
+            assert reported["two_poll_exact"]["poll_sha256"] == observed["two_poll_exact"]["poll_sha256"]
             assert float(observed["first_alert"]["completed_mono"]) <= float(observed["first_exact"]["completed_mono"])
-            assert float(observed["first_exact"]["completed_mono"]) < float(observed["stable_exact"]["completed_mono"])
+            assert float(observed["first_exact"]["completed_mono"]) < float(observed["two_poll_exact"]["completed_mono"])
             assert exact(observed["first_exact"], expected)
-            assert exact(observed["stable_exact"], expected)
+            assert exact(observed["two_poll_exact"], expected)
             assert observed["first_exact"]["components"] == EXPECTED_FINAL_COMPONENTS[scenario], (
                 scenario,
                 cadence,
                 "first exact component contract",
                 observed["first_exact"]["components"],
             )
-            assert observed["stable_exact"]["components"] == EXPECTED_FINAL_COMPONENTS[scenario], (
+            assert observed["two_poll_exact"]["components"] == EXPECTED_FINAL_COMPONENTS[scenario], (
                 scenario,
                 cadence,
                 "two-poll exact component contract",
-                observed["stable_exact"]["components"],
+                observed["two_poll_exact"]["components"],
             )
             scenario_pids.add(int(ready["pid"]))
             scenario_ids.add(ready["observer_id"])
@@ -216,24 +241,24 @@ def verify_campaign(root: Path) -> dict[str, Any]:
             ready_rows.append(ready)
             trajectory_count += 1
             exact_count += 1
-            stable_count += 1
+            two_poll_exact_count += 1
         assert len(scenario_pids) == 3, (scenario, scenario_pids)
         assert len(scenario_ids) == 3, (scenario, scenario_ids)
         assert scenario_summary["distinct_pids"] == 3
         assert scenario_summary["distinct_observer_ids"] == 3
-        assert scenario_summary["all_exact"] and scenario_summary["all_stable"]
+        assert scenario_summary["all_exact"] and scenario_summary["all_two_poll_exact"]
         verified_scenario_projections.append({
             "scenario": scenario_summary["scenario"],
             "expected_class_set": scenario_summary["expected_class_set"],
             "all_exact": scenario_summary["all_exact"],
-            "all_stable": scenario_summary["all_stable"],
+            "all_two_poll_exact": scenario_summary["all_two_poll_exact"],
             "distinct_pids": scenario_summary["distinct_pids"],
         })
 
     assert trajectory_count == 27
     assert summary["trajectories"] == summary["expected_trajectories"] == trajectory_count
     assert summary["exact_trajectories"] == exact_count == 27
-    assert summary["stable_trajectories"] == stable_count == 27
+    assert summary["two_poll_exact_trajectories"] == two_poll_exact_count == 27
     assert summary["scenarios"] == summary["scenarios_all_exact"] == 9
     assert summary["distinct_observer_processes_across_windows"] == len(all_pids) == 27
     assert summary["adapter_error_polls"] == 0
@@ -242,6 +267,7 @@ def verify_campaign(root: Path) -> dict[str, Any]:
     )
 
     trajectory_rows = json.loads((root / "trajectories.json").read_text(encoding="utf-8"))
+    assert_no_legacy_derived_fields(trajectory_rows, "trajectories.json")
     assert len(trajectory_rows) == 27
     assert trajectory_rows == verified_trajectory_rows, (
         "trajectories.json is not the exact ordered concatenation of raw-verified scenario trajectories"
@@ -249,7 +275,10 @@ def verify_campaign(root: Path) -> dict[str, Any]:
     assert summary["scenario_summaries"] == verified_scenario_projections
 
     with (root / "trajectories.csv").open(newline="", encoding="utf-8") as handle:
-        csv_rows = list(csv.DictReader(handle))
+        reader = csv.DictReader(handle)
+        assert reader.fieldnames is not None
+        assert not LEGACY_DERIVED_FIELDS.intersection(reader.fieldnames)
+        csv_rows = list(reader)
     assert len(csv_rows) == len(trajectory_rows)
     for csv_row, json_row in zip(csv_rows, trajectory_rows):
         assert csv_row["scenario"] == json_row["scenario"]
@@ -260,7 +289,7 @@ def verify_campaign(root: Path) -> dict[str, Any]:
         assert csv_row["exact_correct"] == str(json_row["exact_correct"])
     for source_key, summary_key in (
         ("cause_to_first_exact_seconds", "cause_to_first_exact_seconds"),
-        ("cause_to_stable_exact_seconds", "cause_to_stable_exact_seconds"),
+        ("cause_to_two_poll_exact_seconds", "cause_to_two_poll_exact_seconds"),
     ):
         values = sorted(float(row[source_key]) for row in trajectory_rows)
         expected_aggregate = {

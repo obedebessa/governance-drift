@@ -174,7 +174,7 @@ class MarkerTests(unittest.TestCase):
         values = [float(value) for value in range(1, 28)]
         self.assertEqual(campaign.nearest_rank(values, 0.95), 26.0)
 
-    def test_stable_is_second_consecutive_exact_poll(self) -> None:
+    def test_two_poll_exact_is_second_consecutive_exact_poll(self) -> None:
         rows = [
             {"sequence": 1, "completed_mono": 9.0, "verdict": "consistent", "class_set": []},
             {"sequence": 2, "completed_mono": 11.0, "verdict": "undecidable", "class_set": ["evidence"]},
@@ -193,7 +193,7 @@ class MarkerTests(unittest.TestCase):
         observed = campaign.event_markers(rows, 10.0, ["configuration"])
         self.assertEqual(observed["first_alert"]["sequence"], 2)
         self.assertEqual(observed["exact"]["sequence"], 3)
-        self.assertEqual(observed["stable"]["sequence"], 6)
+        self.assertEqual(observed["two_poll_exact"]["sequence"], 6)
 
 
 if __name__ == "__main__":

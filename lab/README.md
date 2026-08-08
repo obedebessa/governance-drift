@@ -53,16 +53,17 @@ continuity across resource deletion and recreation. S4 reuses the shared T3
 digest adapter and is not independent authorization validation. Intent and
 environment were not evaluated.
 
-| Slice | Exact | Median first-honest DDL | Median first substantive | Median ESC |
+| Slice | Exact | Median onset-to-first-honest | Median first substantive | Median ESC |
 |---|---:|---:|---:|---:|
 | S1 configuration / Argo CD native | 5/5 | 0.207 s | 0.646 s | 1.677 s |
 | S3 policy / Gatekeeper native | 5/5 | 0.157 s | 1.659 s | 1.659 s |
 | S4 authorization / shared adapter | 5/5 | 0.215 s | 0.215 s | 0.650 s |
 
-First-honest DDL stops at the first completed non-consistent or undecidable
-evaluation, so it may be epistemic rather than substantive. First epistemic
-alert and first substantive alert are retained separately; ESC stops only when
-all declared evaluated components are decidable and the projected class set is
+Operational-onset-to-first-honest latency stops at the first completed
+non-consistent or undecidable evaluation, so it may be epistemic rather than
+substantive. It is not DDL, whose onset is class-specific. First epistemic alert
+and first substantive alert are retained separately; ESC stops only when all
+declared evaluated components are decidable and the projected class set is
 exact. All five S1 and all five S3 observations emitted an epistemic alert
 (median 0.207 and 0.157 seconds); three of five S4 observations did so (median
 0.216 seconds among reached observations). The analyzer reconstructs all four

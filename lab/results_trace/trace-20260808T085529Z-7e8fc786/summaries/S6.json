@@ -1,6 +1,6 @@
 {
   "all_exact": true,
-  "all_stable": true,
+  "all_two_poll_exact": true,
   "cause_started_mono": 2734292.784882208,
   "cause_started_utc": "2026-08-08T08:57:59.361550+00:00",
   "distinct_observer_ids": 3,
@@ -16,14 +16,14 @@
   "observer_processes": 3,
   "scenario": "S6",
   "scenario_label": "unapproved Git rollback followed by Flux convergence",
-  "schema": "govdrift-trace-scenario-summary/v1",
+  "schema": "govdrift-trace-scenario-summary/v2",
   "trajectories": [
     {
       "adapter_error_polls": 0,
       "cadence_seconds": 1.0,
       "cause_to_first_alert_seconds": 0.4935862082056701,
       "cause_to_first_exact_seconds": 1.4706835001707077,
-      "cause_to_stable_exact_seconds": 2.4887599172070622,
+      "cause_to_two_poll_exact_seconds": 2.4887599172070622,
       "effect_to_first_exact_seconds": -4.092311542015523,
       "exact_correct": true,
       "expected_class_set": [
@@ -64,7 +64,7 @@
       "raw_path": "raw/S6/observer-01s.ndjson",
       "scenario": "S6",
       "scenario_label": "unapproved Git rollback followed by Flux convergence",
-      "stable_exact": {
+      "two_poll_exact": {
         "actual_start_mono": 2734295.052147958,
         "actual_start_utc": "2026-08-08T08:58:01.628835+00:00",
         "class_set": [
@@ -83,7 +83,7 @@
       "cadence_seconds": 5.0,
       "cause_to_first_alert_seconds": 4.539520208258182,
       "cause_to_first_exact_seconds": 4.539520208258182,
-      "cause_to_stable_exact_seconds": 9.547788083087653,
+      "cause_to_two_poll_exact_seconds": 9.547788083087653,
       "effect_to_first_exact_seconds": -1.0234748339280486,
       "exact_correct": true,
       "expected_class_set": [
@@ -124,7 +124,7 @@
       "raw_path": "raw/S6/observer-05s.ndjson",
       "scenario": "S6",
       "scenario_label": "unapproved Git rollback followed by Flux convergence",
-      "stable_exact": {
+      "two_poll_exact": {
         "actual_start_mono": 2734302.057016041,
         "actual_start_utc": "2026-08-08T08:58:08.633776+00:00",
         "class_set": [
@@ -143,7 +143,7 @@
       "cadence_seconds": 10.0,
       "cause_to_first_alert_seconds": 9.547744458075613,
       "cause_to_first_exact_seconds": 9.547744458075613,
-      "cause_to_stable_exact_seconds": 19.499972583260387,
+      "cause_to_two_poll_exact_seconds": 19.499972583260387,
       "effect_to_first_exact_seconds": 3.9847494158893824,
       "exact_correct": true,
       "expected_class_set": [
@@ -184,7 +184,7 @@
       "raw_path": "raw/S6/observer-10s.ndjson",
       "scenario": "S6",
       "scenario_label": "unapproved Git rollback followed by Flux convergence",
-      "stable_exact": {
+      "two_poll_exact": {
         "actual_start_mono": 2734312.050007833,
         "actual_start_utc": "2026-08-08T08:58:18.626896+00:00",
         "class_set": [

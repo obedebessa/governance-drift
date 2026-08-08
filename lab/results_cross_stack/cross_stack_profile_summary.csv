@@ -1,4 +1,4 @@
-scenario,expected_set,surface,repetitions,exact_sets,median_ddl_seconds,min_ddl_seconds,max_ddl_seconds,epistemic_alert_observations,median_first_epistemic_alert_seconds,median_first_substantive_alert_seconds,median_exact_latency_seconds,native_cross_stack_component_replication
+scenario,expected_set,surface,repetitions,exact_sets,median_operational_onset_to_first_honest_seconds,min_operational_onset_to_first_honest_seconds,max_operational_onset_to_first_honest_seconds,epistemic_alert_observations,median_first_epistemic_alert_seconds,median_first_substantive_alert_seconds,median_exact_latency_seconds,native_cross_stack_component_replication
 S1,configuration,argocd-native,5,5,0.206765,0.183438,0.880384,5,0.206765,0.645707,1.676624,True
 S3,policy,gatekeeper-native,5,5,0.156506,0.141988,0.332091,5,0.156506,1.6594,1.6594,True
 S4,authorization,shared-artifact-adapter,5,5,0.21545,0.186795,0.240291,3,0.216292,0.21545,0.650497,False

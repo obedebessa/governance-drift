@@ -42,3 +42,13 @@ CPU, memory, API, readiness, and time stop rules, and deletes only that
 namespace in a `finally` block. The frozen raw artifact records SHA-256 values
 for both the runner and the shared batch evaluator; the analyzer rejects a
 source-provenance mismatch.
+
+- `live_fleet_raw.json` / `.csv`: admitted sweeps, stop state, source hashes,
+  resource checks, and cleanup evidence.
+- `live_fleet_summary.json`: validated completed-size and fan-out summaries.
+- `manifest-n0010.json`, `manifest-n0050.json`, and `manifest-n0100.json`:
+  generated workload manifests; the final target is retained even though it
+  produced no admitted timing sample.
+- `namespace.json`: exclusive experimental namespace definition.
+- `cleanup.json`: bounded deletion and absence proof.
+- `table_live_fleet.tex` and `table_live_fleet_fanout.tex`: generated tables.

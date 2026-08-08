@@ -27,21 +27,53 @@ initiation and select the episode- and class-specific
 $t_{\mathrm{onset}}\in\{t^{\mathrm{sub}}_{k,j},t^{\mathrm{evd}}_{k,j}\}$
 from \cref{def:gd}: the former begins substantive divergence and the latter
 begins evidence failure. Let $t_{\mathrm{first}}$ be the first honest polar
-alert or undecidable evidence verdict, $t_{\mathrm{complete}}$ the first report equal to the
-protocol's declared complete class-set target, and $t_{\mathrm{evidence}}$ completion of the
-atomic bundle supporting that report. For a declared episode cut $\theta^*$,
-Stable-VCL measures finality of the bundle explicitly labeled historical
-as-of-$\theta^*$, not currentness at $t_{\mathrm{stable}}$. Define
+alert or undecidable evidence verdict. Let $\mathcal P$ be the protocol's
+declared completion projection---the class-set projection in our experiments,
+or the identity for a full-vector target---and let $\mathcal T^*$ be its
+declared target. Then $t_{\mathrm{complete}}$ is the first report satisfying
+$\mathcal P(\mathcal V)=\mathcal T^*$, and $t_{\mathrm{evidence}}$ is completion
+of the atomic bundle supporting that report. For a declared episode cut
+$\theta^*$, Stable-VCL measures finality of a target-valued bundle explicitly
+labeled historical as-of-$\theta^*$, not currentness at
+$t_{\mathrm{stable}}$. For a candidate publication time $c$, let
+$\mathcal R_{u,\theta^*}[c,T]$ contain the bundle published at $c$ and every
+subsequent evaluator revision of that unit and cut induced by a processed
+arrival admissible to $\theta^*$ through $T$, whether or not the revision is
+emitted as a report. Write $\mathrm{Published}^{H}_{\mathcal T^*}(c)$ when the
+bundle published at $c$ is explicitly historical and has that unit, cut, and
+target projection. Write $\mathrm{Sealed}_{u,\theta^*}(T)$ only when every
+relevant watermark event and every received record behind those watermarks
+that is admissible to $\theta^*$ has been processed and materialized in the
+evaluator state by $T$, and the resulting historical bundle is sealed. We then
+define
 \[
+\begin{gathered}
 \begin{aligned}
-t_{\mathrm{stable}}=\inf\{T\geq t_{\mathrm{complete}}:{}&
-\mathcal V^{\mathrm{historical}}_{u,\theta^*;T}\text{ is sealed},\\
-&\bigwedge_j\mathrm{AdmCut}_j(u,\theta^*;T)\}.
-\end{aligned}
+\mathrm{TargetHeld}(c,T)&\Longleftrightarrow
+ \forall\mathcal V\in\mathcal R_{u,\theta^*}[c,T],\\[-0.25ex]
+&\hspace{3.5em}\mathcal P(\mathcal V)=\mathcal T^*
+\end{aligned}\\[0.4ex]
+t_{\mathrm{stable}}
+=\inf\left\{T\ \middle|\
+ \begin{gathered}
+ \exists c\in[t_{\mathrm{complete}},T]:
+     \mathrm{Published}^{H}_{\mathcal T^*}(c),\\
+ \mathrm{TargetHeld}(c,T),\quad
+     \mathrm{Sealed}_{u,\theta^*}(T),\\
+ \displaystyle\bigwedge_j\mathrm{AdmCut}_j(u,\theta^*;T)
+ \end{gathered}
+ \right\}.
+\end{gathered}
 \]
-Because every required source watermark has passed $\theta^*$, no later
-record admissible to that cut can revise the sealed vector; later cuts are new
-evaluations, not revisions of this one. We report actuation latency
+An admissible arrival that changes the projection away from $\mathcal T^*$
+invalidates the current Stable-VCL completion candidate; the next matching
+bundle starts a new candidate interval. If no target-valued candidate reaches
+the sealed condition, Stable-VCL is right-censored. This restart rule does not
+rewrite the separately reported first-completion ESC. Because the target is
+preserved through every same-cut revision from $c$ to sealing and every
+required source watermark has passed $\theta^*$, no later record admissible to
+that cut can revise the sealed target vector; later cuts are new evaluations,
+not revisions of this one. We report actuation latency
 $t_{\mathrm{onset}}-t_{\mathrm{inject}}$, DDL
 $t_{\mathrm{first}}-t_{\mathrm{onset}}$, protocol exact-set completion
 latency $\mathrm{ESC}=t_{\mathrm{complete}}-t_{\mathrm{onset}}$, diagnostic gap

@@ -1,6 +1,6 @@
 {
   "all_exact": true,
-  "all_stable": true,
+  "all_two_poll_exact": true,
   "cause_started_mono": 2734321.144890708,
   "cause_started_utc": "2026-08-08T08:58:27.721834+00:00",
   "distinct_observer_ids": 3,
@@ -15,14 +15,14 @@
   "observer_processes": 3,
   "scenario": "S7",
   "scenario_label": "out-of-band load-balancer change",
-  "schema": "govdrift-trace-scenario-summary/v1",
+  "schema": "govdrift-trace-scenario-summary/v2",
   "trajectories": [
     {
       "adapter_error_polls": 0,
       "cadence_seconds": 1.0,
       "cause_to_first_alert_seconds": 0.4380972501821816,
       "cause_to_first_exact_seconds": 0.4380972501821816,
-      "cause_to_stable_exact_seconds": 1.40113729191944,
+      "cause_to_two_poll_exact_seconds": 1.40113729191944,
       "effect_to_first_exact_seconds": 0.43765000021085143,
       "exact_correct": true,
       "expected_class_set": [
@@ -60,7 +60,7 @@
       "raw_path": "raw/S7/observer-01s.ndjson",
       "scenario": "S7",
       "scenario_label": "out-of-band load-balancer change",
-      "stable_exact": {
+      "two_poll_exact": {
         "actual_start_mono": 2734322.325314666,
         "actual_start_utc": "2026-08-08T08:58:28.902263+00:00",
         "class_set": [
@@ -78,7 +78,7 @@
       "cadence_seconds": 5.0,
       "cause_to_first_alert_seconds": 4.397787000052631,
       "cause_to_first_exact_seconds": 4.397787000052631,
-      "cause_to_stable_exact_seconds": 9.406706917099655,
+      "cause_to_two_poll_exact_seconds": 9.406706917099655,
       "effect_to_first_exact_seconds": 4.397339750081301,
       "exact_correct": true,
       "expected_class_set": [
@@ -116,7 +116,7 @@
       "raw_path": "raw/S7/observer-05s.ndjson",
       "scenario": "S7",
       "scenario_label": "out-of-band load-balancer change",
-      "stable_exact": {
+      "two_poll_exact": {
         "actual_start_mono": 2734330.326487625,
         "actual_start_utc": "2026-08-08T08:58:36.903515+00:00",
         "class_set": [
@@ -134,7 +134,7 @@
       "cadence_seconds": 10.0,
       "cause_to_first_alert_seconds": 9.406711167190224,
       "cause_to_first_exact_seconds": 9.406711167190224,
-      "cause_to_stable_exact_seconds": 19.463604500051588,
+      "cause_to_two_poll_exact_seconds": 19.463604500051588,
       "effect_to_first_exact_seconds": 9.406263917218894,
       "exact_correct": true,
       "expected_class_set": [
@@ -172,7 +172,7 @@
       "raw_path": "raw/S7/observer-10s.ndjson",
       "scenario": "S7",
       "scenario_label": "out-of-band load-balancer change",
-      "stable_exact": {
+      "two_poll_exact": {
         "actual_start_mono": 2734340.326758,
         "actual_start_utc": "2026-08-08T08:58:46.903882+00:00",
         "class_set": [

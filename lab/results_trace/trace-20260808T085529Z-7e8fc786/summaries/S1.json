@@ -1,6 +1,6 @@
 {
   "all_exact": true,
-  "all_stable": true,
+  "all_two_poll_exact": true,
   "cause_started_mono": 2734178.778284625,
   "cause_started_utc": "2026-08-08T08:56:05.353872+00:00",
   "distinct_observer_ids": 3,
@@ -15,14 +15,14 @@
   "observer_processes": 3,
   "scenario": "S1",
   "scenario_label": "manual in-cluster configuration change",
-  "schema": "govdrift-trace-scenario-summary/v1",
+  "schema": "govdrift-trace-scenario-summary/v2",
   "trajectories": [
     {
       "adapter_error_polls": 0,
       "cadence_seconds": 1.0,
       "cause_to_first_alert_seconds": 0.4619809999130666,
       "cause_to_first_exact_seconds": 1.4893691656179726,
-      "cause_to_stable_exact_seconds": 2.514237249735743,
+      "cause_to_two_poll_exact_seconds": 2.514237249735743,
       "effect_to_first_exact_seconds": 0.711253915913403,
       "exact_correct": true,
       "expected_class_set": [
@@ -61,7 +61,7 @@
       "raw_path": "raw/S1/observer-01s.ndjson",
       "scenario": "S1",
       "scenario_label": "manual in-cluster configuration change",
-      "stable_exact": {
+      "two_poll_exact": {
         "actual_start_mono": 2734181.04429625,
         "actual_start_utc": "2026-08-08T08:56:07.619906+00:00",
         "class_set": [
@@ -79,7 +79,7 @@
       "cadence_seconds": 5.0,
       "cause_to_first_alert_seconds": 4.478262249846011,
       "cause_to_first_exact_seconds": 4.478262249846011,
-      "cause_to_stable_exact_seconds": 9.500850207637995,
+      "cause_to_two_poll_exact_seconds": 9.500850207637995,
       "effect_to_first_exact_seconds": 3.700147000141442,
       "exact_correct": true,
       "expected_class_set": [
@@ -117,7 +117,7 @@
       "raw_path": "raw/S1/observer-05s.ndjson",
       "scenario": "S1",
       "scenario_label": "manual in-cluster configuration change",
-      "stable_exact": {
+      "two_poll_exact": {
         "actual_start_mono": 2734188.036562875,
         "actual_start_utc": "2026-08-08T08:56:14.612245+00:00",
         "class_set": [
@@ -135,7 +135,7 @@
       "cadence_seconds": 10.0,
       "cause_to_first_alert_seconds": 9.500680207740515,
       "cause_to_first_exact_seconds": 9.500680207740515,
-      "cause_to_stable_exact_seconds": 19.479959500022233,
+      "cause_to_two_poll_exact_seconds": 19.479959500022233,
       "effect_to_first_exact_seconds": 8.722564958035946,
       "exact_correct": true,
       "expected_class_set": [
@@ -173,7 +173,7 @@
       "raw_path": "raw/S1/observer-10s.ndjson",
       "scenario": "S1",
       "scenario_label": "manual in-cluster configuration change",
-      "stable_exact": {
+      "two_poll_exact": {
         "actual_start_mono": 2734198.037803833,
         "actual_start_utc": "2026-08-08T08:56:24.613612+00:00",
         "class_set": [

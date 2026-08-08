@@ -4,8 +4,8 @@ Campaign `trace-20260808T085529Z-7e8fc786` executes S1--S9 in the dedicated `gov
 scenario is observed by three separate OS processes at 1, 5, and 10 second cadences.
 Every poll is an fsync'd NDJSON record whose SHA-256 field chains to the prior poll.
 Injection records contain a unique ID, source hashes, command-ledger indices, input
-fingerprints, and monotonic plus UTC cause/effect timestamps. A trajectory reaches
-"stable exact" on its second consecutive exact expected classification.
+fingerprints, and monotonic plus UTC cause/effect timestamps. A trajectory records
+`two_poll_exact` on its second consecutive exact expected classification.
 
 The experimental unit reported in `campaign_summary.json` is one injected scenario
 episode (n=9). A scenario-by-observer-cadence trajectory is a correlated observational
@@ -17,9 +17,16 @@ are explicitly descriptive.
 
 ## Verification
 
-Run `python3 scripts/verify_trace_results.py /Users/obede/Library/Mobile Documents/com~apple~CloudDocs/EB-1 Vencedor/Scholarly Articles/09_Governance_Drift/lab/results_trace/trace-20260808T085529Z-7e8fc786` from the repository root.
+Run `python3 scripts/verify_trace_results.py lab/results_trace/trace-20260808T085529Z-7e8fc786`
+from the repository root.
 The verifier recomputes every poll chain, injection hash, event marker, image-lock
 constraint, denominator, and `manifest.sha256` entry.
+
+The reportable derived summaries use the explicit v2 `two_poll_exact*` vocabulary.
+This names the second consecutive exact poll without asserting long-horizon stability.
+The raw poll chains, poll hashes, timestamps, and numeric values are unchanged. The
+captured source under `artifacts/source/` remains the byte-exact execution snapshot;
+the current runner emits the v2 derived schema.
 
 ## Scope and exact limitations
 
@@ -27,8 +34,8 @@ constraint, denominator, and `manifest.sha256` entry.
    cluster (linux/arm64), not an external-validity, throughput, or scalability study.
 2. Detection times are descriptive wall-clock observations. The runner and observers
    share the host monotonic clock; no distributed-clock claim is made.
-3. "Stable" means two consecutive exact polls. It does not establish long-horizon
-   persistence or remediation safety.
+3. `two_poll_exact` means two consecutive exact polls. It does not establish
+   long-horizon persistence or remediation safety.
 4. Flux reconciliation is explicitly requested in setup/reset and S6, so S6 timings
    include forced reconciliation rather than a natural interval distribution.
 5. S4 uses a namespaced Kyverno admission mutation to emulate artifact substitution.

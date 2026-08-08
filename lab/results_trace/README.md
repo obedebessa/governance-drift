@@ -10,6 +10,11 @@ classifications and 27/27 with two-poll exact persistence, and zero
 adapter-error polls. Its own
 `manifest.sha256` covers 133 files.
 
+The reportable scenario and campaign summaries use schema v2 fields beginning
+`two_poll_exact`; the terminology denotes exactly two consecutive exact polls,
+not long-horizon stability. Raw poll chains and numerical observations are
+unchanged from capture.
+
 From the repository root, verify the reportable campaign portably with:
 
 ```bash
@@ -17,8 +22,7 @@ python3 scripts/verify_trace_results.py \
   "lab/results_trace/$(cat lab/results_trace/FINAL_CAMPAIGN)"
 ```
 
-The directories prefixed `_pilot_superseded_` and `_aborted_verifier_hardening_`
-are non-reportable development records. The pilot preceded the corrected
-experimental-unit wording and nearest-rank P95 calculation. The aborted run was
-intentionally stopped before completion while the cross-layer verifier was
-hardened. Neither directory is a source for numerical claims.
+Superseded pilot, verifier-hardening, and pre-intent campaigns are ignored and
+excluded from the release. `FINAL_CAMPAIGN` names the sole included and
+reportable trace directory; no ignored directory is a source for numerical
+claims.

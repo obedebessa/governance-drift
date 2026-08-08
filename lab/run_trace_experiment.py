@@ -688,10 +688,10 @@ def event_markers(
     post = [row for row in rows if float(row["completed_mono"]) >= cause_started_mono]
     first_alert = next((row for row in post if row.get("verdict") != "consistent"), None)
     exact = next((row for row in post if is_exact(row, expected)), None)
-    stable = None
+    two_poll_exact = None
     for previous, current in zip(post, post[1:]):
         if is_exact(previous, expected) and is_exact(current, expected):
-            stable = current
+            two_poll_exact = current
             break
 
     def marker(row: dict[str, Any] | None) -> dict[str, Any] | None:
@@ -707,7 +707,11 @@ def event_markers(
             "verdict": row["verdict"],
             "class_set": row["class_set"],
         }
-    return {"first_alert": marker(first_alert), "exact": marker(exact), "stable": marker(stable)}
+    return {
+        "first_alert": marker(first_alert),
+        "exact": marker(exact),
+        "two_poll_exact": marker(two_poll_exact),
+    }
 
 
 def start_observers(
@@ -767,18 +771,23 @@ def wait_baseline(processes: list[dict[str, Any]], scenario: str) -> None:
     wait_until(ready, timeout=30, description=f"{scenario} baseline poll from every observer")
 
 
-def wait_all_stable(
+def wait_all_two_poll_exact(
     processes: list[dict[str, Any]], scenario: str, cause: float, expected: list[str]
 ) -> None:
-    def stable() -> bool:
+    def complete() -> bool:
         for item in processes:
             if item["process"].poll() is not None:
-                raise RuntimeError(f"{scenario} observer exited before stable detection")
+                raise RuntimeError(f"{scenario} observer exited before two-poll exact detection")
             markers = event_markers(read_ndjson(item["output"]), cause, expected)
-            if markers["stable"] is None:
+            if markers["two_poll_exact"] is None:
                 return False
         return True
-    wait_until(stable, timeout=100, description=f"{scenario} stable exact detections", interval=0.2)
+    wait_until(
+        complete,
+        timeout=100,
+        description=f"{scenario} two-poll exact detections",
+        interval=0.2,
+    )
 
 
 def stop_observers(processes: list[dict[str, Any]], stop_file: Path) -> None:
@@ -814,8 +823,8 @@ def summarize_scenario(
             raise RuntimeError(f"incomplete trajectory {scenario}/{item['cadence']}: {markers}")
         first = markers["first_alert"]
         exact = markers["exact"]
-        stable = markers["stable"]
-        assert first and exact and stable
+        two_poll_exact = markers["two_poll_exact"]
+        assert first and exact and two_poll_exact
         trajectories.append({
             "scenario": scenario,
             "scenario_label": SCENARIO_LABELS[scenario],
@@ -830,15 +839,15 @@ def summarize_scenario(
             "adapter_error_polls": sum(bool(row.get("adapter_error")) for row in rows),
             "first_alert": first,
             "first_exact": exact,
-            "stable_exact": stable,
+            "two_poll_exact": two_poll_exact,
             "cause_to_first_alert_seconds": float(first["completed_mono"]) - cause,
             "cause_to_first_exact_seconds": float(exact["completed_mono"]) - cause,
-            "cause_to_stable_exact_seconds": float(stable["completed_mono"]) - cause,
+            "cause_to_two_poll_exact_seconds": float(two_poll_exact["completed_mono"]) - cause,
             "effect_to_first_exact_seconds": float(exact["completed_mono"]) - effect,
             "exact_correct": sorted(exact["class_set"]) == sorted(EXPECTED[scenario]),
         })
     summary = {
-        "schema": "govdrift-trace-scenario-summary/v1",
+        "schema": "govdrift-trace-scenario-summary/v2",
         "scenario": scenario,
         "scenario_label": SCENARIO_LABELS[scenario],
         "expected_class_set": EXPECTED[scenario],
@@ -852,7 +861,7 @@ def summarize_scenario(
         "distinct_pids": len({row["pid"] for row in trajectories}),
         "distinct_observer_ids": len({row["observer_id"] for row in trajectories}),
         "all_exact": all(row["exact_correct"] for row in trajectories),
-        "all_stable": all(row["stable_exact"] is not None for row in trajectories),
+        "all_two_poll_exact": all(row["two_poll_exact"] is not None for row in trajectories),
         "trajectories": trajectories,
     }
     return summary, trajectories
@@ -893,7 +902,12 @@ def run_scenario(
         }
         record["record_sha256"] = sha256_value(record)
         atomic_json(results / "injections" / f"{scenario}.json", record)
-        wait_all_stable(processes, scenario, float(record["cause_started_mono"]), EXPECTED[scenario])
+        wait_all_two_poll_exact(
+            processes,
+            scenario,
+            float(record["cause_started_mono"]),
+            EXPECTED[scenario],
+        )
     finally:
         stop_observers(processes, stop_file)
     summary, trajectories = summarize_scenario(scenario, record, processes)
@@ -945,7 +959,7 @@ def write_trajectory_files(results: Path, trajectories: list[dict[str, Any]]) ->
         "scenario", "scenario_label", "expected_class_set", "cadence_seconds", "observer_id", "pid",
         "polls", "pre_cause_polls", "post_cause_polls", "adapter_error_polls",
         "cause_to_first_alert_seconds", "cause_to_first_exact_seconds",
-        "cause_to_stable_exact_seconds", "effect_to_first_exact_seconds", "exact_correct",
+        "cause_to_two_poll_exact_seconds", "effect_to_first_exact_seconds", "exact_correct",
     ]
     path = results / "trajectories.csv"
     with path.open("w", newline="", encoding="utf-8") as handle:
@@ -970,9 +984,11 @@ def write_campaign_summary(
     trajectories: list[dict[str, Any]],
 ) -> None:
     exact_latencies = [float(row["cause_to_first_exact_seconds"]) for row in trajectories]
-    stable_latencies = [float(row["cause_to_stable_exact_seconds"]) for row in trajectories]
+    two_poll_exact_latencies = [
+        float(row["cause_to_two_poll_exact_seconds"]) for row in trajectories
+    ]
     campaign = {
-        "schema": "govdrift-trace-campaign-summary/v1",
+        "schema": "govdrift-trace-campaign-summary/v2",
         "campaign_id": campaign_id,
         "completed_utc": utc_now(),
         "namespace": NAMESPACE,
@@ -988,7 +1004,9 @@ def write_campaign_summary(
         "expected_trajectories": len(EXPECTED) * len(CADENCES),
         "distinct_observer_processes_across_windows": len({(row["scenario"], row["pid"]) for row in trajectories}),
         "exact_trajectories": sum(bool(row["exact_correct"]) for row in trajectories),
-        "stable_trajectories": sum(row["stable_exact"] is not None for row in trajectories),
+        "two_poll_exact_trajectories": sum(
+            row["two_poll_exact"] is not None for row in trajectories
+        ),
         "scenarios_all_exact": sum(bool(row["all_exact"]) for row in summaries),
         "adapter_error_polls": sum(int(row["adapter_error_polls"]) for row in trajectories),
         "latency_aggregation_scope": "descriptive pooled across 27 correlated observational trajectories",
@@ -998,18 +1016,18 @@ def write_campaign_summary(
             "p95_nearest_rank": nearest_rank(exact_latencies, 0.95),
             "maximum": max(exact_latencies),
         },
-        "cause_to_stable_exact_seconds": {
-            "minimum": min(stable_latencies),
-            "median": statistics.median(stable_latencies),
-            "p95_nearest_rank": nearest_rank(stable_latencies, 0.95),
-            "maximum": max(stable_latencies),
+        "cause_to_two_poll_exact_seconds": {
+            "minimum": min(two_poll_exact_latencies),
+            "median": statistics.median(two_poll_exact_latencies),
+            "p95_nearest_rank": nearest_rank(two_poll_exact_latencies, 0.95),
+            "maximum": max(two_poll_exact_latencies),
         },
         "scenario_summaries": [
             {
                 "scenario": row["scenario"],
                 "expected_class_set": row["expected_class_set"],
                 "all_exact": row["all_exact"],
-                "all_stable": row["all_stable"],
+                "all_two_poll_exact": row["all_two_poll_exact"],
                 "distinct_pids": row["distinct_pids"],
             }
             for row in summaries
@@ -1031,7 +1049,7 @@ scenario is observed by three separate OS processes at 1, 5, and 10 second caden
 Every poll is an fsync'd NDJSON record whose SHA-256 field chains to the prior poll.
 Injection records contain a unique ID, source hashes, command-ledger indices, input
 fingerprints, and monotonic plus UTC cause/effect timestamps. A trajectory reaches
-"stable exact" on its second consecutive exact expected classification.
+`two_poll_exact` on its second consecutive exact expected classification.
 
 The experimental unit reported in `campaign_summary.json` is one injected scenario
 episode (n=9). A scenario-by-observer-cadence trajectory is a correlated observational
@@ -1043,9 +1061,13 @@ are explicitly descriptive.
 
 ## Verification
 
-Run `python3 scripts/verify_trace_results.py {results}` from the repository root.
+Run `python3 scripts/verify_trace_results.py lab/results_trace/{campaign_id}` from
+the repository root.
 The verifier recomputes every poll chain, injection hash, event marker, image-lock
 constraint, denominator, and `manifest.sha256` entry.
+
+The reportable derived summaries use the explicit v2 `two_poll_exact*` vocabulary.
+This names the second consecutive exact poll without asserting long-horizon stability.
 
 ## Scope and exact limitations
 
@@ -1053,8 +1075,8 @@ constraint, denominator, and `manifest.sha256` entry.
    cluster (linux/arm64), not an external-validity, throughput, or scalability study.
 2. Detection times are descriptive wall-clock observations. The runner and observers
    share the host monotonic clock; no distributed-clock claim is made.
-3. "Stable" means two consecutive exact polls. It does not establish long-horizon
-   persistence or remediation safety.
+3. `two_poll_exact` means two consecutive exact polls. It does not establish
+   long-horizon persistence or remediation safety.
 4. Flux reconciliation is explicitly requested in setup/reset and S6, so S6 timings
    include forced reconciliation rather than a natural interval distribution.
 5. S4 uses a namespaced Kyverno admission mutation to emulate artifact substitution.

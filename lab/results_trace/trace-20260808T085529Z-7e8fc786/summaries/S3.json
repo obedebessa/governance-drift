@@ -1,6 +1,6 @@
 {
   "all_exact": true,
-  "all_stable": true,
+  "all_two_poll_exact": true,
   "cause_started_mono": 2734224.239335125,
   "cause_started_utc": "2026-08-08T08:56:50.815353+00:00",
   "distinct_observer_ids": 3,
@@ -15,14 +15,14 @@
   "observer_processes": 3,
   "scenario": "S3",
   "scenario_label": "policy supersession",
-  "schema": "govdrift-trace-scenario-summary/v1",
+  "schema": "govdrift-trace-scenario-summary/v2",
   "trajectories": [
     {
       "adapter_error_polls": 0,
       "cadence_seconds": 1.0,
       "cause_to_first_alert_seconds": 0.4847245002165437,
       "cause_to_first_exact_seconds": 0.4847245002165437,
-      "cause_to_stable_exact_seconds": 1.5829357909969985,
+      "cause_to_two_poll_exact_seconds": 1.5829357909969985,
       "effect_to_first_exact_seconds": 0.36954712495207787,
       "exact_correct": true,
       "expected_class_set": [
@@ -60,7 +60,7 @@
       "raw_path": "raw/S3/observer-01s.ndjson",
       "scenario": "S3",
       "scenario_label": "policy supersession",
-      "stable_exact": {
+      "two_poll_exact": {
         "actual_start_mono": 2734225.532547458,
         "actual_start_utc": "2026-08-08T08:56:52.108579+00:00",
         "class_set": [
@@ -78,7 +78,7 @@
       "cadence_seconds": 5.0,
       "cause_to_first_alert_seconds": 4.528380958363414,
       "cause_to_first_exact_seconds": 4.528380958363414,
-      "cause_to_stable_exact_seconds": 9.551730582956225,
+      "cause_to_two_poll_exact_seconds": 9.551730582956225,
       "effect_to_first_exact_seconds": 4.413203583098948,
       "exact_correct": true,
       "expected_class_set": [
@@ -116,7 +116,7 @@
       "raw_path": "raw/S3/observer-05s.ndjson",
       "scenario": "S3",
       "scenario_label": "policy supersession",
-      "stable_exact": {
+      "two_poll_exact": {
         "actual_start_mono": 2734233.528110541,
         "actual_start_utc": "2026-08-08T08:57:00.104222+00:00",
         "class_set": [
@@ -134,7 +134,7 @@
       "cadence_seconds": 10.0,
       "cause_to_first_alert_seconds": 9.550965750124305,
       "cause_to_first_exact_seconds": 9.550965750124305,
-      "cause_to_stable_exact_seconds": 19.552514208015054,
+      "cause_to_two_poll_exact_seconds": 19.552514208015054,
       "effect_to_first_exact_seconds": 9.43578837485984,
       "exact_correct": true,
       "expected_class_set": [
@@ -172,7 +172,7 @@
       "raw_path": "raw/S3/observer-10s.ndjson",
       "scenario": "S3",
       "scenario_label": "policy supersession",
-      "stable_exact": {
+      "two_poll_exact": {
         "actual_start_mono": 2734243.534395416,
         "actual_start_utc": "2026-08-08T08:57:10.110637+00:00",
         "class_set": [

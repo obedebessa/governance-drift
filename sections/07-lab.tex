@@ -218,7 +218,7 @@ Sixth Substantive Distance.}
 
 \Cref{tab:lab-cadence} reports the aggregate effect. DR was 100.0\% at 0.5~s
 and 99.4\% at both 2 and 10~s. Conditional ESA remained 100.0\%. Median DDL
-rose from 0.47 to 1.44 and 6.25~s as cadence widened; P95 rose from 10.08 to
+rose from 0.48 to 1.45 and 6.25~s as cadence widened; P95 rose from 10.08 to
 10.47 and 14.61~s. P95 is dominated partly by S3's PolicyReport delay rather
 than cadence alone, so these are distributions of the complete deciding
 paths on this laboratory, not calibrated evaluator-service times.
@@ -322,15 +322,18 @@ lag, component class set, and diagnostic detail for every poll.
 
 \begin{table}[t]
 \centering
-\caption{Transition-Inclusive Benign Controls. Governance Drift Excludes the
-Separately Reported Configuration-Convergence and Epistemic Outcomes.}
+\caption{Transition-Inclusive Benign Controls. Non-Configuration
+Governance-Plane Drift Counts Substantive Policy, Authorization, Intent, or
+Environment Outcomes; Configuration-Convergence and Epistemic Outcomes Are
+Reported Separately.}
 \label{tab:transition-controls}
 \scriptsize
 \resizebox{\columnwidth}{!}{\input{lab/results_transition/table_transition_controls}}
 \end{table}
 
-Across 777 polls, no observer emitted substantive policy, authorization,
-intent, or environment drift (\cref{tab:transition-controls}). Seven C2 polls
+Across 777 polls, the non-configuration governance-plane drift count was zero:
+no observer emitted substantive policy, authorization, intent, or environment
+drift (\cref{tab:transition-controls}). Seven C2 polls
 correctly exposed temporary desired/observed configuration divergence during
 the approved rollback. Thirty-six polls across C2--C6 returned
 \emph{undecidable} while an active pod lacked a complete ready-container
@@ -526,8 +529,9 @@ readiness/resource stop rules bounded the campaign.
 \begin{table*}[t]
 \centering
 \caption{Bounded Argo CD/Gatekeeper Cross-Stack Replication. Exact Is the
-Projected Class-Set Count; DDL, First Substantive Alert, and ESC Are Measured
-from Operational Onset to Evaluation Completion, in Seconds.}
+Projected Class-Set Count; Operational-Onset-to-First-Honest, First
+Substantive, and ESC Latencies Are Measured to Evaluation Completion, in
+Seconds.}
 \label{tab:cross-stack}
 \scriptsize
 \resizebox{\textwidth}{!}{\input{lab/results_cross_stack/table_cross_stack}}
@@ -535,17 +539,20 @@ from Operational Onset to Evaluation Completion, in Seconds.}
 
 All 15 observations reached the exact expected singleton class set over the
 declared evaluated components (\cref{tab:cross-stack}). The timing distinction
-is material. First-honest DDL ends at the earliest completed evaluation that
-is either substantively inconsistent or epistemically \emph{undecidable}; it
-is therefore the earlier available event on two separately retained clocks, not necessarily a
-class-detection time. First epistemic alert is the first completed evaluation
-with an undecidable evaluated component. First substantive alert is the first
-completed evaluation with an inconsistent evaluated component. ESC ends only
-when every declared evaluated component is decidable and the projected class
-set is exactly the expected singleton; it is first completion, not the
-watermark-qualified Stable-VCL of \cref{met:ddl}.
+is material. Operational-onset-to-first-honest latency ends at the earliest
+completed evaluation that is either substantively inconsistent or
+epistemically \emph{undecidable}; it is therefore the earlier available event
+on two separately retained clocks, not necessarily a class-detection time.
+It is not DDL as defined in \cref{met:ddl}, because DDL begins at the onset of
+the class or evidence failure being reported. First epistemic alert is the
+first completed evaluation with an undecidable evaluated component. First
+substantive alert is the first completed evaluation with an inconsistent
+evaluated component. ESC ends only when every declared evaluated component is
+decidable and the projected class set is exactly the expected singleton; it is
+first completion, not watermark-qualified Stable-VCL.
 
-For S1, median first-honest DDL, first substantive alert, and ESC were
+For S1, median operational-onset-to-first-honest, first-substantive, and ESC
+latencies were
 0.207, 0.646, and 1.677~s; all 5 observations produced an epistemic alert,
 with median 0.207~s. For S3, the corresponding medians were 0.157, 1.659,
 and 1.659~s; again, all 5 first-honest verdicts were epistemic, with median

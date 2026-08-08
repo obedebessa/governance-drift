@@ -19,12 +19,9 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 STACK = ROOT / "lab" / "stacks" / "argocd-gatekeeper"
 DEFAULT_RESULTS = ROOT / "lab" / "results_cross_stack"
-CAMPAIGN_SOURCE_SNAPSHOTS = {
-    "lab/run_cross_stack_experiment.py": "run_cross_stack_experiment.py",
-    "lab/test_cross_stack_adapter.py": "test_cross_stack_adapter.py",
-    "scripts/analyze_cross_stack.py": "analyze_cross_stack.py",
-}
-DERIVED_OUTPUT_SOURCE_FILES = {
+CAMPAIGN_SOURCE_FILES = {
+    "lab/run_cross_stack_experiment.py": ROOT / "lab" / "run_cross_stack_experiment.py",
+    "lab/test_cross_stack_adapter.py": ROOT / "lab" / "test_cross_stack_adapter.py",
     "scripts/analyze_cross_stack.py": ROOT / "scripts" / "analyze_cross_stack.py",
 }
 EXPECTED = {"S1": "configuration", "S3": "policy", "S4": "authorization"}
@@ -237,7 +234,7 @@ def recompute_scenario_timing(
         "injection_utc": marker["injection_utc"],
         "onset_utc": marker["onset_utc"],
         "actuation_seconds": round(actuation, 6),
-        "operational_onset_to_first_honest_seconds": round(first_honest, 6),
+        "ddl_seconds": round(first_honest, 6),
         "first_honest_verdict_kind": first_honest_kind,
         "first_epistemic_alert_seconds": (
             round(first_epistemic, 6) if first_epistemic is not None else None
@@ -387,8 +384,7 @@ def main() -> int:
                 checksum_by_key[key]["sha256"] == sha256_file(path),
                 f"local manifest changed after execution: {path.name}",
             )
-    for name, snapshot_name in CAMPAIGN_SOURCE_SNAPSHOTS.items():
-        path = results / "source" / snapshot_name
+    for name, path in CAMPAIGN_SOURCE_FILES.items():
         key = ("campaign-source", name)
         require(key in checksum_by_key, f"missing campaign source checksum {name}")
         row = checksum_by_key[key]
@@ -400,22 +396,6 @@ def main() -> int:
             require(False, f"campaign source byte count is invalid: {name}")
             recorded_bytes = -1
         require(recorded_bytes == path.stat().st_size, f"campaign source size changed: {name}")
-    for name, path in DERIVED_OUTPUT_SOURCE_FILES.items():
-        key = ("derived-output-source", name)
-        require(key in checksum_by_key, f"missing derived-output source checksum {name}")
-        row = checksum_by_key[key]
-        require(
-            row.get("verified") == "True",
-            f"derived-output source is not verified: {name}",
-        )
-        require(
-            row.get("sha256") == sha256_file(path),
-            f"derived-output source hash changed: {name}",
-        )
-        require(
-            int(row.get("bytes", "-1")) == path.stat().st_size,
-            f"derived-output source byte count changed: {name}",
-        )
 
     ready_components = {
         row.get("component") for row in installs
@@ -480,10 +460,7 @@ def main() -> int:
         )
         parse_utc_field(row, "injection_utc", f"{scenario} observation")
         parse_utc_field(row, "onset_utc", f"{scenario} observation")
-        require(
-            float(row.get("operational_onset_to_first_honest_seconds", -1)) >= 0.0,
-            f"{scenario}: invalid operational-onset-to-first-honest latency",
-        )
+        require(float(row.get("ddl_seconds", -1)) >= 0.0, f"{scenario}: invalid DDL")
         require(
             row.get("first_honest_verdict_kind")
             in {"epistemic-only", "substantive-only", "substantive-and-epistemic"},
@@ -491,14 +468,12 @@ def main() -> int:
         )
         epistemic = row.get("first_epistemic_alert_seconds")
         require(
-            epistemic is None
-            or float(epistemic)
-            >= float(row["operational_onset_to_first_honest_seconds"]),
-            f"{scenario}: epistemic alert precedes the first honest verdict",
+            epistemic is None or float(epistemic) >= float(row["ddl_seconds"]),
+            f"{scenario}: epistemic alert precedes DDL",
         )
         require(
             float(row.get("first_substantive_alert_seconds", -1))
-            >= float(row["operational_onset_to_first_honest_seconds"]),
+            >= float(row["ddl_seconds"]),
             f"{scenario}: substantive alert precedes first honest verdict",
         )
         require(
@@ -714,7 +689,7 @@ def main() -> int:
             )
         for field in (
             "actuation_seconds",
-            "operational_onset_to_first_honest_seconds",
+            "ddl_seconds",
             "first_substantive_alert_seconds",
             "exact_set_latency_seconds",
             "evidence_latency_seconds",
@@ -780,10 +755,7 @@ def main() -> int:
             raw_timing_by_key[(scenario, repetition)]
             for repetition in range(1, 6)
         ]
-        first_honest = [
-            float(row["operational_onset_to_first_honest_seconds"])
-            for row in scenario_timings
-        ]
+        ddl = [float(row["ddl_seconds"]) for row in scenario_timings]
         epistemic = [
             float(row["first_epistemic_alert_seconds"])
             for row in scenario_timings
@@ -803,15 +775,9 @@ def main() -> int:
                 "surface": SURFACE[scenario],
                 "repetitions": len(scenario_timings),
                 "exact_sets": len(scenario_timings),
-                "median_operational_onset_to_first_honest_seconds": round(
-                    statistics.median(first_honest), 6
-                ),
-                "min_operational_onset_to_first_honest_seconds": round(
-                    min(first_honest), 6
-                ),
-                "max_operational_onset_to_first_honest_seconds": round(
-                    max(first_honest), 6
-                ),
+                "median_ddl_seconds": round(statistics.median(ddl), 6),
+                "min_ddl_seconds": round(min(ddl), 6),
+                "max_ddl_seconds": round(max(ddl), 6),
                 "epistemic_alert_observations": len(epistemic),
                 "median_first_epistemic_alert_seconds": (
                     round(statistics.median(epistemic), 6) if epistemic else None
@@ -870,7 +836,7 @@ def main() -> int:
         "% Generated by scripts/analyze_cross_stack.py",
         r"\begin{tabular}{@{}llllrrrrrr@{}}",
         r"\toprule",
-        r"Slice & Expected & Evidence surface & $n$ & Exact & Median honest & Median substantive & Median ESC & Min honest & Max honest \\",
+        r"Slice & Expected & Evidence surface & $n$ & Exact & Median DDL & Median substantive & Median ESC & Min DDL & Max DDL \\",
         r" & & & & & \multicolumn{5}{c}{seconds} \\",
         r"\midrule",
     ]
@@ -878,11 +844,11 @@ def main() -> int:
         table.append(
             f"{row['scenario']} & {tex(row['expected_set'])} & {tex(row['surface'])} & "
             f"{row['repetitions']} & {row['exact_sets']} & "
-            f"{row['median_operational_onset_to_first_honest_seconds']:.3f} & "
+            f"{row['median_ddl_seconds']:.3f} & "
             f"{row['median_first_substantive_alert_seconds']:.3f} & "
             f"{row['median_exact_latency_seconds']:.3f} & "
-            f"{row['min_operational_onset_to_first_honest_seconds']:.3f} & "
-            f"{row['max_operational_onset_to_first_honest_seconds']:.3f} \\\\"
+            f"{row['min_ddl_seconds']:.3f} & "
+            f"{row['max_ddl_seconds']:.3f} \\\\"
         )
     table.extend([r"\bottomrule", r"\end{tabular}"])
     (results / "table_cross_stack.tex").write_text("\n".join(table) + "\n")
@@ -921,18 +887,16 @@ it does not claim continuation-safe identity across resource recreation.
 The comparison with the primary Flux + Kyverno laboratory is descriptive. It
 tests bounded realizability of corresponding evidence paths; it is not an
 equivalence, non-inferiority, prevalence, reliability, or production-latency
-study. Operational-onset-to-first-honest latency ends at the first completed
+study. First-honest DDL is time from operational onset to the first honest
 non-consistent or undecidable verdict, so it may be epistemic rather than a
-substantive class detection. It is not DDL, whose onset is class-specific.
-First-substantive latency is reported separately.
+substantive class detection. First-substantive latency is reported separately.
 ESC ends at the first exact projected classification over the declared
 evaluated components; it is not watermark-qualified Stable-VCL.
 
 The raw trace preserves injection/onset and baseline reference markers plus
 evaluation-start, evaluation-completion, duration, and completion-classification
-fields for every poll. The analyzer reconstructs operational-onset-to-first-
-honest, first-epistemic, first-substantive, and exact-classification latencies
-from those fields.
+fields for every poll. The analyzer reconstructs DDL, first epistemic alert,
+first substantive alert, and exact-classification latency from those fields.
 
 The resource stop rule was 80% sustained for three five-second samples on host
 CPU, host memory-pressure utilization, normalized Kind-node CPU, or Kind-node
@@ -942,14 +906,10 @@ capture.
 
 - `cross_stack_raw.ndjson`: every baseline and scenario poll.
 - `cross_stack_observations.json` / `.csv`: one result per repetition.
-- `cross_stack_profile_summary.csv`: one validated aggregate row per slice.
 - `install_events.ndjson`: manifest, readiness, and setup provenance.
 - `resource_samples.ndjson`: stop-rule inputs.
 - `manifest_checksums.csv`: upstream, local-stack, and campaign-source SHA-256 inventory.
-- `source/`: immutable source snapshots used for the executed campaign; the
-  current analyzer is hashed separately as the derived-output source.
 - `platform.json`: exact platform, source state, images, clock, and validation boundary.
-- `run_status.json`: campaign completion, stop-rule, API-error, and cleanup state.
 - `cross_stack_summary.json`: validated descriptive summary.
 - `table_cross_stack.tex`: manuscript-ready table.
 - `cleanup.json`: deletion command plus pre/post verification stdout, stderr,
