@@ -106,16 +106,56 @@ def load_records(directory: Path) -> list[dict[str, Any]]:
 
 
 def applicable(proof: dict[str, Any], live: dict[str, Any] | None, now: float) -> bool:
+    """Decide current authority without rewriting execution-time lineage."""
+
     mode = proof.get("mode", "one-shot")
+    if mode not in {"one-shot", "continuing", "temporary-exception"}:
+        raise ValueError(f"unknown authorization mode: {mode}")
+    if not bool(proof.get("valid_at_execution", True)):
+        return False
+    revocation_effect = proof.get("revocation_effect", "prospective")
     if mode == "one-shot":
-        return bool(proof.get("valid_at_execution", True))
+        if revocation_effect == "retroactive":
+            if live is None:
+                raise LookupError(
+                    f"retroactive-revocation status missing for record {proof.get('id')}"
+                )
+            if bool(live.get("revoked", False)):
+                return False
+        return True
     if live is None:
         raise LookupError(f"live status missing for continuing record {proof.get('id')}")
     if bool(live.get("revoked", False)):
         return False
     if mode in {"continuing", "temporary-exception"}:
         return now < float(live.get("expires_utc", 2**63 - 1))
-    raise ValueError(f"unknown authorization mode: {mode}")
+    raise AssertionError("validated authorization mode escaped its cases")
+
+
+def intent_applicable_at_execution(
+    proof: dict[str, Any], live: dict[str, Any] | None
+) -> bool:
+    """Decide historical intent independently of current authority.
+
+    Prospective expiry, revocation, and loss of continuing live status do not
+    erase an immutable execution-time approval.  A policy that explicitly
+    permits retroactive invalidation is the sole case in which authenticated
+    live status remains an input to the historical edge.
+    """
+
+    mode = proof.get("mode", "one-shot")
+    if mode not in {"one-shot", "continuing", "temporary-exception"}:
+        raise ValueError(f"unknown authorization mode: {mode}")
+    if not bool(proof.get("valid_at_execution", True)):
+        return False
+    revocation_effect = proof.get("revocation_effect", "prospective")
+    if revocation_effect != "retroactive":
+        return True
+    if live is None:
+        raise LookupError(
+            f"retroactive-revocation status missing for record {proof.get('id')}"
+        )
+    return not bool(live.get("revoked", False))
 
 
 def violated_equalities(approved: Any, observed: Any, prefix: str = "") -> list[str]:
@@ -259,6 +299,19 @@ def evaluate(
     try:
         proof_records.extend(load_records(runtime / "proofs"))
         proof_by_id = {row["id"]: row for row in proof_records}
+    except (OSError, ValueError, TypeError, json.JSONDecodeError, KeyError) as exc:
+        proof_records = []
+        proof_by_id = {}
+        components["authorization"] = "undecidable"
+        components["intent"] = "undecidable"
+        details["authorization"].append(
+            f"immutable authorization proof unavailable: {type(exc).__name__}: {exc}"
+        )
+        details["intent"].append(
+            f"immutable authorization proof unavailable: {type(exc).__name__}: {exc}"
+        )
+
+    try:
         live_records = load_records(runtime / "approvals")
         live_by_id = {row["id"]: row for row in live_records}
         inputs["authorization_files"] = {
@@ -266,26 +319,33 @@ def evaluate(
             "proofs": file_map(runtime / "proofs"),
         }
     except (OSError, ValueError, TypeError, json.JSONDecodeError, KeyError) as exc:
-        proof_by_id = {}
         live_records = []
         live_by_id = {}
-        components["authorization"] = "undecidable"
-        components["intent"] = "undecidable"
-        details["authorization"].append(f"authorization records unavailable: {type(exc).__name__}: {exc}")
-        details["intent"].append(f"authorization records unavailable: {type(exc).__name__}: {exc}")
+        details["authorization"].append(
+            f"live authorization records unavailable: {type(exc).__name__}: {exc}"
+        )
 
     applicable_proofs: list[dict[str, Any]] = []
-    live_status_missing = False
+    intent_proofs: list[dict[str, Any]] = []
+    current_authority_unknown = False
+    historical_intent_unknown = False
     if proof_by_id:
         for identifier, proof in proof_by_id.items():
             live = live_by_id.get(identifier)
             try:
                 if applicable(proof, live, now):
                     applicable_proofs.append(proof)
-            except LookupError as exc:
-                live_status_missing = True
+            except (LookupError, TypeError, ValueError) as exc:
+                current_authority_unknown = True
                 details["authorization"].append(str(exc))
-                details["intent"].append(str(exc))
+            try:
+                if intent_applicable_at_execution(proof, live):
+                    intent_proofs.append(proof)
+            except (LookupError, TypeError, ValueError) as exc:
+                historical_intent_unknown = True
+                details["intent"].append(
+                    f"historical intent validity unavailable: {exc}"
+                )
             if live is not None:
                 identity_fields = ("subject", "subjects", "unit_ref")
                 mismatched = [field for field in identity_fields if live.get(field) != proof.get(field)]
@@ -295,26 +355,34 @@ def evaluate(
                         f"live authorization {identifier} mismatches immutable proof fields: "
                         + ", ".join(mismatched)
                     )
-        if live_status_missing:
-            components["authorization"] = "undecidable"
-            components["intent"] = "undecidable"
-        elif not applicable_proofs and components["authorization"] == "consistent":
-            components["authorization"] = "inconsistent"
-            details["authorization"].append("no applicable authorization remains")
+        if not applicable_proofs and components["authorization"] != "inconsistent":
+            if current_authority_unknown:
+                components["authorization"] = "undecidable"
+            else:
+                components["authorization"] = "inconsistent"
+                details["authorization"].append("no applicable authorization remains")
     else:
         components["authorization"] = "undecidable"
         components["intent"] = "undecidable"
-        details["authorization"].append("immutable authorization proof unavailable")
-        details["intent"].append("immutable authorization proof unavailable")
+        if not details["authorization"]:
+            details["authorization"].append("immutable authorization proof unavailable")
+        if not details["intent"]:
+            details["intent"].append("immutable authorization proof unavailable")
 
     try:
         revision = command("git", "rev-parse", "HEAD", cwd=runtime / "work").strip()
         inputs["git_revision"] = revision
-        if not live_status_missing and applicable_proofs and not any(
-            revision in proof.get("revisions", []) for proof in applicable_proofs
+        if proof_by_id and any(
+            revision in proof.get("revisions", []) for proof in intent_proofs
         ):
+            components["intent"] = "consistent"
+        elif proof_by_id and historical_intent_unknown:
+            components["intent"] = "undecidable"
+        elif proof_by_id:
             components["intent"] = "inconsistent"
-            details["intent"].append(f"revision {revision[:12]} is not approved")
+            details["intent"].append(
+                f"revision {revision[:12]} lacks an execution-valid intent path"
+            )
     except (RuntimeError, OSError) as exc:
         components["intent"] = "undecidable"
         details["intent"].append(f"intent stream unavailable: {type(exc).__name__}: {exc}")

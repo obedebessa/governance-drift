@@ -62,11 +62,18 @@ class TraceEvaluatorTests(unittest.TestCase):
         }
         return deployment, policy, pod
 
-    def fake_command(self, deployment: dict, policy: dict, pod: dict):
+    def fake_command(
+        self,
+        deployment: dict,
+        policy: dict,
+        pod: dict,
+        *,
+        revision: str = "baseline-revision",
+    ):
         def command(*args: str, cwd: Path | None = None) -> str:
             del cwd
             if args[0] == "git":
-                return "baseline-revision\n"
+                return f"{revision}\n"
             if args[:3] == ("kubectl", "create", "--dry-run=client"):
                 return json.dumps(deployment)
             if "deployment" in args and campaign.DEPLOYMENT in args:
@@ -94,8 +101,55 @@ class TraceEvaluatorTests(unittest.TestCase):
         self.assertEqual(result["verdict"], "undecidable")
         self.assertEqual(result["class_set"], ["evidence"])
         self.assertEqual(result["components"]["authorization"], "undecidable")
-        self.assertEqual(result["components"]["intent"], "undecidable")
+        self.assertEqual(result["components"]["intent"], "consistent")
         self.assertEqual(result["drift_set"], [])
+
+    def test_unapproved_revision_survives_missing_current_status_as_s12(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            runtime = Path(directory)
+            deployment, policy, pod = self.fixture(runtime)
+            command = self.fake_command(
+                deployment, policy, pod, revision="unapproved-rollback"
+            )
+            with patch.object(trace_evaluator, "command", command):
+                result = trace_evaluator.evaluate(
+                    runtime=runtime,
+                    namespace=campaign.NAMESPACE,
+                    deployment=campaign.DEPLOYMENT,
+                    policy=campaign.POLICY,
+                )
+        self.assertEqual(result["verdict"], "drift")
+        self.assertEqual(result["class_set"], ["intent", "evidence"])
+        self.assertEqual(result["components"]["authorization"], "undecidable")
+        self.assertEqual(result["components"]["intent"], "inconsistent")
+
+    def test_authenticated_retroactive_revocation_invalidates_intent(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            runtime = Path(directory)
+            deployment, policy, pod = self.fixture(runtime)
+            basis = json.loads((runtime / "basis.json").read_text())
+            basis["approval"].update(revocation_effect="retroactive")
+            (runtime / "basis.json").write_text(
+                json.dumps(basis), encoding="utf-8"
+            )
+            approval = {**basis["approval"], "revoked": True}
+            (runtime / "approvals/APR-TRACE-BASE.json").write_text(
+                json.dumps(approval), encoding="utf-8"
+            )
+            with patch.object(
+                trace_evaluator,
+                "command",
+                self.fake_command(deployment, policy, pod),
+            ):
+                result = trace_evaluator.evaluate(
+                    runtime=runtime,
+                    namespace=campaign.NAMESPACE,
+                    deployment=campaign.DEPLOYMENT,
+                    policy=campaign.POLICY,
+                )
+        self.assertEqual(result["verdict"], "drift")
+        self.assertEqual(set(result["drift_set"]), {"authorization", "intent"})
+        self.assertEqual(result["undecidable_components"], [])
 
     def test_identity_mismatch_is_authorization_drift(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

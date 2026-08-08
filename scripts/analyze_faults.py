@@ -127,8 +127,8 @@ def main() -> int:
             require(expected <= COMPONENTS, f"{profile}: unknown expected component")
             actual = {name for name, value in components.items() if value == "undecidable"}
             derived_verdict = (
-                "undecidable" if actual
-                else "inconsistent" if any(value == "inconsistent" for value in components.values())
+                "inconsistent" if any(value == "inconsistent" for value in components.values())
+                else "undecidable" if actual
                 else "consistent"
             )
             mask_matches_components = all(

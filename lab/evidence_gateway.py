@@ -385,10 +385,10 @@ class EvidenceGateway:
                 reasons[component] = [f"{stream}: inconsistent" for stream in inconsistent]
 
             total = (
-                "undecidable"
-                if any(value == "undecidable" for value in components.values())
-                else "inconsistent"
+                "inconsistent"
                 if any(value == "inconsistent" for value in components.values())
+                else "undecidable"
+                if any(value == "undecidable" for value in components.values())
                 else "consistent"
             )
             return {

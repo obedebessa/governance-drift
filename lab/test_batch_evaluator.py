@@ -179,7 +179,40 @@ class BatchEvaluatorContract(unittest.TestCase):
         approval = replace(bundle.approvals[0], live_status_available=False)
         verdict = self.evaluator.evaluate(units, replace(bundle, approvals=(approval,)))[units[0]]
         self.assertEqual(verdict.components["authorization"], "undecidable")
-        self.assertEqual(verdict.components["intent"], "undecidable")
+        self.assertEqual(verdict.components["intent"], "consistent")
+        self.assertEqual(verdict.class_set, ("evidence",))
+
+    def test_unapproved_revision_with_missing_live_status_is_s12(self) -> None:
+        units, bundle = build_synthetic_evidence(1)
+        approval = replace(bundle.approvals[0], live_status_available=False)
+        revisions = {**bundle.current_revision, units[0]: "unapproved-rollback"}
+        verdict = self.evaluator.evaluate(
+            units,
+            replace(bundle, approvals=(approval,), current_revision=revisions),
+        )[units[0]]
+        self.assertEqual(verdict.verdict, "drift")
+        self.assertEqual(verdict.class_set, ("intent", "evidence"))
+        self.assertEqual(verdict.components["authorization"], "undecidable")
+        self.assertEqual(verdict.components["intent"], "inconsistent")
+
+    def test_prospective_revocation_does_not_rewrite_intent(self) -> None:
+        units, bundle = build_synthetic_evidence(1)
+        approval = replace(bundle.approvals[0], revoked=True)
+        verdict = self.evaluator.evaluate(units, replace(bundle, approvals=(approval,)))[units[0]]
+        self.assertEqual(verdict.components["authorization"], "inconsistent")
+        self.assertEqual(verdict.components["intent"], "consistent")
+
+    def test_retroactive_revocation_invalidates_historical_intent(self) -> None:
+        units, bundle = build_synthetic_evidence(1)
+        approval = replace(
+            bundle.approvals[0],
+            revoked=True,
+            revocation_effect="retroactive",
+        )
+        verdict = self.evaluator.evaluate(units, replace(bundle, approvals=(approval,)))[units[0]]
+        self.assertEqual(verdict.components["authorization"], "inconsistent")
+        self.assertEqual(verdict.components["intent"], "inconsistent")
+        self.assertEqual(set(verdict.drift_set), {"authorization", "intent"})
 
     def test_total_and_subset_fanout_have_exact_vectors(self) -> None:
         units, bundle = build_synthetic_evidence(25)

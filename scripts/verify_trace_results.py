@@ -26,6 +26,17 @@ EXPECTED = {
     "S8": ["authorization"],
     "S9": ["evidence"],
 }
+EXPECTED_FINAL_COMPONENTS = {
+    "S1": {"configuration": "inconsistent", "policy": "consistent", "authorization": "consistent", "intent": "consistent", "environment": "consistent"},
+    "S2": {"configuration": "consistent", "policy": "consistent", "authorization": "inconsistent", "intent": "consistent", "environment": "consistent"},
+    "S3": {"configuration": "consistent", "policy": "inconsistent", "authorization": "consistent", "intent": "consistent", "environment": "consistent"},
+    "S4": {"configuration": "consistent", "policy": "consistent", "authorization": "inconsistent", "intent": "consistent", "environment": "consistent"},
+    "S5": {"configuration": "consistent", "policy": "consistent", "authorization": "consistent", "intent": "consistent", "environment": "inconsistent"},
+    "S6": {"configuration": "consistent", "policy": "consistent", "authorization": "inconsistent", "intent": "inconsistent", "environment": "consistent"},
+    "S7": {"configuration": "consistent", "policy": "consistent", "authorization": "consistent", "intent": "consistent", "environment": "inconsistent"},
+    "S8": {"configuration": "consistent", "policy": "consistent", "authorization": "inconsistent", "intent": "consistent", "environment": "consistent"},
+    "S9": {"configuration": "consistent", "policy": "consistent", "authorization": "undecidable", "intent": "consistent", "environment": "consistent"},
+}
 
 
 def canonical_bytes(value: Any) -> bytes:
@@ -187,6 +198,18 @@ def verify_campaign(root: Path) -> dict[str, Any]:
             assert float(observed["first_exact"]["completed_mono"]) < float(observed["stable_exact"]["completed_mono"])
             assert exact(observed["first_exact"], expected)
             assert exact(observed["stable_exact"], expected)
+            assert observed["first_exact"]["components"] == EXPECTED_FINAL_COMPONENTS[scenario], (
+                scenario,
+                cadence,
+                "first exact component contract",
+                observed["first_exact"]["components"],
+            )
+            assert observed["stable_exact"]["components"] == EXPECTED_FINAL_COMPONENTS[scenario], (
+                scenario,
+                cadence,
+                "two-poll exact component contract",
+                observed["stable_exact"]["components"],
+            )
             scenario_pids.add(int(ready["pid"]))
             scenario_ids.add(ready["observer_id"])
             all_pids.add((scenario, int(ready["pid"])))

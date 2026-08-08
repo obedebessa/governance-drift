@@ -557,9 +557,12 @@ class ResourceMonitor(threading.Thread):
 @dataclass
 class Injection:
     scenario: str
+    injection_id: str
+    timing_reference_id: str
     t_inject: float
     t_onset: float
     injection_utc: str
+    onset_utc: str
     policy_not_before_utc: str
     actuation_seconds: float
 
@@ -1120,6 +1123,18 @@ class CrossStackExperiment:
                 },
             }
         }
+        reference_monotonic = time.monotonic()
+        reference_id = f"baseline-sync:{scenario}:r{repetition}"
+        self.raw.add(
+            "baseline_sync_marker",
+            scenario=scenario,
+            repetition=repetition,
+            timing_reference_id=reference_id,
+            reference_kind="argo-baseline-sync-start",
+            reference_utc=utc_now(),
+            reference_monotonic_seconds=round(reference_monotonic, 9),
+            source_revision=self.source_revision,
+        )
         self.kubectl(
             "-n", "argocd", "patch", "application", "cross-payments",
             "--type=merge", "-p", canonical_json(operation),
@@ -1129,9 +1144,11 @@ class CrossStackExperiment:
         while time.monotonic() < deadline:
             self.check_stop()
             poll += 1
+            evaluation_started = time.monotonic()
             application = self.safe_json(
                 "-n", "argocd", "get", "application", "cross-payments"
             )
+            evaluation_completed = time.monotonic()
             status = application.get("status") or {}
             operation_state = status.get("operationState") or {}
             phase = operation_state.get("phase")
@@ -1141,19 +1158,37 @@ class CrossStackExperiment:
                 default=-1,
             )
             new_history = current_history_id > previous_history_id
+            terminal_success = new_history and phase == "Succeeded"
+            terminal_failure = new_history and phase in {"Error", "Failed"}
             self.raw.add(
                 "baseline_sync_poll",
                 scenario=scenario,
                 repetition=repetition,
                 poll_index=poll,
+                timing_reference_id=reference_id,
+                evaluation_started_since_reference_seconds=round(
+                    evaluation_started - reference_monotonic, 6
+                ),
+                evaluation_completed_since_reference_seconds=round(
+                    evaluation_completed - reference_monotonic, 6
+                ),
+                evaluation_duration_seconds=round(
+                    evaluation_completed - evaluation_started, 6
+                ),
                 source_revision=self.source_revision,
                 previous_history_id=previous_history_id,
                 current_history_id=current_history_id,
                 new_history=new_history,
                 operation_phase=phase,
                 operation_message=operation_state.get("message"),
+                classification_at_completion={
+                    "new_history": new_history,
+                    "operation_phase": phase,
+                    "terminal_success": terminal_success,
+                    "terminal_failure": terminal_failure,
+                },
             )
-            if new_history and phase == "Succeeded":
+            if terminal_success:
                 return {
                     "previous_history_id": previous_history_id,
                     "current_history_id": current_history_id,
@@ -1163,7 +1198,7 @@ class CrossStackExperiment:
                         (operation_state.get("syncResult") or {}).get("revision")
                     ),
                 }
-            if new_history and phase in {"Error", "Failed"}:
+            if terminal_failure:
                 raise ExperimentError(
                     f"Argo baseline reset failed: {operation_state.get('message')}"
                 )
@@ -1222,21 +1257,50 @@ class CrossStackExperiment:
                 f"baseline digest changed: approved={self.approved_digests}, current={current}"
             )
 
-        deadline = time.monotonic() + 120
+        reference_monotonic = time.monotonic()
+        reference_id = f"baseline-observation:{scenario}:r{repetition}"
+        self.raw.add(
+            "baseline_observation_marker",
+            scenario=scenario,
+            repetition=repetition,
+            timing_reference_id=reference_id,
+            reference_kind="baseline-observation-start",
+            reference_utc=utc_now(),
+            reference_monotonic_seconds=round(reference_monotonic, 9),
+        )
+        deadline = reference_monotonic + 120
         last: dict[str, Any] = {}
         poll = 0
         while time.monotonic() < deadline:
             self.check_stop()
             poll += 1
+            evaluation_started = time.monotonic()
             last = self.collect_evidence(policy_not_before_utc=policy_boundary)
+            evaluation_completed = time.monotonic()
             exact_empty = last["observed_set"] == [] and not last["undecidable_components"]
             self.raw.add(
                 "baseline_poll",
                 scenario=scenario,
                 repetition=repetition,
                 poll_index=poll,
+                timing_reference_id=reference_id,
+                evaluation_started_since_reference_seconds=round(
+                    evaluation_started - reference_monotonic, 6
+                ),
+                evaluation_completed_since_reference_seconds=round(
+                    evaluation_completed - reference_monotonic, 6
+                ),
+                evaluation_duration_seconds=round(
+                    evaluation_completed - evaluation_started, 6
+                ),
                 expected_set=[],
                 exact_empty=exact_empty,
+                classification_at_completion={
+                    "components": last["components"],
+                    "observed_set": last["observed_set"],
+                    "undecidable_components": last["undecidable_components"],
+                    "exact_empty": exact_empty,
+                },
                 **last,
             )
             if exact_empty:
@@ -1244,7 +1308,13 @@ class CrossStackExperiment:
             time.sleep(POLL_SECONDS)
         raise ExperimentError(f"baseline did not become fully decidable and empty: {last}")
 
-    def inject(self, scenario: str) -> Injection:
+    def inject(
+        self,
+        scenario: str,
+        *,
+        repetition: int,
+        schedule_index: int,
+    ) -> Injection:
         t_inject = time.monotonic()
         injection_utc = utc_now()
         if scenario == "S1":
@@ -1258,11 +1328,13 @@ class CrossStackExperiment:
                 "--type=json", "-p", canonical_json(patch),
             )
             t_onset = time.monotonic()
+            onset_utc = utc_now()
             self.hard_refresh_argo()
             policy_boundary = injection_utc
         elif scenario == "S3":
             self.apply(STACK / "gatekeeper-constraint-v8.yaml")
             t_onset = time.monotonic()
+            onset_utc = utc_now()
             policy_boundary = injection_utc
         elif scenario == "S4":
             self.set_live_image(ALT_NODE_REF)
@@ -1277,18 +1349,39 @@ class CrossStackExperiment:
                     f"artifact substitution did not materialize: {alternate}"
                 )
             t_onset = time.monotonic()
+            onset_utc = utc_now()
             self.hard_refresh_argo()
             policy_boundary = injection_utc
         else:
             raise ExperimentError(f"unknown scenario: {scenario}")
-        return Injection(
+        injection_id = f"{scenario}:r{repetition}:schedule{schedule_index}"
+        timing_reference_id = f"operational-onset:{injection_id}"
+        injection = Injection(
             scenario=scenario,
+            injection_id=injection_id,
+            timing_reference_id=timing_reference_id,
             t_inject=t_inject,
             t_onset=t_onset,
             injection_utc=injection_utc,
+            onset_utc=onset_utc,
             policy_not_before_utc=policy_boundary,
             actuation_seconds=max(0.0, t_onset - t_inject),
         )
+        self.raw.add(
+            "injection_onset_marker",
+            scenario=scenario,
+            repetition=repetition,
+            schedule_index=schedule_index,
+            injection_id=injection_id,
+            timing_reference_id=timing_reference_id,
+            reference_kind="operational-onset",
+            injection_utc=injection_utc,
+            onset_utc=onset_utc,
+            injection_monotonic_seconds=round(t_inject, 9),
+            onset_monotonic_seconds=round(t_onset, 9),
+            actuation_seconds=round(injection.actuation_seconds, 6),
+        )
+        return injection
 
     def observe(
         self,
@@ -1303,6 +1396,8 @@ class CrossStackExperiment:
         next_poll = injection.t_onset
         poll_index = 0
         first_honest_time: float | None = None
+        first_honest_verdict_kind: str | None = None
+        first_epistemic_time: float | None = None
         first_substantive_time: float | None = None
         first_substantive_set: list[str] | None = None
         last: dict[str, Any] = {}
@@ -1322,6 +1417,14 @@ class CrossStackExperiment:
             undecidable = set(last["undecidable_components"])
             if (observed or undecidable) and first_honest_time is None:
                 first_honest_time = completed
+                if observed and undecidable:
+                    first_honest_verdict_kind = "substantive-and-epistemic"
+                elif observed:
+                    first_honest_verdict_kind = "substantive-only"
+                else:
+                    first_honest_verdict_kind = "epistemic-only"
+            if undecidable and first_epistemic_time is None:
+                first_epistemic_time = completed
             if observed and first_substantive_time is None:
                 first_substantive_time = completed
                 first_substantive_set = sorted(observed)
@@ -1331,19 +1434,35 @@ class CrossStackExperiment:
                 scenario=scenario,
                 repetition=repetition,
                 schedule_index=schedule_index,
+                injection_id=injection.injection_id,
                 poll_index=poll_index,
                 poll_period_seconds=POLL_SECONDS,
                 scheduler_lag_seconds=round(scheduler_lag, 6),
+                timing_reference_id=injection.timing_reference_id,
                 elapsed_since_onset_seconds=round(started - injection.t_onset, 6),
+                evaluation_started_since_onset_seconds=round(
+                    started - injection.t_onset, 6
+                ),
+                evaluation_completed_since_onset_seconds=round(
+                    completed - injection.t_onset, 6
+                ),
+                evaluation_duration_seconds=round(completed - started, 6),
                 expected_set=sorted(expected),
                 exact_set=exact,
                 surface=SURFACE[scenario],
+                classification_at_completion={
+                    "components": last["components"],
+                    "observed_set": last["observed_set"],
+                    "undecidable_components": last["undecidable_components"],
+                    "exact_set": exact,
+                },
                 **last,
             )
             if exact:
-                exact_time = time.monotonic()
+                exact_time = completed
                 if first_honest_time is None:
                     first_honest_time = exact_time
+                    first_honest_verdict_kind = "substantive-only"
                 if first_substantive_time is None:
                     first_substantive_time = exact_time
                     first_substantive_set = sorted(observed)
@@ -1351,6 +1470,10 @@ class CrossStackExperiment:
                     "scenario": scenario,
                     "repetition": repetition,
                     "schedule_index": schedule_index,
+                    "injection_id": injection.injection_id,
+                    "timing_reference_id": injection.timing_reference_id,
+                    "injection_utc": injection.injection_utc,
+                    "onset_utc": injection.onset_utc,
                     "surface": SURFACE[scenario],
                     "expected_set": "|".join(sorted(expected)),
                     "first_observed_set": "|".join(first_substantive_set or []),
@@ -1360,13 +1483,17 @@ class CrossStackExperiment:
                     "polls_to_exact": poll_index,
                     "actuation_seconds": round(injection.actuation_seconds, 6),
                     "ddl_seconds": round(first_honest_time - injection.t_onset, 6),
+                    "first_honest_verdict_kind": first_honest_verdict_kind,
+                    "first_epistemic_alert_seconds": (
+                        round(first_epistemic_time - injection.t_onset, 6)
+                        if first_epistemic_time is not None
+                        else None
+                    ),
                     "first_substantive_alert_seconds": round(
                         first_substantive_time - injection.t_onset, 6
                     ),
                     "exact_set_latency_seconds": round(exact_time - injection.t_onset, 6),
-                    "evidence_latency_seconds": round(
-                        time.monotonic() - injection.t_onset, 6
-                    ),
+                    "evidence_latency_seconds": round(completed - injection.t_onset, 6),
                     "deployment_uid": last.get("deployment_uid"),
                     "argocd_gatekeeper_native_validation": scenario in {"S1", "S3"},
                     "shared_adapter_only": scenario == "S4",
@@ -1396,7 +1523,11 @@ class CrossStackExperiment:
                     scenario=scenario,
                     repetition=repetition,
                 )
-                injection = self.inject(scenario)
+                injection = self.inject(
+                    scenario,
+                    repetition=repetition,
+                    schedule_index=schedule_index,
+                )
                 row, final_poll = self.observe(
                     scenario=scenario,
                     repetition=repetition,
@@ -1608,27 +1739,72 @@ class CrossStackExperiment:
 
     def cleanup(self) -> dict[str, Any]:
         started = utc_now()
+        verification_command = ["kind", "get", "clusters"]
+        delete_command = ["kind", "delete", "cluster", "--name", CLUSTER]
+
+        def verification_evidence(
+            proc: subprocess.CompletedProcess[str],
+        ) -> dict[str, Any]:
+            clusters = sorted({
+                row.strip() for row in proc.stdout.splitlines() if row.strip()
+            })
+            return {
+                "command": verification_command,
+                "returncode": proc.returncode,
+                "stdout": proc.stdout,
+                "stderr": proc.stderr,
+                "clusters": clusters,
+            }
+
+        before_proc = command(
+            verification_command,
+            check=False,
+            timeout=30,
+        )
+        before = verification_evidence(before_proc)
         result = {
             "cluster": CLUSTER,
             "cleanup_started_utc": started,
             "target_scope": "only govdrift-cross",
             "delete_attempted": self.cluster_created,
             "delete_returncode": None,
-            "verified_absent": not self.cluster_created,
+            "verified_absent": False,
+        }
+        delete_evidence: dict[str, Any] = {
+            "command": delete_command,
+            "attempted": self.cluster_created,
+            "returncode": None,
+            "stdout": "",
+            "stderr": "",
         }
         if self.cluster_created:
             proc = command(
-                ["kind", "delete", "cluster", "--name", CLUSTER],
+                delete_command,
                 check=False,
                 timeout=180,
             )
             result["delete_returncode"] = proc.returncode
-            clusters = command(
-                ["kind", "get", "clusters"],
-                check=False,
-                timeout=30,
-            ).stdout.splitlines()
-            result["verified_absent"] = CLUSTER not in {row.strip() for row in clusters}
+            delete_evidence.update(
+                {
+                    "returncode": proc.returncode,
+                    "stdout": proc.stdout,
+                    "stderr": proc.stderr,
+                }
+            )
+        after_proc = command(
+            verification_command,
+            check=False,
+            timeout=30,
+        )
+        after = verification_evidence(after_proc)
+        result["verified_absent"] = (
+            after["returncode"] == 0 and CLUSTER not in set(after["clusters"])
+        )
+        result["cleanup_proof"] = {
+            "verify_before": before,
+            "delete": delete_evidence,
+            "verify_after": after,
+        }
         result["cleanup_completed_utc"] = utc_now()
         (self.output_dir / "cleanup.json").write_text(json.dumps(result, indent=2) + "\n")
         return result

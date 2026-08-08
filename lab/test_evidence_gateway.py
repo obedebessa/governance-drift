@@ -94,6 +94,30 @@ class EvidenceGatewayTests(unittest.TestCase):
         finally:
             fixture.close()
 
+    def test_known_component_inconsistency_precedes_other_component_unknowns(self) -> None:
+        gateway = EvidenceGateway(expected_subject=SUBJECT)
+        configuration_mismatch = make_envelope(
+            stream="configuration",
+            subject=SUBJECT,
+            sequence=1,
+            captured_at=0.0,
+            delivered_at=0.05,
+            payload={"consistent": False, "version": 1},
+        )
+        self.assertEqual(
+            gateway.ingest(configuration_mismatch)["status"], "accepted"
+        )
+
+        result = gateway.evaluate(now=0.1)
+        self.assertEqual(result["components"]["configuration"], "inconsistent")
+        self.assertTrue(result["mask"]["configuration"])
+        self.assertEqual(result["components"]["policy"], "undecidable")
+        self.assertFalse(result["mask"]["policy"])
+        self.assertEqual(result["verdict"], "inconsistent")
+        self.assertTrue(
+            any(value == "undecidable" for value in result["components"].values())
+        )
+
     def test_duplicate_delivery_is_idempotent(self) -> None:
         fixture = TransportFixture(
             RelayProfile("duplicate", duplicate={("authorization", 2)})

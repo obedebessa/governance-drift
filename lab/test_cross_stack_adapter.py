@@ -3,11 +3,20 @@
 
 from __future__ import annotations
 
+import copy
 import json
+import sys
 import tempfile
 import unittest
 from pathlib import Path
 
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from analyze_cross_stack import (  # noqa: E402
+    recompute_scenario_timing,
+    validate_cleanup_proof,
+)
 from run_cross_stack_experiment import (
     CrossStackExperiment,
     ExperimentError,
@@ -21,6 +30,168 @@ from run_cross_stack_experiment import (
 
 
 class CrossStackAdapterTests(unittest.TestCase):
+    @staticmethod
+    def timing_fixture() -> tuple[dict, list[dict]]:
+        marker = {
+            "record_type": "injection_onset_marker",
+            "scenario": "S3",
+            "repetition": 1,
+            "schedule_index": 1,
+            "injection_id": "S3:r1:schedule1",
+            "timing_reference_id": "operational-onset:S3:r1:schedule1",
+            "reference_kind": "operational-onset",
+            "injection_utc": "2026-08-08T12:00:00+00:00",
+            "onset_utc": "2026-08-08T12:00:00.100000+00:00",
+            "injection_monotonic_seconds": 100.0,
+            "onset_monotonic_seconds": 100.1,
+            "actuation_seconds": 0.1,
+        }
+        components_undecidable = {
+            "configuration": "consistent",
+            "policy": "undecidable",
+            "authorization": "consistent",
+            "intent": "not_evaluated",
+            "environment": "not_evaluated",
+        }
+        components_policy = {**components_undecidable, "policy": "inconsistent"}
+        polls = [
+            {
+                "record_type": "scenario_poll",
+                "scenario": "S3",
+                "repetition": 1,
+                "schedule_index": 1,
+                "injection_id": marker["injection_id"],
+                "timing_reference_id": marker["timing_reference_id"],
+                "poll_index": 1,
+                "elapsed_since_onset_seconds": 0.0,
+                "evaluation_started_since_onset_seconds": 0.0,
+                "evaluation_completed_since_onset_seconds": 0.2,
+                "evaluation_duration_seconds": 0.2,
+                "components": components_undecidable,
+                "observed_set": [],
+                "undecidable_components": ["policy"],
+                "exact_set": False,
+                "classification_at_completion": {
+                    "components": components_undecidable,
+                    "observed_set": [],
+                    "undecidable_components": ["policy"],
+                    "exact_set": False,
+                },
+            },
+            {
+                "record_type": "scenario_poll",
+                "scenario": "S3",
+                "repetition": 1,
+                "schedule_index": 1,
+                "injection_id": marker["injection_id"],
+                "timing_reference_id": marker["timing_reference_id"],
+                "poll_index": 2,
+                "elapsed_since_onset_seconds": 1.0,
+                "evaluation_started_since_onset_seconds": 1.0,
+                "evaluation_completed_since_onset_seconds": 1.3,
+                "evaluation_duration_seconds": 0.3,
+                "components": components_policy,
+                "observed_set": ["policy"],
+                "undecidable_components": [],
+                "exact_set": True,
+                "classification_at_completion": {
+                    "components": components_policy,
+                    "observed_set": ["policy"],
+                    "undecidable_components": [],
+                    "exact_set": True,
+                },
+            },
+        ]
+        return marker, polls
+
+    @staticmethod
+    def cleanup_fixture() -> dict:
+        verify_command = ["kind", "get", "clusters"]
+        delete_command = [
+            "kind", "delete", "cluster", "--name", "govdrift-cross"
+        ]
+        return {
+            "cluster": "govdrift-cross",
+            "target_scope": "only govdrift-cross",
+            "delete_attempted": True,
+            "delete_returncode": 0,
+            "verified_absent": True,
+            "cleanup_proof": {
+                "verify_before": {
+                    "command": verify_command,
+                    "returncode": 0,
+                    "stdout": "govdrift-cross\nother-cluster\n",
+                    "stderr": "",
+                    "clusters": ["govdrift-cross", "other-cluster"],
+                },
+                "delete": {
+                    "command": delete_command,
+                    "attempted": True,
+                    "returncode": 0,
+                    "stdout": "Deleted nodes: [govdrift-cross-control-plane]\n",
+                    "stderr": "",
+                },
+                "verify_after": {
+                    "command": verify_command,
+                    "returncode": 0,
+                    "stdout": "other-cluster\n",
+                    "stderr": "",
+                    "clusters": ["other-cluster"],
+                },
+            },
+        }
+
+    def test_raw_timing_recomputes_epistemic_substantive_and_exact(self) -> None:
+        marker, polls = self.timing_fixture()
+        timing = recompute_scenario_timing(marker, polls, {"policy"})
+        self.assertEqual(timing["ddl_seconds"], 0.2)
+        self.assertEqual(timing["first_honest_verdict_kind"], "epistemic-only")
+        self.assertEqual(timing["first_epistemic_alert_seconds"], 0.2)
+        self.assertEqual(timing["first_substantive_alert_seconds"], 1.3)
+        self.assertEqual(timing["exact_set_latency_seconds"], 1.3)
+
+    def test_raw_timing_rejects_missing_or_tampered_fields(self) -> None:
+        marker, polls = self.timing_fixture()
+        missing = copy.deepcopy(polls)
+        del missing[0]["evaluation_completed_since_onset_seconds"]
+        with self.assertRaises(SystemExit):
+            recompute_scenario_timing(marker, missing, {"policy"})
+
+        bad_duration = copy.deepcopy(polls)
+        bad_duration[0]["evaluation_duration_seconds"] = 0.3
+        with self.assertRaises(SystemExit):
+            recompute_scenario_timing(marker, bad_duration, {"policy"})
+
+        bad_classification = copy.deepcopy(polls)
+        bad_classification[0]["classification_at_completion"]["exact_set"] = True
+        with self.assertRaises(SystemExit):
+            recompute_scenario_timing(marker, bad_classification, {"policy"})
+
+    def test_cleanup_proof_rejects_missing_or_tampered_evidence(self) -> None:
+        valid = self.cleanup_fixture()
+        validate_cleanup_proof(valid)
+
+        wrong_target = copy.deepcopy(valid)
+        wrong_target["cleanup_proof"]["delete"]["command"][-1] = "other-cluster"
+        with self.assertRaises(SystemExit):
+            validate_cleanup_proof(wrong_target)
+
+        missing_stdout = copy.deepcopy(valid)
+        del missing_stdout["cleanup_proof"]["verify_after"]["stdout"]
+        with self.assertRaises(SystemExit):
+            validate_cleanup_proof(missing_stdout)
+
+        still_present = copy.deepcopy(valid)
+        still_present["cleanup_proof"]["verify_after"]["stdout"] = (
+            "govdrift-cross\nother-cluster\n"
+        )
+        still_present["cleanup_proof"]["verify_after"]["clusters"] = [
+            "govdrift-cross",
+            "other-cluster",
+        ]
+        with self.assertRaises(SystemExit):
+            validate_cleanup_proof(still_present)
+
     def test_argo_out_of_sync_is_configuration_inconsistent(self) -> None:
         application = {
             "status": {

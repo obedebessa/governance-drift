@@ -170,6 +170,22 @@ def _authorization_state(record: AuthorizationRecord, now: int) -> bool | None:
     raise ValueError(f"unknown authorization mode: {record.mode}")
 
 
+def _intent_state(record: AuthorizationRecord) -> bool | None:
+    """True=execution-valid lineage, False=invalid lineage, None=unknown."""
+
+    if not record.proof_available:
+        return None
+    if record.mode not in {"one-shot", "continuing", "temporary-exception"}:
+        raise ValueError(f"unknown authorization mode: {record.mode}")
+    if not record.valid_at_execution:
+        return False
+    if record.revocation_effect != "retroactive":
+        return True
+    if not record.live_status_available:
+        return None
+    return not record.revoked
+
+
 def _combine(left: Status, right: Status) -> Status:
     if "inconsistent" in {left, right}:
         return "inconsistent"
@@ -212,12 +228,19 @@ class BatchEvaluator:
         records = prepared.approvals_by_scope.get(unit, ())
         known_applicable: list[AuthorizationRecord] = []
         unknown_authorization = False
+        intent_applicable: list[AuthorizationRecord] = []
+        unknown_intent = False
         for record in records:
             state = _authorization_state(record, self.now)
             if state is True:
                 known_applicable.append(record)
             elif state is None:
                 unknown_authorization = True
+            intent_state = _intent_state(record)
+            if intent_state is True:
+                intent_applicable.append(record)
+            elif intent_state is None:
+                unknown_intent = True
 
         if not records:
             authorization_status: Status = "undecidable"
@@ -231,9 +254,9 @@ class BatchEvaluator:
         revision = evidence.current_revision.get(unit)
         if revision is None or not records:
             components["intent"] = "undecidable"
-        elif any(revision in record.revisions for record in known_applicable):
+        elif any(revision in record.revisions for record in intent_applicable):
             components["intent"] = "consistent"
-        elif unknown_authorization:
+        elif unknown_intent:
             components["intent"] = "undecidable"
         else:
             components["intent"] = "inconsistent"
