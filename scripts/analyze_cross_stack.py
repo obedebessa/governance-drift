@@ -299,7 +299,7 @@ def main() -> int:
             row for row in trace
             if row.get("record_type") == "scenario_poll" and row.get("exact_set")
         ]
-        require(finals, f"{scenario} r{repetition}: no exact final raw poll")
+        require(finals, f"{scenario} r{repetition}: no exact projected raw poll")
         final = finals[0]
         if scenario == "S1":
             require(
@@ -436,7 +436,8 @@ v3.22.2 manifests were downloaded from their tagged upstream repositories,
 verified against the pinned SHA-256 values, and preserved under `upstream/`.
 
 The campaign ran five repetitions each of S1, S3, and S4. It produced
-{len(rows)}/15 exact final singleton sets. S1 used Argo CD's native
+{len(rows)}/15 exact projected singleton classifications over the declared
+evaluated components. S1 used Argo CD's native
 desired/live status; S3 used a fresh Gatekeeper background-audit violation
 with `enforcementAction: dryrun`. Gatekeeper's violation record did not emit a
 structural resource-UID field, so the controlled Rego rule embeds the

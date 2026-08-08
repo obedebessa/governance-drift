@@ -159,14 +159,17 @@ def capture_git_provenance() -> dict[str, Any]:
 
     modified = command(
         ["git", "-C", str(ROOT), "diff", "--name-only", "-z", "HEAD", "--"],
-        timeout=30,
+        # iCloud-backed workspaces can make an otherwise small index scan take
+        # tens of seconds. Provenance is a hard gate, so allow the scan to
+        # finish rather than weakening or skipping it.
+        timeout=120,
     ).stdout.split("\0")
     untracked = command(
         [
             "git", "-C", str(ROOT), "ls-files", "--others",
             "--exclude-standard", "-z", "--",
         ],
-        timeout=30,
+        timeout=120,
     ).stdout.split("\0")
     dirty_files = sorted({path for path in modified + untracked if path})
     return {
