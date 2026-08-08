@@ -5,19 +5,20 @@
   \node[brok, right=17mm of conf, minimum width=27mm, yshift=9mm] (pol)
     {\textbf{policy drift}\\{\smlbl running state vs.\ $\Pol(t)$}\\{\smlbl tier T1 \; (S3)}};
   \node[brok, below=2.5mm of pol, minimum width=27mm] (auth)
-    {\textbf{authorization drift}\\{\smlbl validity of $A_0$ at $t$}\\{\smlbl tier T2/T3 \; (S2, S4, S8)}};
+    {\textbf{authorization drift}\\{\smlbl $A_B^{\rm proof}+A_{\rm live}(t)$}\\{\smlbl tier T2/T3 \; (S2, S4, S8)}};
   \node[brok, below=2.5mm of auth, minimum width=27mm] (int)
     {\textbf{intent drift}\\{\smlbl driving content vs.\ approval basis}\\{\smlbl tier T2 \; (S6, jointly authz)}};
   \node[brok, below=2.5mm of int, minimum width=27mm] (evd)
     {\textbf{evidence drift}\\{\smlbl decidability of the above}\\{\smlbl tier T2 \; (S9): verdict $\to \unk$}};
   \node[brok, below=2.5mm of evd, minimum width=27mm] (env)
-    {\textbf{environment drift}\\{\smlbl $\varepsilon_t$ vs.\ assumptions $\sigma_0$}\\{\smlbl tier T4 \; (S5, S7)}};
+    {\textbf{environment drift}\\{\smlbl $\varepsilon_t$ vs.\ predicates $\sigma_B$}\\{\smlbl tier T4 \; (S5, S7)}};
 
   \node[evid, right=8mm of auth.east, minimum width=20mm, yshift=-6mm] (gov)
-    {\textbf{governance drift}\\{\smlbl aggregate (Def.~8)}\\{\smlbl vector $\GD(t)$}};
+    {\textbf{governance drift}\\{\smlbl aggregate (Def.~8)}\\{\smlbl $(\GDsub,\ObsMask)$}};
 
-  \draw[flow] (conf.east) to[out=0,in=180] node[lbl, above, pos=0.35]{S1: also governance drift} ($(pol.west)+(0,-2mm)$);
-  \foreach \n in {pol,auth,int,evd,env}
+  \draw[flow] (conf.east) to[out=0,in=180] ($(pol.west)+(0,-2mm)$);
+  \foreach \n in {pol,auth,int,env}
     \draw[eflow] (\n.east) to[out=0,in=180] (gov.west);
-  \draw[eflow] (conf.south) to[out=-60,in=200] node[lbl, below]{approved-property subset} (gov.south west);
+  \draw[bflow] (evd.east) to[out=0,in=180] (gov.west);
+  \draw[eflow] (conf.south) to[out=-60,in=200] (gov.south west);
 \end{tikzpicture}

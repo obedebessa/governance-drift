@@ -1,0 +1,7 @@
+build export-ignore
+originais export-ignore
+output/pdf export-ignore
+qa export-ignore
+release/RELEASE_MANIFEST.md export-ignore
+release/*.zip export-ignore
+tmp export-ignore

@@ -1,0 +1,18 @@
+\begin{tabular}{@{}lccc rr@{}}
+\toprule
+Scenario & Expected & Local union & Joined & Local exact & Joined exact \\
+\midrule
+S1 & $\{config.\}$ & $\{config.\}$ & $\{config.\}$ & 100 & 100 \\
+S2 & $\{auth.\}$ & $\{auth.\}$ & $\{auth.\}$ & 100 & 100 \\
+S3 & $\{policy\}$ & $\{policy\}$ & $\{policy\}$ & 100 & 100 \\
+S4 & $\{auth.\}$ & $\{auth.\}$ & $\{auth.\}$ & 100 & 100 \\
+S5 & $\{env.\}$ & $\{env.\}$ & $\{env.\}$ & 100 & 100 \\
+S6 & $\{intent,auth.\}$ & $\{auth.\}$ & $\{intent,auth.\}$ & 0 & 100 \\
+S7 & $\{env.\}$ & $\{env.\}$ & $\{env.\}$ & 100 & 100 \\
+S8 & $\{auth.\}$ & $\{auth.\}$ & $\{auth.\}$ & 100 & 100 \\
+S9 & $\{evidence\}$ & $\{\}$ & $\{evidence\}$ & 0 & 100 \\
+S10 & $\{policy,auth.\}$ & $\{policy,auth.\}$ & $\{policy,auth.\}$ & 100 & 100 \\
+S11 & $\{auth.,env.\}$ & $\{auth.,env.\}$ & $\{auth.,env.\}$ & 100 & 100 \\
+S12 & $\{evidence\}$ & $\{auth.\}$ & $\{evidence\}$ & 0 & 100 \\
+\bottomrule
+\end{tabular}

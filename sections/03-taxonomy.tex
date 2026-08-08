@@ -23,13 +23,15 @@ that subsequently evolve. All definitions are made precise in the model of
 
 \begin{definition}[Approved State]
 \label{def:approved}
-The \emph{approved state} $\Gapp(t_0)$ of a deployment is the snapshot, at
-approval time $t_0$, of: the approved configuration (manifest content and the
+The \emph{approved state} of a deployment is an append-only sequence of
+immutable snapshots, one per approval event. Each snapshot records: the
+approved configuration (manifest content and the
 artifact digests it resolves to), the policy version under which it was
-evaluated, the authorization basis (approvals, exceptions, their subjects,
-scopes, and windows), the intent linkage (the change record and revision the
+evaluated, immutable authorization proof (approvals, exceptions, their
+subjects, scopes, execution times, and windows), the intent linkage (the change record and revision the
 approval covers), and the declared environment assumptions within which the
-risk assessment was made.
+risk assessment was made. Evaluation selects the latest applicable covering
+snapshot; prior snapshots remain evidence rather than being overwritten.
 \end{definition}
 
 \begin{definition}[Configuration Drift]
@@ -38,11 +40,14 @@ Divergence between the \emph{current desired} configuration and the
 \emph{observed} configuration: $\Gobs(t) \ne$ desired$(t)$. This is the
 classical notion~\cite{awsconfig,driftctl,nist800128}, decidable by
 comparison of present states.
+It is an operational component of the umbrella vector; by itself it does not
+assert that either state is unauthorized.
 \end{definition}
 
 \begin{definition}[Policy Drift]
 \label{def:poldrift}
-Divergence between the policy version pinned in $\Gapp(t_0)$ and the policy
+Divergence between the policy version $\pi_B$ pinned in the selected admitted
+basis $B_x(t)$ and the policy
 context now governing the environment, \emph{as it bears on this deployment}:
 $\Pol(t)$ has changed such that the running configuration would not be
 admitted under it today, although it was compliant when approved.
@@ -51,9 +56,11 @@ admitted under it today, although it was compliant when approved.
 \begin{definition}[Authorization Drift]
 \label{def:authdrift}
 Invalidation or mismatch of the authorization basis without any configuration
-event: an approval's window lapsed while its effect persists (expired
-emergency exception); an approval was revoked; or the running artifact's
-digest is not the subject any valid approval refers to.
+event: a continuing approval or temporary exception lapsed while its effect
+persists; an applicable approval was revoked under its declared prospective
+or retroactive semantics; or the running artifact's digest is not the subject
+any valid approval refers to. A one-shot approval need only have been valid at
+execution, provided its integrity-valid proof survives.
 \end{definition}
 
 \begin{definition}[Intent Drift]
@@ -70,14 +77,18 @@ Decay of the records connecting the running state to its approval basis: the
 chain (revision $\to$ artifact $\to$ deployment $\to$ approval) can no longer
 be established from surviving evidence, so governance consistency becomes
 \emph{undecidable} rather than false. Evidence drift converts governance
-questions from answerable to unanswerable and is therefore tracked as its own
-class rather than folded into the others.
+questions from answerable to unanswerable. It is therefore an
+\emph{epistemic, transversal} class: unlike the five substantive components,
+it does not assert that a governed relation is inconsistent; it records that
+one or more such relations can no longer be decided. We keep it inside the
+governance-drift umbrella because the operational response---repair evidence
+and withhold a polar verdict---is class-specific.
 \end{definition}
 
 \begin{definition}[Environment Drift]
 \label{def:envdrift}
-Change, outside the managed configuration's scope, of environment properties
-that the approval's risk assessment assumed: IAM scope broadened,
+Violation, outside the managed configuration's scope, of an environment
+predicate recorded by the approval's risk assessment: IAM scope broadened,
 network exposure altered, an adjacent cloud resource modified out of
 band---no desired state exists for the changed property, so no
 configuration comparison can even represent the divergence.
@@ -87,12 +98,14 @@ configuration comparison can even represent the divergence.
 \label{def:govdrift}
 The condition in which the operational state of an environment diverges from
 the state, policy context, authorization basis, intent, or environment
-assumptions under which it was approved: the componentwise condition over
-\cref{def:poldrift,def:authdrift,def:intdrift,def:evddrift,def:envdrift},
-together with those configuration divergences (\cref{def:confdrift}) that
-bear on approved properties. A deployment is \emph{governance-consistent} at
-$t$ when every component distance of \cref{sec:model} is zero and none is
-undecidable. The components are not mutually exclusive: one incident may
+assumptions under which it was approved, together with the epistemic condition
+in which one or more such relations can no longer be decided. Formally, the
+umbrella contains five substantive divergence components
+(\cref{def:confdrift,def:poldrift,def:authdrift,def:intdrift,def:envdrift})
+and one transversal evidence condition (\cref{def:evddrift}). A deployment is
+\emph{governance-consistent} at $t$ when every substantive divergence of
+\cref{sec:model} is zero and every required component is decidable. The
+substantive components are not mutually exclusive: one incident may
 drift several at once (an unapproved rollback drifts intent \emph{and}
 leaves the runtime on digests no valid approval covers), which is one reason
 the model of \cref{sec:model} keeps them as a vector.
@@ -101,8 +114,8 @@ the model of \cref{sec:model} keeps them as a vector.
 \subsection{Risk Channels and Severity}
 \label{sec:severity}
 
-The six components are equivalent only as coordinates of the governance
-distance vector; they are \emph{not} equivalent in consequence. A raw count
+The five substantive divergence components and the epistemic evidence class
+are \emph{not} equivalent in ontology or consequence. A raw count
 therefore cannot stand in for severity. Each class opens a different primary
 risk channel and implies a different default disposition, as summarized in
 \cref{tab:severity}. Configuration drift first threatens operational
@@ -147,9 +160,10 @@ weight orders every incident.
 \centering
 \resizebox{\columnwidth}{!}{\input{figs/fig-taxonomy}}
 \caption{The drift taxonomy. Configuration drift (left) is a relation between
-two present configurations. The governance-drift classes (right) each relate
-the present state to a component of the approved snapshot or its evolved
-context; their aggregate is governance drift (\cref{def:govdrift}). Annotated
+two present configurations. Five substantive components relate the present
+state to the approved snapshot or evolved context; evidence drift is the
+transversal loss of decidability shown by the dotted path. Their umbrella is
+governance drift (\cref{def:govdrift}). Annotated
 under each class: the evidence tier of \cref{sec:architecture} that first
 decides it, as measured in \cref{sec:study}.}
 \label{fig:taxonomy}
@@ -236,7 +250,8 @@ the input vocabulary, not the mechanism, is what must widen.
 The separation does not demote configuration drift: unauthorized manual
 change (\cref{sec:study}, S1) is both configuration and governance drift, and
 configuration comparison is its right detector. The taxonomy's point is
-containment, not replacement: configuration drift is one class among six, the
-only one decidable in the configuration vocabulary---which the study confirms
+containment, not replacement: configuration drift is one of five substantive
+components under the six-class umbrella, and the only one decidable in the
+configuration vocabulary---which the study confirms
 empirically as a detectability staircase whose first step is exactly that one
 class.

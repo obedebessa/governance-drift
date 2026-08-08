@@ -9,7 +9,10 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EXCLUDED_PARTS = {".git", "__pycache__", ".pytest_cache", "runtime", "tmp"}
+EXCLUDED_PARTS = {
+    ".git", "__pycache__", ".pytest_cache", "runtime", "tmp", "build",
+    "originais", "output", "qa", "release",
+}
 EXCLUDED_SUFFIXES = {".aux", ".bbl", ".blg", ".log", ".out", ".xdv"}
 
 
@@ -22,6 +25,7 @@ def included(path: Path) -> bool:
         and path.suffix not in EXCLUDED_SUFFIXES
         and path.name != "main.pdf"
         and path.name != "governance-drift-paper.pdf"
+        and path.suffix != ".zip"
     )
 
 

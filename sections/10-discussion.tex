@@ -1,28 +1,6 @@
 \section{Discussion and Limitations}
 \label{sec:discussion}
 
-\subsection{The Reviewer's Objection, Taken Seriously}
-``This is just configuration drift with more inputs.'' The objection deserves
-a precise answer beyond \cref{sec:related}'s. Configuration drift is a
-\emph{two-place, memoryless} relation between present states; governance
-drift is a \emph{three-place, history-anchored} relation among present state,
-evolving context, and a recorded past event. The difference is not input count but relation type. Mechanically, we
-concede, every detector at every tier is a comparison---monitoring always
-is; the question is what is compared with what. Configuration drift compares
-two present configurations; governance drift compares present state and
-present context against a \emph{recorded past event}---the admitted
-basis---under validity clocks. That relational difference has observable
-consequences the study exhibits: (i)~a detector of the first relation can be perfectly correct and
-carry zero information about the second (\cref{fnd:blind}); (ii)~the second
-relation can change value with \emph{no event on either configuration}
-(policy supersession, window expiry)---nothing a comparison could ever
-register, however frequently it runs; and (iii)~the first relation's repair
-action (reconcile) can be the very mechanism that consummates a violation of
-the second (S6: convergence to unapproved content). A phenomenon whose
-detectors, event sources, and remediations are all disjoint from
-configuration drift's is a different research object; what they share is the
-word ``drift'' and the ambient system.
-
 \subsection{Legitimacy, Blame, and the Policy-Drift Question}
 Measuring divergence is not assigning fault. Policy drift in particular is
 usually the \emph{organization's own} motion; flagging a deployment as
@@ -40,9 +18,23 @@ class selects a primary risk channel and response family, while blast radius,
 duration, reversibility, consequence, and evidence coverage determine actual
 severity. The vector must not be collapsed into a universal danger ranking.
 
+\subsection{Evidence Failure and Business Availability}
+An \emph{undecidable} verdict is epistemic, not an automatic shutdown command.
+The safe default is fail-closed for the \emph{governance claim}---the system
+must not report conformance without evidence---while availability policy is
+chosen separately. A new admission may be blocked when T1--T3 evidence is
+missing; an already-running critical service may remain available under a
+bounded grace period, elevated alert, and evidence-repair SLO. Conversely, a
+retroactive revocation or known uncovered digest is a substantive verdict,
+not evidence degradation, and may justify immediate containment. The
+component, service criticality, blast radius, and maximum tolerated evidence
+age must therefore select fail-open or fail-closed actuation in a published
+policy. This preserves business availability without laundering uncertainty
+into a false ``consistent'' state.
+
 \subsection{Limitations}
 \emph{The approved-state prerequisite.} Everything downstream of
-\cref{sec:architecture} assumes $\Gapp$ was recorded durably; where it was
+\cref{sec:architecture} assumes an admitted basis $B_x(t)$ was recorded durably; where it was
 not, verdicts degrade to undecidable, and the honest headline is GCC, not
 drift rates. This is a real adoption constraint, not a footnote: estates
 without durable approval evidence cannot measure their governance drift, and
@@ -50,8 +42,11 @@ discovering that is arguably the measurement's first value.
 \emph{Bounded live empirics.} The laboratory executed 20 repetitions of each
 scenario at three evaluator cadences on one Kind/Flux/Kyverno stack, plus 20
 benign control windows. Its 538/540 detection observations, 538/538
-conditional class agreement, and zero alarms in 543 benign-control polls
-establish bounded realizability and within-laboratory behavior. They do not
+conditional exact-set agreements, zero conditional Hamming loss, and zero
+substantive alarms or epistemic warnings in 543 benign-control polls
+are supplemented by 45/45 exact compound-vector completions and a 30-minute,
+4,680-poll benign soak with no substantive or epistemic alarm. They establish
+bounded realizability and within-laboratory behavior. They do not
 establish natural occurrence, field prevalence, production reliability,
 universal false-alarm rates, stream-loss tolerance, or transfer across
 organizations. The two cadence misses are retained because they expose a
@@ -59,7 +54,7 @@ real observability boundary for transient drift. \emph{Single-deployment granula
 per-deployment; estate-level aggregation (fleet drift, correlated policy
 supersessions) raises weighting questions we defer to the metrics'
 published-composite discipline. \emph{Environment scope.} $\denv$ is bounded
-by what $\sigma_0$ declared; assumptions never written down cannot drift
+by what $\sigma_B$ declares; assumptions never written down cannot drift
 detectably---an instance of the general dependence of governance measurement
 on capture discipline. \emph{Remediation dynamics.} We model detection, not
 the control loop that acts on it; closing the loop (auto-re-approval

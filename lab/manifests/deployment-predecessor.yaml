@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: payments
-          image: localhost:5001/governance-demo:1.0
+          image: localhost:5001/governance-demo:alternate
           imagePullPolicy: Always
           env:
             - name: APP_VERSION

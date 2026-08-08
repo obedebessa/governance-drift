@@ -1,0 +1,62 @@
+{
+  "design": "five repetitions of S10--S12 at three cadences; six 300-second benign windows",
+  "positive_observations": 45,
+  "detected": 45,
+  "exact_final_vectors": 45,
+  "first_complete_vectors": 34,
+  "scenarios": [
+    {
+      "scenario": "S10",
+      "expected_class_set": "policy|authorization",
+      "observations": 15,
+      "detections": 15,
+      "exact_final_vectors": 15,
+      "first_complete_vectors": 4,
+      "first_observed_sets": {
+        "authorization": 11,
+        "policy|authorization": 4
+      },
+      "ddl_median_seconds": 1.3347020423971117,
+      "ddl_p95_seconds": 8.482681541703641,
+      "vcl_median_seconds": 7.881209165789187,
+      "vcl_p95_seconds": 14.259274625219405
+    },
+    {
+      "scenario": "S11",
+      "expected_class_set": "authorization|environment",
+      "observations": 15,
+      "detections": 15,
+      "exact_final_vectors": 15,
+      "first_complete_vectors": 15,
+      "first_observed_sets": {
+        "authorization|environment": 15
+      },
+      "ddl_median_seconds": 1.2467060405761003,
+      "ddl_p95_seconds": 2.7534467093646526,
+      "vcl_median_seconds": 1.2467060405761003,
+      "vcl_p95_seconds": 2.7534467093646526
+    },
+    {
+      "scenario": "S12",
+      "expected_class_set": "evidence",
+      "observations": 15,
+      "detections": 15,
+      "exact_final_vectors": 15,
+      "first_complete_vectors": 15,
+      "first_observed_sets": {
+        "evidence": 15
+      },
+      "ddl_median_seconds": 0.5677017909474671,
+      "ddl_p95_seconds": 8.495680917054415,
+      "vcl_median_seconds": 0.5677017909474671,
+      "vcl_p95_seconds": 8.495680917054415
+    }
+  ],
+  "soak": {
+    "windows": 6,
+    "seconds": 1800.0,
+    "polls": 4680,
+    "substantive_alarms": 0,
+    "epistemic_warnings": 0
+  }
+}

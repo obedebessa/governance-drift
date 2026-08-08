@@ -63,12 +63,24 @@ scan environments against benchmark policy; continuous-validation features in
 attestation-gated deployment~\cite{binauthz} re-check the artifact-policy
 slice after admission. These supply, respectively, our T1 evaluation
 semantics, part of T4's observation, and a one-tier precedent for continuous
-re-evaluation. What none provides is the \emph{approved-state reference}:
+re-evaluation. Commercial continuous-compliance and CSPM products may
+integrate several of these signals, but their native decision object remains
+current state versus current rule or benchmark; this is not an exhaustive
+feature audit. What the documented mechanisms do not provide is the
+\emph{approved-state reference}:
 they compare state against current policy, not against the basis under which
 the state was admitted, so they cannot distinguish ``was never compliant''
 from ``was admitted legitimately and the world moved''---the distinction
 carrying the remediation semantics of \cref{sec:model-vector}, and the
 defining relation of governance drift.
+Runtime compliance-monitoring research systematically studies rule
+evaluation over process-event streams and fine-grained violation feedback
+\cite{ly2015compliance}. That literature supplies monitoring languages and
+execution semantics; its native reference is a compliance rule or process
+model, not a deployment-specific immutable admission event. The distinction
+is complementary rather than competitive: such monitors can implement T1,
+while $B_x(t)$ determines why the same current violation is classified as
+post-admission drift rather than absence of an admitted basis.
 
 \subsection{Supply-Chain Integrity and Authorization Evidence}
 Attestation frameworks bind artifacts to build and review
@@ -78,14 +90,18 @@ verification; governance drift adds the post-admission temporal dimension
 (validity windows, revocation, supersession) and the join against
 $\Gapp$. Records-side, durable approval evidence and transparency
 services~\cite{scitt2025,provdm,cloudtrail} determine whether the evaluator's
-verdicts are decidable at all---our $\devd$ component and GCC metric make
+verdicts are decidable at all---our observability mask and GCC metric make
 that dependence explicit rather than assumed.
 
 \subsection{Access Control, Runtime Verification, and Drift Theory}
-Temporal validity of authorization has deep roots in access-control
-theory~\cite{sandhu1996,clark1987} and zero-trust's continuous-evaluation
-stance~\cite{nist800207}; governance drift operationalizes ``continuous''
-for the deployment-governance plane. Runtime
+Temporal validity of authorization has deep roots in temporal authorization
+and role models~\cite{bertino1994temporal,bertino2001trbac}, while usage
+control adds ongoing decisions, mutable attributes, obligations, and
+conditions~\cite{park2004ucon,schoepp2023usage}. These works justify the
+one-shot/continuing distinction rather than leaving validity as a Boolean.
+Classical access-control theory~\cite{sandhu1996,clark1987} and zero-trust's
+continuous-evaluation stance~\cite{nist800207} provide the broader foundation;
+governance drift applies it to deployment admission history. Runtime
 verification~\cite{leucker2009,pnueli1977} monitors executions against
 temporal specifications; our evaluator is kin---governance consistency is a
 safety-style property over joined state and context streams---but the
@@ -97,11 +113,15 @@ data streams, not divergence from an approval basis; we flag it to prevent
 terminological import of its detectors, which answer a statistical question
 ours does not ask. Industry usage of ``governance'' alongside drift
 management~\cite{industrydrift} treats governance as the program that
-suppresses configuration drift; we are aware of no prior formal treatment of
+suppresses configuration drift; we found no documented formal treatment of
 drift \emph{of} the governance relation itself, and a term search (queries \texttt{"governance drift"} alone and with
 \texttt{cloud}, \texttt{infrastructure}, \texttt{configuration}; ACM DL,
 IEEE Xplore, general scholarly indices; August 2026) found the compound used
 in internet-governance and organizational senses unrelated to this object.
+We therefore narrow the novelty claim to what this review supports: we found
+no documented work that jointly formalizes current operational state, evolving
+governance context, and an immutable admitted basis as a class-resolved
+post-admission relation.
 
 \subsection{Novelty, Answered Directly}
 \emph{Is this just configuration drift?} No---with the argument's weight
@@ -126,11 +146,12 @@ Per tier, largely yes---and we credit it: Kyverno-style background scanning
 continuously re-evaluates resources against current policy (T1);
 configuration recorders and posture management watch unmanaged resources
 (much of T4); continuous validation re-checks artifact policy (part of
-T3)~\cite{kyverno,awsconfig,cspm,binauthz}. Six of our nine scenarios
-trigger \emph{some} existing detector. What no deployed mechanism provides
-is the join against the admitted basis with validity clocks and
+T3)~\cite{kyverno,awsconfig,cspm,binauthz}. Several of our scenarios
+trigger \emph{some} existing detector. We found no documented mechanism that
+provides the complete join against the admitted basis with mode-aware validity and
 class-resolved verdicts---the increment that turns ``a scanner fired'' into
 ``this running state is no longer covered by what admitted it, for this
 reason, with this remediation family.'' That increment is architectural and,
 we argue, decision-relevant; quantifying its operational value on real
-estates is exactly what the laboratory and its LH1--LH4 exist to test.
+estates remains future field work. The present laboratory tests only the
+three hypotheses stated in \cref{sec:lab}.

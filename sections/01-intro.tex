@@ -27,12 +27,13 @@ operational state has diverged not from its manifest but from the state,
 policy context, authorization basis, and intent \emph{under which it was
 approved}.
 
-The distinction is not terminological. Configuration drift is a relation
+The distinction is not terminological. Configuration drift is a
+\emph{two-place, memoryless} relation
 between two configurations---desired and observed---and is therefore decidable
 by comparison, which is exactly what reconcilers and drift
-tools~\cite{awsconfig,driftctl} implement. Governance drift is a relation
-between the present state and a \emph{past approval event together with its
-evolving context}, and we establish the separation in two complementary
+tools~\cite{awsconfig,driftctl} implement. Governance drift is a
+\emph{three-place, history-anchored} relation among present state, evolving
+context, and an immutable admitted basis; we establish the separation in two complementary
 forms: constructed, tool-realizable counterexamples, and a
 definitional-dependency result showing that no detector whose inputs are
 configuration pairs---however sophisticated its diffing---can decide
@@ -46,32 +47,32 @@ Our executed study makes the separation concrete. We implement a
 governance-drift detector evaluated at cumulative evidence tiers---%
 configuration comparison; plus policy re-evaluation; plus authorization
 records with validity semantics; plus artifact lineage; plus environment
-inventory against recorded assumptions---against nine injected drift
-scenarios (including evidence decay) and a no-drift control containing both
+inventory against recorded assumptions---against twelve injected drift
+scenarios (including compound drift and evidence decay) and a no-drift control containing both
 runtime churn and \emph{benign governance churn} (satisfied policy
 revisions, approved updates, hygienic exceptions), under a counterfactual
 scoring rule that credits information rather than alarm volume. The result is
 a strict detectability staircase (\cref{tab:matrix}): normalized
-configuration comparison detects exactly one scenario of nine; each evidence
+configuration comparison detects exactly one scenario of twelve; each evidence
 tier detects precisely the scenarios whose deciding facts it carries; the
 governance tiers achieve zero false alarms \emph{earned against} governance
-churn; and an unnormalized comparator alarms on 71\% of benign control
-events while carrying no information about seven of the nine governance
-scenarios.
+churn. A deliberately naive unnormalized comparator is retained only as a
+scoring diagnostic, not as a production baseline.
 
 \subsection{Research Questions}
 \begin{description}[leftmargin=3.2em,itemsep=1pt,topsep=2pt]
-\item[RQ:] Can divergence between approved intent and operational reality be
+\item[RQ0:] Can divergence between approved intent and operational reality be
 formally represented and measured as governance drift?
 \item[RQ1:] Which forms of governance drift occur in cloud-native systems?
-\item[RQ2:] Can governance drift be detected using existing control-plane
-evidence?
+\item[RQ2:] Can governance drift be detected using existing operational,
+governance, and control-plane evidence streams?
 \item[RQ3:] How quickly does governance drift become visible?
 \item[RQ4:] Which forms of drift are detectable through configuration
 comparison alone, and which require authorization or evidence context?
 \end{description}
 
-RQ1 is answered by the taxonomy and scenario catalog
+RQ0 is answered by the formal model and the combined analytic and empirical
+results. RQ1 is answered by the taxonomy and scenario catalog
 (\cref{sec:taxonomy,sec:study}); RQ2 and RQ4 by the dependency result (\cref{prop:impossible}), the tiered architecture (\cref{sec:architecture}),
 the executed detectability study (\cref{sec:study}), and the bounded live
 laboratory (\cref{sec:lab}); RQ3 by the study's event-time measurements and
@@ -81,14 +82,15 @@ time-to-evidence observations across three polling cadences.
 \subsection{Contributions and Epistemic Status}
 \begin{enumerate}[label=\textbf{C\arabic*.},leftmargin=2.2em,itemsep=1.5pt,topsep=2pt]
 \item \textbf{Taxonomy} (conceptual): formal definitions separating
-configuration, policy, authorization, intent, evidence, and environment
-drift, with governance drift as their aggregate---and with the explicit
+five substantive components---configuration, policy, authorization, intent,
+and environment---plus transversal epistemic evidence drift, with governance
+drift as their umbrella---and with the explicit
 commitment that governance drift must not, and provably does not, reduce to
 configuration drift (\cref{sec:taxonomy}).
-\item \textbf{Formal model} (conceptual/analytic): approved-state snapshot
-$\Gapp(t_0)$, observed state $\Gobs(t)$, time-indexed governance contexts
-$\Pol(t), \Auth(t), \Int(t)$, and a component-wise governance-distance vector
-$\GD(t)$, with a reasoned rejection of a primitive scalar distance
+\item \textbf{Formal model} (conceptual/analytic): an immutable sequence of
+approved-state snapshots, observed state $\Gobs(t)$, time-indexed governance contexts
+$\Pol(t), \Auth(t), \Int(t)$, and a component-wise governance-divergence vector
+$\GDsub(t)$ plus an observability mask $\ObsMask(t)$, with a reasoned rejection of a primitive scalar distance
 (\cref{sec:model}).
 \item \textbf{Separation results} (analytic): constructed counterexamples and
 a definitional-dependency proposition establishing that configuration
@@ -96,12 +98,15 @@ equality does not imply governance consistency and that no configuration-pair
 detector decides it---deliberately elementary, and billed as such
 (\cref{sec:taxonomy,sec:model}).
 \item \textbf{Detection architecture} (design): a vendor-neutral tiered
-architecture mapping each drift class to the minimal evidence tier that
-decides it (\cref{sec:architecture}).
-\item \textbf{Executed detector study} (empirical, closed-world): nine
+architecture mapping each component to a sufficient evidence tier, together
+with indistinguishable-world constructions proving tier minimality
+(\cref{sec:architecture,prop:tier-minimality}).
+\item \textbf{Executed detector study} (empirical, closed-world): twelve
 scenarios $\times$ six detector tiers $\times$ twenty seeds, with
-counterfactual scoring, class-set ground truth, and a control containing
-runtime \emph{and} benign governance churn; all code and data released,
+counterfactual scoring, full-vector ground truth, three compound scenarios,
+exact-set and Hamming scoring, an independent composite baseline without the
+admitted-basis join, and a control containing
+runtime \emph{and} benign governance churn; all code and data packaged,
 matrix generated programmatically (\cref{sec:study}). Its role is precisely
 scoped: it validates that the reference semantics realize the model's
 dependency structure and quantifies noise behavior; it is not field evidence,
@@ -110,10 +115,12 @@ and it makes no claim about any real cluster.
 pinned Kind/Flux/Kyverno stack, local Git and OCI services, approved-state
 recorder, tiered evaluator, and executable injections for S1--S9. In one
 hundred eighty controlled injections (20 per scenario), three randomized-phase
-polling cadences produced 538/540 detections and 100\% conditional
-classification accuracy; 20 balanced benign-change windows produced zero
-alarms in 543 polls (\cref{sec:lab}). The execution establishes bounded
-realizability and within-laboratory behavior, not natural occurrence,
+polling cadences produced 538/540 detections and 100\% conditional exact-set
+accuracy; 20 balanced benign-change windows produced zero
+alarms in 543 polls (\cref{sec:lab}). A secondary S10--S12 extension reached
+the exact vector in 45/45 cadence observations; six 300-s benign windows
+added 4,680 polls without substantive or epistemic alarms. The execution
+establishes bounded realizability and within-laboratory behavior, not natural occurrence,
 prevalence, production effectiveness, stream-loss reliability, or transfer.
 \end{enumerate}
 

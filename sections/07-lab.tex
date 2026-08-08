@@ -4,10 +4,22 @@
 The closed-world study fixes semantics; a live stack tests whether the
 declared classes and evidence dependencies are concretely realizable through
 control-plane interfaces. We therefore executed a repeated laboratory over
-all nine scenarios and six benign controls. Its purpose is deliberately
+the nine atomic scenarios and six benign controls, followed by a smaller
+compound-vector extension and a 30-minute benign soak. Its purpose is deliberately
 bounded: realizability and within-laboratory detector behavior on one pinned
 stack. It is not evidence of natural occurrence, field prevalence,
 production effectiveness, or transfer across organizations.
+
+\subsection{Laboratory Hypotheses}
+The experiment tests three predeclared, falsifiable hypotheses.
+\textbf{LH1 (realizability):} each injected scenario, when observed at or
+above its predicted minimum evidence tier, yields exactly the class set in
+the model. \textbf{LH2 (cadence sensitivity):} a transient drift interval can
+be missed when its dwell time is shorter than the evaluator cadence.
+\textbf{LH3 (specificity within scope):} admitted-basis-preserving changes in
+the six benign families produce neither substantive drift nor epistemic
+warnings. These are laboratory hypotheses, not prevalence or cross-platform
+claims.
 
 \subsection{Build and Reproducibility Boundary}
 A single-node Kind~v0.32.0 cluster running Kubernetes~v1.36.1~\cite{kind}
@@ -20,17 +32,38 @@ images, and records platform versions. An approved-state recorder snapshots
 $\Gapp$: manifest, resolved pod-image digest, policy pin, approval JSON with
 validity window, Git revision, and declared environment assumptions. The
 dependency-free evaluator reads Kubernetes, Git, Kyverno PolicyReports,
-file-backed approvals, pod image IDs, and the file-backed inventory through
+file-backed live authorization status, pod image IDs, and the file-backed inventory through
 tier-restricted entry points T0n--T4. The bootstrap, injections, repeated
 harness, evaluator, raw observations, controls, and generated tables ship
 under \texttt{lab/}.
+The baseline deployment uses a continuing approval: its immutable proof is
+captured in $B_x(t)$, while the live JSON supplies current administrative
+status; S9 removes the latter and therefore makes continuing validity
+undecidable. In this bounded implementation, stream health and syntactic completeness are
+checked at read time and resource names provide subject linkage; local files
+are trusted sources, so cryptographic source authentication and independent
+freshness attestations remain outside the executed contract. The reference semantics are explicit: T0n compares the declared image
+reference (including its tag) as configuration, while T3 resolves the running
+\texttt{imageID} digest and tests whether an applicable approval covers that
+digest. Thus re-tagging can remain configuration-consistent yet fail lineage.
+
+Measurements ran on an arm64 Apple M4 Max host with 48~GiB RAM and
+macOS~26.5.1, Docker~29.1.3, and Python~3.11.9. The Kind node reported 16
+CPUs and 8,024,028~KiB memory; Docker imposed no explicit per-container CPU
+or memory limit. No benchmark workload ran concurrently, but ordinary host
+background services were neither disabled nor load-controlled. Durations use
+Python's monotonic clock (\texttt{mach\_absolute\_time()}, reported resolution
+$4.17\times10^{-8}$~s), so wall-clock adjustment cannot invert intervals.
+These conditions make the reported seconds interpretable as measurements of
+this host, not portable performance guarantees; the machine-readable snapshot
+is stored with the observations.
 
 \subsection{Protocol and Four Clocks}
 For each repetition, a seeded shuffle changes scenario order. Before every
 injection, the harness restores the approved Git revision, policy $\pi_7$,
 approval record, artifact tag, deployment, and inventory, and requires T4 to
 return \emph{consistent}. Each S1--S9 scenario is executed 20 times. Three
-logical evaluators observe the same injection at cadences 0.5, 2, and 10~s;
+logical full-vector evaluators observe the same injection at cadences 0.5, 2, and 10~s;
 their first post-onset phase is sampled independently and deterministically
 from $[0,c)$ for cadence $c$, after which they poll every $c$ seconds. Thus a
 latency below 0.5~s is possible when the first scheduled poll falls shortly
@@ -38,9 +71,16 @@ after onset; 0.5~s is a cadence, not a measurement-resolution floor. We
 report two decimal places and retain higher-resolution raw clocks only for
 recalculation.
 
+The experimental unit is the injected scenario repetition (180 units: 20 per
+scenario). The 540 cadence-specific observations are correlated repeated
+measurements over those same injections, not 540 independent experiments.
+We therefore report Wilson intervals separately by cadence and use a seeded
+nonparametric bootstrap that resamples the 180 injections as clusters for the
+aggregate rate.
+
 The harness records four timestamps: command initiation
 $t_{\mathrm{inject}}$, operational inconsistency
-$t_{\mathrm{onset}}$, first tier-appropriate verdict
+$t_{\mathrm{onset}}$, first non-consistent full-vector verdict
 $t_{\mathrm{detect}}$, and completion of the minimal JSON evidence bundle
 $t_{\mathrm{evidence}}$. It reports actuation, DDL, end-to-end latency, and
 TTE exactly as defined in \cref{met:ddl}. For command-carried mutations,
@@ -54,17 +94,21 @@ assembly in this reference implementation is synchronous with verdict
 serialization, so TTE and DDL are nearly identical; this does not estimate
 retrieval delay for a platform-scale evidence service.
 
-Ground truth is a set. S6 is $\{\text{intent},\text{authorization}\}$; the T2
-evaluator's first-priority verdict is intent, which is scored as a member of
-that set rather than by simplifying the ground truth. Detection rate (DR)
-counts a non-consistent verdict before the 180-s timeout. Classification
-accuracy (CA) is conditional on detection.
+Ground truth is a set. S6 is $\{\text{intent},\text{authorization}\}$; T2
+can expose the intent component, while T3 lineage is required to decide its
+authorization component. Every live observation is therefore evaluated at
+T4 and compared as a complete set; the recorded tier is the minimum predicted
+to decide that scenario. The priority-ordered first verdict is retained only
+as an operational interface. Detection rate (DR) counts a non-consistent or
+undecidable verdict before the 180-s timeout. Exact-set accuracy (ESA) requires
+equality of the complete observed and expected sets, conditional on detection;
+we also report per-component precision/recall and Hamming loss.
 
 \begin{table*}[t]
 \centering
 \caption{Repeated Live-Stack Results at the Default 0.5-s Cadence (20 Runs
 per Scenario). Expected Is a Class Set; ``First Verdict'' Is the Evaluator's
-Priority-Ordered Output. DR and CA Are Percentages. Act., DDL, P95 DDL,
+Priority-Ordered Output. DR and ESA Are Percentages. Act., DDL, P95 DDL,
 End-to-End (E2E), and TTE Are Seconds; All Except P95 Are Medians.}
 \label{tab:lab-results}
 \scriptsize
@@ -73,40 +117,67 @@ End-to-End (E2E), and TTE Are Seconds; All Except P95 Are Medians.}
 
 \subsection{Detection, Classification, and Cadence}
 At the default 0.5-s cadence, all 180 injections were detected and all
-detected verdicts belonged to their expected class sets
+detected vectors exactly matched their expected class sets
 (\cref{tab:lab-results}). The separation of clocks changes the interpretation
-materially. For S6, median actuation was 10.05~s, median DDL 0.47~s, and
-median end-to-end latency 10.52~s. The former one-pass value around 7~s was
-therefore not detector latency. Conversely, S3 had median actuation 0.15~s
-but median DDL 7.98~s (P95 10.25~s), exposing the background-policy path.
+materially. For S6, median actuation was 10.05~s, median DDL 0.54~s, and
+median end-to-end latency 10.50~s. The former one-pass value around 7~s was
+therefore not detector latency. Conversely, S3 had median actuation 0.13~s
+but median DDL 9.68~s (P95 10.38~s), exposing the background-policy path.
 
 Across all cadences, 538 of 540 observations produced a verdict, and all 538
-detected observations were classified correctly. Both misses were S1 in the
+detected vectors exactly matched their expected sets. Both misses were S1 in the
 same repetition: the 0.5-s evaluator observed the manual mutation, but Flux
 reconciled it before the first 2-s and 10-s polls. This is not discarded as
 an outlier. It demonstrates the cadence limit predicted by \textbf{LH2}:
-polling a transient relation can miss it even when classification is perfect
+polling a transient relation can miss it even when exact-set identification is perfect
 when observed.
+
+At 0.5~s, detection was 180/180 (Wilson 95\% CI 97.91--100\%); at both
+2 and 10~s it was 179/180 (96.92--99.90\%). Resampling complete
+three-cadence injection clusters gives 99.63\% aggregate detection with a
+95\% percentile-bootstrap interval of 98.89--100\% (50,000 resamples,
+seed 20260807). These intervals quantify repeated behavior in this protocol;
+they are not confidence intervals for production effectiveness. For a single
+transient of duration $\tau$ sampled with uniformly random phase at cadence
+$c$, the idealized miss probability is
+$\max(0,1-\tau/c)$; a production miss percentage additionally requires the
+field distribution of $\tau$, which this study does not estimate.
+
+Across all 540 observations, exact-set accuracy was 99.63\% and Hamming loss
+was 0.000617. The two missed S1 labels account for all error: configuration
+recall was 96.7\%; precision for every output and recall for policy,
+authorization, intent, evidence, and environment were 100\%
+(\cref{tab:lab-vector}).
 
 \begin{table}[t]
 \centering
-\caption{Cadence Sensitivity Across Nine Scenarios and 20 Repetitions. CA Is
+\caption{Cadence Sensitivity Across Nine Scenarios and 20 Repetitions. ESA Is
 Conditional on Detection; DDL Values Are Seconds.}
 \label{tab:lab-cadence}
 \footnotesize
 \resizebox{\columnwidth}{!}{\input{lab/results/table_cadence}}
 \end{table}
 
+\begin{table}[t]
+\centering
+\caption{Full-Vector Component Metrics Across All Cadences. Evidence Is the
+Epistemic Output Triggered by an Undecidable Substantive Component, Not a
+Sixth Substantive Distance.}
+\label{tab:lab-vector}
+\footnotesize
+\resizebox{\columnwidth}{!}{\input{lab/results/table_vector_metrics}}
+\end{table}
+
 \Cref{tab:lab-cadence} reports the aggregate effect. DR was 100.0\% at 0.5~s
-and 99.4\% at both 2 and 10~s. Conditional CA remained 100.0\%. Median DDL
-rose from 0.46 to 1.46 and 6.11~s as cadence widened; P95 rose from 8.06 to
-8.37 and 12.36~s. P95 is dominated partly by S3's PolicyReport delay rather
+and 99.4\% at both 2 and 10~s. Conditional ESA remained 100.0\%. Median DDL
+rose from 0.47 to 1.44 and 6.26~s as cadence widened; P95 rose from 10.08 to
+10.47 and 14.61~s. P95 is dominated partly by S3's PolicyReport delay rather
 than cadence alone, so these are distributions of the complete deciding
 paths on this laboratory, not calibrated evaluator-service times.
 
 \subsection{Benign Live-Stack Controls}
 The positive scenarios do not establish specificity. We therefore ran 20
-10.5-s drift-free windows, balanced round-robin across six controls:
+10.5-s drift-free windows (210~s total), balanced round-robin across six controls:
 satisfied policy revision (C1), rollback accompanied by approval for the new
 revision (C2), exception removal at expiry (C3), re-tag accompanied by
 approval for the new digest (C4), autoscaling replica change outside the
@@ -116,34 +187,98 @@ was evaluated at all three cadences.
 \begin{table}[t]
 \centering
 \caption{Benign Live-Stack Controls. ``Polls'' Sums All Three Cadences;
-Alarm Windows Counts Windows with at Least One Non-Consistent Verdict.}
+Alarm Windows Counts Windows with at Least One Substantive Drift Verdict;
+Epistemic Polls Count Honest \emph{Undecidable} Outputs Separately.}
 \label{tab:lab-controls}
 \footnotesize
 \resizebox{\columnwidth}{!}{\input{lab/results/table_controls}}
 \end{table}
 
-The controls produced 543 evaluator polls and zero alarms
+The controls produced 543 evaluator polls, zero substantive alarms, and zero
+epistemic warnings
 (\cref{tab:lab-controls}). This supports \textbf{LH3} within the declared
 projection: the evaluator did not simply classify every change as drift.
 It does not bound false-positive rates under untested production churn; with
 zero observed alarms, the defensible statement is $0/543$ polls and $0/20$
 windows, not a claim of zero population probability.
 
+\subsection{Compound Vectors and Extended Benign Soak}
+The primary campaign establishes each atomic class, but simultaneous changes
+can become observable at different times. We therefore added a predeclared
+secondary extension: five repetitions each of live S10 (policy supersession
+plus expired exception), S11 (artifact substitution plus environment
+change), and S12 (rollback plus missing live status for continuing authority),
+observed at the same three cadences. These 15 injections yield 45 correlated
+cadence observations. After the first non-consistent verdict, the harness
+continues polling until the complete expected class set appears or the 180-s
+timeout expires. We call the interval from onset to that event vector
+completion latency (VCL); DDL remains time to the first honest alert.
+
+\begin{table*}[t]
+\centering
+\caption{Secondary Compound-Scenario Extension Across Five Injections and
+Three Cadences per Scenario. DR and Exact Refer to the Final Vector; ``First
+Complete'' Is the Fraction Whose First Alert Already Contained That Vector.
+DDL and VCL Are Seconds.}
+\label{tab:lab-compound}
+\footnotesize
+\input{lab/results_extension/table_compound}
+\end{table*}
+
+All 45 observations detected drift and reached the exact expected final
+vector (\cref{tab:lab-compound}). S11 and S12 were complete at the first
+alert in 15/15 observations each. S10 was complete at the first alert in only
+4/15: exception expiry was immediately visible, whereas Kyverno's asynchronous
+background scan exposed the policy component later. Its median DDL was
+1.33~s, but median VCL was 7.88~s (P95 14.26~s). This is the intended result
+of retaining a vector over time: an early correct subset must not be mistaken
+for a complete diagnosis.
+
+The extension then ran one 300-s window for each benign control, 1,800~s in
+total. The three cadences produced 4,680 evaluator polls, zero substantive
+alarms, and zero epistemic warnings. The experimental units are the six
+windows, not the correlated polls; the defensible statement remains the
+observed $0/6$ windows and $0/4{,}680$ polls. The longer soak improves
+coverage of sustained benign operation but still does not estimate a
+production false-alarm probability or exercise high-volume concurrent churn.
+
+\subsection{Fault-Contract Checks}
+The healthy-stream campaign is complemented by 15 deterministic evaluator
+contract tests. They inject a control-plane/API outage, malformed
+PolicyReport payload, missing approval basis, missing environment inventory,
+an uncovered running artifact digest, duplicate valid approval, authenticated
+retroactive revocation, and one-shot versus continuing authority under
+missing live status. Five adapter-envelope checks additionally accept a fresh
+ordered record and reject stale, excessively delayed, reordered, or
+subject-mismatched evidence. Outage, malformed
+policy evidence, and missing approval or inventory produce \emph{undecidable}
+for exactly the affected components;
+the fresh but uncovered digest produces authorization drift; and duplication is idempotent.
+These tests verify fail-closed epistemic and transport-boundary semantics,
+not delay distributions or reliability under a real faulty transport. They are executable with
+\texttt{PYTHONPATH=lab python3 -m unittest lab/test\_evaluator\_contract.py}.
+
 \subsection{Evidence Boundary and Refutation Conditions}
 The repeated execution strengthens the earlier one-pass realizability check
 but remains controlled and single-cluster. It uses injected scenarios,
 file-backed approval and environment streams, a single deployment, no
-concurrent workload churn during positive injections, and no induced stream
-loss or API saturation. It estimates a distribution only for this pinned
-laboratory protocol.
+concurrent workload churn during positive injections, and only a 30-minute
+benign soak. The evaluator degrades unavailable PolicyReport, approval, lineage, and
+inventory evidence to \emph{undecidable}; however, this campaign does not
+estimate reliability under real delayed, reordered, or lossy transports, API
+saturation, or stale-cache races; only deterministic adapter contracts cover
+those temporal cases. It estimates a distribution only for this
+pinned laboratory protocol. A second reconciler/policy-engine stack and
+production-backed approval and inventory services remain external-validity
+work rather than claims smuggled into this execution.
 
 The expected tier/class shape appeared whenever an injection was observed,
-supporting the realizability part of \textbf{LH1}. The two S1 misses support
+including every compound extension, supporting \textbf{LH1}. The two S1 misses support
 the cadence-bounded qualification in \textbf{LH2} and refute any stronger
 claim of cadence-independent detection. Zero alarms in the six benign change
-families support \textbf{LH3} within scope. \textbf{LH4} remains open: the
-minimal evidence bundle is constructed synchronously after verdict, so this
-laboratory does not test a separate, platform-bound evidence retrieval path.
-Misclassification of an observed higher-tier scenario, alarms under these
+families support \textbf{LH3} within scope. The minimal evidence bundle is
+constructed synchronously after verdict, so this laboratory does not test a
+separate, platform-bound evidence retrieval path.
+Incorrect exact-set output for an observed higher-tier scenario, alarms under these
 benign controls, or a repeatable class requiring less evidence than
 \cref{prop:tiers} states would refute the corresponding claims.

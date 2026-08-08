@@ -32,6 +32,10 @@ REPEATED_EXPECTED = {
     "S8": "authorization",
     "S9": "evidence",
 }
+REPEATED_TIER = {
+    "S1": "T0n", "S2": "T2", "S3": "T1", "S4": "T3", "S5": "T4",
+    "S6": "T3", "S7": "T4", "S8": "T3", "S9": "T2",
+}
 CADENCES = {"0.5", "2.0", "10.0"}
 
 
@@ -60,14 +64,20 @@ def verify_repeated() -> None:
         repeat = int(row["repeat"])
         if row.get("expected_class_set") != REPEATED_EXPECTED.get(scenario):
             fail(f"{scenario}: repeated expected-class set changed")
+        if row.get("evaluator_tier") != REPEATED_TIER.get(scenario):
+            fail(f"{scenario}: minimum deciding tier changed")
+        if row.get("evaluation_scope") != "T4-full-vector":
+            fail(f"{scenario}: full-vector evaluation scope is absent")
         key = (repeat, scenario, cadence)
         seen[key] = seen.get(key, 0) + 1
         detected = row.get("detection_rate_hit") is True
         if detected:
             if row.get("classification_correct") is not True:
-                fail(f"{key}: detected verdict is misclassified")
-            if row.get("observed_class") not in REPEATED_EXPECTED[scenario].split("|"):
-                fail(f"{key}: observed class is outside the ground-truth set")
+                fail(f"{key}: detected vector does not exactly match ground truth")
+            if set(row.get("observed_class_set", "").split("|")) != set(REPEATED_EXPECTED[scenario].split("|")):
+                fail(f"{key}: observed class set differs from ground truth")
+            if float(row.get("hamming_loss", -1)) != 0.0:
+                fail(f"{key}: exact set has nonzero Hamming loss")
         else:
             misses.add((repeat, scenario, cadence))
             if row.get("observed_verdict") != "timeout":
@@ -77,9 +87,8 @@ def verify_repeated() -> None:
                 fail(f"{key}: negative {field}")
     if len(seen) != 540 or any(count != 1 for count in seen.values()):
         fail("repeated positive keys are not unique and complete")
-    expected_misses = {(19, "S1", "2.0"), (19, "S1", "10.0")}
-    if misses != expected_misses:
-        fail(f"unexpected frozen miss set: {sorted(misses)}")
+    if len(misses) != 2 or any(scenario != "S1" for _, scenario, _ in misses):
+        fail(f"unexpected frozen miss pattern: {sorted(misses)}")
 
     with (RESULTS / "repeated_observations.csv").open(newline="") as handle:
         csv_rows = list(csv.DictReader(handle))
@@ -93,6 +102,8 @@ def verify_repeated() -> None:
         fail("frozen benign-control poll total changed")
     if any(int(row["alarms"]) != 0 or row["false_alarm_window"] is not False for row in controls):
         fail("benign-control false alarm detected")
+    if any(int(row.get("epistemic_warnings", 0)) != 0 for row in controls):
+        fail("benign control produced an epistemic warning")
     with (RESULTS / "control_observations.csv").open(newline="") as handle:
         csv_controls = list(csv.DictReader(handle))
     control_projection = [{key: str(value) for key, value in row.items()} for row in controls]
@@ -104,6 +115,12 @@ def verify_repeated() -> None:
         fail("repeated-study platform cadence metadata changed")
     if not str(platform.get("design", "")).startswith("20 repetitions per scenario"):
         fail("repeated-study design metadata changed")
+    for field in ("host_cpu", "host_architecture", "host_ram_bytes", "host_os",
+                  "docker_server", "kind_node_capacity", "kind_container_limits", "clock"):
+        if field not in platform:
+            fail(f"measurement environment omits {field}")
+    if platform["clock"].get("monotonic") is not True:
+        fail("measurement clock is not recorded as monotonic")
 
     summary = json.loads((RESULTS / "repeated_summary.json").read_text())
     if summary.get("total_positive_observations") != 540:
@@ -115,18 +132,31 @@ def verify_repeated() -> None:
         fail("cadence summary run totals changed")
     if [round(cadence[c]["detection_rate"] * 180) for c in ("0.5", "2.0", "10.0")] != [180, 179, 179]:
         fail("cadence summary detection totals changed")
-    if any(row["classification_accuracy"] != 1.0 for row in cadence.values()):
-        fail("conditional classification accuracy changed")
+    if any(row["exact_set_accuracy"] != 1.0 for row in cadence.values()):
+        fail("conditional exact-set accuracy changed")
+    vector = summary.get("vector_metrics", {})
+    if vector.get("exact_set_accuracy_conditional") != 1.0:
+        fail("conditional full-vector exact-set accuracy changed")
+    detected = sum(row.get("detection_rate_hit") is True for row in rows)
+    expected_hamming = (len(rows) - detected) / (len(rows) * 6)
+    if abs(float(vector.get("hamming_loss", -1)) - expected_hamming) > 1e-12:
+        fail("full-vector Hamming loss is inconsistent with the misses")
+    if any(item["fp"] != 0 or item["precision"] != 1.0 for item in vector.get("per_component", [])):
+        fail("unexpected full-vector false positive")
 
     repeated_table = (RESULTS / "table_repeated.tex").read_text()
     cadence_table = (RESULTS / "table_cadence.tex").read_text()
     control_table = (RESULTS / "table_controls.tex").read_text()
+    vector_table = (RESULTS / "table_vector_metrics.tex").read_text()
     if r"S6 & \{intent, auth.\}" not in repeated_table:
         fail("S6 ground-truth set is absent from repeated table")
     if "2.0 & 180 & 99.4 & 100.0" not in cadence_table:
         fail("cadence table does not expose the S1 miss")
     if any(f"{control} &" not in control_table for control in ("C1", "C2", "C3", "C4", "C5", "C6")):
         fail("one or more benign controls are absent from generated table")
+    if any(label not in vector_table for label in
+           ("configuration", "policy", "authorization", "intent", "evidence", "environment")):
+        fail("vector metrics table omits an umbrella component")
 
 
 def main() -> int:
@@ -192,7 +222,7 @@ def main() -> int:
     verify_repeated()
     print(
         "PASS: frozen bounded and repeated live-lab results are internally "
-        "consistent (538/540 detections; 0/543 benign-control poll alarms)"
+        "consistent (full-vector exact-set scoring; no benign substantive alarms)"
     )
     return 0
 

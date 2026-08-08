@@ -14,6 +14,7 @@ cat > "$RUNTIME/approvals/EXC-1.json" <<EOF
 {
   "id": "EXC-1",
   "kind": "emergency-exception",
+  "mode": "temporary-exception",
   "subject": "deployment/payments",
   "basis": "incident-4711",
   "granted_utc": $NOW,

@@ -3,35 +3,38 @@
 
 \Cref{prop:impossible,prop:tiers} together prescribe the architecture:
 governance-drift detection is configuration comparison \emph{plus} the
-minimal additional evidence streams, joined against the approved snapshot.
+minimal additional evidence streams, joined against the selected admitted basis.
 \Cref{fig:architecture} organizes it as cumulative tiers, each named for what
 it adds and each mapped to the drift classes it first decides.
 
-\begin{figure}[t]
+\begin{figure*}[t]
 \centering
-\resizebox{\columnwidth}{!}{\input{figs/fig-architecture}}
-\caption{Tiered governance-drift detection. The approved-state snapshot
-(left) is recorded at admission. Evidence tiers (center) cumulatively widen
+\resizebox{0.93\textwidth}{!}{\input{figs/fig-architecture}}
+\caption{Tiered governance-drift detection. The append-only recorder (left)
+preserves successive approvals and selects $B_x(t)$. Evidence tiers (center) cumulatively widen
 the detector's vocabulary: T0/T0n configuration comparison (the reconciler's
 existing loop, naive or churn-normalized), T1 policy-version stream, T2
 authorization records with validity semantics, T3 artifact lineage, T4
 environment inventory. The evaluator (right) recomputes the component
-distances of \cref{sec:model-distance} continuously and emits classed drift
-verdicts with the remediation family each class implies. Annotations show
-which of Scenarios S1--S8 each tier first detects, as measured in
+divergences of \cref{sec:model-distance} continuously and emits classed drift
+vectors plus an epistemic mask, with a priority projection and the remediation
+family each component implies. Stream adapters also report the presence,
+completeness, freshness, integrity, authenticity, subject linkage, and health
+required by each component's evidence contract. Annotations show which components of
+Scenarios S1--S9 each tier first detects, as measured in
 \cref{sec:study}.}
 \label{fig:architecture}
-\end{figure}
+\end{figure*}
 
 \subsection{Components}
-\textbf{Approved-state recorder.} At admission, snapshot
-$\Gapp(t_0)$---manifest content, \emph{resolved} digests, policy-version pin,
-authorization records with windows, intent linkage, environment
+\textbf{Approved-state recorder.} At every approval, append an immutable
+snapshot to $\Gapp^x$---manifest content, \emph{resolved} digests, policy-version pin,
+immutable authorization proof with execution times, intent linkage, environment
 assumptions---and persist it durably and independently of the delivery
 platforms. This is the architecture's one hard prerequisite: without a
 recorded approval basis there is nothing to drift \emph{from}; where such
 records are absent or decayed, drift verdicts degrade to undecidable
-($\devd$), which the evaluator must report as such rather than as
+(the corresponding entries of $\ObsMask$ are zero), which the evaluator must report as such rather than as
 consistency.
 
 \textbf{Evidence tiers.}
@@ -42,8 +45,8 @@ the naive form is unusable as a governance signal.
 \emph{T1}: the policy-version stream from the policy engine's
 repository~\cite{opa,kyverno}; the evaluator re-evaluates the running state
 against $\Pol(t)$ and compares with the pinned basis.
-\emph{T2}: authorization records with validity semantics---expiry, scope,
-revocation---so that exceptions and approvals are objects with clocks, not
+\emph{T2}: authorization records with mode and validity semantics---expiry,
+scope, prospective or retroactive revocation---so that exceptions and approvals are objects with clocks, not
 booleans; ITIL-style change records~\cite{itil4} and platform approvals both
 map here.
 \emph{T3}: artifact lineage---digest-level linkage from running workloads to
@@ -51,7 +54,7 @@ approval subjects, the slice pioneered by supply-chain
 attestation~\cite{slsa,torres2019,newman2022,binauthz}.
 \emph{T4}: environment inventory---observation of the unmanaged properties
 assumed at approval (IAM scope, exposure) and comparison against the
-\emph{recorded} assumptions $\sigma_0$ in $\Gapp$, from cloud inventories,
+\emph{recorded} predicates $\sigma_B$ in $B_x(t)$, from cloud inventories,
 audit streams, and telemetry correlation~\cite{cloudtrail,cspm,otel}.
 Mechanically this is baseline comparison---CSPM's move---and we say so
 plainly; the difference is the reference (the approval event's recorded
@@ -64,6 +67,35 @@ than full re-scans---governance drift, unlike configuration drift, is mostly
 \emph{event-driven} on the governance plane, which is why several scenarios
 in \cref{sec:study} are detectable with zero latency at the tier that
 carries the relevant event.
+
+\textbf{Analytic scaling envelope.} For $n$ deployments with at most $r$
+policy predicates, $a$ relied-upon instruments, $d$ running digests, and $q$
+environment predicates each, a full sweep is
+$O(n(r+a+d+q))$ time and stores $O(n(s+a+d+q))$ evidence for $s$ retained
+snapshots. The intended execution is incremental: policy-to-deployment,
+subject-to-approval, digest-to-workload, and predicate-to-resource indices
+restrict an event to its $k$ affected deployments, yielding
+$O(k(r+a+d+q))$ work. Policy results and immutable proofs are cacheable;
+evaluators can shard by cluster, namespace, or tenant. Kubernetes watches and
+batched cloud-inventory deltas avoid one API request per deployment. Cloud
+quotas and cache invalidation remain engineering constraints, not measured
+results; this laboratory does not claim a throughput bound.
+
+\textbf{Minimal adoption path.} The smallest useful deployment is
+T0n+T1+T2: normalize the reconciler comparison, re-evaluate running state
+under current policy, and join durable approvals and exceptions with explicit
+validity semantics. This separates operational, compliance, and authorization
+risk immediately; T3 adds digest lineage and T4 adds declared environment
+predicates as evidence maturity grows. GCC is reported from the first rollout
+so unevaluable coverage is visible rather than treated as conformance.
+
+For legacy workloads, a discovery pass may create a signed
+\emph{retrospective baseline} from current state, current policy results, and
+an accountable owner's attestation. It is timestamped and labeled as
+reconstructed evidence---never represented as a historical approval---and
+GCC remains partial for facts that cannot be recovered. New changes then enter
+the ordinary append-only path, allowing coverage to increase without
+rewriting the estate's past.
 
 \subsection{Relation to Existing Mechanisms}
 The architecture is deliberately assembled from streams that already exist in
@@ -78,9 +110,9 @@ tooling, and the architecture credits it explicitly: Kyverno's background
 scanning re-evaluates existing resources against current policy (our
 T1)~\cite{kyverno}; configuration recorders track unmanaged resources
 (much of T4)~\cite{awsconfig,cspm}; continuous validation re-checks
-artifact policy (part of T3)~\cite{binauthz}. What no deployed mechanism
-provides, to our knowledge, is the join: all tiers evaluated against the
-\emph{admitted basis} $\Gapp$, with validity clocks on the authorization
+artifact policy (part of T3)~\cite{binauthz}. We found no documented mechanism
+that provides the complete join: all tiers evaluated against the
+\emph{admitted basis} $B_x(t)$, with mode-aware validity on the authorization
 itself, and verdicts that distinguish ``violates policy'' from ``was never
 approved'' from ``was admitted legitimately and the world moved''---the
 distinctions that determine remediation (\cref{sec:model-vector}). The
