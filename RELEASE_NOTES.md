@@ -7,7 +7,7 @@
   These activation/supersession checks are v1.6/B4 probes, not observations
   from the frozen primary live campaign.
 - Defines stable unit identity, atomic per-unit verdict bundles, admissible
-  temporal cuts, watermarks, skew/freshness bounds, and Stable-VCL; seven
+  temporal cuts, watermarks, skew/freshness bounds, and Stable-VCL; eight
   executable temporal-cut tests cover every rejection condition.
 - Adds a cumulative B0--B4 ablation: exact scenario-vector success rises from
   75.0% to 100% over 240 paired units, while ten targeted semantic probes
