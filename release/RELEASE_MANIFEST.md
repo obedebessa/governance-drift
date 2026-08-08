@@ -4,13 +4,13 @@
 - Concept DOI: `10.5281/zenodo.21841458`
 - Repository: `https://github.com/obedebessa/governance-drift`
 - Tag: `v1.6.0`
-- Scientific source-and-data commit: `fc6270e907b6bdf1cd9f22b5603a708ae6993816`
+- Scientific source-and-data commit: `266828938a82c79b7f71f03275124b2223ac337e`
 
 ## Release assets
 
 | File | SHA-256 |
 |---|---|
-| `governance-drift-v1.6.0-source.zip` | `93d1fe3285cc475bc392b3f75ddee8ad467d0e0daf4b049c22f28946b19f5e38` |
+| `governance-drift-v1.6.0-source.zip` | `6e0c7c5dff01989f5d5c03835089c5860c9a8c90f1550e3cff9ecc6157193e8a` |
 | `governance-drift-v1.6.0.pdf` | `db4e74d633ffa7244e687613f3772e5f7d4e18ba797c67c9b4d63eb1bdd92677` |
 | `governance-drift-v1.6.0-anonymous-artifact.zip` | `018ba9cdd963f8f5e8ac95f29811258e4c18d0217b7565ea26698cfde474aa08` |
 
