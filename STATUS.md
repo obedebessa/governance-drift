@@ -1,17 +1,16 @@
 # A09 — Situação editorial
 
 - **Título:** Governance Drift: Measuring Divergence Between Approved Intent and Operational Reality in Cloud-Native Systems
-- **Arquivo principal de trabalho:** `main.tex`; o PDF versionado v1.6.0 será
-  gerado somente após o congelamento e a verificação final.
+- **Arquivo principal de trabalho:** `main.tex`; PDF arquivado:
+  `output/pdf/governance-drift-v1.6.0.pdf`.
 - **Destino editorial:** ainda não definido.
 - **Estágio comprovado:** revisão científica e pacote de reprodutibilidade preparados; não submetido.
 - **Repositório público:** https://github.com/obedebessa/governance-drift
-- **Último arquivo permanente verificado:** v1.5.0,
-  https://doi.org/10.5281/zenodo.21845707
+- **Último arquivo permanente verificado:** v1.6.0,
+  https://doi.org/10.5281/zenodo.21847543
 - **DOI de conceito (todas as versões):** https://doi.org/10.5281/zenodo.21841458
-- **Versão:** candidata congelada v1.6.0, ainda sem tag; o DOI
-  `10.5281/zenodo.21847543` está reservado, mas não é ainda um registro público
-  ou citável;
+- **Versão:** v1.6.0, congelada sob a tag `v1.6.0` e o DOI
+  `10.5281/zenodo.21847543`;
   formaliza seleção por ativação, identidade estável, cortes temporais
   admissíveis, consistência e cobertura separadas e finalização por watermark.
   As sondas de ativação/supersessão pertencem à ablação B4 da v1.6, não à
@@ -42,7 +41,6 @@
   S4 usa o adaptador compartilhado, e intenção/ambiente não são avaliados.
   Alvos que acionam regras de parada não geram amostras admitidas.
 - **Limite empírico:** as execuções delimitadas demonstram realizabilidade semântica e comportamento dentro dos laboratórios; não demonstram ocorrência natural, prevalência, confiabilidade de produção, taxa universal de falso alarme ou transferência entre organizações.
-- **Próxima ação editorial:** passar o verificador agregado, gerar e verificar
-  PDF/pacote/hashes e somente então criar a tag e publicar o depósito reservado;
-  depois escolher o venue e adaptar formato, limite de páginas e bundle
-  anonimizado.
+- **Próxima ação editorial:** escolher o venue e adaptar apenas a camada de
+  formatação, o limite de páginas e o bundle anonimizado, preservando o texto e
+  a evidência congelados desta versão.

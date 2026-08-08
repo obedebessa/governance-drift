@@ -16,15 +16,13 @@ exact-set/per-component/Hamming metrics, three compound closed-world
 scenarios, immutable approval-snapshot history, authorization modes,
 component evidence contracts, formal hypotheses, clustered uncertainty, a
 separately implemented no-join baseline, a live compound-class-set extension,
-six five-minute benign windows, and a tier-minimality result. The version 1.6.0
-candidate adds activation-safe basis selection, admissible temporal cuts, a B0--B4
+six five-minute benign windows, and a tier-minimality result. Version 1.6.0
+adds activation-safe basis selection, admissible temporal cuts, a B0--B4
 ablation ladder, transition-inclusive controls, real-process trace auditing,
 a two-hop TCP fault campaign, in-memory scaling, and a live multi-Deployment
 adapter path, plus a bounded Argo CD/Gatekeeper cross-stack replication. The
-candidate results are frozen, but this remains an unpublished prerelease: no
-tag or public v1.6.0 archive is claimed until the PDF, source package, and
-release hashes pass final verification and the reserved Zenodo record is
-published.
+release results, source, manuscript, and integrity metadata are frozen under
+tag `v1.6.0` and archived at <https://doi.org/10.5281/zenodo.21847543>.
 
 ## Evidence boundary
 
@@ -158,19 +156,17 @@ tectonic -X compile main.tex
 
 ## Citation and release
 
-Candidate citation metadata is provided in `CITATION.cff`; draft Zenodo deposit
-metadata is in `.zenodo.json`. The frozen v1.6.0 candidate has no release tag
-or public version DOI. Zenodo has reserved `10.5281/zenodo.21847543` for this
-version, but that identifier is not yet a public or citable record. Version
+Citation metadata is provided in `CITATION.cff`; Zenodo deposit metadata is in
+`.zenodo.json`. Version 1.6.0 is archived at
+<https://doi.org/10.5281/zenodo.21847543> and corresponds to tag `v1.6.0`.
+Version
 1.0.0 remains permanently archived at
 <https://doi.org/10.5281/zenodo.21841459>; version 1.1.0 is archived at
 <https://doi.org/10.5281/zenodo.21842722>; version 1.2.0 is archived at
-<https://doi.org/10.5281/zenodo.21843860>. The concept DOI
-<https://doi.org/10.5281/zenodo.21841458> resolves to the latest version.
-Version 1.5.0 is archived at <https://doi.org/10.5281/zenodo.21845707>. The
-v1.6.0 tag and Zenodo record will be claimed only after the PDF, source
-package, and release hashes are frozen and verified and the deposit is
-published.
+<https://doi.org/10.5281/zenodo.21843860>. Version 1.5.0 is archived at
+<https://doi.org/10.5281/zenodo.21845707>. The
+concept DOI <https://doi.org/10.5281/zenodo.21841458> resolves to the latest
+published version.
 
 ## License
 

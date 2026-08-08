@@ -1,8 +1,10 @@
 cff-version: 1.2.0
-message: "Pre-release metadata for the unpublished v1.6.0 candidate. DOI 10.5281/zenodo.21847543 is reserved but not yet public or citable; cite the latest archived release until publication."
+message: "If you use this artifact, cite the archived Governance Drift v1.6.0 release."
 type: software
 title: "Governance Drift: Reproducibility Package"
 version: 1.6.0
+doi: 10.5281/zenodo.21847543
+date-released: 2026-08-08
 authors:
   - family-names: "Bessa Rocha da Silva"
     given-names: "Obede"
@@ -14,7 +16,7 @@ abstract: >
   Manuscript source, closed-world detector study, separately implemented
   no-join baseline, canonical results, and bounded Kubernetes/GitOps
   laboratories measuring divergence between operational reality and the basis
-  under which infrastructure was approved. The version 1.6.0 candidate adds
+  under which infrastructure was approved. Version 1.6.0 adds
   activation-safe selection, temporal cuts, ablation, transition controls,
   real-process trace auditing, transport faults, live multi-deployment
   evaluation, and a bounded Argo CD/Gatekeeper cross-stack replication. Live

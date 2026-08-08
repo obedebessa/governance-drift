@@ -1,6 +1,6 @@
 # Release notes
 
-## v1.6.0 candidate — 2026-08-08 (unpublished)
+## v1.6.0 — 2026-08-08
 
 - Separates approval from activation and selects the unique maximal activated
   basis under explicit supersession; ambiguous parallel maxima fail closed.
@@ -45,10 +45,9 @@
 - Broadens and bounds the related-work review, acknowledges prior uses of the
   exact term, adds a reproducible inclusion ledger, and narrows novelty to the
   deployment-level three-place relation and its executable semantics.
-- Prepares the manuscript, source-and-data snapshot, raw traces, validators,
-  and release-hash workflow. The candidate results are frozen, but no v1.6.0
-  tag or public Zenodo record is claimed until the PDF, packages, aggregate
-  verification, and release hashes pass and the reserved deposit is published.
+- Freezes the manuscript, source-and-data snapshot, raw traces, validators,
+  PDF, and release hashes under tag `v1.6.0` and archives the release at
+  <https://doi.org/10.5281/zenodo.21847543>.
 
 ## v1.5.0 — 2026-08-08
 

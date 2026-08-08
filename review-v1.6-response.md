@@ -1,4 +1,4 @@
-# Governance Drift v1.6.0 candidate — disposition of the v1.5.0 external review
+# Governance Drift v1.6.0 — disposition of the v1.5.0 external review
 
 This document records the disposition of the external review that rated
 v1.5.0 at 9.5/10. Every completed result below is tied to executable code or
@@ -45,7 +45,7 @@ production reliability, or independent external validation.
 8. **Experimental units.** Compound tables separate five injected episodes
    per scenario from fifteen correlated cadence observations.
 
-## P1 extensions implemented or executed in the v1.6.0 candidate
+## P1 extensions implemented or executed in v1.6.0
 
 - **Ablation ladder:** B0–B4 rises from 75.0% to 100% unconditional exact
   scenario vectors over 240 paired units; targeted semantic-probe coverage is
