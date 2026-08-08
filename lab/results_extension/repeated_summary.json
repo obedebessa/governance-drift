@@ -1,0 +1,179 @@
+{
+  "scenario_default_cadence": [
+    {
+      "scenario": "S10",
+      "expected_class_set": "policy|authorization",
+      "observed_class_set": "policy|authorization",
+      "observed_first_priority": "policy",
+      "n": 5,
+      "detection_rate": 1.0,
+      "exact_set_accuracy": 1.0,
+      "actuation_median_seconds": 2.677542040590197,
+      "ddl_median_seconds": 0.40163445798680186,
+      "ddl_p95_seconds": 0.8141454998403788,
+      "end_to_end_median_seconds": 3.20807212498039,
+      "tte_median_seconds": 0.40167566668242216
+    },
+    {
+      "scenario": "S11",
+      "expected_class_set": "authorization|environment",
+      "observed_class_set": "authorization|environment",
+      "observed_first_priority": "authorization",
+      "n": 5,
+      "detection_rate": 1.0,
+      "exact_set_accuracy": 1.0,
+      "actuation_median_seconds": 1.6754063749685884,
+      "ddl_median_seconds": 0.5166808343492448,
+      "ddl_p95_seconds": 0.679178707767278,
+      "end_to_end_median_seconds": 2.170094999950379,
+      "tte_median_seconds": 0.5167445000261068
+    },
+    {
+      "scenario": "S12",
+      "expected_class_set": "evidence",
+      "observed_class_set": "evidence",
+      "observed_first_priority": "evidence",
+      "n": 5,
+      "detection_rate": 1.0,
+      "exact_set_accuracy": 1.0,
+      "actuation_median_seconds": 7.202294999733567,
+      "ddl_median_seconds": 0.3453392921946943,
+      "ddl_p95_seconds": 0.4640048327855766,
+      "end_to_end_median_seconds": 7.584675459191203,
+      "tte_median_seconds": 0.3453745422884822
+    }
+  ],
+  "cadence": [
+    {
+      "cadence_seconds": 0.5,
+      "runs": 15,
+      "detection_rate": 1.0,
+      "exact_set_accuracy": 1.0,
+      "ddl_median_seconds": 0.4213133747689426,
+      "ddl_p95_seconds": 0.8141454998403788
+    },
+    {
+      "cadence_seconds": 2.0,
+      "runs": 15,
+      "detection_rate": 1.0,
+      "exact_set_accuracy": 1.0,
+      "ddl_median_seconds": 1.6127403751015663,
+      "ddl_p95_seconds": 2.158978749997914
+    },
+    {
+      "cadence_seconds": 10.0,
+      "runs": 15,
+      "detection_rate": 1.0,
+      "exact_set_accuracy": 1.0,
+      "ddl_median_seconds": 4.207121124956757,
+      "ddl_p95_seconds": 8.495680917054415
+    }
+  ],
+  "controls": [
+    {
+      "control": "C1",
+      "control_name": "satisfied policy revision",
+      "windows": 1,
+      "polls": 780,
+      "alarm_windows": 0,
+      "epistemic_polls": 0
+    },
+    {
+      "control": "C2",
+      "control_name": "approved rollback",
+      "windows": 1,
+      "polls": 780,
+      "alarm_windows": 0,
+      "epistemic_polls": 0
+    },
+    {
+      "control": "C3",
+      "control_name": "exception removed at expiry",
+      "windows": 1,
+      "polls": 780,
+      "alarm_windows": 0,
+      "epistemic_polls": 0
+    },
+    {
+      "control": "C4",
+      "control_name": "approved artifact re-tag",
+      "windows": 1,
+      "polls": 780,
+      "alarm_windows": 0,
+      "epistemic_polls": 0
+    },
+    {
+      "control": "C5",
+      "control_name": "autoscaling replica change",
+      "windows": 1,
+      "polls": 780,
+      "alarm_windows": 0,
+      "epistemic_polls": 0
+    },
+    {
+      "control": "C6",
+      "control_name": "legitimate rollout restart",
+      "windows": 1,
+      "polls": 780,
+      "alarm_windows": 0,
+      "epistemic_polls": 0
+    }
+  ],
+  "vector_metrics": {
+    "exact_set_accuracy_all": 1.0,
+    "exact_set_accuracy_conditional": 1.0,
+    "hamming_loss": 0.0,
+    "per_component": [
+      {
+        "component": "configuration",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "component": "policy",
+        "tp": 15,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "component": "authorization",
+        "tp": 30,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "component": "intent",
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "component": "evidence",
+        "tp": 15,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "component": "environment",
+        "tp": 15,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0
+      }
+    ]
+  },
+  "total_positive_observations": 45,
+  "total_control_observations": 18
+}

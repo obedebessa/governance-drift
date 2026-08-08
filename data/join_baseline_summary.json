@@ -1,0 +1,34 @@
+{
+  "scenario_seed_units": 240,
+  "local_union_exact": 0.75,
+  "joined_exact": 1.0,
+  "local_union_false_alarm_events": 0,
+  "semantic_probes": {
+    "same_current_policy_failure_with_admitted_basis": {
+      "local_union": [
+        "policy"
+      ],
+      "joined": [
+        "policy"
+      ]
+    },
+    "same_current_policy_failure_without_admitted_basis": {
+      "local_union": [
+        "policy"
+      ],
+      "joined": [
+        "evidence"
+      ]
+    },
+    "missing_live_status_continuing_authorization": {
+      "local_union": [],
+      "joined": [
+        "evidence"
+      ]
+    },
+    "missing_live_source_one_shot_with_retained_proof": {
+      "local_union": [],
+      "joined": []
+    }
+  }
+}

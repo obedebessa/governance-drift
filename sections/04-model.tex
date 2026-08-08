@@ -4,69 +4,147 @@
 \subsection{States and Contexts}
 \label{sec:model-states}
 
-Fix a deployment $x$ into environment $e$, approved at $t_0$.
+Fix a deployment $x$ into environment $e$ with approval events at
+$t_0<\cdots<t_k\leq t$.
 
-\textbf{Approved snapshot.} Per \cref{def:approved},
+\textbf{Approved-snapshot history.} Per \cref{def:approved}, every approval
+event appends an immutable snapshot
 \[
-\Gapp(t_0) = \bigl(m_0,\; \delta_0,\; \dig(\pi_0),\; A_0,\; \iota_0,\;
-\sigma_0\bigr):
+\begin{aligned}
+\Gapp^{x}(t)&=\{G_{\mathrm{app}}^{(0)}(t_0),\ldots,
+G_{\mathrm{app}}^{(k)}(t_k)\},\\
+G_{\mathrm{app}}^{(i)}&=\bigl(m_i,\delta_i,\dig(\pi_i),A_i^{\mathrm{proof}},
+\iota_i,\sigma_i\bigr).
+\end{aligned}
 \]
-the approved manifest content $m_0$ and the artifact digests $\delta_0$ it
+Each record contains the approved manifest content $m_i$ and artifact digests $\delta_i$ it
 resolved to at approval; the pinned policy version; the authorization basis
-$A_0$ (a set of approval and exception records, each with subject digest,
-scope, window, and revocation status); the intent linkage $\iota_0$ (change
-record, revision); and the environment assumptions $\sigma_0$ (the declared
+$A_i^{\mathrm{proof}}$ (the immutable proof that approval instruments covered
+the named subjects and scope at their execution times); the intent linkage $\iota_i$ (change
+record, revision); and the environment assumptions $\sigma_i$ (the declared
 properties of $e$---identity scopes, exposure---under which risk was
-assessed). $\Gapp(t_0)$ is immutable by construction: it is a record of an
-event.
+assessed). Let $b(t)$ select the greatest $i$ such that $t_i\leq t$ and the
+snapshot scope covers $(x,e)$. The admitted basis is
+\[
+B_x(t)=G_{\mathrm{app}}^{(b(t))}
+=\bigl(m_B,\delta_B,\dig(\pi_B),A_B^{\mathrm{proof}},
+\iota_B,\sigma_B\bigr).
+\]
+Selection does not require current validity: an expired or revoked basis must
+remain selected so its divergence can be reported. Superseded snapshots
+remain available for audit and lineage; benign reapproval appends a new basis
+rather than mutating history. Append-only means records cannot be rewritten,
+not that their storage cannot be lost; loss of $A_B^{\mathrm{proof}}$ is an
+evidence failure, as S9 exercises.
 
 \textbf{Observed state.} $\Gobs(t) = (m_t, \delta_t, \varepsilon_t)$: the
 observed configuration, the digests actually executing, and the observed
-environment properties corresponding to $\sigma_0$.
+environment properties needed to evaluate the predicates in $\sigma_B$.
 
 \textbf{Contexts.} Three time-indexed context streams:
 $\Pol(t)$, the policy version(s) governing $e$ at $t$ with their evaluation
-semantics; $\Auth(t)$, the authorization records valid at $t$ (windows
-elapsed, revocations applied); and $\Int(t)$, the intent records and the
+semantics; $\Auth_{\mathrm{live}}(t)$, the authenticated current administrative
+state of instruments (revocations, continuing validity, expiry); and $\Int(t)$, the intent records and the
 desired-state revision currently driving delivery. Evidence availability,
 where needed, is a fourth stream $\Evd(t)$ (the records from which the above
 can be established).
 
-\subsection{The Governance-Distance Vector}
+\textbf{Authorization semantics.} Every instrument $a$ declares
+$\mathrm{mode}(a)\in\{\text{one-shot},\text{continuing},
+\text{temporary-exception}\}$, subject, scope, validity interval, and
+revocation policy. One-shot authority is required at execution and its proof
+is retained afterward; continuing authority must remain valid while its
+effect persists; a temporary exception is continuing only until its expiry.
+Revocation is prospective unless the record explicitly declares retroactive
+invalidation. Let $\mathrm{NeedsLive}(a)$ hold for continuing and temporary
+instruments, and for a one-shot instrument only when its declared revocation
+policy permits retroactive invalidation. For an effect executed at $\tau$,
+let $\mathrm{AppObs}(a,t)$ mean that its proof is available and, whenever
+$\mathrm{NeedsLive}(a)$ holds, authenticated live status is also available.
+Write $V_1$ for validity at $\tau$ without retroactive revocation, $V_c$
+for current validity without revocation, and $V_e$ for $V_c$ while the
+declared exception has not expired. Define the three-valued applicability function
+\[
+\mathrm{Applicable}(a,\tau,t)=
+\begin{cases}
+\bot,&\neg\mathrm{AppObs}(a,t);\\
+V_1(a,\tau,t),&\text{one-shot};\\
+V_c(a,t),&\text{continuing};\\
+V_e(a,t),&\text{temporary exception}.
+\end{cases}
+\]
+A retained historical proof is therefore not confused with currently
+effective authority. Missing proof or live status yields undecidable where
+the selected mode requires it; an authenticated revocation yields a polar
+inconsistent verdict.
+
+\textbf{Legitimate successors.} Let
+$\mathrm{Succ}(\iota_B,t)$ be the set of revisions $\iota_n$ for which
+there exists a finite chain $\iota_B,\iota_1,\ldots,\iota_n$ with transition
+execution times $\tau_1,\ldots,\tau_n$, such that every edge
+$(\iota_{j-1},\iota_j)$ and its artifact digest are covered by an instrument
+$a_j$ for which $\mathrm{Applicable}(a_j,\tau_j,t)$ holds. A revision is a
+legitimate successor iff it belongs to this set.
+This definition excludes mere Git ancestry: lineage without a valid approval
+edge does not extend the admitted basis.
+
+\subsection{The Governance-Divergence Vector}
 \label{sec:model-distance}
 
-We define one distance per taxonomy class; each is a function of exactly the
-inputs its class needs, which is what makes the detectability results of
+We define one divergence component per substantive relation; each is a function of exactly the
+inputs its component needs, which is what makes the detectability results of
 \cref{sec:study} possible to state.
 
 \begin{itemize}[leftmargin=1.5em,itemsep=1.5pt,topsep=2pt]
 \item $\dconf(t)$: a normalized difference over the managed configuration
 graph between desired$(t)$ and $m_t$ (field-level graph diff with
 runtime-owned fields factored out; \cref{sec:study} shows the normalization
-is not cosmetic but the difference between signal and noise).
+is not cosmetic but the difference between signal and noise). This is an
+operational consistency component included to give the evaluator a complete
+control-state report; nonzero $\dconf$ alone does not imply that either the
+desired or observed state lacks authorization coverage.
 \item $\dpol(t)$: the set of controls in $\Pol(t)$ that the running state
-violates although $\Gapp$ was compliant at $t_0$---empty iff admission would
+violates although $B_x(t)$ records compliance under $\pi_B$---empty iff admission would
 re-succeed under today's policy. Reported as a violated-control set, not a
 number: policy versions form a revision structure, not a metric space, and
 ``how far'' is policy-weighted judgment, not geometry.
-\item $\dauth(t)$: the validity gap of the authorization basis: expired-but-%
-effective exceptions, revoked approvals still relied on, and the digest
-mismatch $\delta_t \not\subseteq \mathrm{subjects}(\Auth(t))$.
+\item $\dauth(t)$: the set of relied-upon instruments for which
+$\mathrm{Applicable}(a,\tau,t)$ is false, plus running digests in $\delta_t$
+not covered by an applicable instrument grounded in $A_B^{\mathrm{proof}}$
+and $\Auth_{\mathrm{live}}(t)$. If applicability is $\bot$, the authorization
+mask entry is zero and the substantive component is undecidable rather than
+included in this set.
 \item $\dint(t)$: the mismatch between the revision driving delivery and the
-revision the valid authorization covers ($\Int(t)$ versus $\iota_0$ and its
-legitimate successors).
-\item $\denv(t)$: divergence $\varepsilon_t \ne \sigma_0$ on the assumed
-environment properties.
-\item $\devd(t)$: the undecidability gap---components of the above that
-cannot be evaluated from $\Evd(t)$; a three-valued semantics
-(consistent / inconsistent / undecidable-at-$\ell$) rather than a magnitude.
+revision the valid authorization covers: the current revision is outside
+$\{\iota_B\}\cup\mathrm{Succ}(\iota_B,t)$.
+\item $\denv(t)=\{q\in\sigma_B:q(\varepsilon_t)=\mathrm{false}\}$. The laboratory's
+declared IAM-scope and exposure fields instantiate equality predicates, but
+the definition permits ranges, membership, and monotone safety predicates.
 \end{itemize}
 
-\begin{definition}[Governance Distance; Consistency]
+Evidence availability is ontologically different from those distances. Define
+the observability mask
+$\ObsMask(t)=(o_{\mathrm{conf}},o_{\mathrm{pol}},o_{\mathrm{auth}},
+o_{\mathrm{int}},o_{\mathrm{env}})$, where $o_j=1$ iff every required item in
+the component's evidence contract is present, complete, fresh within its
+declared bound, integrity-valid, source-authenticated, linked to subject
+$x$, and delivered by a healthy stream. Confidence is therefore not an
+unscoped probability: it is a named contract and threshold published with
+the evaluator. A missing or contract-failing record yields \emph{undecidable};
+an authenticated record stating ``revoked,'' ``negative,'' or ``never
+issued'' is available evidence and may yield \emph{inconsistent}. Evidence drift is a
+transition of any required $o_j$ from one to zero. Each substantive component
+therefore has three-valued reporting semantics---consistent, inconsistent, or
+undecidable---but only the first two are values of the substantive relation.
+
+\begin{definition}[Governance Divergence Vector; Consistency]
 \label{def:gd}
-$\GD(t) = \bigl(\dconf, \dpol, \dauth, \dint, \denv, \devd\bigr)(t)$, and
-$\Cons(x, t)$ holds iff every component is empty/zero and none is
-undecidable. Onset of governance drift is
+$\GDsub(t) = \bigl(\dconf, \dpol, \dauth, \dint, \denv\bigr)(t)$ and
+$\GD(t)=(\GDsub(t),\ObsMask(t))$. Operational consistency
+$\mathsf{OpCons}(x,t)$ holds iff $\dconf=0$ and its evidence is decidable.
+Governance coverage $\mathsf{GovCov}(x,t)$ holds iff
+$\dpol=\dauth=\dint=\denv=0$ and their mask entries are one. Total
+$\Cons(x,t)=\mathsf{OpCons}(x,t)\land\mathsf{GovCov}(x,t)$. Onset of governance drift is
 $\inf\{t > t_0 : \lnot\Cons(x,t)\}$; \emph{dwell time} is the duration of
 inconsistency; \emph{detection latency} is detection time minus onset.
 \end{definition}
@@ -96,7 +174,7 @@ weights are governance choices, not properties of the system.
 reconcile ($\dconf$), re-evaluate and re-approve or migrate ($\dpol$),
 re-authorize or terminate the exception ($\dauth$), restore or re-approve
 intent ($\dint$), restore assumptions or re-assess ($\denv$), repair evidence
-($\devd$)---so collapsing them destroys exactly the information an operator
+where $\ObsMask$ is zero---so collapsing them destroys exactly the information an operator
 needs. \emph{Temporal structure}: components drift on different clocks
 (policy revisions are discrete organizational events; exception expiry is a
 scheduled instant; registry re-tags are exogenous), so a scalar time series
@@ -108,23 +186,27 @@ replace findings.
 \subsection{Detectability, Formally}
 \label{sec:model-detect}
 
-Each component distance is a function of specific streams:
+Each component divergence is a function of specific streams:
 $\dconf$ of (desired, $\Gobs$); $\dpol$ additionally of $\Pol(t)$ and
-$\Gapp$'s pin; $\dauth$ of $\Auth(t)$, $\Gapp$, and $\delta_t$; $\dint$ of
-$\Int(t)$ and $\Gapp$; $\denv$ of $\varepsilon_t$ and $\sigma_0$; $\devd$ of
-$\Evd(t)$. \Cref{prop:impossible} is the negative direction of this
+$\pi_B$; $\dauth$ of $A_B^{\mathrm{proof}}$, $\Auth_{\mathrm{live}}(t)$,
+execution times, and $\delta_t$; $\dint$ of $\Int(t)$ and $\iota_B$;
+$\denv$ of $\varepsilon_t$ and $\sigma_B$; and every
+entry of $\ObsMask$ of the evidence needed for its corresponding computation.
+\Cref{prop:impossible} is the negative direction of this
 dependency structure; the positive direction is equally direct:
 
 \begin{proposition}[Tier sufficiency]
 \label{prop:tiers}
 A detector with access to the streams a component depends on decides that
 component's consistency (in the closed-world model, exactly; in the field, up
-to the fidelity of the streams). Consequently the minimal detector for full
-governance consistency is one that joins the configuration comparison with
-the policy, authorization, intent/lineage, and environment streams---the tiered architecture of \cref{sec:architecture}, whose scenario-to-tier realization \cref{sec:study} checks cell by cell.
+to the fidelity of the streams). Consequently a sufficient detector for full
+governance consistency joins the configuration comparison with the policy,
+authorization, intent/lineage, and environment streams---the tiered
+architecture of \cref{sec:architecture}, whose scenario-to-tier realization
+\cref{sec:study} checks cell by cell.
 \end{proposition}
 \begin{proof}
-Each component distance in \cref{sec:model-distance} is defined as a
+Each component divergence in \cref{sec:model-distance} is defined as a
 computable function of the named streams; providing the streams provides the
 function's inputs.
 \end{proof}
@@ -135,11 +217,38 @@ implementation realizes it is a separate, checkable question---%
 semantics, and \emph{only} that check: agreement there validates the
 implementation, not the model.
 
+\begin{proposition}[Tier minimality]
+\label{prop:tier-minimality}
+For every stream added at T1--T4, there exist two worlds that are
+indistinguishable to every lower tier but have different governance verdicts
+for a component first decidable from that stream. Therefore no lower tier
+decides that component in general.
+\end{proposition}
+\begin{proof}
+Construct the pairs while holding all lower-tier observations fixed. For T1,
+keep desired and observed configuration identical and let the current policy
+admit the deployment in one world but reject it in the other. For T2, keep the
+T1 projection fixed and let the same effective exception be valid in one world
+but expired in the other; alternatively, retain versus delete its approval
+record, changing the authorization/intent mask from decidable to undecidable.
+For T3, keep the manifest tag and every T2 stream fixed but let the running tag
+resolve to an approved digest in one world and an uncovered digest in the
+other. For T4, keep all T3 streams fixed and change only an unmanaged
+environment property recorded in $\sigma_B$. Each pair has identical
+lower-tier projections and different component verdicts, so any lower-tier
+detector returns the same value in both and errs in one.
+\end{proof}
+
+Unlike \cref{prop:tiers}, this is a necessity result: the staircase is not
+merely a convenient implementation decomposition. Its scope remains relative
+to the declared component semantics; adding a genuinely equivalent stream at
+a lower tier widens that tier's projection rather than refuting the result.
+
 Two modeling notes bound the claims. First, \emph{granularity}: whether the
 registry re-tag scenario is ``configuration'' drift depends on reference
 semantics---under tag semantics the configuration is unchanged; under digest
 semantics it changed. The model takes no side: it requires only that
-$\Gapp$ record resolved digests, which relocates the question from metaphysics
+$B_x(t)$ record resolved digests, which relocates the question from metaphysics
 to evidence (what did the approval bind?), where \cref{sec:study} shows it is
 decidable at the lineage tier. Second, \emph{legitimate context change}:
 policy supersession does not make drift \emph{culpable}---the deployment was

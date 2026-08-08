@@ -3,119 +3,128 @@
     {
       "scenario": "S1",
       "expected_class_set": "configuration",
+      "observed_class_set": "configuration",
       "observed_first_priority": "configuration",
       "n": 20,
       "detection_rate": 1.0,
-      "classification_accuracy": 1.0,
-      "actuation_median_seconds": 0.05114395800046623,
-      "ddl_median_seconds": 0.34302285430021584,
-      "ddl_p95_seconds": 0.5679904171265662,
-      "end_to_end_median_seconds": 0.3938049173448235,
-      "tte_median_seconds": 0.3430838962085545
+      "exact_set_accuracy": 1.0,
+      "actuation_median_seconds": 0.0495022505056113,
+      "ddl_median_seconds": 0.4474559579975903,
+      "ddl_p95_seconds": 0.6546232081018388,
+      "end_to_end_median_seconds": 0.4953040415421128,
+      "tte_median_seconds": 0.44750114553608
     },
     {
       "scenario": "S2",
       "expected_class_set": "authorization",
+      "observed_class_set": "authorization",
       "observed_first_priority": "authorization",
       "n": 20,
       "detection_rate": 1.0,
-      "classification_accuracy": 1.0,
-      "actuation_median_seconds": 2.6042821248993278,
-      "ddl_median_seconds": 0.41922783362679183,
-      "ddl_p95_seconds": 0.6510441252030432,
-      "end_to_end_median_seconds": 2.890052666887641,
-      "tte_median_seconds": 0.41927316691726446
+      "exact_set_accuracy": 1.0,
+      "actuation_median_seconds": 2.3437483333982527,
+      "ddl_median_seconds": 0.47185937548056245,
+      "ddl_p95_seconds": 0.708447250071913,
+      "end_to_end_median_seconds": 2.8968031664844602,
+      "tte_median_seconds": 0.47191249998286366
     },
     {
       "scenario": "S3",
       "expected_class_set": "policy",
+      "observed_class_set": "policy",
       "observed_first_priority": "policy",
       "n": 20,
       "detection_rate": 1.0,
-      "classification_accuracy": 1.0,
-      "actuation_median_seconds": 0.14592049946077168,
-      "ddl_median_seconds": 7.983183104312047,
-      "ddl_p95_seconds": 10.247139875311404,
-      "end_to_end_median_seconds": 8.123485604301095,
-      "tte_median_seconds": 7.983231395948678
+      "exact_set_accuracy": 1.0,
+      "actuation_median_seconds": 0.13073439593426883,
+      "ddl_median_seconds": 9.684726207982749,
+      "ddl_p95_seconds": 10.378496165852994,
+      "end_to_end_median_seconds": 9.809773958055303,
+      "tte_median_seconds": 9.684821146074682
     },
     {
       "scenario": "S4",
       "expected_class_set": "authorization",
+      "observed_class_set": "authorization",
       "observed_first_priority": "authorization",
       "n": 20,
       "detection_rate": 1.0,
-      "classification_accuracy": 1.0,
-      "actuation_median_seconds": 1.649302521487698,
-      "ddl_median_seconds": 0.9542868959251791,
-      "ddl_p95_seconds": 1.7781928330659866,
-      "end_to_end_median_seconds": 2.4827513329219073,
-      "tte_median_seconds": 0.9543527504429221
+      "exact_set_accuracy": 1.0,
+      "actuation_median_seconds": 1.5612348960712552,
+      "ddl_median_seconds": 0.5302382500376552,
+      "ddl_p95_seconds": 0.6846812921576202,
+      "end_to_end_median_seconds": 2.102513499557972,
+      "tte_median_seconds": 0.5303031038492918
     },
     {
       "scenario": "S5",
       "expected_class_set": "environment",
+      "observed_class_set": "environment",
       "observed_first_priority": "environment",
       "n": 20,
       "detection_rate": 1.0,
-      "classification_accuracy": 1.0,
-      "actuation_median_seconds": 0.031037604436278343,
-      "ddl_median_seconds": 0.44068127148784697,
-      "ddl_p95_seconds": 0.6005397909320891,
-      "end_to_end_median_seconds": 0.47991908341646194,
-      "tte_median_seconds": 0.44072675006464124
+      "exact_set_accuracy": 1.0,
+      "actuation_median_seconds": 0.026216229191049933,
+      "ddl_median_seconds": 0.4388492084108293,
+      "ddl_p95_seconds": 0.5803378750570118,
+      "end_to_end_median_seconds": 0.45855122874490917,
+      "tte_median_seconds": 0.4388983545359224
     },
     {
       "scenario": "S6",
       "expected_class_set": "intent|authorization",
+      "observed_class_set": "authorization|intent",
       "observed_first_priority": "intent",
       "n": 20,
       "detection_rate": 1.0,
-      "classification_accuracy": 1.0,
-      "actuation_median_seconds": 10.045440374873579,
-      "ddl_median_seconds": 0.4662211034446955,
-      "ddl_p95_seconds": 0.6751700830645859,
-      "end_to_end_median_seconds": 10.517886604182422,
-      "tte_median_seconds": 0.4662888541352004
+      "exact_set_accuracy": 1.0,
+      "actuation_median_seconds": 10.049869874725118,
+      "ddl_median_seconds": 0.5405246873851866,
+      "ddl_p95_seconds": 0.749912042170763,
+      "end_to_end_median_seconds": 10.495519937481731,
+      "tte_median_seconds": 0.5406065413262695
     },
     {
       "scenario": "S7",
       "expected_class_set": "environment",
+      "observed_class_set": "environment",
       "observed_first_priority": "environment",
       "n": 20,
       "detection_rate": 1.0,
-      "classification_accuracy": 1.0,
-      "actuation_median_seconds": 0.029273291118443012,
-      "ddl_median_seconds": 0.4682341036386788,
-      "ddl_p95_seconds": 0.5924099157564342,
-      "end_to_end_median_seconds": 0.510038478532806,
-      "tte_median_seconds": 0.4682797291316092
+      "exact_set_accuracy": 1.0,
+      "actuation_median_seconds": 0.0369036456104368,
+      "ddl_median_seconds": 0.44511183304712176,
+      "ddl_p95_seconds": 0.6011798330582678,
+      "end_to_end_median_seconds": 0.48250670870766044,
+      "tte_median_seconds": 0.4451716458424926
     },
     {
       "scenario": "S8",
       "expected_class_set": "authorization",
+      "observed_class_set": "authorization",
       "observed_first_priority": "authorization",
       "n": 20,
       "detection_rate": 1.0,
-      "classification_accuracy": 1.0,
-      "actuation_median_seconds": 0.03377520805224776,
-      "ddl_median_seconds": 0.42267954139970243,
-      "ddl_p95_seconds": 0.6638720002956688,
-      "end_to_end_median_seconds": 0.4782508327625692,
-      "tte_median_seconds": 0.42273364611901343
+      "exact_set_accuracy": 1.0,
+      "actuation_median_seconds": 0.02393058338202536,
+      "ddl_median_seconds": 0.3984531455207616,
+      "ddl_p95_seconds": 0.6685604169033468,
+      "end_to_end_median_seconds": 0.43592366646043956,
+      "tte_median_seconds": 0.39859302109107375
     },
     {
       "scenario": "S9",
       "expected_class_set": "evidence",
+      "observed_class_set": "evidence",
       "observed_first_priority": "evidence",
       "n": 20,
       "detection_rate": 1.0,
-      "classification_accuracy": 1.0,
-      "actuation_median_seconds": 0.014326229458674788,
-      "ddl_median_seconds": 0.38408825010992587,
-      "ddl_p95_seconds": 0.6135946246795356,
-      "end_to_end_median_seconds": 0.3972161249257624,
-      "tte_median_seconds": 0.38414627127349377
+      "exact_set_accuracy": 1.0,
+      "actuation_median_seconds": 0.01439264602959156,
+      "ddl_median_seconds": 0.39543622895143926,
+      "ddl_p95_seconds": 0.5942036672495306,
+      "end_to_end_median_seconds": 0.4102407705504447,
+      "tte_median_seconds": 0.39548233337700367
     }
   ],
   "cadence": [
@@ -123,25 +132,25 @@
       "cadence_seconds": 0.5,
       "runs": 180,
       "detection_rate": 1.0,
-      "classification_accuracy": 1.0,
-      "ddl_median_seconds": 0.4649515626952052,
-      "ddl_p95_seconds": 8.06157295871526
+      "exact_set_accuracy": 1.0,
+      "ddl_median_seconds": 0.47498045838437974,
+      "ddl_p95_seconds": 10.079467582982033
     },
     {
       "cadence_seconds": 2.0,
       "runs": 180,
       "detection_rate": 0.9944444444444445,
-      "classification_accuracy": 1.0,
-      "ddl_median_seconds": 1.4598910207860172,
-      "ddl_p95_seconds": 8.366217582952231
+      "exact_set_accuracy": 1.0,
+      "ddl_median_seconds": 1.4447976043447852,
+      "ddl_p95_seconds": 10.469048666767776
     },
     {
       "cadence_seconds": 10.0,
       "runs": 180,
       "detection_rate": 0.9944444444444445,
-      "classification_accuracy": 1.0,
-      "ddl_median_seconds": 6.112346499459818,
-      "ddl_p95_seconds": 12.361864042002708
+      "exact_set_accuracy": 1.0,
+      "ddl_median_seconds": 6.263379353797063,
+      "ddl_p95_seconds": 14.612647665664554
     }
   ],
   "controls": [
@@ -150,44 +159,105 @@
       "control_name": "satisfied policy revision",
       "windows": 4,
       "polls": 108,
-      "alarm_windows": 0
+      "alarm_windows": 0,
+      "epistemic_polls": 0
     },
     {
       "control": "C2",
       "control_name": "approved rollback",
       "windows": 4,
       "polls": 108,
-      "alarm_windows": 0
+      "alarm_windows": 0,
+      "epistemic_polls": 0
     },
     {
       "control": "C3",
       "control_name": "exception removed at expiry",
       "windows": 3,
       "polls": 84,
-      "alarm_windows": 0
+      "alarm_windows": 0,
+      "epistemic_polls": 0
     },
     {
       "control": "C4",
       "control_name": "approved artifact re-tag",
       "windows": 3,
       "polls": 81,
-      "alarm_windows": 0
+      "alarm_windows": 0,
+      "epistemic_polls": 0
     },
     {
       "control": "C5",
       "control_name": "autoscaling replica change",
       "windows": 3,
       "polls": 81,
-      "alarm_windows": 0
+      "alarm_windows": 0,
+      "epistemic_polls": 0
     },
     {
       "control": "C6",
       "control_name": "legitimate rollout restart",
       "windows": 3,
       "polls": 81,
-      "alarm_windows": 0
+      "alarm_windows": 0,
+      "epistemic_polls": 0
     }
   ],
+  "vector_metrics": {
+    "exact_set_accuracy_all": 0.9962962962962963,
+    "exact_set_accuracy_conditional": 1.0,
+    "hamming_loss": 0.0006172839506172839,
+    "per_component": [
+      {
+        "component": "configuration",
+        "tp": 58,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.9666666666666667
+      },
+      {
+        "component": "policy",
+        "tp": 60,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "component": "authorization",
+        "tp": 240,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "component": "intent",
+        "tp": 60,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "component": "evidence",
+        "tp": 60,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "component": "environment",
+        "tp": 120,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0
+      }
+    ]
+  },
   "total_positive_observations": 540,
   "total_control_observations": 60
 }

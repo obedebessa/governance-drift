@@ -1,14 +1,21 @@
 #!/usr/bin/env python3
 """
-Closed-world detector study for the Governance Drift paper (v2).
+Closed-world detector study for the Governance Drift paper (v3).
 
-v2 changes in response to internal adversarial review:
+v3 extends the vector semantics and scoring:
+  * Twelve drift scenarios include three compound cases. Detectors emit the
+    full set decidable at each tier; exact-set agreement, subset-only partial
+    diagnosis, and Hamming loss replace member-of-set single-label scoring.
+  * Evidence drift is modeled as an epistemic output: missing evidence makes
+    affected substantive components undecidable rather than inconsistent.
+
+v2 established the definition-faithful baseline:
   * Class set identical to the paper's taxonomy (configuration, policy,
     authorization, intent, evidence, environment) -- no extra classes.
     Ground truth is a SET per scenario (component distances are a vector;
-    scenarios may drift in more than one component); a classification is
-    correct iff the reported class is in the set.
-  * Evidence drift exercised: scenario S9 deletes the approval record; the
+    scenarios may drift in more than one component).
+  * Evidence drift exercised: scenario S9 removes authenticated live status
+    required by a continuing approval while retaining immutable proof; the
     detector reports an explicit undecidable/evidence verdict, not a polar
     authorization verdict.
   * T1 implements Definition 3 (admission re-evaluation): policy versions
@@ -34,10 +41,9 @@ Tiers (cumulative): T0 naive config comparison (runtime-owned fields
 included), T0n normalized, T1 +policy evaluation, T2 +authorization records,
 T3 +artifact lineage, T4 +environment inventory vs sigma_0.
 
-Scenarios: S0 control; S1 manual change; S2 expired-but-active exception;
-S3 violating policy supersession; S4 artifact substitution (tag re-pointed);
-S5 IAM expansion; S6 unapproved git rollback; S7 out-of-band cloud change;
-S8 approval subject mismatch; S9 approval-record deletion (evidence drift).
+Scenarios: S0 control; S1--S9 the single/paired live-lab cases; S10 policy
+plus expired authorization; S11 artifact substitution plus environment
+change; S12 rollback plus missing approval evidence.
 
 Counterfactual scoring: drift is detected iff the alarm sequence differs
 from a paired same-seed no-drift control (identical churn); an
@@ -56,8 +62,10 @@ CHURN_RATE = 0.30          # runtime churn probability per event
 GOV_CHURN_RATE = 0.02      # benign governance-event probability per event
 EXC_WINDOW = 40
 
-SCENARIOS = ["S0", "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9"]
+SCENARIOS = ["S0", "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9",
+             "S10", "S11", "S12"]
 TIERS = ["T0", "T0n", "T1", "T2", "T3", "T4"]
+CLASS_ORDER = ("configuration", "policy", "intent", "authorization", "environment", "evidence")
 
 # ground-truth drift-class SETS (taxonomy classes only)
 CLASSES = {
@@ -71,6 +79,12 @@ CLASSES = {
     "S7": {"environment"},
     "S8": {"authorization"},
     "S9": {"evidence"},
+    "S10": {"policy", "authorization"},
+    "S11": {"authorization", "environment"},
+    # The underlying rollback is substantively intent+authorization drift,
+    # but deleting the approval basis makes both components undecidable. The
+    # honest detector output is therefore the epistemic evidence class.
+    "S12": {"evidence"},
 }
 
 # policy versions as requirement sets over manifest keys
@@ -96,11 +110,15 @@ def initial_state(rng):
         observed=dict(approved["manifest"]),
         observed_digest=d0,
         registry={"svc:1.4.2": d0},
+        attested_digests={d0},        # tool-local trust input, not admitted-basis history
         policy_version="pi-7",
         env=dict(iam_scope="least-priv", cloud_lb="standard-config"),
         exceptions=[],               # dicts: id, expires, removed_at
         approvals={"APR-1": dict(subjects={d0}, revisions={"rev-42"},
-                                 revoked=False)},
+                                 mode="continuing", executed_at=0,
+                                 valid_at_execution=True, proof_available=True,
+                                 live_status_available=True, revoked=False,
+                                 revocation_effect="prospective")},
         chain_approval="APR-1",
         pod_hash="h0", replicas=3,
         next_rev=43, next_dig=0,
@@ -125,10 +143,16 @@ def benign_governance_churn(world, rng, k):
         dig = f"sha256:new{world['next_dig']:03d}"; world["next_dig"] += 1
         aid = f"APR-{rev}"
         world["approvals"][aid] = dict(subjects={dig}, revisions={rev},
-                                       revoked=False)
+                                       mode="continuing", executed_at=k,
+                                       valid_at_execution=True,
+                                       proof_available=True,
+                                       live_status_available=True,
+                                       revoked=False,
+                                       revocation_effect="prospective")
         world["git_revision"] = rev
         world["registry"][world["git"]["image_tag"]] = dig
         world["observed_digest"] = dig
+        world["attested_digests"].add(dig)
         world["chain_approval"] = aid
     else:
         world["exceptions"].append(dict(id=f"EXC-b{k}", expires=k + 10,
@@ -159,7 +183,22 @@ def inject(scn, world, k):
     elif scn == "S8":
         world["observed_digest"] = "sha256:ccc333"
     elif scn == "S9":
-        world["approvals"].clear()   # approval records lost
+        for approval in world["approvals"].values():
+            approval["live_status_available"] = False
+    elif scn == "S10":
+        world["policy_version"] = "pi-8"
+        world["exceptions"].append(dict(id="EXC-c1", expires=k,
+                                        removed_at=None))
+    elif scn == "S11":
+        world["observed_digest"] = "sha256:compound"
+        world["env"]["cloud_lb"] = "tls-policy-downgraded"
+    elif scn == "S12":
+        world["git"] = dict(world["git"], image_tag="svc:1.3.9")
+        world["git_revision"] = "rev-37"
+        world["observed"] = dict(world["git"])
+        world["observed_digest"] = "sha256:old999"
+        for approval in world["approvals"].values():
+            approval["live_status_available"] = False
 
 
 # -------------------------------------------------------------------- detector
@@ -167,61 +206,91 @@ def satisfies(manifest, policy_version):
     return all(req in manifest for req in POLICIES[policy_version])
 
 
-def valid_approvals(world):
-    return [a for a in world["approvals"].values() if not a["revoked"]]
+def applicable_approvals(world, k):
+    """Return (applicable records, decidable) under mode-aware semantics."""
+    applicable_records = []
+    for approval in world["approvals"].values():
+        if not approval.get("proof_available", False):
+            return [], False
+        mode = approval.get("mode", "one-shot")
+        if mode == "one-shot":
+            if not approval.get("valid_at_execution", False):
+                continue
+            if (approval.get("revocation_effect") == "retroactive" and
+                    not approval.get("live_status_available", False)):
+                return [], False
+            if approval.get("revoked") and approval.get("revocation_effect") == "retroactive":
+                continue
+            applicable_records.append(approval)
+        elif mode in {"continuing", "temporary-exception"}:
+            if not approval.get("live_status_available", False):
+                return [], False
+            if not approval.get("revoked") and k <= approval.get("expires", 10**18):
+                applicable_records.append(approval)
+        else:
+            raise ValueError(f"unknown authorization mode: {mode}")
+    return applicable_records, True
 
 
 def detect(tier, approved, world, k):
     """Pure function of the tier's visible streams.
-    Returns (alarm, klass) with klass in the taxonomy's class set; the
-    evaluation order over components is a declared implementation choice
-    (config, policy, authorization-validity, evidence, intent, lineage,
-    environment); ground truth is a set, so order affects only which member
-    of a multi-component drift is reported first."""
+    Returns the complete class set decidable at that tier. Evidence denotes
+    an epistemic failure to decide one or more substantive components."""
+    classes = set()
     diffs = [f for f in world["git"]
              if world["git"][f] != world["observed"].get(f)]
     if tier == "T0":
         if diffs or world["replicas"] != approved["manifest"]["replicas"]:
-            return True, "configuration"
-        return False, None
+            classes.add("configuration")
+        ordered = tuple(x for x in CLASS_ORDER if x in classes)
+        return bool(ordered), ordered
     if diffs:
-        return True, "configuration"
+        classes.add("configuration")
     if tier == "T0n":
-        return False, None
+        ordered = tuple(x for x in CLASS_ORDER if x in classes)
+        return bool(ordered), ordered
 
     # T1: admission re-evaluation against the current policy version
     if not satisfies(world["observed"], world["policy_version"]):
-        return True, "policy"
+        classes.add("policy")
     if tier == "T1":
-        return False, None
+        ordered = tuple(x for x in CLASS_ORDER if x in classes)
+        return bool(ordered), ordered
 
     # T2: authorization validity + evidence decidability + intent coverage
     for exc in world["exceptions"]:
         if k >= exc["expires"] and \
            (exc["removed_at"] is None or exc["removed_at"] > k):
-            return True, "authorization"
-    va = valid_approvals(world)
-    if not va:
-        return True, "evidence"      # basis unevaluable: undecidable verdict
-    if not any(world["git_revision"] in a["revisions"] for a in va):
-        return True, "intent"
+            classes.add("authorization")
+    va, authorization_decidable = applicable_approvals(world, k)
+    if not authorization_decidable:
+        classes.add("evidence")      # substantive components are undecidable
+    elif not va:
+        classes.add("authorization")
+        classes.add("intent")
+    elif not any(world["git_revision"] in a["revisions"] for a in va):
+        classes.add("intent")
     if tier == "T2":
-        return False, None
+        ordered = tuple(x for x in CLASS_ORDER if x in classes)
+        return bool(ordered), ordered
 
     # T3: artifact lineage (running digest covered by a valid approval)
-    if not any(world["observed_digest"] in a["subjects"] for a in va):
-        return True, "authorization"
-    tag_dig = world["registry"].get(world["git"]["image_tag"])
-    if tag_dig is not None and \
-       not any(tag_dig in a["subjects"] for a in va):
-        return True, "authorization"
+    if va:
+        if not any(world["observed_digest"] in a["subjects"] for a in va):
+            classes.add("authorization")
+        tag_dig = world["registry"].get(world["git"]["image_tag"])
+        if tag_dig is not None and \
+           not any(tag_dig in a["subjects"] for a in va):
+            classes.add("authorization")
     if tier == "T3":
-        return False, None
+        ordered = tuple(x for x in CLASS_ORDER if x in classes)
+        return bool(ordered), ordered
 
     # T4: environment inventory vs recorded assumptions sigma_0
     if world["env"] != approved["sigma0"]:
-        return True, "environment"
-    return False, None
+        classes.add("environment")
+    ordered = tuple(x for x in CLASS_ORDER if x in classes)
+    return bool(ordered), ordered
 
 
 # ------------------------------------------------------------------------- run
@@ -244,20 +313,27 @@ def run(scn, tier, seed):
     drift = alarm_stream(scn, tier, seed)
     control = alarm_stream("S0", tier, seed)
     false_alarms = sum(1 for a, _ in control if a)
-    first_diff = alarm_class = None
+    first_diff = None
+    alarm_classes = ()
     for k in range(N_EVENTS):
         if drift[k] != control[k]:
             first_diff = k
-            alarm_class = drift[k][1] if drift[k][0] else None
+            alarm_classes = drift[k][1] if drift[k][0] else ()
             break
     onset = ONSET + EXC_WINDOW if scn == "S2" else ONSET
     detected = first_diff is not None and scn != "S0"
     latency = (first_diff - onset) if detected else None
-    correct = detected and alarm_class in CLASSES[scn]
+    observed_set = set(alarm_classes)
+    correct = detected and observed_set == CLASSES[scn]
+    subset_correct = detected and bool(observed_set) and observed_set <= CLASSES[scn]
     return dict(scn=scn, tier=tier, seed=seed, detected=int(detected),
                 correct=int(bool(correct)),
+                subset_correct=int(bool(subset_correct)),
                 latency=latency if latency is not None else "",
-                false_alarms=false_alarms, alarm_class=alarm_class or "")
+                false_alarms=false_alarms,
+                alarm_class_set="|".join(alarm_classes),
+                first_priority=(alarm_classes[0] if alarm_classes else ""),
+                hamming_loss=len(observed_set ^ CLASSES[scn]) / 6.0)
 
 
 def main():
@@ -267,28 +343,29 @@ def main():
     rows = [run(s, t, seed) for s in SCENARIOS for t in TIERS
             for seed in SEEDS]
     with open(os.path.join(out, "detector_raw.csv"), "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
+        w = csv.DictWriter(f, fieldnames=list(rows[0].keys()), lineterminator="\n")
         w.writeheader(); w.writerows(rows)
 
     agg = {}
     for r in rows:
         agg.setdefault((r["scn"], r["tier"]), []).append(r)
     with open(os.path.join(out, "matrix.csv"), "w", newline="") as f:
-        w = csv.writer(f)
-        w.writerow(["scn", "tier", "det_rate", "cls_rate", "lat_mean",
+        w = csv.writer(f, lineterminator="\n")
+        w.writerow(["scn", "tier", "det_rate", "exact_set_rate", "subset_rate", "lat_mean",
                     "lat_sd", "fp_mean"])
         for (s, t), rs in sorted(agg.items()):
             det = statistics.mean(x["detected"] for x in rs)
             cor = statistics.mean(x["correct"] for x in rs)
+            sub = statistics.mean(x["subset_correct"] for x in rs)
             lats = [x["latency"] for x in rs if x["latency"] != ""]
             lm = statistics.mean(lats) if lats else ""
             ls = statistics.stdev(lats) if len(lats) > 1 else 0.0
             fp = statistics.mean(x["false_alarms"] for x in rs)
-            w.writerow([s, t, det, cor, lm, ls, fp])
+            w.writerow([s, t, det, cor, sub, lm, ls, fp])
 
     # naive-comparator FP sensitivity to churn rate
     with open(os.path.join(out, "fp_sensitivity.csv"), "w", newline="") as f:
-        w = csv.writer(f)
+        w = csv.writer(f, lineterminator="\n")
         w.writerow(["churn", "tier", "fp_mean"])
         for churn in (0.1, 0.3, 0.5):
             for tier in ("T0", "T0n"):
@@ -304,7 +381,8 @@ def main():
         cor = statistics.mean(x["correct"] for x in rs)
         if det == 0:
             return "\\xmark"
-        mark = "\\cmark" if cor == 1.0 else "$\\sim$"
+        subset = statistics.mean(x["subset_correct"] for x in rs)
+        mark = "\\cmark" if cor == 1.0 else ("$\\triangle$" if subset == 1.0 else "$\\sim$")
         lats = [x["latency"] for x in rs if x["latency"] != ""]
         lm = statistics.mean(lats) if lats else 0.0
         if lm >= 0.05:

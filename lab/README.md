@@ -29,10 +29,13 @@ T0n–T4.
 | S3 | Policy supersession | policy | policy | T1 |
 | S4 | Artifact substitution and rollout | authorization | authorization | T3 |
 | S5 | IAM expansion | environment | environment | T4 |
-| S6 | Unapproved Git rollback and Flux convergence | intent, authorization | intent | T2 |
+| S6 | Unapproved Git rollback and Flux convergence | intent, authorization | intent | T3 (T2 reports intent only) |
 | S7 | Out-of-band load-balancer change | environment | environment | T4 |
 | S8 | Approval subject mismatch | authorization | authorization | T3 |
 | S9 | Approval-record deletion | evidence | evidence (`undecidable`) | T2 |
+| S10 | Policy supersession plus expired exception | policy, authorization | authorization (policy may arrive later) | T2 |
+| S11 | Artifact substitution plus environment change | authorization, environment | authorization | T4 |
+| S12 | Rollback plus missing continuing-authorization status | evidence | evidence (`undecidable`) | T2 |
 
 The seeded protocol runs every scenario 20 times in shuffled order. Three
 logical evaluators observe the same injection; each begins at a deterministic
@@ -45,6 +48,12 @@ Twenty 10.5-second windows are balanced round-robin across satisfied policy
 revision, approved rollback, exception removal at expiry, approved artifact
 retag, autoscaling outside the managed projection, and legitimate rollout
 restart. Every window is observed at all three cadences.
+
+The v1.5 secondary campaign runs S10--S12 five times each at the same three
+cadences and continues after the first alert until the exact class set is
+available. It then executes one 300-second window for each benign control.
+The frozen extension contains 45/45 exact final vectors and 4,680 benign
+polls with no substantive or epistemic alarm.
 
 ## Four clocks
 
@@ -70,6 +79,9 @@ memory for the single-node cluster.
 ```bash
 lab/bootstrap.sh
 python3 lab/run_repeated_experiment.py
+PYTHONPATH=lab python3 -m unittest -v lab/test_evaluator_contract.py
+python3 scripts/analyze_lab_uncertainty.py
+python3 scripts/analyze_lab_extension.py
 python3 scripts/verify_lab_results.py
 ```
 
@@ -78,7 +90,10 @@ The repeated harness writes:
 - `results/repeated_observations.csv` and `.json` — 540 cadence observations;
 - `results/control_observations.csv` — all benign-control polls;
 - `results/repeated_summary.json` — protocol, cadence, scenario, and control summaries;
-- `results/table_repeated.tex`, `table_cadence.tex`, and `table_controls.tex`.
+- `results/table_repeated.tex`, `table_cadence.tex`, `table_controls.tex`, and
+  `table_vector_metrics.tex`.
+- `results_extension/` — compound-vector observations, six-window soak,
+  validated JSON summary, and generated table.
 
 To regenerate summaries and LaTeX tables from frozen raw data without a
 cluster:
@@ -88,7 +103,12 @@ python3 lab/run_repeated_experiment.py --summarize-only
 python3 scripts/verify_lab_results.py
 ```
 
-The recorded run produced 538/540 detections, 538/538 correct classifications
-conditional on detection, and zero alarms in 543 benign-control polls. Both
+The v1.5 evaluator scores full sets rather than membership of a priority
+label. The frozen run produced 538/540 detections, 538/538 conditional exact
+sets, global Hamming loss 0.000617, and zero substantive or epistemic control
+alerts in 543 polls; priority output is retained only for operator routing. Both
 misses were S1 at the 2- and 10-second cadences in one repetition: Flux
 reconciled the transient mutation before those evaluators' first polls.
+Authorization records now declare one-shot, continuing, or
+temporary-exception semantics, and environment checks instantiate the
+approved inventory as equality predicates over recorded fields only.

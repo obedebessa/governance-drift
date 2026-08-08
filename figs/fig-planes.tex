@@ -1,10 +1,10 @@
 % Approved intent vs runtime reality (single column, resized)
 \begin{tikzpicture}[node distance=3.2mm and 4mm]
   % approval event
-  \node[human, minimum width=20mm] (appr) at (0,0)
-    {approval event $t_0$\\{\smlbl snapshot $\Gapp(t_0)$}};
+  \node[human, minimum width=22mm] (appr) at (0,0)
+    {approval history\\{\smlbl $t_0<t_1<\cdots<t_k$}};
   \node[attn, below=2.5mm of appr, minimum width=20mm] (snap)
-    {$m_0$, $\delta_0$, $\dig(\pi_0)$, $A_0$, $\iota_0$, $\sigma_0$};
+    {$G^{(0)}\to\cdots\to B_x(t)$\\{\smlbl $m_B,\delta_B,\dig(\pi_B),A_B^{\rm proof},\iota_B,\sigma_B$}};
 
   % runtime plane
   \node[stage, right=8mm of appr, minimum width=17mm] (r1)

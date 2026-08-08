@@ -6,8 +6,10 @@ from __future__ import annotations
 import csv
 import json
 import os
+import platform
 import shutil
 import subprocess
+import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -120,9 +122,16 @@ def reset_baseline() -> None:
     run("docker", "push", "localhost:5001/governance-demo:1.0")
     trigger_flux()
     wait_rollout()
-    kubectl("-n", "payments", "rollout", "restart", "deployment/payments")
+    # A rollout-restart annotation is itself reverted by Flux, which can
+    # revive the old ReplicaSet while a mutable tag still resolves to the
+    # previous scenario digest. Recreate the pod under the reconciled template
+    # instead, forcing imagePullPolicy=Always to materialize the restored tag.
+    kubectl("-n", "payments", "delete", "pod", "-l", "app=payments", "--wait=true")
     wait_rollout()
     wait_consistent()
+    # Each independent experimental reset materializes a fresh immutable
+    # admitted-basis snapshot from the restored approval proof and state.
+    run("bash", str(LAB / "snapshot.sh"))
 
 
 def inject(scenario: str) -> float:
@@ -163,12 +172,38 @@ def platform_snapshot() -> dict:
         for item in payload["items"]
         for container in item["spec"]["template"]["spec"]["containers"]
     })
+    node = json.loads(kubectl("get", "node", "govdrift-lab-control-plane", "-o", "json"))
+    inspect = json.loads(run("docker", "inspect", "govdrift-lab-control-plane"))[0]
+    clock = time.get_clock_info("monotonic")
     return {
+        "host_cpu": run("sysctl", "-n", "machdep.cpu.brand_string").strip(),
+        "host_architecture": platform.machine(),
+        "host_ram_bytes": int(run("sysctl", "-n", "hw.memsize").strip()),
+        "host_os": f"macOS {run('sw_vers', '-productVersion').strip()}",
+        "python": sys.version.split()[0],
+        "docker_server": run("docker", "version", "--format", "{{.Server.Version}}").strip(),
         "kind": run("kind", "version").strip(),
+        "kind_node_capacity": node.get("status", {}).get("capacity", {}),
+        "kind_container_limits": {
+            "memory_bytes": inspect.get("HostConfig", {}).get("Memory", 0),
+            "nano_cpus": inspect.get("HostConfig", {}).get("NanoCpus", 0),
+            "interpretation": "0 means no explicit Docker per-container limit",
+        },
         "kubernetes_server": server,
         "flux_images": images(flux),
         "kyverno_images": images(kyverno),
         "evaluator_poll_seconds": 0.5,
+        "clock": {
+            "function": "time.monotonic",
+            "implementation": clock.implementation,
+            "resolution_seconds": clock.resolution,
+            "monotonic": clock.monotonic,
+            "adjustable": clock.adjustable,
+        },
+        "concurrent_load": (
+            "no intentionally launched benchmark workload; ordinary host background "
+            "services were not disabled or load-controlled"
+        ),
         "design": "one bounded execution per scenario; no prevalence or reliability estimate",
     }
 

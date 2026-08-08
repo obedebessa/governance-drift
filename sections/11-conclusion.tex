@@ -5,33 +5,44 @@ Reconciliation solved configuration drift so well that its green status has
 come to stand for a property it does not check. This paper named the
 difference: governance drift, the divergence of operational reality from the
 state, policy context, authorization basis, intent, and assumptions under
-which it was approved. We separated six drift classes formally; established,
+which it was approved. We separated five substantive drift components and a
+transversal epistemic evidence condition formally; established,
 by constructed counterexample and by a definitional-dependency argument,
 that configuration equality does not imply governance consistency and that
-no configuration-pair detector can decide it; modeled governance distance as
-an irreducibly component-wise vector anchored to a recorded approval event;
+no configuration-pair detector can decide it; modeled governance divergence as
+an irreducibly component-wise substantive vector plus observability mask,
+anchored to a recorded approval event;
 organized detection as cumulative evidence tiers; and checked, in an
 executed and fully reproducible closed-world study with class-set ground
 truth and benign governance churn in its control, that a
 definition-faithful reference implementation realizes the model's
 detectability staircase: configuration comparison decides exactly one of
-nine drift scenarios; each governance tier detects precisely the scenarios
+twelve drift scenarios and each governance tier detects precisely the components
 whose deciding facts it carries, earning zero false alarms against
-governance noise; and an unnormalized comparator alarms on 71\% of benign
-control events. The umbrella research question is thereby answered with its
+governance noise. RQ0 is thereby answered with its
 conditions stated: governance drift is formally representable (the vector
 $\GD$), measurable exactly where the admitted basis was recorded (coverage,
 GCC, bounds everything else), and detectable to the depth of the evidence
 tiers an estate maintains. The repeated Kubernetes/GitOps laboratory executed
 20 repetitions of all nine scenarios at 0.5-, 2-, and 10-s cadences on a
 pinned Kind/Flux/Kyverno stack. It detected 538 of 540 observations; all 538
-detected verdicts belonged to the expected class sets. Twenty benign windows
-covering six change families produced zero alarms in 543 polls. Separate
+detected outputs exactly matched the expected sets, yielding zero conditional
+Hamming loss. Twenty benign windows
+covering six change families produced zero substantive alarms and zero
+epistemic warnings in 543 polls. Separate
 injection, onset, detection, and evidence clocks show that actuation and DDL
 are distinct: for example, S6's median actuation was 10.05~s while median DDL
-was 0.47~s at the default cadence. These results establish bounded
+was 0.54~s at the default cadence. These results establish bounded
 realizability and within-laboratory behavior, not natural occurrence,
 prevalence, production reliability, or universal latency distributions.
+An independent no-join composite diagnoses only 9/12 closed-world scenario
+sets versus 12/12 for the history-aware join, isolating the increment from
+alarm volume. The live compound extension reaches exact final vectors in
+45/45 cadence observations and exposes why first alert and vector completion
+are distinct: S10's median DDL is 1.33~s but its median complete diagnosis is
+7.88~s. A 30-minute benign soak adds 4,680 polls without substantive or
+epistemic alarms; it strengthens the bounded specificity check without being
+misrepresented as a production-rate estimate.
 
 The definitions are offered for reuse; the matrix is offered as a template
 for evaluating any governance-drift detector; and the central lesson is

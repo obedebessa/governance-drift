@@ -9,11 +9,12 @@ rejecting what cannot be justified.
 \label{met:gdd}
 \emph{Proposed as}: a scalar distance between approved and operational
 state. \emph{Verdict: rejected as primitive; adopted as vector.} By
-\cref{sec:model-vector}, the primitive object is the component vector
-$\GD(t)$; a scalar GDD is legitimate only as a published-weight composite
-over it, with the weights understood as policy, and never as a substitute for
-the class-resolved report. (This mirrors the model's rejection of a scalar
-distance and is the suite's structural decision.)
+\cref{sec:model-vector}, the primitive report is
+$(\GDsub(t),\ObsMask(t))$; a scalar GDD is legitimate only as a
+published-weight composite over the decidable substantive components, with
+coverage reported separately and the weights understood as policy. It never
+substitutes for the component-resolved report. (This mirrors the model's
+rejection of a scalar distance and is the suite's structural decision.)
 \end{metricdef}
 
 \begin{metricdef}[Drift Detection Latency, DDL]
@@ -43,7 +44,11 @@ covered by a valid authorization basis at the time of effect. \emph{Verdict:
 adopted, with an evidence caveat}: UCR is computable only where approvals are
 recorded durably; where they are not, UCR's denominator is measurable but its
 numerator degrades to undecidable, and the metric must report the undecidable
-mass separately ($\devd$) rather than folding it into either pole.
+mass separately through $\ObsMask$ rather than folding it into either pole.
+With $N$ observed changes, $U$ known unapproved changes, and $Q$
+undecidable changes, report the identification interval
+$\mathrm{UCR}_{\min}=U/N$ and
+$\mathrm{UCR}_{\max}=(U+Q)/N$ rather than a fabricated point estimate.
 \end{metricdef}
 
 \begin{metricdef}[Policy-Version Divergence, PVD]
@@ -59,8 +64,8 @@ compare equal to one cosmetic control.
 
 \begin{metricdef}[Authorization Drift Ratio, ADR]
 \label{met:adr}
-Fraction of active authorization instruments (approvals, exceptions) in an
-estate that are expired, revoked, or subject-mismatched while still relied
+Fraction of authorization dependencies currently relied upon in an
+estate whose instruments are expired, revoked, or subject-mismatched while still relied
 upon---S2/S8-type conditions as a standing estate measurement.
 \emph{Verdict: adopted}; it is directly computable from T2/T3 evidence and
 is the metric that makes ``exception hygiene'' a number.
@@ -69,8 +74,8 @@ is the metric that makes ``exception hygiene'' a number.
 \begin{metricdef}[Governance Conformance Coverage, GCC]
 \label{met:gcc}
 Fraction of running deployments for which governance consistency is
-\emph{evaluable at all}---i.e., an approved-state snapshot exists, and every
-component distance can be computed from available streams. \emph{Verdict:
+\emph{evaluable at all}---i.e., an admitted basis exists, and every
+component divergence can be computed from available streams. \emph{Verdict:
 adopted, and placed first in reporting order}: coverage bounds the meaning of
 every other metric (a superb ADR over 20\% GCC is a statement about 20\% of
 the estate), and low GCC is itself the actionable finding that approved-state
@@ -83,3 +88,22 @@ weights published. The gaming surfaces are the usual ones---weakening policy
 lowers PVD; widening approvals lowers UCR---and, as in any governance
 measurement, the counters are meaningful only jointly with the policy and
 approval baselines they are computed against.
+
+\subsection{What the Present Data Can and Cannot Instantiate}
+The live campaign identifies DDL directly and exercises GCC semantics, but it
+does not instantiate estate-level GCC because its units are observations, not
+running deployments. All 60 S9 cadence observations intentionally fail the
+approval evidence contract, so observation-level full-vector evaluability is
+480/540 (88.9\%) in the scenario-balanced positive set and 543/543 polls in
+the benign controls. This is a contract exercise, not an estate estimate.
+UCR, PVD, and ADR are not
+reported from these injections: their denominators are deployment populations
+or naturally occurring change and authorization populations, whereas this
+case-control design fixes scenario counts by construction. Relabeling those
+fractions as operational rates would manufacture prevalence.
+
+For an estate, aggregate only after reporting GCC: compute each metric over
+evaluable deployments, retain unevaluable mass separately, and stratify by
+service criticality, environment, and evidence tier. A fleet-wide scalar may
+then be a published-weight summary, but it must not erase class counts or let
+a high-coverage low-risk stratum conceal an unevaluable critical stratum.
