@@ -1,0 +1,249 @@
+{
+  "schema_version": 1,
+  "experiment": "live Kind Kubernetes object-path plus in-memory BatchEvaluator",
+  "measurement_scope": "Each sweep uses one kubectl command that performs one Deployment LIST and one Pod LIST, then JSON decoding, adapter normalization, locally synthesized scoped approval/inventory evidence, and in-memory semantic evaluation. This is not a Flux/Kyverno full-stack, approval-service, inventory-service, or production test.",
+  "status": "stopped",
+  "requested_sizes": [
+    10,
+    50,
+    100
+  ],
+  "completed_sizes": [
+    10,
+    50
+  ],
+  "seed": 20260808,
+  "raw_sweeps": 40,
+  "all_vectors_exact": true,
+  "all_policy_fanouts_exact": true,
+  "api_errors": 0,
+  "quantile_method": "linear interpolation on zero-indexed ranks",
+  "stop_rules": {
+    "node_memory_percent": 85.0,
+    "node_cpu_percent": 90.0,
+    "cpu_confirmation_samples": 2,
+    "api_errors_allowed": 0,
+    "readiness_timeout_seconds": 240,
+    "per_size_timeout_seconds": 600,
+    "semantic_errors_allowed": 0
+  },
+  "churn_schedule": {
+    "sweeps_1_8": "settled baseline",
+    "before_sweep_9": "scale deterministic 20% cohort from one to two replicas",
+    "sweeps_9_14": "settled post-scale",
+    "before_sweep_15": "rollout restart the same cohort and wait for settlement",
+    "sweeps_15_20": "settled post-restart",
+    "concurrency_boundary": "mutations occur between phases; timed sweeps begin after settlement"
+  },
+  "limitations": [
+    "One local single-node Kind cluster and one host execution.",
+    "Deployments and Pods are real; approvals, policy results, and environment inventory are locally synthesized after capture.",
+    "Flux and Kyverno do not participate in the exclusive namespace.",
+    "The two resource LIST operations are issued by one kubectl command; kubectl process startup is included in fetch time.",
+    "Churn is phase-separated and settled before measurement, not concurrent with a sweep.",
+    "No API saturation, multi-cluster behavior, field prevalence, or production effectiveness is estimated."
+  ],
+  "platform": {
+    "host_os": "macOS-26.5.1-arm64-arm-64bit",
+    "host_machine": "arm64",
+    "logical_cpus": 16,
+    "python": "3.11.9",
+    "kubernetes_client": "v1.36.3",
+    "kubernetes_server": "v1.36.1",
+    "node_capacity": {
+      "cpu": "16",
+      "ephemeral-storage": "954976684Ki",
+      "hugepages-1Gi": "0",
+      "hugepages-2Mi": "0",
+      "hugepages-32Mi": "0",
+      "hugepages-64Ki": "0",
+      "memory": "8024028Ki",
+      "pods": "110"
+    },
+    "node_allocatable": {
+      "cpu": "16",
+      "ephemeral-storage": "954976684Ki",
+      "hugepages-1Gi": "0",
+      "hugepages-2Mi": "0",
+      "hugepages-32Mi": "0",
+      "hugepages-64Ki": "0",
+      "memory": "8024028Ki",
+      "pods": "110"
+    },
+    "container_image": "localhost:5001/governance-demo:1.0",
+    "initial_node_stats": {
+      "available": true,
+      "utc": "2026-08-08T05:47:19.145605+00:00",
+      "cpu_percent": 18.69,
+      "memory_percent": 30.41,
+      "memory_usage": "2.327GiB / 7.652GiB",
+      "pids": "495"
+    }
+  },
+  "resource_checks": [
+    {
+      "available": true,
+      "utc": "2026-08-08T05:47:24.840237+00:00",
+      "cpu_percent": 20.01,
+      "memory_percent": 33.28,
+      "memory_usage": "2.547GiB / 7.652GiB",
+      "pids": "808",
+      "stage": "n=10-ready"
+    },
+    {
+      "available": true,
+      "utc": "2026-08-08T05:47:33.021222+00:00",
+      "cpu_percent": 20.0,
+      "memory_percent": 34.34,
+      "memory_usage": "2.628GiB / 7.652GiB",
+      "pids": "865",
+      "stage": "n=10-post-scale"
+    },
+    {
+      "available": true,
+      "utc": "2026-08-08T05:47:38.840578+00:00",
+      "cpu_percent": 38.43,
+      "memory_percent": 34.93,
+      "memory_usage": "2.673GiB / 7.652GiB",
+      "pids": "872",
+      "stage": "n=10-post-restart"
+    },
+    {
+      "available": true,
+      "utc": "2026-08-08T05:47:51.006152+00:00",
+      "cpu_percent": 23.23,
+      "memory_percent": 45.99,
+      "memory_usage": "3.519GiB / 7.652GiB",
+      "pids": "1984",
+      "stage": "n=50-ready"
+    },
+    {
+      "available": true,
+      "utc": "2026-08-08T05:47:57.726959+00:00",
+      "cpu_percent": 26.09,
+      "memory_percent": 48.51,
+      "memory_usage": "3.712GiB / 7.652GiB",
+      "pids": "2287",
+      "stage": "n=50-post-scale"
+    },
+    {
+      "available": true,
+      "utc": "2026-08-08T05:48:08.882162+00:00",
+      "cpu_percent": 84.87,
+      "memory_percent": 49.12,
+      "memory_usage": "3.759GiB / 7.652GiB",
+      "pids": "2272",
+      "stage": "n=50-post-restart"
+    }
+  ],
+  "cleanup": {
+    "attempted": true,
+    "namespace": "govdrift-fleet",
+    "started_utc": "2026-08-08T05:52:11.172314+00:00",
+    "returncode": 0,
+    "stdout": "namespace \"govdrift-fleet\" deleted",
+    "stderr": "",
+    "completed_utc": "2026-08-08T05:52:29.336971+00:00",
+    "namespace_absent_after": true
+  },
+  "sizes": [
+    {
+      "n": 10,
+      "sweeps": 20,
+      "phases": {
+        "baseline": 8,
+        "post-scale": 6,
+        "post-restart": 6
+      },
+      "fetch_ms": {
+        "p50": 53.611625000000004,
+        "p95": 76.68796665,
+        "mean": 56.361843750000006
+      },
+      "parse_ms": {
+        "p50": 0.690354,
+        "p95": 0.9701619000000007,
+        "mean": 0.7439937
+      },
+      "core_ms": {
+        "p50": 0.09918750000000001,
+        "p95": 0.1451375,
+        "mean": 0.107752
+      },
+      "total_ms": {
+        "p50": 54.388229,
+        "p95": 78.61038365000002,
+        "mean": 57.220016699999995
+      },
+      "units_per_second_median": 183.8844225466444,
+      "active_pods_min": 10,
+      "active_pods_max": 12,
+      "active_containers_min": 20,
+      "active_containers_max": 24,
+      "response_bytes_p50": 235251.0,
+      "response_bytes_p95": 251041.90000000002,
+      "exact_vectors": 200,
+      "expected_vectors": 200,
+      "api_errors": 0,
+      "api_commands": 20,
+      "modeled_api_list_operations": 40,
+      "policy_fanout_units": 2,
+      "policy_fanout_core_ms": {
+        "p50": 0.030792,
+        "p95": 0.040630950000000006,
+        "mean": 0.03267705
+      },
+      "policy_fanout_exact_total": 40,
+      "policy_fanout_expected_total": 40
+    },
+    {
+      "n": 50,
+      "sweeps": 20,
+      "phases": {
+        "baseline": 8,
+        "post-scale": 6,
+        "post-restart": 6
+      },
+      "fetch_ms": {
+        "p50": 101.54291649999999,
+        "p95": 111.81223365000001,
+        "mean": 101.56786665
+      },
+      "parse_ms": {
+        "p50": 2.7799995,
+        "p95": 4.6236482500000005,
+        "mean": 3.03135825
+      },
+      "core_ms": {
+        "p50": 0.324229,
+        "p95": 0.42324375000000003,
+        "mean": 0.34020195
+      },
+      "total_ms": {
+        "p50": 104.9151455,
+        "p95": 115.26045864999999,
+        "mean": 104.9494833
+      },
+      "units_per_second_median": 476.57570713299947,
+      "active_pods_min": 50,
+      "active_pods_max": 60,
+      "active_containers_min": 100,
+      "active_containers_max": 120,
+      "response_bytes_p50": 1176598.0,
+      "response_bytes_p95": 1224923.0,
+      "exact_vectors": 1000,
+      "expected_vectors": 1000,
+      "api_errors": 0,
+      "api_commands": 20,
+      "modeled_api_list_operations": 40,
+      "policy_fanout_units": 10,
+      "policy_fanout_core_ms": {
+        "p50": 0.0995005,
+        "p95": 0.11027885,
+        "mean": 0.10141675000000001
+      },
+      "policy_fanout_exact_total": 200,
+      "policy_fanout_expected_total": 200
+    }
+  ]
+}

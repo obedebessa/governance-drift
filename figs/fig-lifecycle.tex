@@ -2,23 +2,26 @@
 \begin{tikzpicture}[x=1mm, y=1mm]
   \def\W{92}
   \draw[flow] (0,0) -- (\W,0) node[lbl, right]{$t$};
-  \foreach \x/\lab in {6/{approval $t_0$},
+  \foreach \x/\lab in {6/{basis activation $t_0^{\rm act}$},
                          30/{drift onset},
-                         56/{detection},
-                         74/{remediation}}{
+                         50/{first alert},
+                         64/{stable vector},
+                         78/{remediation}}{
     \draw[black] (\x,0) -- (\x,2.5);
     \node[lbl, above, text=black] at (\x,3) {\lab};
   }
   \draw[decorate,decoration={brace,mirror,amplitude=3pt}, black!60]
-    (30,-2) -- (56,-2) node[midway, below=3pt, lbl] {detection latency (DDL)};
+    (30,-2) -- (50,-2) node[midway, below=3pt, lbl] {DDL};
   \draw[decorate,decoration={brace,mirror,amplitude=3pt}, black!60]
-    (30,-8.5) -- (74,-8.5) node[midway, below=3pt, lbl] {dwell time (exposure)};
-  \node[lbl, below=1mm] at (18,-13.5) {\smlbl consistent};
-  \draw[line width=2.2pt, black] (6,-13) -- (30,-13);
-  \draw[line width=2.2pt, black, dashed] (30,-13) -- (74,-13);
-  \draw[line width=2.2pt, black] (74,-13) -- (\W-4,-13);
-  \node[lbl, below=1mm, text=black] at (52,-13.5) {\smlbl inconsistent (dashed; classed by $\GD$)};
-  \node[lbl, below=1mm] at (84,-13.5) {\smlbl restored};
+    (30,-7.5) -- (64,-7.5) node[midway, below=3pt, lbl] {Stable-VCL};
+  \draw[decorate,decoration={brace,mirror,amplitude=3pt}, black!60]
+    (30,-13) -- (78,-13) node[midway, below=3pt, lbl] {dwell time (exposure)};
+  \node[lbl, below=1mm] at (18,-18) {\smlbl consistent};
+  \draw[line width=2.2pt, black] (6,-17.5) -- (30,-17.5);
+  \draw[line width=2.2pt, black, dashed] (30,-17.5) -- (78,-17.5);
+  \draw[line width=2.2pt, black] (78,-17.5) -- (\W-4,-17.5);
+  \node[lbl, below=1mm, text=black] at (54,-18) {\smlbl inconsistent (dashed; classed by $\GD$)};
+  \node[lbl, below=1mm] at (85,-18) {\smlbl restored};
   \node[lbl, text=black!60] at (46,8)
     {onset is class-specific: an event ($\pi$ revision, re-tag), a clock (expiry), or a convergence (rollback)};
 \end{tikzpicture}

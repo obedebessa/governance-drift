@@ -21,27 +21,30 @@ after four hours and has now been silently in force for six weeks; the registry
 re-tagged \texttt{svc:1.4.2} so the pods run a digest no approval ever
 referenced; and a well-meaning rollback reverted Git to \texttt{rev-37},
 content whose approval belongs to a different change. Configuration drift:
-zero. Every governance fact that made the deployment legitimate on
-March~3rd: gone. We call this condition \emph{governance drift}: the
+zero. One or more legitimacy conditions that covered the deployment on
+March~3rd no longer hold. We call this condition \emph{governance drift}: the
 operational state has diverged not from its manifest but from the state,
 policy context, authorization basis, and intent \emph{under which it was
 approved}.
 
-The distinction is not terminological. Configuration drift is a
-\emph{two-place, memoryless} relation
-between two configurations---desired and observed---and is therefore decidable
-by comparison, which is exactly what reconcilers and drift
-tools~\cite{awsconfig,driftctl} implement. Governance drift is a
+The distinction is not terminological. The desired/observed
+configuration-drift signal implemented by reconcilers and commonplace IaC
+drift tools is a \emph{two-place, memoryless} relation between two
+configurations and is therefore decidable by comparison
+\cite{awsconfig,driftctl}. Configuration-management programs can retain
+approved historical baselines (\cref{sec:related}), but their decision object
+remains configuration-scoped. Governance drift is a
 \emph{three-place, history-anchored} relation among present state, evolving
 context, and an immutable admitted basis; we establish the separation in two complementary
 forms: constructed, tool-realizable counterexamples, and a
 definitional-dependency result showing that no detector whose inputs are
 configuration pairs---however sophisticated its diffing---can decide
 governance consistency, because the deciding facts are not functions of those
-inputs (\cref{prop:impossible}). Worse, reconciliation can \emph{manufacture}
-governance drift while eliminating configuration drift: the rollback scenario
-above is converged by the reconciler into a state that no current approval
-covers (\cref{sec:taxonomy}).
+inputs (\cref{prop:impossible}). Worse, reconciliation can materialize an
+unauthorized desired-state change and then erase the transient
+configuration-drift signal, leaving intent drift: the rollback scenario above
+is converged into content outside the historically authorized change lineage
+(\cref{sec:taxonomy}).
 
 Our executed study makes the separation concrete. We implement a
 governance-drift detector evaluated at cumulative evidence tiers---%
@@ -63,7 +66,8 @@ scoring diagnostic, not as a production baseline.
 \begin{description}[leftmargin=3.2em,itemsep=1pt,topsep=2pt]
 \item[RQ0:] Can divergence between approved intent and operational reality be
 formally represented and measured as governance drift?
-\item[RQ1:] Which forms of governance drift occur in cloud-native systems?
+\item[RQ1:] Which forms of governance drift can arise and be distinguished in
+cloud-native systems?
 \item[RQ2:] Can governance drift be detected using existing operational,
 governance, and control-plane evidence streams?
 \item[RQ3:] How quickly does governance drift become visible?
@@ -88,7 +92,8 @@ drift as their umbrella---and with the explicit
 commitment that governance drift must not, and provably does not, reduce to
 configuration drift (\cref{sec:taxonomy}).
 \item \textbf{Formal model} (conceptual/analytic): an immutable sequence of
-approved-state snapshots, observed state $\Gobs(t)$, time-indexed governance contexts
+atomic approval snapshots plus separate activation and supersession records,
+stable unit identity, admissible cross-stream temporal cuts, observed state $\Gobs(t)$, time-indexed governance contexts
 $\Pol(t), \Auth(t), \Int(t)$, and a component-wise governance-divergence vector
 $\GDsub(t)$ plus an observability mask $\ObsMask(t)$, with a reasoned rejection of a primitive scalar distance
 (\cref{sec:model}).
@@ -104,7 +109,7 @@ with indistinguishable-world constructions proving tier minimality
 \item \textbf{Executed detector study} (empirical, closed-world): twelve
 scenarios $\times$ six detector tiers $\times$ twenty seeds, with
 counterfactual scoring, full-vector ground truth, three compound scenarios,
-exact-set and Hamming scoring, an independent composite baseline without the
+exact-set and Hamming scoring, a separately implemented composite comparator without the
 admitted-basis join, and a control containing
 runtime \emph{and} benign governance churn; all code and data packaged,
 matrix generated programmatically (\cref{sec:study}). Its role is precisely
@@ -112,16 +117,40 @@ scoped: it validates that the reference semantics realize the model's
 dependency structure and quantifies noise behavior; it is not field evidence,
 and it makes no claim about any real cluster.
 \item \textbf{Repeated Kubernetes/GitOps laboratory} (empirical, executed): a
-pinned Kind/Flux/Kyverno stack, local Git and OCI services, approved-state
+version-pinned Kind/Flux/Kyverno stack, local Git and OCI services, approved-state
 recorder, tiered evaluator, and executable injections for S1--S9. In one
 hundred eighty controlled injections (20 per scenario), three randomized-phase
 polling cadences produced 538/540 detections and 100\% conditional exact-set
-accuracy; 20 balanced benign-change windows produced zero
-alarms in 543 polls (\cref{sec:lab}). A secondary S10--S12 extension reached
-the exact vector in 45/45 cadence observations; six 300-s benign windows
-added 4,680 polls without substantive or epistemic alarms. The execution
-establishes bounded realizability and within-laboratory behavior, not natural occurrence,
+accuracy for provisional class-set classifications under the laboratory's
+sequential-snapshot assumption. Twenty steady-state benign windows produced no alarms in 543 polls;
+a separate transition-inclusive campaign began three isolated observers before
+each benign mutation and retained all 777 polls, including seven expected
+configuration-convergence polls and 36 fail-safe epistemic warning polls but
+no policy, authorization, intent, or environment drift; all 60 trajectories
+ended with a provisionally consistent classification
+(\cref{sec:lab}). A secondary S10--S12 extension reached
+the exact provisional class set in 45/45 cadence observations; six separate 300-s benign windows
+added 4,680 steady-state polls without substantive or epistemic alarms. The execution
+demonstrates bounded realizability and behavior within the reported laboratory conditions, not natural occurrence,
 prevalence, production effectiveness, stream-loss reliability, or transfer.
+\item \textbf{Boundary campaigns} (empirical, executed): a nine-episode audit
+with 27 separate observer processes and 261 raw polls; nine controlled profiles
+through a two-hop localhost TCP evidence path; an in-memory batched-join
+benchmark through 1,000 units; and a live Kubernetes object-path campaign that
+completed 10- and 50-Deployment targets while enforcing declared stop rules.
+The same section specifies a pending bounded cross-stack rerun on Argo CD and
+Gatekeeper (\cref{sec:lab}); it is designed to exercise the native S1
+configuration and S3 policy paths, while S4 retains the shared artifact
+adapter. Its reportable outputs will be projected singleton classifications
+over those declared evaluated components, not complete formal vectors; frozen
+counts remain \texttt{CROSS\_TBD}. The process-isolated audit requires exact output
+on two consecutive polls; it does not claim watermark-qualified persistence.
+The separate temporal-cut tests validate the admissibility contract rather
+than retroactively making the sequential live snapshots globally coherent.
+These campaigns
+test traceability, fail-safe transport semantics, decision-core scaling, live
+fan-out, and limited component-path transfer separately; none is presented as
+an equivalence, production-capacity, or reliability estimate.
 \end{enumerate}
 
 Established results are cited; analytic claims are proved in the model; the

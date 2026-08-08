@@ -1,0 +1,78 @@
+{
+  "experimental_units": 180,
+  "estimand": "macro-average detection over the balanced nine-scenario experimental mixture",
+  "cadence_wilson_95": {
+    "0.5": {
+      "successes": 180,
+      "total": 180,
+      "lower": 0.9791045020783868,
+      "upper": 1.0
+    },
+    "2.0": {
+      "successes": 179,
+      "total": 180,
+      "lower": 0.9692069292336208,
+      "upper": 0.9990186339327839
+    },
+    "10.0": {
+      "successes": 179,
+      "total": 180,
+      "lower": 0.9692069292336208,
+      "upper": 0.9990186339327839
+    }
+  },
+  "scenario_detection": {
+    "S1": {
+      "injections": 20,
+      "cadence_observations_detected": 58,
+      "cadence_observations_total": 60
+    },
+    "S2": {
+      "injections": 20,
+      "cadence_observations_detected": 60,
+      "cadence_observations_total": 60
+    },
+    "S3": {
+      "injections": 20,
+      "cadence_observations_detected": 60,
+      "cadence_observations_total": 60
+    },
+    "S4": {
+      "injections": 20,
+      "cadence_observations_detected": 60,
+      "cadence_observations_total": 60
+    },
+    "S5": {
+      "injections": 20,
+      "cadence_observations_detected": 60,
+      "cadence_observations_total": 60
+    },
+    "S6": {
+      "injections": 20,
+      "cadence_observations_detected": 60,
+      "cadence_observations_total": 60
+    },
+    "S7": {
+      "injections": 20,
+      "cadence_observations_detected": 60,
+      "cadence_observations_total": 60
+    },
+    "S8": {
+      "injections": 20,
+      "cadence_observations_detected": 60,
+      "cadence_observations_total": 60
+    },
+    "S9": {
+      "injections": 20,
+      "cadence_observations_detected": 60,
+      "cadence_observations_total": 60
+    }
+  },
+  "scenario_stratified_cluster_bootstrap_95": {
+    "estimate": 0.9962962962962963,
+    "lower": 0.9888888888888889,
+    "upper": 1.0,
+    "resamples": 50000,
+    "seed": 20260807
+  }
+}

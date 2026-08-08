@@ -9,12 +9,14 @@ not that anyone erred. We consider this a feature of the vector semantics:
 because classes are separated, an estate can adopt distinct dispositions per
 class (auto-reconcile configuration drift; ticket policy drift with a
 migration SLA; page on authorization drift; block on intent drift)---%
-consistent with the evidence that indiscriminate heavyweight gating harms
-delivery without improving stability~\cite{forsgren2018,dora2019}---turning
+consistent with observational DORA evidence associating delivery practices
+with delivery and stability outcomes~\cite{forsgren2018,dora2019}---turning
 the taxonomy into an operating policy rather than an alarm firehose. What the
+observational association does not establish is that the response families
+proposed here cause either faster delivery or greater stability. What the
 model deliberately does not decide---and no measurement can---is the
 disposition itself. \Cref{tab:severity} makes the distinction systematic:
-class selects a primary risk channel and response family, while blast radius,
+class informs a primary risk channel and response family, while blast radius,
 duration, reversibility, consequence, and evidence coverage determine actual
 severity. The vector must not be collapsed into a universal danger ranking.
 
@@ -35,25 +37,58 @@ into a false ``consistent'' state.
 \subsection{Limitations}
 \emph{The approved-state prerequisite.} Everything downstream of
 \cref{sec:architecture} assumes an admitted basis $B_x(t)$ was recorded durably; where it was
-not, verdicts degrade to undecidable, and the honest headline is GCC, not
-drift rates. This is a real adoption constraint, not a footnote: estates
-without durable approval evidence cannot measure their governance drift, and
-discovering that is arguably the measurement's first value.
+not, only basis-dependent components and the total governance verdict degrade
+to undecidable. Configuration remains comparable when its desired/observed
+evidence is available, but it cannot support a total governance-conformance
+claim; the honest headline is component coverage and GCC, not a total drift
+rate. This is a real adoption constraint, not a footnote: estates without
+durable approval evidence cannot measure their basis-dependent governance
+relations, and discovering that is arguably the measurement's first value.
 \emph{Bounded live empirics.} The laboratory executed 20 repetitions of each
-scenario at three evaluator cadences on one Kind/Flux/Kyverno stack, plus 20
-benign control windows. Its 538/540 detection observations, 538/538
-conditional exact-set agreements, zero conditional Hamming loss, and zero
-substantive alarms or epistemic warnings in 543 benign-control polls
-are supplemented by 45/45 exact compound-vector completions and a 30-minute,
-4,680-poll benign soak with no substantive or epistemic alarm. They establish
-bounded realizability and within-laboratory behavior. They do not
+of S1--S9 at three evaluator cadences on one Kind/Flux/Kyverno stack, plus 20
+post-stabilization benign control windows. Its 538/540 detection observations,
+538/538 conditional exact provisional class-set agreements, and 0.000617
+unconditional Hamming loss are supplemented by 45/45 exact provisional
+compound-class-set completions and six separate
+five-minute windows totaling 4,680 steady-state polls with no substantive or
+epistemic alarm. A transition-inclusive rerun adds 777 per-poll observations:
+zero policy, authorization, intent, or environment drift; seven expected configuration-convergence
+polls, and 36 fail-safe evidence-warning polls; all 60 window--cadence
+trajectories ended with a provisionally consistent classification.
+The pending Argo CD/Gatekeeper rerun will report projected singleton
+classifications only over the declared evaluated components for S1, S3, and
+S4: configuration and policy use native second-stack surfaces; S4 retains the
+shared digest adapter, and intent and environment are unevaluated. Its frozen
+counts remain \texttt{CROSS\_TBD} and do not contribute to the completed-result
+claims. The completed campaigns demonstrate
+bounded realizability and within-laboratory behavior under their reported
+conditions. They do not
 establish natural occurrence, field prevalence, production reliability,
-universal false-alarm rates, stream-loss tolerance, or transfer across
-organizations. The two cadence misses are retained because they expose a
-real observability boundary for transient drift. \emph{Single-deployment granularity.} The model is
-per-deployment; estate-level aggregation (fleet drift, correlated policy
-supersessions) raises weighting questions we defer to the metrics'
-published-composite discipline. \emph{Environment scope.} $\denv$ is bounded
+universal false-alarm rates, stream-loss tolerance, full-stack equivalence, or
+transfer across organizations. The two cadence misses are retained because they expose a
+real observability boundary for transient drift.
+\emph{Temporal-contract implementation gap.} The formal model requires
+stable unit references, authenticated capture intervals, watermarks, and an
+admissible cut. The primary cluster evaluator reads its sources sequentially
+and does not implement production watermarks; namespace/UID correlation,
+fail-safe incomplete-rollout behavior, deterministic envelope faults, and
+hash-chain selection test pieces on the live path, while a separate executable
+cut selector tests the complete rejection semantics over synthetic stream
+records. Thus live outputs are provisional class-set classifications under a
+laboratory sequential-snapshot assumption, while temporal-cut tests validate
+the contract separately; neither is a claim that arbitrary distributed
+snapshots are coherent or that the live runs evaluated formal $\Cons$.
+\emph{Live granularity and scale.} The scenario campaign remains
+per-deployment. The separate live adapter campaign covers 50 Deployments,
+60 Pods, 120 containers after settled churn, and the actual Kubernetes object
+fetch/parse path; its attempted 100-Deployment target hit the declared
+readiness stop rule. Approval, policy, and inventory evidence in that campaign
+remain synthesized, and churn is phase-separated. The 1,000-unit
+microbenchmark is consistent with the $O(n)$ call-count analysis and validates
+exact indexed execution only over the tested values of $n$. API saturation,
+multi-cluster aggregation, production services, and positive injections under
+truly concurrent fleet churn remain open.
+\emph{Environment scope.} $\denv$ is bounded
 by what $\sigma_B$ declares; assumptions never written down cannot drift
 detectably---an instance of the general dependence of governance measurement
 on capture discipline. \emph{Remediation dynamics.} We model detection, not

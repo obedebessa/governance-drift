@@ -2,54 +2,63 @@
   "design": "five repetitions of S10--S12 at three cadences; six 300-second benign windows",
   "positive_observations": 45,
   "detected": 45,
-  "exact_final_vectors": 45,
-  "first_complete_vectors": 34,
+  "exact_completed_class_sets": 45,
+  "first_complete_class_sets": 35,
   "scenarios": [
     {
       "scenario": "S10",
       "expected_class_set": "policy|authorization",
       "observations": 15,
+      "injections": 5,
       "detections": 15,
-      "exact_final_vectors": 15,
-      "first_complete_vectors": 4,
+      "exact_completed_class_sets": 15,
+      "first_complete_class_sets": 5,
       "first_observed_sets": {
-        "authorization": 11,
-        "policy|authorization": 4
+        "authorization": 10,
+        "policy|authorization": 5
       },
-      "ddl_median_seconds": 1.3347020423971117,
-      "ddl_p95_seconds": 8.482681541703641,
-      "vcl_median_seconds": 7.881209165789187,
-      "vcl_p95_seconds": 14.259274625219405
+      "ddl_median_seconds": 1.5438798340037465,
+      "ddl_p95_seconds": 8.480617249850184,
+      "exact_set_completion_median_seconds": 7.614803750067949,
+      "exact_set_completion_p95_seconds": 14.233289458788931,
+      "diagnostic_gap_median_seconds": 5.983912625350058,
+      "diagnostic_gap_p95_seconds": 10.034993167035282
     },
     {
       "scenario": "S11",
       "expected_class_set": "authorization|environment",
       "observations": 15,
+      "injections": 5,
       "detections": 15,
-      "exact_final_vectors": 15,
-      "first_complete_vectors": 15,
+      "exact_completed_class_sets": 15,
+      "first_complete_class_sets": 15,
       "first_observed_sets": {
         "authorization|environment": 15
       },
-      "ddl_median_seconds": 1.2467060405761003,
-      "ddl_p95_seconds": 2.7534467093646526,
-      "vcl_median_seconds": 1.2467060405761003,
-      "vcl_p95_seconds": 2.7534467093646526
+      "ddl_median_seconds": 1.291882541961968,
+      "ddl_p95_seconds": 2.829547875095159,
+      "exact_set_completion_median_seconds": 1.291882541961968,
+      "exact_set_completion_p95_seconds": 2.829547875095159,
+      "diagnostic_gap_median_seconds": 0.0,
+      "diagnostic_gap_p95_seconds": 0.0
     },
     {
       "scenario": "S12",
-      "expected_class_set": "evidence",
+      "expected_class_set": "intent|evidence",
       "observations": 15,
+      "injections": 5,
       "detections": 15,
-      "exact_final_vectors": 15,
-      "first_complete_vectors": 15,
+      "exact_completed_class_sets": 15,
+      "first_complete_class_sets": 15,
       "first_observed_sets": {
-        "evidence": 15
+        "intent|evidence": 15
       },
-      "ddl_median_seconds": 0.5677017909474671,
-      "ddl_p95_seconds": 8.495680917054415,
-      "vcl_median_seconds": 0.5677017909474671,
-      "vcl_p95_seconds": 8.495680917054415
+      "ddl_median_seconds": 0.6946618747897446,
+      "ddl_p95_seconds": 8.579337249975652,
+      "exact_set_completion_median_seconds": 0.6946618747897446,
+      "exact_set_completion_p95_seconds": 8.579337249975652,
+      "diagnostic_gap_median_seconds": 0.0,
+      "diagnostic_gap_p95_seconds": 0.0
     }
   ],
   "soak": {

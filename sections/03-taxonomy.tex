@@ -10,9 +10,10 @@ linkage, and environment assumptions. Afterward, two planes evolve
 independently: the runtime plane (observed configuration, running artifacts,
 environment) and the governance plane (policy versions, authorization
 validity, intent records). Reconcilers continuously compare within the runtime
-plane (solid loop); nothing in standard practice compares the runtime plane
-against the \emph{evolved} governance plane (dashed gap)---the space in which
-governance drift lives.}
+plane (solid loop). Mechanisms in our bounded source set evaluate portions of
+the dashed relation, but none of their documented native decision objects
+joins both planes to a uniquely activated admitted basis and returns the full
+class-resolved verdict---the gap studied here.}
 \label{fig:planes}
 \end{figure}
 
@@ -30,8 +31,11 @@ artifact digests it resolves to), the policy version under which it was
 evaluated, immutable authorization proof (approvals, exceptions, their
 subjects, scopes, execution times, and windows), the intent linkage (the change record and revision the
 approval covers), and the declared environment assumptions within which the
-risk assessment was made. Evaluation selects the latest applicable covering
-snapshot; prior snapshots remain evidence rather than being overwritten.
+risk assessment was made. Approval appends a record; activation binds it to
+an effect that became operational. Evaluation selects the unique maximal
+activated covering successor, never merely the latest approval timestamp;
+pending, aborted, superseded, and prior snapshots remain evidence rather than
+being overwritten (\cref{prop:basis-selection}).
 \end{definition}
 
 \begin{definition}[Configuration Drift]
@@ -65,19 +69,35 @@ execution, provided its integrity-valid proof survives.
 
 \begin{definition}[Intent Drift]
 \label{def:intdrift}
-Divergence between the content now driving the runtime and the intent record
-the authorization covers: the desired state was changed (e.g., rolled back)
-to content whose approval basis is absent or belongs to a different change,
-and reconciliation faithfully executes it.
+Divergence between the lineage now driving the runtime and the historically
+authorized change lineage recorded by the selected admitted basis: the desired
+state was changed (e.g., rolled back) to content that was never covered by that
+change or belongs to a different change, and reconciliation faithfully executes
+it. Expiry or prospective revocation changes current authorization, not the
+historical fact of what intent was authorized. Only an explicitly retroactive
+revocation whose semantics invalidate the original approval can invalidate that
+historical intent relation.
 \end{definition}
 
-\begin{definition}[Evidence Drift]
+\begin{definition}[Evidence Failure and Evidence Drift]
 \label{def:evddrift}
-Decay of the records connecting the running state to its approval basis: the
-chain (revision $\to$ artifact $\to$ deployment $\to$ approval) can no longer
-be established from surviving evidence, so governance consistency becomes
-\emph{undecidable} rather than false. Evidence drift converts governance
-questions from answerable to unanswerable. It is therefore an
+Failure of any declared component evidence contract---including the admitted
+basis or its activation order, authorization proof or required live status,
+policy result, intent/lineage chain, environment inventory, freshness,
+authenticity, subject linkage, or stream health---so the corresponding
+governance relation can no longer be established. For component $j$, let
+\[
+\begin{aligned}
+\mathrm{EvdFail}_j(t)&\iff o_j(t)=0,\\
+\mathrm{EvdDrift}_j(t)&\iff o_j(t^-)=1\land o_j(t)=0.
+\end{aligned}
+\]
+The first is current unavailability; the second is the witnessed transition
+from answerable to unanswerable. Without a prior observation, the system may
+claim evidence failure or low coverage, not a temporal drift it did not
+witness. Both make the affected relation \emph{undecidable} rather than false
+and share the operational label \emph{evidence}, because both require evidence
+repair and withholding a polar verdict. This label is therefore an
 \emph{epistemic, transversal} class: unlike the five substantive components,
 it does not assert that a governed relation is inconsistent; it records that
 one or more such relations can no longer be decided. We keep it inside the
@@ -147,8 +167,9 @@ Environment & Assumption and exposure boundary & Do unmanaged surroundings still
 \end{tabular}
 \end{table*}
 
-This mapping is causal, not ordinal: drift class $\rightarrow$ risk channel
-$\rightarrow$ response family. Within a class, severity must still be
+This mapping is diagnostic and decision-oriented, not ordinal: each class is
+associated with a primary risk channel and candidate response family; causal
+impact and final disposition require incident-specific evidence. Within a class, severity must still be
 conditioned on asset criticality, affected subjects, exposure time,
 reversibility, and the confidence permitted by surviving evidence. Across
 classes, a low-impact authorization mismatch can be less severe than a
@@ -185,8 +206,10 @@ exception expiry (authorization drift), and at the registry re-tag
 (authorization drift at digest granularity). In the fourth panel the desired
 state itself is rolled back and the reconciler \emph{eliminates} the
 transient configuration drift by converging to content with no valid approval
-basis: reconciliation manufactures intent drift while restoring configuration
-consistency. Each panel is realizable with standard tooling, and each is one
+basis: reconciliation can materialize a desired-state change outside the
+historically authorized lineage and then erase the transient
+configuration-drift signal, leaving intent drift.
+Each panel is realizable with standard tooling, and each is one
 of the executed scenarios of \cref{sec:study}.
 
 \begin{figure*}[t]

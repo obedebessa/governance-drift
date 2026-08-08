@@ -1,0 +1,53 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "labels": {
+      "app": "payments-trace",
+      "env": "prod",
+      "team-owner": "platform"
+    },
+    "name": "payments-trace",
+    "namespace": "govdrift-trace"
+  },
+  "spec": {
+    "replicas": 1,
+    "selector": {
+      "matchLabels": {
+        "app": "payments-trace"
+      }
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "payments-trace"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "env": [
+              {
+                "name": "APP_VERSION",
+                "value": "v2-approved"
+              }
+            ],
+            "image": "nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10",
+            "imagePullPolicy": "IfNotPresent",
+            "name": "payments-trace",
+            "resources": {
+              "limits": {
+                "cpu": "100m",
+                "memory": "64Mi"
+              },
+              "requests": {
+                "cpu": "25m",
+                "memory": "16Mi"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

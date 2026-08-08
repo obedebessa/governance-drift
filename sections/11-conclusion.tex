@@ -1,52 +1,71 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-Reconciliation solved configuration drift so well that its green status has
-come to stand for a property it does not check. This paper named the
-difference: governance drift, the divergence of operational reality from the
-state, policy context, authorization basis, intent, and assumptions under
-which it was approved. We separated five substantive drift components and a
-transversal epistemic evidence condition formally; established,
-by constructed counterexample and by a definitional-dependency argument,
-that configuration equality does not imply governance consistency and that
-no configuration-pair detector can decide it; modeled governance divergence as
-an irreducibly component-wise substantive vector plus observability mask,
-anchored to a recorded approval event;
-organized detection as cumulative evidence tiers; and checked, in an
-executed and fully reproducible closed-world study with class-set ground
-truth and benign governance churn in its control, that a
-definition-faithful reference implementation realizes the model's
-detectability staircase: configuration comparison decides exactly one of
-twelve drift scenarios and each governance tier detects precisely the components
-whose deciding facts it carries, earning zero false alarms against
-governance noise. RQ0 is thereby answered with its
-conditions stated: governance drift is formally representable (the vector
-$\GD$), measurable exactly where the admitted basis was recorded (coverage,
-GCC, bounds everything else), and detectable to the depth of the evidence
-tiers an estate maintains. The repeated Kubernetes/GitOps laboratory executed
-20 repetitions of all nine scenarios at 0.5-, 2-, and 10-s cadences on a
-pinned Kind/Flux/Kyverno stack. It detected 538 of 540 observations; all 538
-detected outputs exactly matched the expected sets, yielding zero conditional
-Hamming loss. Twenty benign windows
-covering six change families produced zero substantive alarms and zero
-epistemic warnings in 543 polls. Separate
-injection, onset, detection, and evidence clocks show that actuation and DDL
-are distinct: for example, S6's median actuation was 10.05~s while median DDL
-was 0.54~s at the default cadence. These results establish bounded
-realizability and within-laboratory behavior, not natural occurrence,
-prevalence, production reliability, or universal latency distributions.
-An independent no-join composite diagnoses only 9/12 closed-world scenario
-sets versus 12/12 for the history-aware join, isolating the increment from
-alarm volume. The live compound extension reaches exact final vectors in
-45/45 cadence observations and exposes why first alert and vector completion
-are distinct: S10's median DDL is 1.33~s but its median complete diagnosis is
-7.88~s. A 30-minute benign soak adds 4,680 polls without substantive or
-epistemic alarms; it strengthens the bounded specificity check without being
-misrepresented as a production-rate estimate.
+Configuration convergence answers whether observed state matches declared
+desired state. It does not answer whether that state remains covered by the
+approval, policy, authorization, intent, and environmental assumptions that
+made it legitimate. This paper formalized that second question as governance
+drift: a deployment-level, history-anchored relation among operational
+reality, current governance context, and a unique activated admitted basis.
+The model separates five substantive components from an epistemic
+observability mask; distinguishes approval, activation, supersession, and
+authorization modes; requires stable unit identity and admissible temporal
+cuts; and makes ambiguity or missing evidence undecidable rather than silently
+consistent. Configuration equality therefore does not imply governance
+consistency, and a configuration-pair detector cannot decide the missing
+relations because their deciding facts are outside its inputs.
 
-The definitions are offered for reuse; the matrix is offered as a template
-for evaluating any governance-drift detector; and the central lesson is
-offered to practice in one sentence: a system can match its manifest
-perfectly and still be running outside everything that made it legitimate---%
-and whether an organization can \emph{see} that is an architectural choice,
-made tier by tier, that this paper makes explicit.
+The empirical results test what that claim means in executable systems. In the
+twelve-scenario closed world, normalized configuration comparison decides one
+scenario, while the admitted-basis join decides all twelve at the required
+tiers. A separately implemented no-join comparator identifies 9/12 sets, and
+a cumulative ablation raises unconditional exact-vector success from 75.0\%
+to 100\% over 240 paired scenario--seed units; targeted probe coverage across
+B0--B4 is 3/10, 3/10, 4/10, 5/10, and 10/10. This isolates the contributions
+of evidence contracts, mode-aware authorization, intent history, and
+activation-safe basis selection rather than rewarding alarm volume.
+
+On the version-pinned Kind/Flux/Kyverno laboratory, 180 injections observed at three
+cadences produced 538/540 detections. All 538 detected outputs matched exactly
+(100\% conditional ESA) as provisional class-set classifications under the
+laboratory's sequential-snapshot assumption, while unconditional Hamming loss over all
+$540\times6$ output labels was 0.000617. The two retained misses expose the
+cadence boundary for transient drift. The compound extension reached the
+exact provisional class set in 45/45 correlated observations and showed why first
+honest alert and complete diagnosis differ: for S10, median DDL was 1.54~s
+while median ESC was 7.61~s. Six separate five-minute benign windows
+(30 minutes cumulative) added 4,680 polls without substantive or epistemic
+alarms. Transition-inclusive controls retained all 777 polls: no policy,
+authorization, intent, or environment drift; seven configuration-convergence polls, 36 fail-safe
+evidence-warning polls, and all 60 window--cadence trajectories ending
+with a provisionally consistent classification. Separate temporal-cut tests
+exercise the admissibility contract; they do not make these sequential live
+snapshots formal $\Cons$ evaluations.
+
+Additional campaigns bound the implementation claim instead of inflating it.
+A nine-episode audit ran 27 separate observer processes and retained 261 raw
+polls; all 27 correlated trajectories reached the exact expected class set and
+then two-poll exact persistence, with zero adapter error. A real two-hop localhost transport campaign passed
+all eleven fault-state safety checks. The in-memory batch core remained exact
+through 1,000 units, and the live object path completed a 50-Deployment target
+spanning 50--60 Pods and 100--120 containers; the 100-Deployment target hit
+its declared readiness stop and contributed no timing sample. A pending bounded
+second-stack rerun will report projected singleton classifications over its
+declared evaluated components: Argo CD and Gatekeeper provide the native S1
+configuration and S3 policy paths, while S4 retains the shared digest adapter;
+intent and environment are not evaluated there, and frozen counts remain
+\texttt{CROSS\_TBD}.
+
+These results answer RQ0 under explicit conditions: governance drift is
+representable as a component-resolved vector; configuration remains comparable
+from desired and observed state, whereas basis-dependent components and total
+governance conformance are measurable only where the admitted basis and their
+required evidence exist. Detection reaches only the depth of the maintained
+evidence tiers. The results demonstrate semantic realizability,
+safe uncertainty handling, and bounded behavior within the reported conditions.
+They do not estimate natural occurrence, organizational prevalence,
+production reliability, or universal latency and false-alarm distributions.
+The practical consequence is nevertheless direct: a system can match its
+manifest perfectly while one or more legitimacy conditions no longer hold,
+and seeing that difference is an architectural choice that must be
+made---and reported---tier by tier.

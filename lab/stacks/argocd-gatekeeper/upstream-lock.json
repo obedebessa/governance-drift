@@ -1,0 +1,12 @@
+{
+  "argocd": {
+    "version": "v3.4.2",
+    "url": "https://raw.githubusercontent.com/argoproj/argo-cd/v3.4.2/manifests/install.yaml",
+    "sha256": "69114b8c9eb48a1d08598e6f654a0869b10ae902456ea4b70796cb563760f5ec"
+  },
+  "gatekeeper": {
+    "version": "v3.22.2",
+    "url": "https://raw.githubusercontent.com/open-policy-agent/gatekeeper/v3.22.2/deploy/gatekeeper.yaml",
+    "sha256": "72683f57fdfa4c34d4a892e5e6f457a5a7e533eba0293d781d53d08dd6614a5a"
+  }
+}

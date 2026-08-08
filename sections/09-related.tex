@@ -24,7 +24,10 @@ The Comparison Is Not an Exhaustive Product Feature Audit.}
 Line of work & Config. & Policy & Auth. & Intent & Evidence & Environ. & Joins admitted basis \\
 \midrule
 Desired-state/GitOps reconciliation~\cite{argocd,fluxcd,opengitops} & \cmark & -- & -- & -- & -- & -- & -- \\
+Security-focused configuration baselines~\cite{nist800128,nist80053} & \cmark & $\triangle$ & -- & $\triangle$ & $\triangle$ & $\triangle$ & -- \\
 IaC drift/configuration recorders~\cite{awsconfig,driftctl} & \cmark & -- & -- & -- & -- & $\triangle$ & -- \\
+AWS Control Tower governance drift~\cite{awsctgovernancedrift} & \cmark & \cmark & $\triangle$ & -- & -- & $\triangle$ & -- \\
+Multi-cloud policy consistency/drift~\cite{marella2026multicloud} & \cmark & \cmark & -- & -- & -- & \cmark & -- \\
 Policy-as-code/background scans~\cite{opa,kyverno} & -- & \cmark & -- & -- & -- & -- & -- \\
 Posture and hardening scans~\cite{cspm,nsacisa2022} & $\triangle$ & \cmark & -- & -- & -- & \cmark & -- \\
 Supply-chain attestations~\cite{slsa,newman2022} & -- & $\triangle$ & $\triangle$ & $\triangle$ & \cmark & -- & -- \\
@@ -42,6 +45,58 @@ composed to cover several columns. It is the explicit temporal three-way
 relation, the class-resolved verdicts it yields, and the evidence coverage
 required to decide it.
 
+\subsection{Terminology and Review Boundary}
+The phrase \emph{governance drift} predates this work, and we make no claim to
+have coined it. AWS Control Tower officially uses the phrase (also
+``organizational drift'') for changes to managed organizational units,
+accounts, landing-zone artifacts, controls, policies, and inherited
+baselines~\cite{awsctgovernancedrift}. That product taxonomy is an important
+precedent. Its documented decision object is nevertheless Control
+Tower-managed organizational and control state; AWS explicitly excludes
+resource drift inside a baseline. It does not define a deployment-specific
+join between present workload state, evolving governance context, and a
+uniquely activated immutable approval record.
+
+Two 2026 papers further sharpen the boundary. Marella's SSRN preprint proposes
+centralized policy abstraction, cross-cloud policy mapping, and continuous
+drift detection across AWS, Azure, and GCP~\cite{marella2026multicloud}. Its
+object is provider-independent policy consistency; that layer can supply T1
+and T4 evidence, but does not by itself establish whether a running deployment
+remains covered by the authorization, intent, and environmental assumptions
+recorded at admission. Do et al. use the exact phrase \emph{AI governance
+drift} for post-deployment misalignment between governance mechanisms and the
+behavior of deployed AI systems, and evaluate an organizational model relating
+audit, monitoring, assurance, visibility, drift, and resilience
+\cite{do2026aigovernancedrift}. Their unit of analysis is AI governance
+capability and behavior rather than a cloud deployment's immutable admitted
+basis; for that reason, the work is discussed here but is not forced into the
+mechanism columns of \cref{tab:scope-comparison}.
+
+Other 2026 uses confirm that the compound is polysemous rather than available
+for a naming claim. H\"opfner and Schacht study \emph{socio-technical
+governance drift} as longitudinal erosion of rule compliance in human--AI
+teams~\cite{hoepfner2026architecture}. Solozobov's preprint and accompanying
+toolkit monitor degradation of the statistical evidence supporting deployed
+risk models under delayed ground truth~\cite{solozobov2026labelfree}. The
+former concerns organizational oversight behavior; the latter concerns model
+performance evidence. Neither makes cloud workload admission history its
+decision object, but both are relevant neighbors and are included rather than
+dismissed as mere keyword collisions.
+
+We tested the remaining novelty statement with a bounded, one-reviewer
+\emph{scoping review} updated through August 8, 2026---not a systematic review
+or a claim of corpus completeness. The protocol records the exact queries,
+sources, cutoff, inclusion criteria, and limitations; its item-level ledger
+records the included and excluded candidates and a reason for every decision
+(\path{literature/scoping_review_protocol.md} and
+\path{literature/scoping_review_records.csv}). Discovery used exact-term
+and adjacent-construct queries, while substantive claims were checked against
+official documentation, standards, DOI/publisher records, and primary
+proceedings. No corpus-size estimate, dual screening, or risk-of-bias appraisal
+is implied. The bounded conclusion is correspondingly narrow: among the
+screened sources, none jointly specifies the full deployment-level,
+history-anchored, class-resolved relation defined here.
+
 \subsection{Configuration Drift and Desired-State Systems}
 Configuration drift detection is mature practice: reconciler status in
 GitOps~\cite{argocd,fluxcd,opengitops,beetz2022}, cloud configuration
@@ -49,11 +104,20 @@ recorders~\cite{awsconfig}, IaC drift tools~\cite{driftctl}, and the
 configuration-management control tradition~\cite{nist800128,nist80053} that
 institutionalizes baseline comparison. IaC research studies the quality and
 smells of the configuration artifacts themselves~\cite{rahman2019mapping,
-rahman2019,sharma2016}. All of it operates in the configuration vocabulary
-and against the \emph{current} desired state; \cref{prop:impossible} bounds
-what that vocabulary can decide, and \cref{fnd:blind} measures the bound. Our
-claim is containment: this literature solves one class of six, and solves it
-well---T0n in our architecture \emph{is} this literature.
+rahman2019,sharma2016}. GitOps reconcilers and many deployed drift tools use
+the current desired state as their comparator, but configuration management as
+a field is not uniformly memoryless. NIST SP 800-128 requires an established
+baseline, security-impact analysis, approval and documentation of controlled
+changes, and monitoring of the resulting configuration~\cite{nist800128}; it
+therefore supplies genuine approved-history semantics. The narrower boundary
+is dimensional: that history is configuration-scoped, whereas our relation
+joins the selected deployment admission to current policy, authorization,
+artifact evidence, intent, and environment as well. \Cref{prop:impossible}
+bounds what the configuration-only vocabulary can decide, and
+\cref{fnd:blind} measures the bound. Our claim is containment, not erasure:
+this literature solves the configuration component well---T0n in our
+architecture \emph{is} this literature---but it does not decide all six
+classes from configuration evidence alone.
 
 \subsection{Policy-as-Code, Admission, and Continuous Compliance}
 Policy engines~\cite{opa,kyverno} and admission
@@ -81,6 +145,14 @@ model, not a deployment-specific immutable admission event. The distinction
 is complementary rather than competitive: such monitors can implement T1,
 while $B_x(t)$ determines why the same current violation is classified as
 post-admission drift rather than absence of an admitted basis.
+Within the screened set, the closest new result on the authorization timeline
+is Peng and Wu's policy-state serializability: it prevents an authorization or
+delayed human approval from becoming stale while mutable policy state changes
+before the governed effect commits~\cite{peng2026stateful}. Its protected interval ends at
+effect commit; ours begins from the admitted deployment and asks whether the
+running object remains covered as multiple governance planes evolve afterward.
+The guarantees are complementary: serializable admission can create a sound
+basis, and the retained basis can support post-admission drift detection.
 
 \subsection{Supply-Chain Integrity and Authorization Evidence}
 Attestation frameworks bind artifacts to build and review
@@ -88,10 +160,21 @@ facts~\cite{slsa,torres2019,newman2022}; they are T3's substrate and make
 S4/S8-class drift decidable. Their orientation is admission-time
 verification; governance drift adds the post-admission temporal dimension
 (validity windows, revocation, supersession) and the join against
-$\Gapp$. Records-side, durable approval evidence and transparency
-services~\cite{scitt2025,provdm,cloudtrail} determine whether the evaluator's
-verdicts are decidable at all---our observability mask and GCC metric make
-that dependence explicit rather than assumed.
+$\Gapp$. Howell and Kotz's end-to-end authorization carries the authority
+justifying a request across administrative, network, abstraction, and protocol
+boundaries~\cite{howell2000e2e}; governance drift preserves an analogous
+justification across time, but asks whether a previously admitted, still
+running deployment remains covered after its context changes. Provenance work
+provides equally direct foundations for the evidence join. Muniswamy-Reddy
+et al. integrate provenance across application, workflow, storage, and network
+layers~\cite{muniswamyreddy2009layering}; TAP explicitly represents time,
+distributed state, and state changes in provenance~\cite{zhou2011tap}.
+Those systems solve cross-layer ancestry and temporal explanation, not the
+normative, class-resolved conformance test against an activated approval
+record. Records-side, durable approval evidence and transparency
+services~\cite{scitt2025,provdm,cloudtrail} determine whether that test is
+decidable at all---our observability mask and GCC metric make the dependence
+explicit rather than assumed.
 
 \subsection{Access Control, Runtime Verification, and Drift Theory}
 Temporal validity of authorization has deep roots in temporal authorization
@@ -111,17 +194,10 @@ architecture's prerequisite rather than an optimization. Concept
 drift~\cite{gama2014} shares only the word: it names distribution change in
 data streams, not divergence from an approval basis; we flag it to prevent
 terminological import of its detectors, which answer a statistical question
-ours does not ask. Industry usage of ``governance'' alongside drift
-management~\cite{industrydrift} treats governance as the program that
-suppresses configuration drift; we found no documented formal treatment of
-drift \emph{of} the governance relation itself, and a term search (queries \texttt{"governance drift"} alone and with
-\texttt{cloud}, \texttt{infrastructure}, \texttt{configuration}; ACM DL,
-IEEE Xplore, general scholarly indices; August 2026) found the compound used
-in internet-governance and organizational senses unrelated to this object.
-We therefore narrow the novelty claim to what this review supports: we found
-no documented work that jointly formalizes current operational state, evolving
-governance context, and an immutable admitted basis as a class-resolved
-post-admission relation.
+ours does not ask. The exact-phrase precedents and review boundary are stated
+above so that the contribution rests neither on naming priority nor on a
+universal absence claim. It rests on the specified decision object and the
+analytic consequences of retaining the admitted basis.
 
 \subsection{Novelty, Answered Directly}
 \emph{Is this just configuration drift?} No---with the argument's weight
@@ -135,8 +211,8 @@ independent field evidence. And we concede the mechanical point a skeptic
 will press: every governance-tier detector is itself a comparison---against
 a recorded basis, a validity clock, or a coverage set. The claim is not a
 new mechanism but a different \emph{relation}: three-place
-(state, current context, admitted basis) where configuration drift is
-two-place and memoryless, with the consequences \cref{sec:discussion}
+(state, current context, admitted basis) where the desired/observed
+configuration signal is two-place and memoryless, with the consequences \cref{sec:discussion}
 enumerates. \emph{Is it policy compliance scanning?} Scanning
 evaluates current state against current policy; governance drift is
 three-way---state, current context, \emph{and approved basis}---and the third
@@ -147,8 +223,9 @@ continuously re-evaluates resources against current policy (T1);
 configuration recorders and posture management watch unmanaged resources
 (much of T4); continuous validation re-checks artifact policy (part of
 T3)~\cite{kyverno,awsconfig,cspm,binauthz}. Several of our scenarios
-trigger \emph{some} existing detector. We found no documented mechanism that
-provides the complete join against the admitted basis with mode-aware validity and
+trigger \emph{some} existing detector. Within the bounded scoping set, we
+found no documented mechanism providing the complete join against the
+admitted basis with mode-aware validity and
 class-resolved verdicts---the increment that turns ``a scanner fired'' into
 ``this running state is no longer covered by what admitted it, for this
 reason, with this remediation family.'' That increment is architectural and,

@@ -1,0 +1,10 @@
+profile,fault_layer,target_stream,evaluations,safety_checks,safety_violations,local_masking_failures,transport_attempts,transport_failures,transport_retries,application_record_drops,duplicate_emits,reordered_emits,stale_replays,invalid_rejections,recovery_events,recovery_logical_max_seconds,recovery_wall_median_ms,safety_property,local_masking_property,recovered_property,mandatory_properties_present,all_declared_properties,outcome
+baseline,none,none,1,0,0,0,7,0,0,0,0,0,0,0,0,0.0,0.0,True,True,True,True,True,PASS
+delay_jitter,delay+jitter,policy,10,5,0,0,42,0,0,0,0,0,0,0,5,0.2,53.215,True,True,True,True,True,PASS
+record_drop,record loss,policy,2,1,0,0,14,0,0,1,0,0,0,0,1,0.2,0.351,True,True,True,True,True,PASS
+duplicate,record duplicate,authorization,1,0,0,0,9,0,0,0,1,0,0,0,0,0.0,0.0,True,True,True,True,True,PASS
+reorder,record reorder,policy,1,0,0,0,9,0,0,0,0,1,0,0,0,0.0,0.0,True,True,True,True,True,PASS
+stale_replay,record replay,inventory,2,1,0,0,15,0,0,0,0,0,1,0,1,0.2,0.379,True,True,True,True,True,PASS
+outage,TCP outage+retry,authorization,2,1,0,0,15,1,1,0,0,0,0,0,1,0.1,75.527,True,True,True,True,True,PASS
+delay_drop,delay+record loss,policy,4,2,0,0,21,0,0,1,0,0,0,0,2,0.2,20.318,True,True,True,True,True,PASS
+dependency_masking,gateway validation,lineage,2,1,0,0,9,0,0,0,0,0,0,1,1,0.2,0.459,True,True,True,True,True,PASS

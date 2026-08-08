@@ -1,0 +1,190 @@
+{
+  "all_exact": true,
+  "all_stable": true,
+  "cause_started_mono": 2724911.041326916,
+  "cause_started_utc": "2026-08-08T06:21:37.529157+00:00",
+  "distinct_observer_ids": 3,
+  "distinct_pids": 3,
+  "effect_observed_mono": 2724911.83596925,
+  "effect_observed_utc": "2026-08-08T06:21:38.323797+00:00",
+  "expected_class_set": [
+    "configuration"
+  ],
+  "injection_id": "trace-20260808T062119Z-ca37624c:S1:838836a3-99bc-47a7-a977-a2e48dba641c",
+  "injection_sha256": "779cb2a17e6c8b328bcbb48f2f6c0d589586df70fca547b66cd70b32da92ddd0",
+  "observer_processes": 3,
+  "scenario": "S1",
+  "scenario_label": "manual in-cluster configuration change",
+  "schema": "govdrift-trace-scenario-summary/v1",
+  "trajectories": [
+    {
+      "adapter_error_polls": 0,
+      "cadence_seconds": 1.0,
+      "cause_to_first_alert_seconds": 0.6836614171043038,
+      "cause_to_first_exact_seconds": 1.6928677503019571,
+      "cause_to_stable_exact_seconds": 2.6888852091506124,
+      "effect_to_first_exact_seconds": 0.8982254159636796,
+      "exact_correct": true,
+      "expected_class_set": [
+        "configuration"
+      ],
+      "first_alert": {
+        "actual_start_mono": 2724911.516171333,
+        "actual_start_utc": "2026-08-08T06:21:38.004003+00:00",
+        "class_set": [
+          "configuration",
+          "evidence"
+        ],
+        "completed_mono": 2724911.724988333,
+        "completed_utc": "2026-08-08T06:21:38.212823+00:00",
+        "poll_sha256": "1e30351bd23d03a2da99688fb024fb8fd4b8038c8030e5a4382b78732836d38f",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "first_exact": {
+        "actual_start_mono": 2724912.517061791,
+        "actual_start_utc": "2026-08-08T06:21:39.004900+00:00",
+        "class_set": [
+          "configuration"
+        ],
+        "completed_mono": 2724912.734194666,
+        "completed_utc": "2026-08-08T06:21:39.222033+00:00",
+        "poll_sha256": "dc052f9f42089245ab66c67ed4c4efc3dceaf21c8a62190929fad092b35165e9",
+        "sequence": 3,
+        "verdict": "drift"
+      },
+      "observer_id": "f5df87ac-009c-4ac6-9c12-e779c24c3ba6",
+      "pid": 43683,
+      "polls": 21,
+      "post_cause_polls": 20,
+      "pre_cause_polls": 1,
+      "raw_path": "raw/S1/observer-01s.ndjson",
+      "scenario": "S1",
+      "scenario_label": "manual in-cluster configuration change",
+      "stable_exact": {
+        "actual_start_mono": 2724913.52109825,
+        "actual_start_utc": "2026-08-08T06:21:40.008935+00:00",
+        "class_set": [
+          "configuration"
+        ],
+        "completed_mono": 2724913.730212125,
+        "completed_utc": "2026-08-08T06:21:40.218053+00:00",
+        "poll_sha256": "43f61deeab871d30d6b2278c3f540b773437b0169fd6ae55bb0c6053dafd43a8",
+        "sequence": 4,
+        "verdict": "drift"
+      }
+    },
+    {
+      "adapter_error_polls": 0,
+      "cadence_seconds": 5.0,
+      "cause_to_first_alert_seconds": 4.731095292139798,
+      "cause_to_first_exact_seconds": 4.731095292139798,
+      "cause_to_stable_exact_seconds": 9.710091042332351,
+      "effect_to_first_exact_seconds": 3.936452957801521,
+      "exact_correct": true,
+      "expected_class_set": [
+        "configuration"
+      ],
+      "first_alert": {
+        "actual_start_mono": 2724915.514109375,
+        "actual_start_utc": "2026-08-08T06:21:42.001967+00:00",
+        "class_set": [
+          "configuration"
+        ],
+        "completed_mono": 2724915.772422208,
+        "completed_utc": "2026-08-08T06:21:42.260269+00:00",
+        "poll_sha256": "fe96a95af1512b38930b2d678ae2543a6898a057e987bf3bba53bf9582566465",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "first_exact": {
+        "actual_start_mono": 2724915.514109375,
+        "actual_start_utc": "2026-08-08T06:21:42.001967+00:00",
+        "class_set": [
+          "configuration"
+        ],
+        "completed_mono": 2724915.772422208,
+        "completed_utc": "2026-08-08T06:21:42.260269+00:00",
+        "poll_sha256": "fe96a95af1512b38930b2d678ae2543a6898a057e987bf3bba53bf9582566465",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "observer_id": "0136f6c9-6a34-47e2-968d-acf005fb5b8c",
+      "pid": 43684,
+      "polls": 5,
+      "post_cause_polls": 4,
+      "pre_cause_polls": 1,
+      "raw_path": "raw/S1/observer-05s.ndjson",
+      "scenario": "S1",
+      "scenario_label": "manual in-cluster configuration change",
+      "stable_exact": {
+        "actual_start_mono": 2724920.515028458,
+        "actual_start_utc": "2026-08-08T06:21:47.002897+00:00",
+        "class_set": [
+          "configuration"
+        ],
+        "completed_mono": 2724920.751417958,
+        "completed_utc": "2026-08-08T06:21:47.239282+00:00",
+        "poll_sha256": "a23e565db7f8a44b52433d232cca98f9d10f02e1c167515a8d0aeba1f011207e",
+        "sequence": 3,
+        "verdict": "drift"
+      }
+    },
+    {
+      "adapter_error_polls": 0,
+      "cadence_seconds": 10.0,
+      "cause_to_first_alert_seconds": 9.710115042049438,
+      "cause_to_first_exact_seconds": 9.710115042049438,
+      "cause_to_stable_exact_seconds": 19.724833500105888,
+      "effect_to_first_exact_seconds": 8.91547270771116,
+      "exact_correct": true,
+      "expected_class_set": [
+        "configuration"
+      ],
+      "first_alert": {
+        "actual_start_mono": 2724920.521057541,
+        "actual_start_utc": "2026-08-08T06:21:47.008926+00:00",
+        "class_set": [
+          "configuration"
+        ],
+        "completed_mono": 2724920.751441958,
+        "completed_utc": "2026-08-08T06:21:47.239306+00:00",
+        "poll_sha256": "fc1ff24683d681f2471484f21f68fac8d9010d77993d22d9422bc2ae9d914608",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "first_exact": {
+        "actual_start_mono": 2724920.521057541,
+        "actual_start_utc": "2026-08-08T06:21:47.008926+00:00",
+        "class_set": [
+          "configuration"
+        ],
+        "completed_mono": 2724920.751441958,
+        "completed_utc": "2026-08-08T06:21:47.239306+00:00",
+        "poll_sha256": "fc1ff24683d681f2471484f21f68fac8d9010d77993d22d9422bc2ae9d914608",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "observer_id": "18e5a306-2624-46bf-b103-c900fb576eb8",
+      "pid": 43685,
+      "polls": 3,
+      "post_cause_polls": 2,
+      "pre_cause_polls": 1,
+      "raw_path": "raw/S1/observer-10s.ndjson",
+      "scenario": "S1",
+      "scenario_label": "manual in-cluster configuration change",
+      "stable_exact": {
+        "actual_start_mono": 2724930.51507125,
+        "actual_start_utc": "2026-08-08T06:21:57.002989+00:00",
+        "class_set": [
+          "configuration"
+        ],
+        "completed_mono": 2724930.766160416,
+        "completed_utc": "2026-08-08T06:21:57.254063+00:00",
+        "poll_sha256": "ef8cf85673f782f8c971bfd1d7457b21d8ddc8f7ea22e8d6e64dc666bd89d3de",
+        "sequence": 3,
+        "verdict": "drift"
+      }
+    }
+  ]
+}

@@ -1,41 +1,93 @@
-\section{A Formal Model of Governance Drift (RQ2, RQ4)}
+\section{A Formal Model of Governance Drift (RQ0, RQ2, RQ4)}
 \label{sec:model}
 
 \subsection{States and Contexts}
 \label{sec:model-states}
 
-Fix a deployment $x$ into environment $e$ with approval events at
-$t_0<\cdots<t_k\leq t$.
+Fix a deployment $x$ in environment $e$. Snapshot $i$ is approved at
+$t_i^{\mathrm{app}}$ and, if its authorized effect becomes operational for
+$(x,e)$, activated at $t_i^{\mathrm{act}}\geq t_i^{\mathrm{app}}$.
+
+\textbf{Stable unit reference.} Every joined record is keyed by
+$u=\mathrm{UnitRef}(x,e)$, an opaque, collision-resistant identifier minted
+once for the governed workload lineage in that environment. A mutable name,
+label, or current orchestrator UID is not a unit reference. Object recreation
+continues the same $u$ only through an integrity-valid continuation edge from
+the prior runtime identity; name reuse or a copy without that edge creates a
+new $u$. Approval, activation, observation, policy-result, authorization,
+intent, lineage, and inventory records all carry $u$. If a runtime subject
+maps to zero or multiple unit references, every component requiring that join
+is undecidable rather than attached by name. We retain $x$ in the notation
+below, but all joins use this stable reference.
 
 \textbf{Approved-snapshot history.} Per \cref{def:approved}, every approval
 event appends an immutable snapshot
 \[
 \begin{aligned}
-\Gapp^{x}(t)&=\{G_{\mathrm{app}}^{(0)}(t_0),\ldots,
-G_{\mathrm{app}}^{(k)}(t_k)\},\\
+\Gapp^{x}(t)&=\{G_{\mathrm{app}}^{(0)}(t_0^{\mathrm{app}}),\ldots,
+G_{\mathrm{app}}^{(k)}(t_k^{\mathrm{app}})\},\\
 G_{\mathrm{app}}^{(i)}&=\bigl(m_i,\delta_i,\dig(\pi_i),A_i^{\mathrm{proof}},
 \iota_i,\sigma_i\bigr).
 \end{aligned}
 \]
+The append is atomic for one $u$: a partial tuple is not a candidate basis.
 Each record contains the approved manifest content $m_i$ and artifact digests $\delta_i$ it
 resolved to at approval; the pinned policy version; the authorization basis
 $A_i^{\mathrm{proof}}$ (the immutable proof that approval instruments covered
 the named subjects and scope at their execution times); the intent linkage $\iota_i$ (change
 record, revision); and the environment assumptions $\sigma_i$ (the declared
 properties of $e$---identity scopes, exposure---under which risk was
-assessed). Let $b(t)$ select the greatest $i$ such that $t_i\leq t$ and the
-snapshot scope covers $(x,e)$. The admitted basis is
+assessed). Each record also carries scope, lifecycle state, and an explicit
+$\mathrm{Supersedes}$ edge for overlapping approvals. Approval alone does not
+change the running deployment's basis. Activation is the durable event that
+binds the authorized transition to the effect that actually became
+operational; a pending or cancelled rollout therefore cannot displace the
+previous basis. $\mathrm{Aborted}_i$ is terminal only before activation; a
+rollback after activation is a new authorized transition and snapshot, not a
+silent reactivation of an older record.
+
+Let $t_i^{\mathrm{act}}=\infty$ until activation and define
 \[
-B_x(t)=G_{\mathrm{app}}^{(b(t))}
-=\bigl(m_B,\delta_B,\dig(\pi_B),A_B^{\mathrm{proof}},
-\iota_B,\sigma_B\bigr).
+\mathcal C_{x,e}(t)=\{i:t_i^{\mathrm{act}}\leq t\ \land\
+\mathrm{Scope}_i(x,e)\ \land\ \neg\mathrm{Aborted}_i\}.
 \]
-Selection does not require current validity: an expired or revoked basis must
-remain selected so its divergence can be reported. Superseded snapshots
+Write $i\prec_{x,e}j$ when $j$ transitively supersedes $i$ over $(x,e)$.
+If $\mathcal C_{x,e}(t)$ has one $\prec_{x,e}$-maximal element, call it
+$b(t)$; if it has none or multiple incomparable maxima, set $b(t)=\bot$ and
+make every basis-dependent component undecidable. The admitted basis is
+\[
+B_x(t)=
+\begin{cases}
+G_{\mathrm{app}}^{(b(t))}
+=\bigl(m_B,\delta_B,\dig(\pi_B),A_B^{\mathrm{proof}},
+\iota_B,\sigma_B\bigr),&b(t)\neq\bot;\\
+\bot,&b(t)=\bot.
+\end{cases}
+\]
+Thus ``latest approved'' is not the rule: the selected record is the unique
+\emph{maximal activated successor} for this scope. Selection does not require
+current authorization validity: an expired or revoked basis must remain
+selected so its divergence can be reported. Superseded snapshots
 remain available for audit and lineage; benign reapproval appends a new basis
 rather than mutating history. Append-only means records cannot be rewritten,
-not that their storage cannot be lost; loss of $A_B^{\mathrm{proof}}$ is an
-evidence failure, as S9 exercises.
+not that their storage cannot be lost; loss of $A_B^{\mathrm{proof}}$ would be
+an evidence failure. S9 instead preserves that proof and removes authenticated
+live status required by continuing authority.
+
+\begin{proposition}[Activation-safe basis selection]
+\label{prop:basis-selection}
+If the activated candidates covering $(x,e)$ are nonempty and form a finite
+chain under the acyclic transitive closure of $\mathrm{Supersedes}$, $B_x(t)$
+is unique. Appending a pending or aborted approval cannot change it. An
+ambiguous overlap is observable as $b(t)=\bot$, never resolved by timestamp.
+\end{proposition}
+\begin{proof}
+A finite nonempty chain has one maximal element. Pending and aborted records
+are outside $\mathcal C_{x,e}(t)$;
+therefore appending either leaves its maximal element unchanged. Multiple
+maxima supply no model-grounded tie-breaker and consequently fail the basis
+evidence contract.
+\end{proof}
 
 \textbf{Observed state.} $\Gobs(t) = (m_t, \delta_t, \varepsilon_t)$: the
 observed configuration, the digests actually executing, and the observed
@@ -49,6 +101,84 @@ desired-state revision currently driving delivery. Evidence availability,
 where needed, is a fourth stream $\Evd(t)$ (the records from which the above
 can be established).
 
+\textbf{Admissible temporal cuts.} Stream access alone does not license a
+join across unrelated capture times. A record $r$ from source $s$ carries a
+capture interval $I(r)=[c_r^-,c_r^+]$ in a common reference-time domain. The
+interval includes capture duration and expands the source timestamp by its
+declared clock-error bound $\kappa_s$. At evaluator observation time $T$, a
+source watermark $w_s(T)$ promises that no record with capture upper bound at
+or before $w_s(T)$ will arrive later. For component $j$, let $S_j$ be its
+required sources, $F_s$ their published source-freshness bounds, $\Delta_j$ its
+maximum permitted cross-source temporal spread, and $F_j^{\mathrm{cur}}$ the
+maximum age of a cut that may be labeled current. For logical cut $\theta$, let
+$\mathcal R_s(u)$ be the records from $s$ linked to $u$, and let
+$r_s(u,\theta)$ be the unique latest record for $u$ from $s$ with
+$c_{r_s}^+\leq\theta$. The cut is admissible exactly when
+\[
+\begin{aligned}
+\mathrm{AdmCut}_j(u,\theta;T)\ \Longleftrightarrow\ {}
+&\bigwedge_{s\in S_j}\bigl[
+  \mathrm{UnitRef}(r_s)=u\land c_{r_s}^+\leq\theta\bigr]\\
+&\land\bigwedge_{s\in S_j}\bigl[
+  \theta\leq w_s(T)\land\theta-c_{r_s}^+\leq F_s\bigr]\\
+&\land\bigwedge_{s\in S_j}\bigl[
+  \nexists r\in\mathcal R_s(u):c_r^-\leq\theta<c_r^+\bigr]\\
+&\land\left[\max_{s\in S_j}c_{r_s}^+
+  -\min_{s\in S_j}c_{r_s}^-\leq\Delta_j\right].
+\end{aligned}
+\]
+This predicate establishes a coherent \emph{historical} as-of-$\theta$ join;
+it does not by itself make that join current at observation time $T$. A verdict
+labeled current must additionally satisfy
+\[
+\begin{aligned}
+\mathrm{CurCut}_j(u,\theta;T)\ \Longleftrightarrow\ {}
+&\mathrm{AdmCut}_j(u,\theta;T)\\
+&\land[0\leq T-\theta\leq F_j^{\mathrm{cur}}]\\
+&\land\bigwedge_{s\in S_j}[0\leq T-c_{r_s}^+\leq F_s].
+\end{aligned}
+\]
+For later definitions, write
+\[
+\mathrm{ModeCut}_{\mu,j}(u,\theta;T)=
+\begin{cases}
+\mathrm{AdmCut}_j(u,\theta;T),&\mu=\mathrm{historical};\\
+\mathrm{CurCut}_j(u,\theta;T),&\mu=\mathrm{current}.
+\end{cases}
+\]
+Thus watermarks close the prefix, capture intervals make clock skew explicit,
+and $\Delta_j$ prevents a verdict from mixing evidence too far apart in time.
+A missing clock bound, record, unique latest record, or watermark---or an
+interval that straddles the requested cut---makes the affected component
+undecidable. An evaluation that satisfies only $\mathrm{AdmCut}$ is explicitly
+reported as historical at $\theta$ and makes no claim about state at $T$; a
+current evaluation requires $\mathrm{CurCut}$ for every reported component.
+The evaluator never manufactures a polar verdict from an inadmissible or stale
+temporal mixture. Every occurrence of $t$ in a component relation below
+denotes a common logical cut admitted by that component's declared evaluation
+mode.
+
+\textbf{Atomic bundles and composition.} A published verdict bundle is
+atomic only for one unit and one cut and declares
+$\mu\in\{\mathrm{historical},\mathrm{current}\}$:
+\[
+\begin{aligned}
+\mathcal V^{\mu}_{u,\theta;T}=\bigl(&u,\theta,T,\mu,
+\mathrm{id}(B_x(\theta)),\\
+&\GDsub(u,\theta),\ObsMask_{\mu}(u,\theta;T),\\
+&\{\mathrm{id}(r_s),I(r_s),w_s(T)\}_{s}\bigr).
+\end{aligned}
+\]
+Its fields are integrity-bound and a partial publication is invalid; the
+underlying sources need not commit in one transaction because
+$\mathrm{AdmCut}$ supplies temporal coherence. One approval transaction may
+emit several per-unit snapshots carrying a common parent bundle identifier,
+but that does not silently make a multi-workload release atomic. A compound
+claim composes per-unit bundles only when each bundle is valid and their cut
+constraints admit a common $\theta$; otherwise the compound claim is
+undecidable while independently valid per-unit verdicts remain reportable.
+Declared cross-unit dependency edges determine where such failure propagates.
+
 \textbf{Authorization semantics.} Every instrument $a$ declares
 $\mathrm{mode}(a)\in\{\text{one-shot},\text{continuing},
 \text{temporary-exception}\}$, subject, scope, validity interval, and
@@ -56,14 +186,24 @@ revocation policy. One-shot authority is required at execution and its proof
 is retained afterward; continuing authority must remain valid while its
 effect persists; a temporary exception is continuing only until its expiry.
 Revocation is prospective unless the record explicitly declares retroactive
-invalidation. Let $\mathrm{NeedsLive}(a)$ hold for continuing and temporary
-instruments, and for a one-shot instrument only when its declared revocation
-policy permits retroactive invalidation. For an effect executed at $\tau$,
-let $\mathrm{AppObs}(a,t)$ mean that its proof is available and, whenever
-$\mathrm{NeedsLive}(a)$ holds, authenticated live status is also available.
-Write $V_1$ for validity at $\tau$ without retroactive revocation, $V_c$
-for current validity without revocation, and $V_e$ for $V_c$ while the
-declared exception has not expired. Define the three-valued applicability function
+invalidation. Write $\mathrm{Retro}(a)$ when that exceptional policy is
+declared, $\mathrm{ProofObs}(a,t)$ when the immutable execution proof is
+available, and $\mathrm{LiveObs}(a,t)$ when authenticated administrative
+status is available. Current authority needs live status for continuing and
+temporary instruments, and for a one-shot instrument only under retroactive
+invalidation:
+\[
+\begin{aligned}
+\mathrm{NeedsLive}(a)&\Longleftrightarrow
+ [\mathrm{mode}(a)\neq\text{one-shot}]\lor\mathrm{Retro}(a),\\
+\mathrm{AppObs}(a,t)&\Longleftrightarrow \mathrm{ProofObs}(a,t)\land\\
+&\quad [\mathrm{NeedsLive}(a)\Rightarrow\mathrm{LiveObs}(a,t)].
+\end{aligned}
+\]
+Write $V_1$ for validity at execution without an effective retroactive
+invalidation, $V_c$ for current validity without revocation, and $V_e$ for
+$V_c$ while the declared exception has not expired. The three-valued
+\emph{current-authority} function is
 \[
 \mathrm{Applicable}(a,\tau,t)=
 \begin{cases}
@@ -73,20 +213,90 @@ V_c(a,t),&\text{continuing};\\
 V_e(a,t),&\text{temporary exception}.
 \end{cases}
 \]
-A retained historical proof is therefore not confused with currently
-effective authority. Missing proof or live status yields undecidable where
-the selected mode requires it; an authenticated revocation yields a polar
-inconsistent verdict.
+This function is used by $\dauth$. A retained historical proof is therefore not
+confused with currently effective authority. Missing proof or required live
+status yields undecidable; an authenticated expiry or revocation yields a
+polar current-authorization finding.
+
+Intent asks a different question: whether the revision now driving delivery
+belongs to a lineage that was authorized when each transition executed. Let
+$V_{\tau}(a,\tau)$ be the execution-time validity established by the immutable
+proof, let $R_{\mathrm{retro}}(a,t)$ be authenticated status saying that the
+execution has been retroactively invalidated (and structurally false when
+$\neg\mathrm{Retro}(a)$), and define
+\[
+\begin{aligned}
+\mathrm{ExecObs}(a,t)&\Longleftrightarrow \mathrm{ProofObs}(a,t)\land\\
+&\quad[\mathrm{Retro}(a)\Rightarrow\mathrm{LiveObs}(a,t)],\\
+\mathrm{ExecApplicable}(a,\tau,t)&\equiv \mathsf{EA}(a,\tau,t),\\
+\mathsf{EA}(a,\tau,t)&=
+\begin{cases}
+\bot,&\neg\mathrm{ExecObs}(a,t);\\
+\begin{gathered}V_{\tau}(a,\tau)\land\\[-2pt]
+\neg R_{\mathrm{retro}}(a,t)\end{gathered},&\text{else},
+\end{cases}\\
+\mathrm{IntentApplicable}(a,\tau,t)&\equiv
+\mathsf{EA}(a,\tau,t).
+\end{aligned}
+\]
+Thus a later prospective expiry or revocation can invalidate current
+authority while leaving execution-time lineage valid.
+Loss of prospective live status can likewise make current authority
+undecidable without erasing historically authorized intent. Live status
+enters the intent relation only when the declared policy permits retroactive
+invalidation; in that case its loss makes intent undecidable rather than
+silently preserving lineage.
 
 \textbf{Legitimate successors.} Let
-$\mathrm{Succ}(\iota_B,t)$ be the set of revisions $\iota_n$ for which
-there exists a finite chain $\iota_B,\iota_1,\ldots,\iota_n$ with transition
-execution times $\tau_1,\ldots,\tau_n$, such that every edge
-$(\iota_{j-1},\iota_j)$ and its artifact digest are covered by an instrument
-$a_j$ for which $\mathrm{Applicable}(a_j,\tau_j,t)$ holds. A revision is a
-legitimate successor iff it belongs to this set.
-This definition excludes mere Git ancestry: lineage without a valid approval
-edge does not extend the admitted basis.
+$\mathcal P_{B,\iota}(t)$ be the finite set of candidate paths from
+$\iota_B$ to $\iota$ in the integrity-valid transition graph available at
+$t$. Each edge $e_j=(\iota_{j-1},\iota_j,\delta_j^{\mathrm{exp}})$ carries its
+execution time $\tau_j$ and authorization instrument $a_j$; its expected
+artifact digest is bound to the approval/intent record. In strong
+three-valued logic, define
+\[
+\begin{aligned}
+L(p,t)&=\bigwedge_{e_j\in p}\bigl[\mathrm{Covers}(a_j,e_j)\land\\
+&\hspace{5.5em}\mathrm{IntentApplicable}(a_j,\tau_j,t)\bigr],\\
+\mathrm{Succ}(\iota_B,\iota,t)&=
+  \bigvee_{p\in\mathcal P_{B,\iota}(t)}L(p,t).
+\end{aligned}
+\]
+The disjunction is evaluated only when completeness of the relevant transition
+graph is established; otherwise $\mathrm{Succ}=\bot$. On a complete graph it
+is false only when every candidate path is false. Under strong Kleene
+semantics, unknown execution applicability contributes $\bot$ to a path unless
+another conjunct already refutes that path; $\mathrm{Succ}=\bot$ exactly when
+no path is true and at least one path remains $\bot$. A missing graph segment,
+coverage or execution proof, or retroactive-status item is therefore never
+silently converted into a negative historical-authorization fact. A revision
+is a legitimate successor exactly when $\mathrm{Succ}$ is true. This excludes mere Git
+ancestry: lineage without a valid approval edge does not extend the admitted
+basis. The edge digest $\delta_j^{\mathrm{exp}}$ is record-side evidence
+available at T2; it is not the executing digest $\delta_t$. Comparing
+$\delta_t$ with covered expected digests remains the T3 responsibility of
+$\dauth$.
+
+The basis revision itself also needs an execution-time lineage proof rather
+than an equality shortcut. Let $\mathcal M_B^{\mathrm{int}}$ be the complete
+family of inclusion-minimal instrument sets in $A_B^{\mathrm{proof}}$ that
+establish the basis revision at activation time $\tau_B$. Define
+\[
+\begin{aligned}
+\mathrm{BasisIntent}(B_x,t)&=
+ \bigvee_{M\in\mathcal M_B^{\mathrm{int}}}
+ \bigwedge_{a\in M}\mathrm{IntentApplicable}(a,\tau_B,t),\\
+\mathrm{IntentCovered}(\iota_B,\iota,t)&=
+\begin{cases}
+\mathrm{BasisIntent}(B_x,t),&\iota=\iota_B;\\
+\mathrm{Succ}(\iota_B,\iota,t),&\iota\neq\iota_B.
+\end{cases}
+\end{aligned}
+\]
+If the relevant minimal-set family or its completeness proof is unavailable,
+$\mathrm{BasisIntent}=\bot$. This keeps the base case subject to declared
+retroactive invalidation while preventing a later prospective administrative
+change from rewriting historically authorized lineage.
 
 \subsection{The Governance-Divergence Vector}
 \label{sec:model-distance}
@@ -114,51 +324,138 @@ not covered by an applicable instrument grounded in $A_B^{\mathrm{proof}}$
 and $\Auth_{\mathrm{live}}(t)$. If applicability is $\bot$, the authorization
 mask entry is zero and the substantive component is undecidable rather than
 included in this set.
-\item $\dint(t)$: the mismatch between the revision driving delivery and the
-revision the valid authorization covers: the current revision is outside
-$\{\iota_B\}\cup\mathrm{Succ}(\iota_B,t)$.
+\item $\dint(t)$: let $\iota_t$ be the revision driving delivery in
+$\Int(t)$. The component is zero when
+$\mathrm{IntentCovered}(\iota_B,\iota_t,t)$ is true and nonzero when it is
+false. When it is $\bot$, $\dint$ has no substantive value and
+the corresponding intent mask entry is zero. Because this predicate uses execution-time lineage,
+loss of live status for a merely prospective continuing authority does not
+mask intent; missing execution proof or status required by a retroactive
+policy does.
 \item $\denv(t)=\{q\in\sigma_B:q(\varepsilon_t)=\mathrm{false}\}$. The laboratory's
 declared IAM-scope and exposure fields instantiate equality predicates, but
 the definition permits ranges, membership, and monotone safety predicates.
 \end{itemize}
 
-Evidence availability is ontologically different from those distances. Define
-the observability mask
-$\ObsMask(t)=(o_{\mathrm{conf}},o_{\mathrm{pol}},o_{\mathrm{auth}},
-o_{\mathrm{int}},o_{\mathrm{env}})$, where $o_j=1$ iff every required item in
-the component's evidence contract is present, complete, fresh within its
-declared bound, integrity-valid, source-authenticated, linked to subject
-$x$, and delivered by a healthy stream. Confidence is therefore not an
-unscoped probability: it is a named contract and threshold published with
-the evaluator. A missing or contract-failing record yields \emph{undecidable};
-an authenticated record stating ``revoked,'' ``negative,'' or ``never
-issued'' is available evidence and may yield \emph{inconsistent}. Evidence drift is a
-transition of any required $o_j$ from one to zero. Each substantive component
-therefore has three-valued reporting semantics---consistent, inconsistent, or
+The distinction is observable in the compound cases. Removing prospective
+live status while retaining the basis execution proof (S9) makes current
+authorization undecidable but leaves intent decidable and consistent. An
+uncovered rollback combined with that same loss (S12) leaves intent polar and
+inconsistent while authorization is undecidable. The report preserves both
+facts; evidence failure in one component cannot erase a decidable substantive
+finding in another.
+
+Evidence availability is ontologically different from those distances. Let
+$\mathsf{EContract}_{\mu,j}(u,\theta;T)$ mean that every item required by
+component $j$ in mode $\mu$ is present, complete, fresh within its declared
+bound, integrity-valid, source-authenticated, linked to $u$, and delivered by
+a healthy stream. Define
+\[
+\begin{aligned}
+o_{\mu,j}(u,\theta;T)=1\quad\Longleftrightarrow\quad{}
+&\mathsf{EContract}_{\mu,j}(u,\theta;T)\\
+&\land\mathrm{ModeCut}_{\mu,j}(u,\theta;T),\\
+\ObsMask_{\mu}(u,\theta;T)&=
+ \bigl(o_{\mu,\mathrm{conf}},o_{\mu,\mathrm{pol}},
+ o_{\mu,\mathrm{auth}},\\
+&\hspace{3.2em}o_{\mu,\mathrm{int}},o_{\mu,\mathrm{env}}\bigr)(u,\theta;T).
+\end{aligned}
+\]
+Confidence is therefore not an unscoped probability: it is a named contract,
+mode, cut, and threshold published with the evaluator. A missing or
+contract-failing record yields \emph{undecidable}; an authenticated record
+stating ``revoked,'' ``negative,'' or ``never issued'' is available evidence
+and may yield \emph{inconsistent}. Evidence drift is a transition of a
+required mask entry from one to zero. Each substantive component therefore
+has three-valued reporting semantics---consistent, inconsistent, or
 undecidable---but only the first two are values of the substantive relation.
 
 \begin{definition}[Governance Divergence Vector; Consistency]
 \label{def:gd}
-$\GDsub(t) = \bigl(\dconf, \dpol, \dauth, \dint, \denv\bigr)(t)$ and
-$\GD(t)=(\GDsub(t),\ObsMask(t))$. Operational consistency
-$\mathsf{OpCons}(x,t)$ holds iff $\dconf=0$ and its evidence is decidable.
-Governance coverage $\mathsf{GovCov}(x,t)$ holds iff
-$\dpol=\dauth=\dint=\denv=0$ and their mask entries are one. Total
-$\Cons(x,t)=\mathsf{OpCons}(x,t)\land\mathsf{GovCov}(x,t)$. Onset of governance drift is
-$\inf\{t > t_0 : \lnot\Cons(x,t)\}$; \emph{dwell time} is the duration of
-inconsistency; \emph{detection latency} is detection time minus onset.
+For $J=\{\mathrm{conf},\mathrm{pol},\mathrm{auth},\mathrm{int},
+\mathrm{env}\}$, let
+\[
+\begin{aligned}
+\GDsub(u,\theta)&=\bigl(\dconf,\dpol,\dauth,\dint,\denv\bigr)(u,\theta),\\
+\GD_{\mu}(u,\theta;T)&=
+ \bigl(\GDsub(u,\theta),\ObsMask_{\mu}(u,\theta;T)\bigr).
+\end{aligned}
+\]
+At fixed $(u,\theta;T)$, suppress shared arguments and define
+\[
+\begin{aligned}
+\mathsf{OpCons}_{\mu}&\Longleftrightarrow
+ o_{\mu,\mathrm{conf}}=1\land\dconf(u,\theta)=0,\\
+\mathsf{GovPlaneCons}_{\mu}&\Longleftrightarrow\\[-2pt]
+&\quad\bigwedge_{j\in J\setminus\{\mathrm{conf}\}}
+ [o_{\mu,j}=1\land d_j(u,\theta)=0].
+\end{aligned}
+\]
+Let $\mathsf D_{\mu}$ collect known nonzero components and
+$\mathsf U_{\mu}$ collect components whose evidence contract fails:
+\[
+\begin{aligned}
+\mathsf D_{\mu}(u,\theta;T)&=
+ \{j\in J:o_{\mu,j}=1,\ d_j(u,\theta)\neq0\},\\
+\mathsf U_{\mu}(u,\theta;T)&=\{j\in J:o_{\mu,j}=0\}.
+\end{aligned}
+\]
+Suppressing those shared arguments in the case conditions, the total status is
+\[
+\mathsf{Status}_{\mu}(u,\theta;T)=
+\begin{cases}
+\mathrm{inconsistent},&\mathsf D_{\mu}\neq\varnothing;\\
+\mathrm{undecidable},&\mathsf D_{\mu}=\varnothing\land
+ \mathsf U_{\mu}\neq\varnothing;\\
+\mathrm{consistent},&\mathsf D_{\mu}=\mathsf U_{\mu}=\varnothing.
+\end{cases}
+\]
+These cases are exhaustive, and precedence of a known nonzero component
+means an incomplete vector may be substantively inconsistent while retaining
+zero mask entries for what remains unknown. Write
+$\Cons_{\mu}(u,\theta;T)$ iff this total status is
+$\mathrm{consistent}$; $\neg\Cons_{\mu}$ means ``not established
+consistent'' and is \emph{not} a synonym for substantive inconsistency.
+
+Onsets are episode- and class-indexed. Let $\alpha_k$ be the activation,
+re-approval, or verified recovery event that opens episode $k$, and let
+$d_j^{\star}(u,t)$ denote the underlying substantive relation independent of
+whether it is observable. For the declared evaluation track, abbreviate its
+logical-cut schedule by $\theta_k(t)$ and its time-varying mask entry by
+$o^k_{\mu,j}(t)=o_{\mu,j}(u,\theta_k(t);t)$. Then
+\[
+\begin{aligned}
+t^{\mathrm{sub}}_{k,j}&=\inf\{t>\alpha_k:d_j^{\star}(u,t)\neq0\},\\
+t^{\mathrm{evd}}_{k,j}&=\inf\{t>\alpha_k:
+ o^k_{\mu,j}(t^-)=1\land o^k_{\mu,j}(t)=0\}.
+\end{aligned}
+\]
+An empty onset set has infimum $+\infty$; if an episode opens with the
+relation already nonzero or its evidence already masked, the corresponding
+onset is left-censored at $\alpha_k$.
+Substantive dwell is the duration for which $d_j^{\star}\neq0$ in that
+episode; evidence-failure dwell is the duration for which the required mask
+entry remains zero. Detection latency is detection time minus the explicitly
+declared relevant onset. The true substantive onset can be interval-censored
+when evidence arrives late; that uncertainty is reported rather than replaced
+by the evidence-failure time.
 \end{definition}
 
 \begin{figure}[t]
 \centering
 \resizebox{\columnwidth}{!}{\input{figs/fig-lifecycle}}
 \caption{The drift lifecycle and its temporal quantities
-(\cref{def:gd}). Onset is class-specific---an organizational event (policy
-revision), a clock crossing (exception expiry), an exogenous event
-(registry re-tag), or a reconciler convergence (rollback). Detection latency
-is the tier-dependent quantity measured in \cref{sec:study}; dwell time is
-the exposure window that remediation closes, with the remediation family
-determined by the drifted component (\cref{sec:model-vector}).}
+(\cref{def:gd}). Substantive onset is episode- and class-specific---an
+organizational event (policy revision), a clock crossing (exception expiry),
+an exogenous event (registry re-tag), or reconciler convergence (rollback);
+evidence onset is the distinct transition of a required mask entry to zero.
+Drift detection
+latency (DDL; \cref{met:ddl}) ends at the first honest alert; stable
+vector-completion latency (Stable-VCL; \cref{met:ddl}) ends only when an
+admissible cut is closed by the required watermarks. Without that closure
+Stable-VCL is censored. Substantive and evidence dwell are reported
+separately; their remediation families are also distinct
+(\cref{sec:model-vector}).}
 \label{fig:lifecycle}
 \end{figure}
 
@@ -174,7 +471,8 @@ weights are governance choices, not properties of the system.
 reconcile ($\dconf$), re-evaluate and re-approve or migrate ($\dpol$),
 re-authorize or terminate the exception ($\dauth$), restore or re-approve
 intent ($\dint$), restore assumptions or re-assess ($\denv$), repair evidence
-where $\ObsMask$ is zero---so collapsing them destroys exactly the information an operator
+where an entry of $\ObsMask_{\mu}(u,\theta;T)$ is zero---so collapsing them
+destroys exactly the information an operator
 needs. \emph{Temporal structure}: components drift on different clocks
 (policy revisions are discrete organizational events; exception expiry is a
 scheduled instant; registry re-tags are exogenous), so a scalar time series
@@ -189,26 +487,40 @@ replace findings.
 Each component divergence is a function of specific streams:
 $\dconf$ of (desired, $\Gobs$); $\dpol$ additionally of $\Pol(t)$ and
 $\pi_B$; $\dauth$ of $A_B^{\mathrm{proof}}$, $\Auth_{\mathrm{live}}(t)$,
-execution times, and $\delta_t$; $\dint$ of $\Int(t)$ and $\iota_B$;
+execution times, current $\mathrm{Applicable}$ status, and the actually
+executing digests $\delta_t$. In contrast, $\dint$ is a function of $\Int(t)$,
+$\iota_B$, the complete integrity-valid transition graph, its edge-bound
+expected digests, immutable execution proofs, and transition execution times;
+it reads live status only for instruments whose declared policy permits
+retroactive invalidation and never reads $\delta_t$;
 $\denv$ of $\varepsilon_t$ and $\sigma_B$; and every
-entry of $\ObsMask$ of the evidence needed for its corresponding computation.
+entry of $\ObsMask_{\mu}(u,\theta;T)$ of the evidence and mode-specific cut
+needed for its corresponding computation. Architecturally, T2 owns the
+transition graph, edge-bound expected digests, and proofs needed to decide
+$\mathrm{ExecApplicable}$; T3 adds the digest actually executing and is the
+first tier that can compare it with those expected digests.
 \Cref{prop:impossible} is the negative direction of this
 dependency structure; the positive direction is equally direct:
 
 \begin{proposition}[Tier sufficiency]
 \label{prop:tiers}
-A detector with access to the streams a component depends on decides that
-component's consistency (in the closed-world model, exactly; in the field, up
-to the fidelity of the streams). Consequently a sufficient detector for full
+A detector with access to the streams a component depends on, an unambiguous
+unit-reference join, and $\mathrm{ModeCut}_{\mu,j}(u,\theta;T)$ for its
+declared mode decides that component's consistency (in the closed-world
+model, exactly; in the field, up to the fidelity of those contracts). If
+either the unit join or declared cut fails, the sound result is undecidable.
+Consequently a sufficient detector for full
 governance consistency joins the configuration comparison with the policy,
 authorization, intent/lineage, and environment streams---the tiered
 architecture of \cref{sec:architecture}, whose scenario-to-tier realization
 \cref{sec:study} checks cell by cell.
 \end{proposition}
 \begin{proof}
-Each component divergence in \cref{sec:model-distance} is defined as a
-computable function of the named streams; providing the streams provides the
-function's inputs.
+Each component divergence in \cref{sec:model-distance} is a computable
+function of the named streams at one unit and cut. Providing those streams
+under the unit-reference, evidence, and declared-mode cut contracts provides
+the function's inputs; failure of any required contract is represented by the
+corresponding zero mask entry.
 \end{proof}
 
 The proposition is an input-enumeration result; whether a concrete
@@ -228,9 +540,14 @@ decides that component in general.
 Construct the pairs while holding all lower-tier observations fixed. For T1,
 keep desired and observed configuration identical and let the current policy
 admit the deployment in one world but reject it in the other. For T2, keep the
-T1 projection fixed and let the same effective exception be valid in one world
-but expired in the other; alternatively, retain versus delete its approval
-record, changing the authorization/intent mask from decidable to undecidable.
+T1 projection fixed and let the same effective exception be currently valid
+in one world but expired in the other, changing authorization. A separate T2
+pair keeps all lower-tier state fixed but varies a complete, proof-bearing
+authorized transition edge versus a complete graph that refutes such an edge,
+changing intent. Removing prospective live status while preserving execution
+proof changes only the authorization mask; intent remains decidable. For a
+declared retroactive policy, removing the required status can instead mask
+intent, consistently with $\mathrm{ExecApplicable}$.
 For T3, keep the manifest tag and every T2 stream fixed but let the running tag
 resolve to an approved digest in one world and an uncovered digest in the
 other. For T4, keep all T3 streams fixed and change only an unmanaged

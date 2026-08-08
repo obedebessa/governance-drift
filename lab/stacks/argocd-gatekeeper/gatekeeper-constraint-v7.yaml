@@ -1,0 +1,16 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequiredCrossLabel
+metadata:
+  name: payments-current-policy
+  annotations:
+    governance.example/policy-version: pi-7
+spec:
+  enforcementAction: dryrun
+  match:
+    kinds:
+      - apiGroups: ["apps"]
+        kinds: ["Deployment"]
+    namespaces: ["payments"]
+  parameters:
+    label: app
+    value: payments

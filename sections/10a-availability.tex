@@ -1,34 +1,39 @@
 \section{Data and Code Availability}
 \label{sec:availability}
 
-The manuscript source, reference implementation, closed-world data,
-independent no-join baseline, repeated and compound live-stack observations,
-benign-control records, and generated tables are archived as version~1.5.0 at
-\url{https://doi.org/10.5281/zenodo.21845707}; the version-independent concept
-DOI is \url{https://doi.org/10.5281/zenodo.21841458}. Development history and
-the tagged release are at
-\url{https://github.com/obedebessa/governance-drift} (tag
-\texttt{v1.5.0}). The archive's \texttt{RELEASE\_MANIFEST.md} records SHA-256
-digests for the manuscript PDF and source package, while the Git tag binds the
-released tree. Version~1.2.0 remains available as the predecessor at
-\url{https://doi.org/10.5281/zenodo.21843860}.
+The version~1.6.0 working tree contains the manuscript source, reference
+implementation, closed-world data, separately implemented no-join baseline,
+ablation, repeated and compound live-stack observations, transition controls,
+fault traces, scaling samples, live-fleet records, real-process audit trace,
+bounded Argo CD/Gatekeeper cross-stack records, generated tables, and
+validators. At the time of this pre-release build, no v1.6.0 tag, version DOI,
+or frozen release package is claimed. Development history is at
+\url{https://github.com/obedebessa/governance-drift}; the latest verified public
+archive is version~1.5.0 at
+\url{https://doi.org/10.5281/zenodo.21845707}, and the version-independent
+concept DOI is \url{https://doi.org/10.5281/zenodo.21841458}. After the results
+are frozen and the aggregate verifier passes, the release manifest will bind
+the manuscript PDF and source package by SHA-256 before a v1.6.0 tag and Zenodo
+record are published.
 
 The dependency-free closed-world study is regenerated with
 \texttt{python3 code/detector\_study.py};
-\texttt{PYTHONPATH=lab python3 -m unittest -v
-lab/test\_evaluator\_contract.py} checks fail-closed evidence semantics;
-\texttt{python3 scripts/analyze\_lab\_uncertainty.py} reproduces the
-Wilson and injection-cluster bootstrap intervals;
-\texttt{python3 scripts/analyze\_lab\_extension.py} validates and summarizes
-the compound-vector extension and extended benign soak;
-\texttt{python3 scripts/verify\_artifact.py} checks its canonical outputs and
-the frozen laboratory results. With Docker, Kind, \texttt{kubectl}, Git, and
-the pinned images available, \texttt{lab/bootstrap.sh} creates the cluster
-and \texttt{python3 lab/run\_repeated\_experiment.py} executes the seeded
-20-by-9 protocol and benign controls. Finally,
-\texttt{python3 scripts/verify\_lab\_results.py} verifies the raw CSV/JSON
-observations and the generated summary tables. Platform versions, seed,
-cadences, raw timestamps, timeout outcomes, expected and observed class sets,
-priority projections, component metrics, Hamming loss, and evidence-completion
-times are retained in \texttt{lab/results/}; the secondary campaign is in
-\texttt{lab/results\_extension/}.
+the ablation with \texttt{python3 code/ablation\_study.py}; and the full
+frozen package is checked with
+\texttt{python3 scripts/verify\_artifact.py}. That aggregator re-executes the
+unit suites and validates the uncertainty, compound, transition, fault,
+scaling, live-fleet, trace, cross-stack, and scoping-review artifacts without recreating a
+cluster. With Docker, Kind, \texttt{kubectl}, Git, and the pinned images
+available, \texttt{lab/bootstrap.sh} creates the primary stack and
+\texttt{python3 lab/run\_repeated\_experiment.py} executes the seeded
+20-by-9 protocol and steady-state controls. Platform versions, seeds,
+cadences, raw timestamps, censoring, expected and observed class sets,
+per-component metrics, Hamming loss, evidence-completion times, stop rules,
+cleanup checks, and source/raw hashes---and, for the trace campaign, a complete
+file manifest---are retained in the reportable directories
+\texttt{lab/results}, \texttt{lab/results\_extension},
+\texttt{lab/results\_transition}, \texttt{lab/results\_faults},
+\texttt{lab/results\_scaling}, \texttt{lab/results\_live\_fleet},
+\texttt{lab/results\_trace}, and \texttt{lab/results\_cross\_stack}. Pilot and
+intentionally aborted development runs
+are excluded from the release manifest and reported claims.

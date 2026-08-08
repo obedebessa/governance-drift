@@ -27,15 +27,21 @@ Scenarios S1--S9 each tier first detects, as measured in
 \end{figure*}
 
 \subsection{Components}
-\textbf{Approved-state recorder.} At every approval, append an immutable
+\textbf{Approved-state recorder.} At approval, append an immutable pending
 snapshot to $\Gapp^x$---manifest content, \emph{resolved} digests, policy-version pin,
 immutable authorization proof with execution times, intent linkage, environment
-assumptions---and persist it durably and independently of the delivery
+assumptions, scope, and predecessor edge. At operational effect, append or
+attest its activation; cancellation marks it aborted. Persist both events
+durably and independently of the delivery
 platforms. This is the architecture's one hard prerequisite: without a
 recorded approval basis there is nothing to drift \emph{from}; where such
-records are absent or decayed, drift verdicts degrade to undecidable
-(the corresponding entries of $\ObsMask$ are zero), which the evaluator must report as such rather than as
-consistency.
+records are absent or decayed, only the basis-dependent components and the
+total governance verdict degrade to undecidable (their entries of $\ObsMask$
+are zero). The desired/observed configuration component remains comparable
+when its own evidence contract is satisfied; the evaluator must report this
+partial result rather than either total consistency or total ignorance.
+Conflicting activated maxima also fail closed instead of being
+ordered by approval timestamp (\cref{prop:basis-selection}).
 
 \textbf{Evidence tiers.}
 \emph{T0/T0n}: the desired/observed comparison every reconciler already
@@ -46,9 +52,11 @@ the naive form is unusable as a governance signal.
 repository~\cite{opa,kyverno}; the evaluator re-evaluates the running state
 against $\Pol(t)$ and compares with the pinned basis.
 \emph{T2}: authorization records with mode and validity semantics---expiry,
-scope, prospective or retroactive revocation---so that exceptions and approvals are objects with clocks, not
-booleans; ITIL-style change records~\cite{itil4} and platform approvals both
-map here.
+scope, prospective or retroactive revocation---bound to the expected change
+graph, covered digests where the authorization scope requires them, and
+immutable approval/exception proofs. Exceptions and approvals are therefore
+evidenced objects with clocks, subjects, and coverage rather than booleans;
+ITIL-style change records~\cite{itil4} and platform approvals both map here.
 \emph{T3}: artifact lineage---digest-level linkage from running workloads to
 approval subjects, the slice pioneered by supply-chain
 attestation~\cite{slsa,torres2019,newman2022,binauthz}.
@@ -62,32 +70,37 @@ assumptions rather than a benchmark) and the joined, class-resolved verdict.
 
 \textbf{Evaluator.} A continuous process (or scheduled sweep) computing
 $\GD(t)$ per deployment: cheap incremental checks on context-change events
-(policy revision published, exception clock elapsed, registry event) rather
-than full re-scans---governance drift, unlike configuration drift, is mostly
-\emph{event-driven} on the governance plane, which is why several scenarios
+(policy revision published, exception clock elapsed, registry event), using
+event-triggered recomputation where a source exposes deltas and scheduled or
+background re-evaluation where it does not. Several scenarios
 in \cref{sec:study} are detectable with zero latency at the tier that
-carries the relevant event.
+carries the relevant modeled event; this is not a claim that live integrations
+avoid polling or scans.
 
-\textbf{Analytic scaling envelope.} For $n$ deployments with at most $r$
-policy predicates, $a$ relied-upon instruments, $d$ running digests, and $q$
-environment predicates each, a full sweep is
-$O(n(r+a+d+q))$ time and stores $O(n(s+a+d+q))$ evidence for $s$ retained
-snapshots. The intended execution is incremental: policy-to-deployment,
+\textbf{Analytic scaling envelope.} For $n$ deployments with at most $m$
+managed configuration fields, $r$ policy predicates, $a$ relied-upon
+instruments, $d$ running digests, and $q$ environment predicates each, a full
+sweep is $O(n(m+r+a+d+q))$ time. Retaining $s$ complete snapshots per
+deployment costs $O(ns(m+a+d+q))$ storage, plus current-stream indices. The
+intended execution is incremental: policy-to-deployment,
 subject-to-approval, digest-to-workload, and predicate-to-resource indices
 restrict an event to its $k$ affected deployments, yielding
-$O(k(r+a+d+q))$ work. Policy results and immutable proofs are cacheable;
+$O(k(m+r+a+d+q))$ work. Policy results and immutable proofs are cacheable;
 evaluators can shard by cluster, namespace, or tenant. Kubernetes watches and
 batched cloud-inventory deltas avoid one API request per deployment. Cloud
-quotas and cache invalidation remain engineering constraints, not measured
-results; this laboratory does not claim a throughput bound.
+quotas and cache invalidation remain engineering constraints. The in-memory
+microbenchmark in \cref{tab:scaling} measures the join after decoding and
+indexing inputs; it deliberately does not claim a Kubernetes or production
+throughput bound.
 
 \textbf{Minimal adoption path.} The smallest useful deployment is
 T0n+T1+T2: normalize the reconciler comparison, re-evaluate running state
 under current policy, and join durable approvals and exceptions with explicit
 validity semantics. This separates operational, compliance, and authorization
 risk immediately; T3 adds digest lineage and T4 adds declared environment
-predicates as evidence maturity grows. GCC is reported from the first rollout
-so unevaluable coverage is visible rather than treated as conformance.
+predicates as evidence maturity grows. Governance Conformance Coverage (GCC;
+\cref{met:gcc}) is reported from the first rollout so unevaluable coverage is
+visible rather than treated as conformance.
 
 For legacy workloads, a discovery pass may create a signed
 \emph{retrospective baseline} from current state, current policy results, and
@@ -96,6 +109,29 @@ reconstructed evidence---never represented as a historical approval---and
 GCC remains partial for facts that cannot be recovered. New changes then enter
 the ordinary append-only path, allowing coverage to increase without
 rewriting the estate's past.
+
+\subsection{Threat and Trust Model}
+The protected claim is integrity and decidability of the relation, not
+availability of the workload. An attacker may mutate Git, tags, runtime
+objects, policy results, authorization status, inventory, or one evidence
+adapter; operators may also make the same changes accidentally. These sources
+are therefore evidence inputs, not intrinsically trusted truth. The trusted
+computing base (TCB) is the recorder/activation authority, stable-identity
+issuer, authenticated time and adapter metadata, append-only log or external
+anchor, basis selector, and evaluator code. Every record is subject-bound,
+sequenced, freshness-bounded, and content-addressed; snapshots are complete
+atomic tuples chained to their predecessors. A contract failure masks only
+the dependent components and prevents a conformance claim.
+
+A local hash chain detects modification and reordering of retained snapshots,
+but cannot by itself prove that a privileged actor did not truncate the tail
+or replace the entire history. Production deployment therefore requires an
+external transparency anchor or threshold signatures, access separation, and
+key/clock rotation records. Compromise of the evaluator and all anchors, or
+collusion of the recorder and activation authority, is outside the model.
+Denial of evidence remains visible as reduced GCC/undecidable; remediation may
+keep a critical workload available, but it must not relabel uncertainty as
+conformance (\cref{sec:discussion}).
 
 \subsection{Relation to Existing Mechanisms}
 The architecture is deliberately assembled from streams that already exist in
@@ -110,8 +146,9 @@ tooling, and the architecture credits it explicitly: Kyverno's background
 scanning re-evaluates existing resources against current policy (our
 T1)~\cite{kyverno}; configuration recorders track unmanaged resources
 (much of T4)~\cite{awsconfig,cspm}; continuous validation re-checks
-artifact policy (part of T3)~\cite{binauthz}. We found no documented mechanism
-that provides the complete join: all tiers evaluated against the
+artifact policy (part of T3)~\cite{binauthz}. Among the mechanisms in the
+bounded source set documented in \cref{sec:related}, none jointly provides all
+of the following: every tier evaluated against the
 \emph{admitted basis} $B_x(t)$, with mode-aware validity on the authorization
 itself, and verdicts that distinguish ``violates policy'' from ``was never
 approved'' from ``was admitted legitimately and the world moved''---the

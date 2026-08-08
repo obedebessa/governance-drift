@@ -43,7 +43,7 @@ T3 +artifact lineage, T4 +environment inventory vs sigma_0.
 
 Scenarios: S0 control; S1--S9 the single/paired live-lab cases; S10 policy
 plus expired authorization; S11 artifact substitution plus environment
-change; S12 rollback plus missing approval evidence.
+change; S12 rollback plus loss of required continuing-authority status.
 
 Counterfactual scoring: drift is detected iff the alarm sequence differs
 from a paired same-seed no-drift control (identical churn); an
@@ -81,10 +81,9 @@ CLASSES = {
     "S9": {"evidence"},
     "S10": {"policy", "authorization"},
     "S11": {"authorization", "environment"},
-    # The underlying rollback is substantively intent+authorization drift,
-    # but deleting the approval basis makes both components undecidable. The
-    # honest detector output is therefore the epistemic evidence class.
-    "S12": {"evidence"},
+    # The rollback lacks an integrity-valid approval path (intent), while
+    # missing live status makes current authorization undecidable (evidence).
+    "S12": {"intent", "evidence"},
 }
 
 # policy versions as requirement sets over manifest keys
@@ -232,6 +231,24 @@ def applicable_approvals(world, k):
     return applicable_records, True
 
 
+def intent_coverage(world):
+    """Return (covered, decidable) from immutable execution-time lineage.
+
+    Current continuing-authority status belongs to authorization, not to the
+    historical question whether the driving revision has a recorded approved
+    path. Missing or invalid proof still makes intent undecidable.
+    """
+    if not world.get("basis_available", True):
+        return False, False
+    approvals = list(world["approvals"].values())
+    if not approvals or any(not row.get("proof_available", False) for row in approvals):
+        return False, False
+    return (
+        any(world["git_revision"] in row.get("revisions", set()) for row in approvals),
+        True,
+    )
+
+
 def detect(tier, approved, world, k):
     """Pure function of the tier's visible streams.
     Returns the complete class set decidable at that tier. Evidence denotes
@@ -264,11 +281,13 @@ def detect(tier, approved, world, k):
             classes.add("authorization")
     va, authorization_decidable = applicable_approvals(world, k)
     if not authorization_decidable:
-        classes.add("evidence")      # substantive components are undecidable
+        classes.add("evidence")      # current authorization is undecidable
     elif not va:
         classes.add("authorization")
-        classes.add("intent")
-    elif not any(world["git_revision"] in a["revisions"] for a in va):
+    intent_covered, intent_decidable = intent_coverage(world)
+    if not intent_decidable:
+        classes.add("evidence")
+    elif not intent_covered:
         classes.add("intent")
     if tier == "T2":
         ordered = tuple(x for x in CLASS_ORDER if x in classes)

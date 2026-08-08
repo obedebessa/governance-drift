@@ -1,0 +1,10 @@
+{
+  "apiVersion": "v1",
+  "kind": "Namespace",
+  "metadata": {
+    "name": "govdrift-fleet",
+    "labels": {
+      "app.kubernetes.io/name": "govdrift-fleet"
+    }
+  }
+}

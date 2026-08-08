@@ -1,0 +1,53 @@
+{
+  "source_campaign": "transition-20260808T051207Z",
+  "controls": [
+    {
+      "control": "C1",
+      "windows": 4,
+      "polls_transition_and_post": 129,
+      "substantive_governance_alarm_polls": 0,
+      "configuration_convergence_polls": 0,
+      "epistemic_warning_polls": 0
+    },
+    {
+      "control": "C2",
+      "windows": 4,
+      "polls_transition_and_post": 195,
+      "substantive_governance_alarm_polls": 0,
+      "configuration_convergence_polls": 7,
+      "epistemic_warning_polls": 12
+    },
+    {
+      "control": "C3",
+      "windows": 3,
+      "polls_transition_and_post": 146,
+      "substantive_governance_alarm_polls": 0,
+      "configuration_convergence_polls": 0,
+      "epistemic_warning_polls": 7
+    },
+    {
+      "control": "C4",
+      "windows": 3,
+      "polls_transition_and_post": 105,
+      "substantive_governance_alarm_polls": 0,
+      "configuration_convergence_polls": 0,
+      "epistemic_warning_polls": 9
+    },
+    {
+      "control": "C5",
+      "windows": 3,
+      "polls_transition_and_post": 102,
+      "substantive_governance_alarm_polls": 0,
+      "configuration_convergence_polls": 0,
+      "epistemic_warning_polls": 5
+    },
+    {
+      "control": "C6",
+      "windows": 3,
+      "polls_transition_and_post": 100,
+      "substantive_governance_alarm_polls": 0,
+      "configuration_convergence_polls": 0,
+      "epistemic_warning_polls": 3
+    }
+  ]
+}

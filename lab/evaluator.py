@@ -9,6 +9,8 @@ import subprocess
 import time
 from pathlib import Path
 
+from basis import select_basis_directory
+
 
 LAB = Path(__file__).resolve().parent
 RUNTIME = LAB / "runtime"
@@ -51,19 +53,30 @@ def projection(obj: dict) -> dict:
     }
 
 
+def _load_records(paths: list[Path]) -> list[dict]:
+    by_id: dict[str, dict] = {}
+    for path in paths:
+        row = json.loads(path.read_text())
+        identifier = row.get("id")
+        if not isinstance(identifier, str) or not identifier:
+            raise ValueError(f"authorization record has no id: {path}")
+        if identifier in by_id and by_id[identifier] != row:
+            raise ValueError(f"conflicting authorization proof: {identifier}")
+        by_id[identifier] = row
+    return [by_id[key] for key in sorted(by_id)]
+
+
 def approvals() -> list[dict]:
-    return [
-        json.loads(path.read_text())
-        for path in sorted((RUNTIME / "approvals").glob("APR-*.json"))
-    ]
+    return _load_records(sorted((RUNTIME / "approvals").glob("*.json")))
 
 
 def approval_proofs() -> list[dict]:
-    gapp = Path((RUNTIME / "gapp_latest").read_text().strip())
-    return [
-        json.loads(path.read_text())
-        for path in sorted((gapp / "approvals").glob("APR-*.json"))
-    ]
+    gapp = select_basis_directory(
+        RUNTIME, subject="payments", environment="payments"
+    )
+    paths = sorted((gapp / "approvals").glob("*.json"))
+    paths.extend(sorted((RUNTIME / "proofs").glob("*.json")))
+    return _load_records(paths)
 
 
 def applicable(proof: dict, now: int, live: dict | None) -> bool:
@@ -85,6 +98,26 @@ def applicable(proof: dict, now: int, live: dict | None) -> bool:
     if mode in {"continuing", "temporary-exception"}:
         return now < int(record.get("expires_utc", 2**63 - 1))
     raise ValueError(f"unknown authorization mode: {mode}")
+
+
+def intent_applicable_at_execution(proof: dict, live: dict | None) -> bool:
+    """Decide historical intent lineage without importing current authority.
+
+    Continuing validity and ordinary expiry affect authorization, not whether
+    the transition was approved when executed. Only an explicitly retroactive
+    revocation can invalidate that historical edge; its live status is then a
+    required intent input.
+    """
+    if not bool(proof.get("valid_at_execution", True)):
+        return False
+    revocation_effect = (live or proof).get(
+        "revocation_effect", proof.get("revocation_effect", "prospective")
+    )
+    if revocation_effect != "retroactive":
+        return True
+    if live is None:
+        raise LookupError("retroactive-revocation status unavailable")
+    return not bool(live.get("revoked", False))
 
 
 def violated_environment_equalities(approved: dict, observed: dict, prefix: str = "") -> list[str]:
@@ -171,6 +204,7 @@ def evaluate(tier: str) -> dict:
     rank = TIER_RANK[tier]
     components = {name: "not_evaluated" for name in COMPONENTS}
     details: dict[str, list[str]] = {name: [] for name in COMPONENTS}
+    observed: dict | None = None
     try:
         desired = kubectl_json(
             "create", "--dry-run=client", "-f",
@@ -187,20 +221,41 @@ def evaluate(tier: str) -> dict:
     if rank == 0:
         return vector_result(components, details)
 
+    basis_path: Path | None = None
+    try:
+        basis_path = select_basis_directory(
+            RUNTIME, subject="payments", environment="payments"
+        )
+        pinned_policy = json.loads((basis_path / "policy.json").read_text())
+        if not pinned_policy.get("metadata", {}).get("labels", {}).get("policy-version"):
+            raise ValueError("selected basis has no pinned policy version")
+    except (OSError, json.JSONDecodeError, KeyError, TypeError, ValueError, LookupError) as exc:
+        components["policy"] = "undecidable"
+        details["policy"].append(f"admitted policy basis unavailable: {exc}")
+
     proc = subprocess.run(
         ["kubectl", "get", "policyreport", "-A", "-o", "json"],
         text=True, capture_output=True,
     )
-    components["policy"] = "consistent"
+    if components["policy"] != "undecidable":
+        components["policy"] = "consistent"
     if proc.returncode != 0:
         components["policy"] = "undecidable"
         details["policy"].append("PolicyReport stream unavailable")
-    else:
+    elif components["policy"] != "undecidable":
         try:
             target_report_seen = False
+            target_uid = (observed or {}).get("metadata", {}).get("uid")
             for item in json.loads(proc.stdout).get("items", []):
                 scope = item.get("scope", {})
-                if scope.get("kind") != "Deployment" or scope.get("name") != "payments":
+                if (
+                    scope.get("kind") != "Deployment"
+                    or scope.get("name") != "payments"
+                    or scope.get("namespace") != "payments"
+                    or item.get("metadata", {}).get("namespace") != "payments"
+                    or not target_uid
+                    or scope.get("uid") != target_uid
+                ):
                     continue
                 for row in item.get("results", []):
                     if row.get("policy") != "governance-baseline":
@@ -221,27 +276,44 @@ def evaluate(tier: str) -> dict:
     now = int(time.time())
     components["authorization"] = "consistent"
     components["intent"] = "consistent"
-    for path in sorted((RUNTIME / "approvals").glob("EXC-*.json")):
-        exception = json.loads(path.read_text())
-        if now >= int(exception["expires_utc"]) and not exception.get("removed"):
-            components["authorization"] = "inconsistent"
-            details["authorization"].append(f"expired exception {exception['id']}")
     try:
         proof_records = approval_proofs()
-        live_records = approvals()
-        live_by_id = {row.get("id"): row for row in live_records}
-        current_approvals = [
-            proof for proof in proof_records
-            if applicable(proof, now, live_by_id.get(proof.get("id")))
-        ]
     except (OSError, json.JSONDecodeError, TypeError, ValueError, LookupError) as exc:
         proof_records = []
-        approval_records = []
-        current_approvals = []
-        details["authorization"].append(f"approval stream unavailable: {exc}")
-        details["intent"].append(f"approval stream unavailable: {exc}")
-    else:
-        approval_records = proof_records
+        details["authorization"].append(f"immutable approval proof unavailable: {exc}")
+        details["intent"].append(f"immutable approval proof unavailable: {exc}")
+    approval_records = proof_records
+    current_approvals = []
+    live_records: list[dict] = []
+    live_by_id: dict[str, dict] = {}
+    live_status_undecidable = False
+    if proof_records:
+        try:
+            live_records = approvals()
+            live_by_id = {row.get("id"): row for row in live_records}
+            for proof in proof_records:
+                try:
+                    if applicable(proof, now, live_by_id.get(proof.get("id"))):
+                        current_approvals.append(proof)
+                except LookupError as exc:
+                    live_status_undecidable = True
+                    details["authorization"].append(
+                        f"immutable proof retained but live status unavailable: {exc}"
+                    )
+        except (OSError, json.JSONDecodeError, TypeError, ValueError) as exc:
+            live_status_undecidable = True
+            details["authorization"].append(f"live authorization stream unavailable: {exc}")
+    intent_records: list[dict] = []
+    intent_undecidable = False
+    for proof in proof_records:
+        try:
+            if intent_applicable_at_execution(proof, live_by_id.get(proof.get("id"))):
+                intent_records.append(proof)
+        except LookupError as exc:
+            intent_undecidable = True
+            details["intent"].append(
+                f"historical intent validity unavailable: {exc}"
+            )
     if not approval_records:
         components["authorization"] = "undecidable"
         components["intent"] = "undecidable"
@@ -250,17 +322,59 @@ def evaluate(tier: str) -> dict:
         if not details["intent"]:
             details["intent"].append("approval basis unavailable")
     else:
-        if not current_approvals:
+        if live_status_undecidable:
+            components["authorization"] = "undecidable"
+        elif not current_approvals:
             components["authorization"] = "inconsistent"
             details["authorization"].append("no applicable authorization remains")
-        try:
-            revision = command("git", "rev-parse", "HEAD", cwd=RUNTIME / "work").strip()
-            if not any(revision in approval.get("revisions", []) for approval in current_approvals):
-                components["intent"] = "inconsistent"
-                details["intent"].append(f"revision {revision[:12]} is not approved")
-        except (RuntimeError, OSError) as exc:
+        if intent_undecidable:
             components["intent"] = "undecidable"
-            details["intent"].append(f"intent stream unavailable: {exc}")
+        else:
+            try:
+                revision = command("git", "rev-parse", "HEAD", cwd=RUNTIME / "work").strip()
+                if not any(
+                    revision in approval.get("revisions", [])
+                    for approval in intent_records
+                ):
+                    components["intent"] = "inconsistent"
+                    details["intent"].append(
+                        f"revision {revision[:12]} lacks an execution-valid intent path"
+                    )
+            except (RuntimeError, OSError) as exc:
+                components["intent"] = "undecidable"
+                details["intent"].append(f"intent stream unavailable: {exc}")
+
+    proof_by_id = {row.get("id"): row for row in proof_records}
+    for exception in [
+        row for row in live_records
+        if row.get("kind") == "emergency-exception"
+    ]:
+        if now < int(exception.get("expires_utc", 2**63 - 1)) or exception.get("removed"):
+            continue
+        identifier = exception.get("id")
+        proof = proof_by_id.get(identifier)
+        if proof is None:
+            components["authorization"] = "undecidable"
+            details["authorization"].append(
+                f"expired exception {identifier} lacks immutable execution proof"
+            )
+            continue
+        if proof.get("subject") != "deployment/payments":
+            continue
+        try:
+            annotations = observed["spec"]["template"]["metadata"].get("annotations", {})
+            effect_persists = annotations.get("emergency-debug") == identifier
+        except (NameError, KeyError, TypeError):
+            components["authorization"] = "undecidable"
+            details["authorization"].append(
+                f"cannot establish whether exception {identifier} effect persists"
+            )
+        else:
+            if effect_persists:
+                components["authorization"] = "inconsistent"
+                details["authorization"].append(
+                    f"expired exception {identifier} still covers an active effect"
+                )
     if rank == 2:
         return vector_result(components, details)
 
@@ -272,16 +386,36 @@ def evaluate(tier: str) -> dict:
                 if pod.get("metadata", {}).get("deletionTimestamp"):
                     continue
                 statuses = pod.get("status", {}).get("containerStatuses", [])
-                if not statuses or not statuses[0].get("ready") or not statuses[0].get("imageID"):
-                    continue
-                candidates.append(statuses[0]["imageID"])
+                init_statuses = pod.get("status", {}).get("initContainerStatuses", [])
+                if not statuses or any(
+                    not status.get("ready") or not status.get("imageID")
+                    for status in statuses
+                ):
+                    raise RuntimeError(
+                        "an active pod lacks a complete ready-container digest set"
+                    )
+                if any(not status.get("imageID") for status in init_statuses):
+                    raise RuntimeError(
+                        "an init container lacks a materialized digest"
+                    )
+                candidates.extend(status["imageID"] for status in statuses)
+                candidates.extend(status["imageID"] for status in init_statuses)
             if not candidates:
-                raise RuntimeError("no active ready pod has a materialized imageID")
-            image_id = sorted(candidates)[0]
-            digest = image_id.split("@", 1)[-1]
-            if not any(digest in approval.get("subjects", []) for approval in current_approvals):
+                raise RuntimeError("no active ready container has a materialized imageID")
+            digests = sorted({image_id.split("@", 1)[-1] for image_id in candidates})
+            uncovered = [
+                digest for digest in digests
+                if not any(
+                    digest in approval.get("subjects", [])
+                    for approval in current_approvals
+                )
+            ]
+            if uncovered:
                 components["authorization"] = "inconsistent"
-                details["authorization"].append(f"running digest {digest} is not approved")
+                details["authorization"].append(
+                    "running digest set contains uncovered members: "
+                    + ", ".join(uncovered)
+                )
         except (RuntimeError, KeyError, IndexError, json.JSONDecodeError) as exc:
             components["authorization"] = "undecidable"
             details["authorization"].append(f"artifact lineage unavailable: {exc}")
@@ -290,7 +424,9 @@ def evaluate(tier: str) -> dict:
 
     components["environment"] = "consistent"
     try:
-        gapp = Path((RUNTIME / "gapp_latest").read_text().strip())
+        gapp = basis_path or select_basis_directory(
+            RUNTIME, subject="payments", environment="payments"
+        )
         current_inventory = json.loads((RUNTIME / "cloud-inventory.json").read_text())
         approved_inventory = json.loads((gapp / "sigma0.json").read_text())
         violations = violated_environment_equalities(approved_inventory, current_inventory)
@@ -299,7 +435,7 @@ def evaluate(tier: str) -> dict:
             details["environment"].append(
                 "declared environment predicates violated: " + ", ".join(violations)
             )
-    except (OSError, json.JSONDecodeError, KeyError) as exc:
+    except (OSError, json.JSONDecodeError, KeyError, LookupError) as exc:
         components["environment"] = "undecidable"
         details["environment"].append(f"environment inventory unavailable: {exc}")
     return vector_result(components, details)

@@ -1,7 +1,7 @@
 {
   "title": "Governance Drift: Reproducibility Package",
   "upload_type": "software",
-  "description": "Manuscript source, closed-world detector study, independent no-join baseline, canonical results, and a repeated bounded Kubernetes/GitOps laboratory for Governance Drift. Version 1.5.0 retains 538/540 detections with 538/538 exact class sets conditional on detection in the primary live campaign; adds 45/45 exact compound-vector observations; and adds a 1,800-second benign soak with zero substantive or epistemic alarms in 4,680 polls. The no-join baseline diagnoses 9/12 scenario sets versus 12/12 for the admitted-basis join. These bounded results establish realizability and within-laboratory behavior, not natural occurrence, field prevalence, production effectiveness, or transport reliability.",
+  "description": "Draft deposit metadata for the Governance Drift v1.6.0 candidate: manuscript source, closed-world detector study, separately implemented no-join baseline, canonical results, and bounded Kubernetes/GitOps laboratories. The primary live campaign retains 538/540 detections with 538/538 exact provisional class-set classifications conditional on detection under a sequential-snapshot laboratory assumption, plus 45/45 exact provisional compound class sets. The candidate adds activation-safe basis-selection probes at B4 (separate from the frozen primary live campaign), admissible temporal-cut tests, transition-inclusive controls, a nine-episode/27-process trace audit with two-poll exact persistence, localhost transport faults, scaling benchmarks, a live multi-Deployment adapter path, and a pending Argo CD/Gatekeeper frozen rerun limited to projected singleton classifications over declared evaluated components. Only configuration and policy use native second-stack surfaces; authorization retains the shared digest adapter, and intent/environment are not evaluated there. These results demonstrate bounded semantic realizability and within-laboratory behavior, not natural occurrence, field prevalence, production effectiveness, equivalence, or production reliability. No v1.6.0 DOI or release tag is claimed until the candidate is frozen and verified.",
   "creators": [
     {
       "name": "Bessa Rocha da Silva, Obede",
@@ -10,9 +10,7 @@
   ],
   "access_right": "open",
   "license": "mit-license",
-  "version": "1.5.0",
-  "publication_date": "2026-08-08",
-  "doi": "10.5281/zenodo.21845707",
+  "version": "1.6.0-rc.1",
   "keywords": [
     "governance drift",
     "configuration drift",

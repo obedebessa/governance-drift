@@ -8,6 +8,7 @@ FLUX_VERSION="2.9.4"
 KYVERNO_VERSION="1.18.2"
 FLUX_SHA256="9eb86c5f9d606b2ac2cfe71223ab2f23faa2d59ccb21df4e08e5610e54d535f8"
 KYVERNO_SHA256="3dcd43eaf11f0719084217148cd0c82a8fa49faa9b1a783ea5bea2cf84041bda"
+IMAGE_LOCK="$LAB/image-lock.json"
 
 for tool in docker kind kubectl git curl jq python3; do
   command -v "$tool" >/dev/null || { echo "missing required tool: $tool" >&2; exit 1; }
@@ -16,7 +17,7 @@ done
 kind delete cluster --name govdrift-lab >/dev/null 2>&1 || true
 docker rm -f kind-registry govdrift-git >/dev/null 2>&1 || true
 rm -rf "$RUNTIME"
-mkdir -p "$RUNTIME/cache" "$RUNTIME/git" "$RUNTIME/log" "$RUNTIME/approvals"
+mkdir -p "$RUNTIME/cache" "$RUNTIME/git" "$RUNTIME/log" "$RUNTIME/approvals" "$RUNTIME/proofs"
 
 curl -fsSL "https://github.com/fluxcd/flux2/releases/download/v${FLUX_VERSION}/install.yaml" \
   -o "$RUNTIME/cache/flux-install.yaml"
@@ -26,9 +27,16 @@ printf '%s  %s\n' "$FLUX_SHA256" "$RUNTIME/cache/flux-install.yaml" \
   | shasum -a 256 -c -
 printf '%s  %s\n' "$KYVERNO_SHA256" "$RUNTIME/cache/kyverno-install.yaml" \
   | shasum -a 256 -c -
+python3 "$LAB/pin_manifests.py" --lock "$IMAGE_LOCK" \
+  "$RUNTIME/cache/flux-install.yaml" "$RUNTIME/cache/kyverno-install.yaml"
+
+locked_image() {
+  python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["images"][sys.argv[2]])' \
+    "$IMAGE_LOCK" "$1"
+}
 
 docker run -d --restart=always -p 127.0.0.1:5001:5000 \
-  --name kind-registry registry:2 >/dev/null
+  --name kind-registry "$(locked_image registry:2)" >/dev/null
 kind create cluster --config "$LAB/kind-cluster.yaml"
 docker network connect kind kind-registry >/dev/null 2>&1 || true
 
@@ -36,7 +44,7 @@ docker network connect kind kind-registry >/dev/null 2>&1 || true
 # registry latency inside the single Kind node dominating bootstrap time.
 CONTROLLER_IMAGES=$(awk '$1 == "image:" && NF >= 2 {gsub(/"/, "", $2); print $2}' \
   "$RUNTIME/cache/flux-install.yaml" "$RUNTIME/cache/kyverno-install.yaml" \
-  | grep -E 'fluxcd/(source-controller|kustomize-controller|notification-controller)|kyverno/(kyvernopre|kyverno:|background-controller|reports-controller)' \
+  | grep -E 'fluxcd/(source-controller|kustomize-controller|notification-controller)|kyverno/(kyvernopre|kyverno@|background-controller|reports-controller)' \
   | sort -u)
 for image in $CONTROLLER_IMAGES; do
   docker pull "$image" >/dev/null
@@ -65,15 +73,17 @@ git -C "$RUNTIME/work" rev-parse HEAD > "$RUNTIME/baseline_revision"
 
 docker run -d --restart=always --network kind --name govdrift-git \
   -v "$RUNTIME/git:/git:ro" -v "$LAB/git-http:/srv/cgi-bin:ro" \
-  python:3.12-slim sh -c \
+  "$(locked_image python:3.12-slim)" sh -c \
   'apt-get update -qq && apt-get install -y -qq git >/dev/null && cd /srv && exec python3 -m http.server --cgi 8000' \
   >/dev/null
 
-docker pull nginx:1.27-alpine >/dev/null
-docker tag nginx:1.27-alpine localhost:5001/governance-demo:1.0
+BASE_IMAGE="$(locked_image nginx:1.27-alpine)"
+ALT_IMAGE="$(locked_image nginx:1.26-alpine)"
+docker pull "$BASE_IMAGE" >/dev/null
+docker tag "$BASE_IMAGE" localhost:5001/governance-demo:1.0
 docker push localhost:5001/governance-demo:1.0 >/dev/null
-docker pull nginx:1.26-alpine >/dev/null
-docker tag nginx:1.26-alpine localhost:5001/governance-demo:alternate
+docker pull "$ALT_IMAGE" >/dev/null
+docker tag "$ALT_IMAGE" localhost:5001/governance-demo:alternate
 docker push localhost:5001/governance-demo:alternate >/dev/null
 
 kubectl apply -f "$RUNTIME/cache/flux-install.yaml" >/dev/null
@@ -99,9 +109,10 @@ kubectl -n payments rollout status deployment/payments --timeout=180s
 
 BASE_DIGEST=$(kubectl -n payments get pod -l app=payments \
   -o jsonpath='{.items[0].status.containerStatuses[0].imageID}' | sed 's/.*@//')
+LOCKED_BASE_DIGEST="${BASE_IMAGE##*@}"
 BASE_REVISION=$(cat "$RUNTIME/baseline_revision")
-jq --arg d "$BASE_DIGEST" --arg r "$BASE_REVISION" \
-  '.subjects=[$d] | .revisions=[$r]' "$LAB/approvals/APR-1.json" \
+jq --arg d "$BASE_DIGEST" --arg ld "$LOCKED_BASE_DIGEST" --arg r "$BASE_REVISION" \
+  '.subjects=([$d,$ld] | unique) | .revisions=[$r]' "$LAB/approvals/APR-1.json" \
   > "$RUNTIME/approvals/APR-1.json"
 cp "$RUNTIME/approvals/APR-1.json" "$RUNTIME/APR-1.baseline.json"
 cp "$LAB/cloud-inventory.json" "$RUNTIME/cloud-inventory.json"

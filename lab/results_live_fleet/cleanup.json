@@ -1,0 +1,10 @@
+{
+  "attempted": true,
+  "namespace": "govdrift-fleet",
+  "started_utc": "2026-08-08T05:52:11.172314+00:00",
+  "returncode": 0,
+  "stdout": "namespace \"govdrift-fleet\" deleted",
+  "stderr": "",
+  "completed_utc": "2026-08-08T05:52:29.336971+00:00",
+  "namespace_absent_after": true
+}

@@ -1,0 +1,181 @@
+{
+  "after_effect_evaluation": {
+    "class": "policy",
+    "class_set": [
+      "policy"
+    ],
+    "components": {
+      "authorization": "consistent",
+      "configuration": "consistent",
+      "environment": "consistent",
+      "intent": "consistent",
+      "policy": "inconsistent"
+    },
+    "detail": "policy pi-8 supersedes admitted pi-7",
+    "details": {
+      "authorization": [],
+      "configuration": [],
+      "environment": [],
+      "intent": [],
+      "policy": [
+        "policy pi-8 supersedes admitted pi-7"
+      ]
+    },
+    "drift_set": [
+      "policy"
+    ],
+    "evaluation_completed_mono": 2724957.096315791,
+    "evaluation_started_mono": 2724956.901543291,
+    "evidence_drift": false,
+    "input_fingerprint_sha256": "daaaacde9750ff819f471877b511b29e8e34e5c9de529a197cf30abeafa761da",
+    "inputs": {
+      "authorization_files": {
+        "approvals": {
+          "APR-TRACE-BASE.json": {
+            "bytes": 536,
+            "sha256": "891c28522ee2d87dcece5bafe36937f6a1a8461c1def5ac1857fcf25abf9f0ec"
+          }
+        },
+        "proofs": {}
+      },
+      "basis": {
+        "basis_id": "trace-20260808T062119Z-ca37624c:baseline",
+        "sha256": "2d244cdf7a2877a1df3469e073f4521dd1a4803db2d93c56d6a96a62d50577e1"
+      },
+      "configuration": {
+        "deployment_uid": "986e5233-7666-456e-8221-bb61e0bb2825",
+        "desired_file_sha256": "8c69ac164fc6da6bb6803d40628e7cc827d0a3e78fc4c26c96a60e8e4448b5ca",
+        "desired_projection_sha256": "4495b6dc96372a449c7eea95ecbfe307b3f829b4294492380773cc260cab87e2",
+        "generation": 13,
+        "observed_projection_sha256": "4495b6dc96372a449c7eea95ecbfe307b3f829b4294492380773cc260cab87e2",
+        "resource_version": "224840"
+      },
+      "deployment": "payments-trace",
+      "environment": {
+        "inventory_sha256": "09caa25f2306a7f8a8b6a2deb27d386444f0cd7e49c9c227abae50247ab1f659",
+        "violations": []
+      },
+      "git_revision": "0b2c59ec350dc01d0a2453323c2853db8bc0c64a",
+      "namespace": "govdrift-trace",
+      "pods": [
+        {
+          "image_ids": [
+            "sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10"
+          ],
+          "name": "payments-trace-5464569798-glhz4",
+          "phase": "Running",
+          "resource_version": "224824",
+          "uid": "e04325d8-d4d8-4ac8-9bf7-e5df94979b09"
+        }
+      ],
+      "policy": {
+        "approved_version": "pi-7",
+        "live_version": "pi-8",
+        "policy_reports_sha256": "f140de9a1fdff66a79b46d7aee50ed98b31e59bca73795744953b1af73e73be6",
+        "resource_version": "224843",
+        "uid": "a2ec778b-549a-457d-9ffd-13e9db63888d"
+      },
+      "runtime": "/var/folders/hh/d9swhw0d1c7660vy4v9qv6_h0000gn/T/govdrift-trace-20260808T062119Z-ca37624c-707jq7op"
+    },
+    "schema": "govdrift-trace-evaluation/v1",
+    "undecidable_components": [],
+    "verdict": "drift"
+  },
+  "after_input_fingerprint_sha256": "daaaacde9750ff819f471877b511b29e8e34e5c9de529a197cf30abeafa761da",
+  "before_evaluation": {
+    "class": null,
+    "class_set": [],
+    "components": {
+      "authorization": "consistent",
+      "configuration": "consistent",
+      "environment": "consistent",
+      "intent": "consistent",
+      "policy": "consistent"
+    },
+    "detail": "",
+    "details": {
+      "authorization": [],
+      "configuration": [],
+      "environment": [],
+      "intent": [],
+      "policy": []
+    },
+    "drift_set": [],
+    "evaluation_completed_mono": 2724956.790148708,
+    "evaluation_started_mono": 2724956.602768041,
+    "evidence_drift": false,
+    "input_fingerprint_sha256": "a6b7e7943b11126433e7f602724768f90ca0f3c03b1096f4d99cf7c9e0b64cf3",
+    "inputs": {
+      "authorization_files": {
+        "approvals": {
+          "APR-TRACE-BASE.json": {
+            "bytes": 536,
+            "sha256": "891c28522ee2d87dcece5bafe36937f6a1a8461c1def5ac1857fcf25abf9f0ec"
+          }
+        },
+        "proofs": {}
+      },
+      "basis": {
+        "basis_id": "trace-20260808T062119Z-ca37624c:baseline",
+        "sha256": "2d244cdf7a2877a1df3469e073f4521dd1a4803db2d93c56d6a96a62d50577e1"
+      },
+      "configuration": {
+        "deployment_uid": "986e5233-7666-456e-8221-bb61e0bb2825",
+        "desired_file_sha256": "8c69ac164fc6da6bb6803d40628e7cc827d0a3e78fc4c26c96a60e8e4448b5ca",
+        "desired_projection_sha256": "4495b6dc96372a449c7eea95ecbfe307b3f829b4294492380773cc260cab87e2",
+        "generation": 13,
+        "observed_projection_sha256": "4495b6dc96372a449c7eea95ecbfe307b3f829b4294492380773cc260cab87e2",
+        "resource_version": "224840"
+      },
+      "deployment": "payments-trace",
+      "environment": {
+        "inventory_sha256": "09caa25f2306a7f8a8b6a2deb27d386444f0cd7e49c9c227abae50247ab1f659",
+        "violations": []
+      },
+      "git_revision": "0b2c59ec350dc01d0a2453323c2853db8bc0c64a",
+      "namespace": "govdrift-trace",
+      "pods": [
+        {
+          "image_ids": [
+            "sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10"
+          ],
+          "name": "payments-trace-5464569798-glhz4",
+          "phase": "Running",
+          "resource_version": "224824",
+          "uid": "e04325d8-d4d8-4ac8-9bf7-e5df94979b09"
+        }
+      ],
+      "policy": {
+        "approved_version": "pi-7",
+        "live_version": "pi-7",
+        "policy_reports_sha256": "f140de9a1fdff66a79b46d7aee50ed98b31e59bca73795744953b1af73e73be6",
+        "resource_version": "224269",
+        "uid": "a2ec778b-549a-457d-9ffd-13e9db63888d"
+      },
+      "runtime": "/var/folders/hh/d9swhw0d1c7660vy4v9qv6_h0000gn/T/govdrift-trace-20260808T062119Z-ca37624c-707jq7op"
+    },
+    "schema": "govdrift-trace-evaluation/v1",
+    "undecidable_components": [],
+    "verdict": "consistent"
+  },
+  "before_input_fingerprint_sha256": "a6b7e7943b11126433e7f602724768f90ca0f3c03b1096f4d99cf7c9e0b64cf3",
+  "campaign_id": "trace-20260808T062119Z-ca37624c",
+  "cause_started_mono": 2724956.79020675,
+  "cause_started_utc": "2026-08-08T06:22:23.293966+00:00",
+  "command_sequences": [
+    78
+  ],
+  "effect_observed_mono": 2724956.901528291,
+  "effect_observed_utc": "2026-08-08T06:22:23.405376+00:00",
+  "evaluator_sha256": "ee9b1b1eb272f5846a4998cc91f18c0b5c7869879cd54326c8108712a9db8789",
+  "expected_class_set": [
+    "policy"
+  ],
+  "harness_sha256": "c3175fe3717d9a8800f2b7fae511248991607ed9093494a6144f32c80367c2f5",
+  "injection_id": "trace-20260808T062119Z-ca37624c:S3:73e1287e-904c-42a2-ac9b-893fce652716",
+  "observer_sha256": "04fb4a244f56bfaf037b671ed7f935e0f41f148c7829c5e4a879698b1cd45941",
+  "record_sha256": "c03b3cf6a12cd5bbfea3b366c69b58523dd250767ef70b213ea3f67e6b149d2f",
+  "scenario": "S3",
+  "scenario_label": "policy supersession",
+  "schema": "govdrift-trace-injection/v1"
+}

@@ -1,7 +1,8 @@
 % Tiered detection architecture (single column, resized)
 \begin{tikzpicture}[node distance=2.6mm and 4mm]
-  \node[attn, minimum width=25mm] (snap) at (0,0)
-    {\textbf{append-only}\\\textbf{approval recorder}\\{\smlbl $G^{(0)}\to\cdots\to B_x(t)$}\\{\smlbl $m_B,\delta_B,\pi_B,A_B^{\rm proof},\iota_B,\sigma_B$}};
+  \node[attn, minimum width=27mm] (snap) at (0,0)
+    {\textbf{append-only}\\\textbf{approval + activation}\\{\smlbl $t_i^{\rm app}\to t_i^{\rm act}$;
+    $G^{(i)}\to B_x(t)$}\\{\smlbl $m_B,\delta_B,\pi_B,A_B^{\rm proof},\iota_B,\sigma_B$}};
 
   % tiers stack
   \node[stage, right=9mm of snap, minimum width=26mm, yshift=13mm] (t0)

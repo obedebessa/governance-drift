@@ -1,14 +1,57 @@
 # Release notes
 
+## v1.6.0 candidate — 2026-08-08 (unpublished)
+
+- Separates approval from activation and selects the unique maximal activated
+  basis under explicit supersession; ambiguous parallel maxima fail closed.
+  These activation/supersession checks are v1.6/B4 probes, not observations
+  from the frozen primary live campaign.
+- Defines stable unit identity, atomic per-unit verdict bundles, admissible
+  temporal cuts, watermarks, skew/freshness bounds, and Stable-VCL; seven
+  executable temporal-cut tests cover every rejection condition.
+- Adds a cumulative B0--B4 ablation: exact scenario-vector success rises from
+  75.0% to 100% over 240 paired units, while ten targeted semantic probes
+  isolate evidence, authorization mode, intent history, and activation.
+- Executes transition-inclusive benign controls with three separate observer
+  processes: 777 polls over 20 changes, no policy, authorization, intent, or
+  environment drift; seven
+  configuration-convergence polls, 36 fail-safe epistemic warning polls, and
+  all 60 trajectories ending consistent.
+- Executes a real-process trace audit for S1--S9: nine injected episodes,
+  27 correlated 1/5/10-second trajectories, 261 raw polls, 27/27 exact outcomes
+  and 27/27 with two-poll exact persistence, zero adapter errors, and a verified
+  133-file manifest. The two-poll check is not watermark-qualified persistence.
+- Exercises nine deterministic profiles through a real two-hop localhost TCP
+  path: 636 events, 25 vector evaluations, and eleven fault-state checks with
+  zero safety or component-local masking failure.
+- Adds a 960-sample in-memory batched-join scaling campaign and a live Kind
+  multi-Deployment adapter campaign. The completed 50-unit target spans
+  50--60 Pods and 100--120 containers with 1,200/1,200 exact per-unit and
+  240/240 exact nested decisions; the 100-unit target is excluded after its
+  declared readiness stop.
+- Adds a bounded Argo CD v3.4.2/Gatekeeper v3.22.2 replication: five
+  repetitions each of S1, S3, and S4 report exact projected singleton
+  classifications only over declared evaluated components. Counts for the
+  UID-emitting frozen rerun remain `CROSS_TBD`. S1/S3 use native
+  second-stack surfaces; S4 remains the shared digest adapter, and
+  intent/environment are not evaluated.
+- Broadens and bounds the related-work review, acknowledges prior uses of the
+  exact term, adds a reproducible inclusion ledger, and narrows novelty to the
+  deployment-level three-place relation and its executable semantics.
+- Prepares the manuscript, source-and-data snapshot, raw traces, validators,
+  and release-hash workflow. No v1.6.0 tag or Zenodo record is claimed until
+  the candidate is frozen and the aggregate verifier passes.
+
 ## v1.5.0 — 2026-08-08
 
 - Makes the admitted basis $B_x(t)$ and its immutable authorization proof
   consistent across every formal component, including mode-aware successor
   authorization and three-valued evidence failure.
-- Adds an independent composite plane-local baseline: 9/12 exact scenario
+- Adds a separately implemented composite plane-local baseline: 9/12 exact scenario
   sets without the history join versus 12/12 with it over 240 units each.
 - Executes five live repetitions of compound S10--S12 at three cadences;
-  all 45 observations reach the exact final vector and expose vector
+  all 45 observations reach the exact provisional class set under the
+  sequential-snapshot laboratory assumption and expose class-set
   completion latency separately from first-alert DDL.
 - Executes six 300-second benign windows, totaling 1,800 seconds and 4,680
   evaluator polls without a substantive or epistemic alarm.
@@ -58,7 +101,8 @@
   boundary, monotonic clock, and the correlated repeated-measurement unit.
 - Adds deterministic contract tests for API outage, malformed PolicyReport,
   missing approvals, stale lineage, and duplicate evidence; unavailable
-  streams degrade to `undecidable`.
+  streams make only their dependent components and the total verdict
+  `undecidable`, while independent components remain reportable.
 - Corrects the Figure 5 S1--S9 caption and shortens the abstract.
 - Hardens baseline restoration against Flux reverting rollout-restart
   annotations by recreating the pod under the reconciled template.

@@ -2,9 +2,9 @@
 \label{sec:study}
 
 We now measure the taxonomy's detectability structure. The study is executed
-and deterministically reproducible from the packaged source
-($\approx$380 lines of dependency-free Python; the results table, including
-its header, is generated programmatically by the same run). Its
+and deterministically reproducible from the packaged dependency-free Python
+source; the results table, including
+its header, is generated programmatically by the same run. Its
 epistemic scope is stated plainly: it is a \emph{closed-world evaluation of
 detector semantics}---the world, its scenarios, and the detectors are all
 models---so it establishes what each evidence tier can and cannot decide
@@ -39,16 +39,20 @@ reverted content; approval binds the newer revision);
 \item[S8] approval mismatch (deployed digest is not any approval's subject);
 \item[S9] live-status deletion for a continuing approval: immutable
 $A_B^{\mathrm{proof}}$ survives, but the authenticated source required to
-establish continuing validity is lost; authorization and intent become
-undecidable---the missing status is neither a revocation nor proof that approval never existed
+establish continuing validity is lost; current authorization becomes
+undecidable, while historically authorized intent remains decidable and
+consistent---the missing status is neither a revocation nor proof that approval never existed
 (evidence drift---\cref{def:evddrift}---exercised directly);
 \item[S10] policy supersession plus an expired exception
 ($\{\text{policy},\text{authorization}\}$);
 \item[S11] artifact substitution plus environment change
 ($\{\text{authorization},\text{environment}\}$);
-\item[S12] rollback plus deletion of its approval basis: the underlying
-intent/authorization relations become undecidable, so the honest observable
-output is evidence drift rather than a guessed polar set;
+\item[S12] rollback plus loss of the authenticated live status required by
+continuing authority, while immutable proof remains: the rollback is outside
+the authorized historical lineage, so intent is inconsistent; current
+authorization is independently undecidable. The honest class set is therefore
+$\{\text{intent},\text{evidence}\}$ rather than either a guessed authorization
+pole or evidence alone;
 \end{description}
 plus \textbf{S0}, a no-drift control. Churn is of two kinds, both present in
 every stream including the control: \emph{runtime churn} (30\% of events:
@@ -57,7 +61,7 @@ governance churn} (2\% of events: policy revisions the running state
 satisfies, approved updates that legitimately advance revision, digest, and
 approval together, and hygienic exceptions removed at expiry). The governance
 churn exists so that the governance tiers' false-alarm rates are earned
-against realistic governance noise rather than measured against a silent
+against modeled non-silent governance churn rather than measured against a silent
 plane.
 
 \subsection{Detectors and Counterfactual Scoring}
@@ -103,8 +107,9 @@ False Alarms per 400-Event Control Run.}
 \parbox{0.96\textwidth}{\scriptsize S1 manual change; S2 expired exception; S3
 policy supersession; S4 artifact substitution; S5 IAM expansion; S6
 unapproved rollback; S7 out-of-band cloud change; S8 approval mismatch; S9
-approval-record deletion; S10 policy+exception; S11 artifact+environment;
-S12 rollback+missing approval. Tiers are cumulative; T0n normalizes
+required live-status evidence loss; S10 policy+exception; S11
+artifact+environment; S12 rollback+required authorization-evidence loss.
+Tiers are cumulative; T0n normalizes
 runtime-owned fields; latencies use expiry-inclusive semantics.}
 \end{table*}
 
@@ -120,7 +125,8 @@ nothing else---one scenario of twelve; T1 adds policy drift (S3) and the
 policy component of S10, and---because it re-evaluates policy rather than
 comparing versions---raises no alarm on satisfied policy revisions in the
 churn. T2 adds the validity- and coverage-dependent scenarios S2, S6, and
-S10, plus the evidence-decay scenarios S9 and S12 (undecidable, not polar).
+S10, plus S9's authorization-evidence loss and S12's compound polar-intent
+and epistemic result.
 T3 adds the digest-level scenarios S4, S8, and S11 and completes S6's
 two-component diagnosis; T4 adds S5/S7 and completes S11. The triangle cells
 show why first-label accuracy was insufficient: a lower tier can report a
@@ -139,8 +145,8 @@ joined tiers. All six umbrella classes are exercised.
 \begin{finding}[A deliberately naive comparator validates the scoring rule]
 \label{fnd:naive}
 The unnormalized diagnostic comparator T0 alarms on 285.4 of 400 control events
-(71.4\% in our churn model)---and the rate is nearly flat across runtime
-churn rates of 10--50\% (287, 285, 300 alarms per run), because alarms
+(71.3\% in our churn model)---and the rate is nearly flat across runtime
+churn rates of 10--50\% (286.5, 285.4, and 300.1 mean alarms per run), because alarms
 track the \emph{dwell} of divergent runtime-owned state, not the event
 rate. Under counterfactual scoring T0 still detects S1, but with mean
 latency 22.6 events versus 0 for T0n: its information is buried in its own
@@ -160,27 +166,28 @@ ignore all of them.
 exception]
 \label{fnd:latency}
 At the correct tier, every scenario is detected with latency 0 events
-(including S2 under expiry-inclusive semantics) and none requires scanning: the deciding facts arrive as
-events on governance streams (a policy revision, a clock crossing, a registry
-event, an inventory delta). RQ3's answer in the closed world is therefore:
-visibility is bounded by evaluation cadence on the governance plane, not by
-any intrinsic latency of the phenomenon---which sharpens what the laboratory
-must measure (wall-clock cadence effects, \cref{sec:lab}).
+(including S2 under expiry-inclusive semantics). In this closed-world event
+model, no additional intrinsic delay is introduced once the deciding fact is
+available at the appropriate tier. Live visibility remains bounded by the
+concrete re-evaluation path---watch, cache, controller audit, scan, and
+evaluator cadence---as the Kyverno results in \cref{sec:lab} demonstrate.
+RQ3's closed-world answer is therefore about information availability, not a
+claim that real policy re-evaluation is scan-free.
 \end{finding}
 
-\begin{finding}[Reconciliation health is compatible with total governance
-failure]
+\begin{finding}[Reconciliation health is compatible with governance
+inconsistency]
 \label{fnd:blind}
 In eleven of twelve scenarios, post-convergence normalized configuration
 comparison reports clean---while the
 deployment runs under superseded policy, expired authorization, unapproved
 content, or altered environment. This is \cref{prop:impossible} made
 operational, and it quantifies the blind spot claimed in
-\cref{sec:background}: a \textsc{Synced} reconciler is evidence about
-configuration, and about configuration only.
+\cref{sec:background}: a \textnormal{\textsc{Synced}} reconciler is evidence
+about desired/observed equality within the reconciler's managed projection.
 \end{finding}
 
-\subsection{Independent Composite Baseline: Signals Without the Join}
+\subsection{Separately Implemented Composite Baseline: Signals Without the Join}
 The staircase establishes dependency realization but does not isolate the
 value of the admitted-basis join. We therefore execute a second baseline that
 unions five plane-local mechanisms: normalized desired/observed comparison,
@@ -193,7 +200,7 @@ signals without claiming to reproduce a particular commercial product.
 
 \begin{table*}[t]
 \centering
-\caption{Composite Plane-Local Baseline Versus the Admitted-Basis Join.
+\caption{Separately Implemented Plane-Local Baseline Versus the Admitted-Basis Join.
 Exact Columns Are Percentages Over 20 Seeds; Empty Local Output on S9 Means
 the Deleted Governance Stream Is Outside Its Vocabulary.}
 \label{tab:join-baseline}
@@ -205,8 +212,35 @@ The local union exactly identifies 9/12 scenario sets (180/240
 scenario-seed units, 75\%); joined T4 identifies 12/12 (240/240, 100\%).
 Both remain quiet on the paired controls, so the difference is diagnosis,
 not alarm volume. The local union misses S6's intent component, cannot see
-S9's evidence loss, and mislabels S12 as an authorization finding rather than
-withholding a polar verdict. Four semantic probes sharpen causality: identical
+S9's evidence loss, and labels S12 as authorization while missing both the
+decidable intent finding and the honest authorization-evidence mask. To avoid attributing the entire difference to one
+monolithic step, we execute a paired cumulative ablation over the same
+12-scenario $\times$ 20-seed units (\cref{tab:ablation}). Ten executable
+semantic probes then target cases the scenario matrix does not separate:
+policy failure with/without a basis; continuing versus one-shot authority
+under missing live status; approved nonstandard environment; unapproved
+rollback; pending, aborted, parallel, and successor activation.
+
+\begin{table}[t]
+\centering
+\caption{Cumulative Ablation of the Admitted-Basis Join. Exact Is
+Unconditional Exact-Class-Set Success Over Paired Scenario--Seed Units; Probes
+Are Executable Semantic Contracts.}
+\label{tab:ablation}
+\scriptsize
+\resizebox{\columnwidth}{!}{\input{data/table_ablation}}
+\end{table}
+
+Exact-class-set success rises from 75.0\% (B0) to 83.3\% after evidence
+contracts (B1). Mode-aware authorization and epistemic masking (B2) preserves
+83.3\% while reducing mean Hamming loss from 0.0417 to 0.0278; it cannot add
+S12's intent component because intent history is deliberately absent. Adding
+that history (B3) raises exactness to 100\%. B3 nevertheless passes only 5/10
+targeted probes; activation-aware basis selection (B4) preserves 100\% exact
+scenario class sets and raises probe coverage to 10/10. This separation is
+important: the scenario score alone would have hidden pending/aborted bases,
+parallel-activation ambiguity, and approved nonstandard environments.
+Identical
 current-policy failure with versus without an admitted basis produces the
 same local ``policy'' alert, while the join returns policy versus evidence;
 missing live status yields evidence for a continuing instrument but remains
@@ -229,9 +263,17 @@ exact-set scoring is invariant to it. Scenario S6's transient configuration sign
 (before the reconciler converges) is not credited to T0n because the
 comparison evaluates post-convergence state in our event ordering; on real
 clusters a fast comparator might glimpse it---a cadence question for the lab.
-\emph{External}: the repeated laboratory (\cref{sec:lab}) shows that the nine
+The no-join comparator and admitted-basis implementation use separate code
+paths, but both were authored by the same researcher and share the world,
+protocol, and oracle. ``Separately implemented'' therefore denotes code-path
+separation, not independent validation; the comparison is an ablation-style
+semantic comparator.
+\emph{External}: the repeated primary laboratory (\cref{sec:lab}) shows that the nine
 scenario classes can be induced and usually observed through real
-Kubernetes/GitOps interfaces on one pinned stack. It does not transfer the
+Kubernetes/GitOps interfaces on one version-pinned stack. A bounded
+Argo CD/Gatekeeper campaign replicates native configuration and policy paths,
+but its authorization slice shares the digest adapter and it does not evaluate
+intent or environment. Neither campaign transfers the
 closed-world rates quantitatively or estimate natural occurrence, field
 prevalence, stream-loss reliability, multi-cluster behavior, or performance
 under load. Its two cadence misses are direct evidence against assuming that

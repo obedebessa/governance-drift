@@ -14,13 +14,16 @@ import evaluator
 
 
 DEPLOYMENT = {
-    "metadata": {"labels": {"app": "payments", "env": "prod", "team-owner": "payments"}},
+    "metadata": {"namespace": "payments", "name": "payments", "uid": "uid-payments",
+                 "labels": {"app": "payments", "env": "prod", "team-owner": "payments"}},
     "spec": {"template": {"metadata": {"labels": {"app": "payments"}}, "spec": {
         "containers": [{"name": "payments", "image": "example:1", "imagePullPolicy": "IfNotPresent"}]
     }}},
 }
 POLICY_PASS = json.dumps({"items": [{
-    "scope": {"kind": "Deployment", "name": "payments"},
+    "metadata": {"namespace": "payments"},
+    "scope": {"kind": "Deployment", "name": "payments", "namespace": "payments",
+              "uid": "uid-payments"},
     "results": [{"policy": "governance-baseline", "rule": "owner", "result": "pass"}],
 }]})
 APPROVAL = {"id": "APR-test", "mode": "one-shot", "valid_at_execution": True,
@@ -32,6 +35,21 @@ def completed(stdout: str = "", returncode: int = 0) -> subprocess.CompletedProc
 
 
 class EvaluatorContract(unittest.TestCase):
+    def setUp(self) -> None:
+        self._basis_temp = tempfile.TemporaryDirectory()
+        self._basis_path = Path(self._basis_temp.name)
+        (self._basis_path / "policy.json").write_text(json.dumps({
+            "metadata": {"labels": {"policy-version": "pi-7"}}
+        }))
+        self._basis_patch = patch.object(
+            evaluator, "select_basis_directory", return_value=self._basis_path
+        )
+        self._basis_patch.start()
+
+    def tearDown(self) -> None:
+        self._basis_patch.stop()
+        self._basis_temp.cleanup()
+
     def test_fresh_ordered_evidence_envelope_is_accepted(self) -> None:
         envelope = {
             "subject": "deployment/payments", "sequence": 11,
@@ -123,6 +141,20 @@ class EvaluatorContract(unittest.TestCase):
         self.assertEqual(result["components"]["policy"], "undecidable")
         self.assertTrue(result["evidence_drift"])
 
+    def test_policy_report_for_wrong_uid_is_ignored(self) -> None:
+        wrong = json.dumps({"items": [{
+            "metadata": {"namespace": "payments"},
+            "scope": {"kind": "Deployment", "name": "payments",
+                      "namespace": "payments", "uid": "uid-reused-name"},
+            "results": [{"policy": "governance-baseline", "rule": "owner",
+                         "result": "pass"}],
+        }]})
+        with patch.object(evaluator, "kubectl_json", return_value=DEPLOYMENT), \
+             patch.object(evaluator.subprocess, "run", return_value=completed(wrong)):
+            result = evaluator.evaluate("T1")
+        self.assertEqual(result["components"]["policy"], "undecidable")
+        self.assertIn("evidence", result["class_set"])
+
     def test_missing_approval_basis_makes_authorization_and_intent_undecidable(self) -> None:
         with patch.object(evaluator, "kubectl_json", return_value=DEPLOYMENT), \
              patch.object(evaluator.subprocess, "run", return_value=completed(POLICY_PASS)), \
@@ -148,6 +180,40 @@ class EvaluatorContract(unittest.TestCase):
         self.assertEqual(result["verdict"], "drift")
         self.assertEqual(result["drift_set"], ["authorization"])
         self.assertFalse(result["evidence_drift"])
+
+    def test_mixed_rollout_checks_every_pod_digest(self) -> None:
+        pods = {"items": [
+            {"status": {"containerStatuses": [{
+                "ready": True, "imageID": "example@sha256:approved"
+            }]}},
+            {"status": {"containerStatuses": [{
+                "ready": True, "imageID": "example@sha256:uncovered"
+            }]}},
+        ]}
+        calls = iter((DEPLOYMENT, DEPLOYMENT, pods))
+        with patch.object(evaluator, "kubectl_json", side_effect=lambda *args: next(calls)), \
+             patch.object(evaluator.subprocess, "run", return_value=completed(POLICY_PASS)), \
+             patch.object(evaluator, "approval_proofs", return_value=[APPROVAL]), \
+             patch.object(evaluator, "approvals", return_value=[APPROVAL]), \
+             patch.object(evaluator, "command", return_value="rev-ok\n"):
+            result = evaluator.evaluate("T3")
+        self.assertEqual(result["drift_set"], ["authorization"])
+        self.assertIn("sha256:uncovered", result["detail"])
+
+    def test_every_container_digest_is_checked(self) -> None:
+        pods = {"items": [{"status": {"containerStatuses": [
+            {"name": "app", "ready": True, "imageID": "example@sha256:approved"},
+            {"name": "sidecar", "ready": True, "imageID": "helper@sha256:uncovered"},
+        ]}}]}
+        calls = iter((DEPLOYMENT, DEPLOYMENT, pods))
+        with patch.object(evaluator, "kubectl_json", side_effect=lambda *args: next(calls)), \
+             patch.object(evaluator.subprocess, "run", return_value=completed(POLICY_PASS)), \
+             patch.object(evaluator, "approval_proofs", return_value=[APPROVAL]), \
+             patch.object(evaluator, "approvals", return_value=[APPROVAL]), \
+             patch.object(evaluator, "command", return_value="rev-ok\n"):
+            result = evaluator.evaluate("T3")
+        self.assertEqual(result["drift_set"], ["authorization"])
+        self.assertIn("sha256:uncovered", result["detail"])
 
     def test_duplicate_valid_approval_is_idempotent(self) -> None:
         pods = {"items": [{"status": {"containerStatuses": [{
@@ -189,10 +255,40 @@ class EvaluatorContract(unittest.TestCase):
         with patch.object(evaluator, "kubectl_json", return_value=DEPLOYMENT), \
              patch.object(evaluator.subprocess, "run", return_value=completed(POLICY_PASS)), \
              patch.object(evaluator, "approval_proofs", return_value=[continuing]), \
-             patch.object(evaluator, "approvals", return_value=[]):
+             patch.object(evaluator, "approvals", return_value=[]), \
+             patch.object(evaluator, "command", return_value="rev-ok\n"):
             result = evaluator.evaluate("T2")
         self.assertEqual(result["verdict"], "undecidable")
-        self.assertEqual(set(result["undecidable_components"]), {"authorization", "intent"})
+        self.assertEqual(set(result["undecidable_components"]), {"authorization"})
+        self.assertEqual(result["components"]["intent"], "consistent")
+        self.assertIn("immutable proof retained but live status unavailable", result["detail"])
+        self.assertNotIn("approval basis unavailable", result["detail"])
+
+    def test_unapproved_revision_remains_intent_drift_when_live_status_is_missing(self) -> None:
+        continuing = {**APPROVAL, "mode": "continuing"}
+        with patch.object(evaluator, "kubectl_json", return_value=DEPLOYMENT), \
+             patch.object(evaluator.subprocess, "run", return_value=completed(POLICY_PASS)), \
+             patch.object(evaluator, "approval_proofs", return_value=[continuing]), \
+             patch.object(evaluator, "approvals", return_value=[]), \
+             patch.object(evaluator, "command", return_value="rev-unapproved\n"):
+            result = evaluator.evaluate("T2")
+        self.assertEqual(set(result["class_set"]), {"intent", "evidence"})
+        self.assertEqual(result["components"]["intent"], "inconsistent")
+        self.assertEqual(result["components"]["authorization"], "undecidable")
+
+    def test_unrelated_expired_exception_does_not_alarm(self) -> None:
+        unrelated = {
+            "id": "EXC-other", "kind": "emergency-exception",
+            "mode": "temporary-exception", "subject": "deployment/ledger",
+            "expires_utc": 0, "valid_at_execution": True, "revoked": False,
+        }
+        with patch.object(evaluator, "kubectl_json", return_value=DEPLOYMENT), \
+             patch.object(evaluator.subprocess, "run", return_value=completed(POLICY_PASS)), \
+             patch.object(evaluator, "approval_proofs", return_value=[APPROVAL, unrelated]), \
+             patch.object(evaluator, "approvals", return_value=[APPROVAL, unrelated]), \
+             patch.object(evaluator, "command", return_value="rev-ok\n"):
+            result = evaluator.evaluate("T2")
+        self.assertEqual(result["verdict"], "consistent")
 
     def test_missing_environment_inventory_is_undecidable(self) -> None:
         pods = {"items": [{"status": {"containerStatuses": [{

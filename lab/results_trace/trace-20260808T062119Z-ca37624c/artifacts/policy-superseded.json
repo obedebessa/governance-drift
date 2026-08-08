@@ -1,0 +1,44 @@
+{
+  "apiVersion": "kyverno.io/v1",
+  "kind": "Policy",
+  "metadata": {
+    "labels": {
+      "policy-version": "pi-8"
+    },
+    "name": "governance-baseline-trace",
+    "namespace": "govdrift-trace"
+  },
+  "spec": {
+    "background": true,
+    "rules": [
+      {
+        "match": {
+          "any": [
+            {
+              "resources": {
+                "kinds": [
+                  "Deployment"
+                ],
+                "names": [
+                  "payments-trace"
+                ]
+              }
+            }
+          ]
+        },
+        "name": "require-prod-env-pi-8",
+        "validate": {
+          "message": "env label required by pi-8",
+          "pattern": {
+            "metadata": {
+              "labels": {
+                "env": "prod"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "validationFailureAction": "Audit"
+  }
+}

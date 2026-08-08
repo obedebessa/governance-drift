@@ -1,10 +1,8 @@
 cff-version: 1.2.0
-message: "If you use this artifact, please cite it as below."
+message: "This is pre-release citation metadata; cite the latest archived release until v1.6.0 is published."
 type: software
 title: "Governance Drift: Reproducibility Package"
-version: 1.5.0
-date-released: 2026-08-08
-doi: "10.5281/zenodo.21845707"
+version: 1.6.0-rc.1
 authors:
   - family-names: "Bessa Rocha da Silva"
     given-names: "Obede"
@@ -13,11 +11,16 @@ license: MIT
 repository-code: "https://github.com/obedebessa/governance-drift"
 url: "https://github.com/obedebessa/governance-drift"
 abstract: >
-  Manuscript source, closed-world detector study, independent plane-local
-  baseline, canonical results, and a repeated bounded Kubernetes/GitOps
-  laboratory measuring divergence between operational reality and the basis
-  under which infrastructure was approved, with compound-vector observations,
-  temporal evidence contracts, and an extended benign soak.
+  Manuscript source, closed-world detector study, separately implemented
+  no-join baseline, canonical results, and bounded Kubernetes/GitOps
+  laboratories measuring divergence between operational reality and the basis
+  under which infrastructure was approved. The version 1.6.0 candidate adds
+  activation-safe selection, temporal cuts, ablation, transition controls,
+  real-process trace auditing, transport faults, live multi-deployment
+  evaluation, and a bounded Argo CD/Gatekeeper cross-stack replication. Live
+  outputs are provisional class-set classifications under the laboratory
+  snapshot assumption; cross-stack claims are projections over declared
+  evaluated components, with the frozen UID-emitting rerun still pending.
 keywords:
   - "governance drift"
   - "configuration drift"

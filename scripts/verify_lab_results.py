@@ -66,8 +66,10 @@ def verify_repeated() -> None:
             fail(f"{scenario}: repeated expected-class set changed")
         if row.get("evaluator_tier") != REPEATED_TIER.get(scenario):
             fail(f"{scenario}: minimum deciding tier changed")
-        if row.get("evaluation_scope") != "T4-full-vector":
-            fail(f"{scenario}: full-vector evaluation scope is absent")
+        if row.get("evaluation_scope") != "T4-sequential-snapshot-class-set":
+            fail(f"{scenario}: sequential-snapshot evaluation scope is absent")
+        if scenario == "S9" and row.get("undecidable_components") != "authorization":
+            fail("S9 must mask current authorization only; intent remains decidable")
         key = (repeat, scenario, cadence)
         seen[key] = seen.get(key, 0) + 1
         detected = row.get("detection_rate_hit") is True
@@ -82,8 +84,15 @@ def verify_repeated() -> None:
             misses.add((repeat, scenario, cadence))
             if row.get("observed_verdict") != "timeout":
                 fail(f"{key}: non-detection must be recorded as timeout")
+            if row.get("ddl_right_censored") is not True:
+                fail(f"{key}: timeout must be marked as right-censored")
+            if any(row.get(field) not in {"", None} for field in
+                   ("ddl_seconds", "end_to_end_seconds", "tte_seconds", "exact_set_complete_seconds")):
+                fail(f"{key}: censored latency must not be stored as observed")
+            if float(row.get("censoring_seconds", -1)) <= 0:
+                fail(f"{key}: invalid censoring bound")
         for field in ("actuation_seconds", "ddl_seconds", "end_to_end_seconds", "tte_seconds"):
-            if float(row[field]) < 0:
+            if row.get(field) not in {"", None} and float(row[field]) < 0:
                 fail(f"{key}: negative {field}")
     if len(seen) != 540 or any(count != 1 for count in seen.values()):
         fail("repeated positive keys are not unique and complete")
@@ -113,8 +122,17 @@ def verify_repeated() -> None:
     platform = document.get("platform", {})
     if platform.get("evaluator_cadences_seconds") != [0.5, 2.0, 10.0]:
         fail("repeated-study platform cadence metadata changed")
-    if not str(platform.get("design", "")).startswith("20 repetitions per scenario"):
+    if not str(platform.get("design", "")).startswith(
+        "assembled reportable dataset with 20 repetitions per represented scenario"
+    ):
         fail("repeated-study design metadata changed")
+    if document.get("execution_selection") != ["S9"]:
+        fail("targeted semantic rerun selection is not disclosed")
+    provenance = document.get("reuse_provenance", [])
+    if len(provenance) != 2 or {row.get("rows_retained") for row in provenance} != {60, 480}:
+        fail("targeted rerun reuse provenance is incomplete")
+    if any(len(str(row.get("source_sha256", ""))) != 64 for row in provenance):
+        fail("targeted rerun source hash is missing")
     for field in ("host_cpu", "host_architecture", "host_ram_bytes", "host_os",
                   "docker_server", "kind_node_capacity", "kind_container_limits", "clock"):
         if field not in platform:
@@ -134,27 +152,29 @@ def verify_repeated() -> None:
         fail("cadence summary detection totals changed")
     if any(row["exact_set_accuracy"] != 1.0 for row in cadence.values()):
         fail("conditional exact-set accuracy changed")
-    vector = summary.get("vector_metrics", {})
-    if vector.get("exact_set_accuracy_conditional") != 1.0:
-        fail("conditional full-vector exact-set accuracy changed")
+    class_set = summary.get("class_set_metrics", {})
+    if abs(float(class_set.get("unconditional_exact_class_set_success", -1)) - 538 / 540) > 1e-12:
+        fail("unconditional exact-class-set success changed")
+    if class_set.get("exact_set_accuracy_conditional") != 1.0:
+        fail("conditional exact-class-set accuracy changed")
     detected = sum(row.get("detection_rate_hit") is True for row in rows)
     expected_hamming = (len(rows) - detected) / (len(rows) * 6)
-    if abs(float(vector.get("hamming_loss", -1)) - expected_hamming) > 1e-12:
-        fail("full-vector Hamming loss is inconsistent with the misses")
-    if any(item["fp"] != 0 or item["precision"] != 1.0 for item in vector.get("per_component", [])):
-        fail("unexpected full-vector false positive")
+    if abs(float(class_set.get("hamming_loss", -1)) - expected_hamming) > 1e-12:
+        fail("class-set Hamming loss is inconsistent with the misses")
+    if any(item["fp"] != 0 or item["precision"] != 1.0 for item in class_set.get("per_component", [])):
+        fail("unexpected class-set false positive")
 
     repeated_table = (RESULTS / "table_repeated.tex").read_text()
     cadence_table = (RESULTS / "table_cadence.tex").read_text()
     control_table = (RESULTS / "table_controls.tex").read_text()
-    vector_table = (RESULTS / "table_vector_metrics.tex").read_text()
+    class_set_table = (RESULTS / "table_class_set_metrics.tex").read_text()
     if r"S6 & \{intent, auth.\}" not in repeated_table:
         fail("S6 ground-truth set is absent from repeated table")
     if "2.0 & 180 & 99.4 & 100.0" not in cadence_table:
         fail("cadence table does not expose the S1 miss")
     if any(f"{control} &" not in control_table for control in ("C1", "C2", "C3", "C4", "C5", "C6")):
         fail("one or more benign controls are absent from generated table")
-    if any(label not in vector_table for label in
+    if any(label not in class_set_table for label in
            ("configuration", "policy", "authorization", "intent", "evidence", "environment")):
         fail("vector metrics table omits an umbrella component")
 
@@ -222,7 +242,7 @@ def main() -> int:
     verify_repeated()
     print(
         "PASS: frozen bounded and repeated live-lab results are internally "
-        "consistent (full-vector exact-set scoring; no benign substantive alarms)"
+        "consistent (provisional sequential-snapshot class-set scoring; no benign substantive alarms)"
     )
     return 0
 
