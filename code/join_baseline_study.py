@@ -10,6 +10,7 @@ import random
 from collections import defaultdict
 
 import detector_study as study
+import ablation_study as ablation
 
 
 def local_union(world: dict, k: int) -> tuple[str, ...]:
@@ -113,24 +114,23 @@ def main() -> None:
             "\\midrule\n" + "".join(table_lines) + "\\bottomrule\n\\end{tabular}\n"
         )
 
+    probe_rows = ablation.semantic_probes()
+    probes_by_name: dict[str, dict[str, str]] = defaultdict(dict)
+    for row in probe_rows:
+        if row["variant"] in {"B0", "B4"}:
+            probes_by_name[row["probe"]][row["variant"]] = row["observed"]
+
     summary = {
         "scenario_seed_units": len(local_rows),
         "local_union_exact": sum(row["exact"] for row in local_rows) / len(local_rows),
         "joined_exact": sum(row["correct"] for row in proposed_rows) / len(proposed_rows),
         "local_union_false_alarm_events": sum(row["false_alarm_events"] for row in local_rows),
         "semantic_probes": {
-            "same_current_policy_failure_with_admitted_basis": {
-                "local_union": ["policy"], "joined": ["policy"]
-            },
-            "same_current_policy_failure_without_admitted_basis": {
-                "local_union": ["policy"], "joined": ["evidence"]
-            },
-            "missing_live_status_continuing_authorization": {
-                "local_union": [], "joined": ["evidence"]
-            },
-            "missing_live_source_one_shot_with_retained_proof": {
-                "local_union": [], "joined": []
-            },
+            name: {
+                "local_union": list(filter(None, values.get("B0", "").split("|"))),
+                "joined": list(filter(None, values.get("B4", "").split("|"))),
+            }
+            for name, values in sorted(probes_by_name.items())
         },
     }
     with open(os.path.join(out_dir, "join_baseline_summary.json"), "w") as stream_out:

@@ -1,0 +1,189 @@
+{
+  "all_exact": true,
+  "all_two_poll_exact": true,
+  "cause_started_mono": 2734224.239335125,
+  "cause_started_utc": "2026-08-08T08:56:50.815353+00:00",
+  "distinct_observer_ids": 3,
+  "distinct_pids": 3,
+  "effect_observed_mono": 2734224.3545125,
+  "effect_observed_utc": "2026-08-08T08:56:50.930527+00:00",
+  "expected_class_set": [
+    "policy"
+  ],
+  "injection_id": "trace-20260808T085529Z-7e8fc786:S3:efc1b8c1-cd5d-4174-a791-57ef03204809",
+  "injection_sha256": "3ad02bc789fbb26bab5051e3aaea9469a0a7e4b4617b08d5165430901d15f2ab",
+  "observer_processes": 3,
+  "scenario": "S3",
+  "scenario_label": "policy supersession",
+  "schema": "govdrift-trace-scenario-summary/v2",
+  "trajectories": [
+    {
+      "adapter_error_polls": 0,
+      "cadence_seconds": 1.0,
+      "cause_to_first_alert_seconds": 0.4847245002165437,
+      "cause_to_first_exact_seconds": 0.4847245002165437,
+      "cause_to_two_poll_exact_seconds": 1.5829357909969985,
+      "effect_to_first_exact_seconds": 0.36954712495207787,
+      "exact_correct": true,
+      "expected_class_set": [
+        "policy"
+      ],
+      "first_alert": {
+        "actual_start_mono": 2734224.532468666,
+        "actual_start_utc": "2026-08-08T08:56:51.108488+00:00",
+        "class_set": [
+          "policy"
+        ],
+        "completed_mono": 2734224.724059625,
+        "completed_utc": "2026-08-08T08:56:51.300084+00:00",
+        "poll_sha256": "15ed1e7fdbbd6ec42b7b5940c97ed1a49cc77f6dc18d82b566dbef06116a9274",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "first_exact": {
+        "actual_start_mono": 2734224.532468666,
+        "actual_start_utc": "2026-08-08T08:56:51.108488+00:00",
+        "class_set": [
+          "policy"
+        ],
+        "completed_mono": 2734224.724059625,
+        "completed_utc": "2026-08-08T08:56:51.300084+00:00",
+        "poll_sha256": "15ed1e7fdbbd6ec42b7b5940c97ed1a49cc77f6dc18d82b566dbef06116a9274",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "observer_id": "5e694498-a900-4892-8da4-b6250f48f572",
+      "pid": 67120,
+      "polls": 21,
+      "post_cause_polls": 20,
+      "pre_cause_polls": 1,
+      "raw_path": "raw/S3/observer-01s.ndjson",
+      "scenario": "S3",
+      "scenario_label": "policy supersession",
+      "two_poll_exact": {
+        "actual_start_mono": 2734225.532547458,
+        "actual_start_utc": "2026-08-08T08:56:52.108579+00:00",
+        "class_set": [
+          "policy"
+        ],
+        "completed_mono": 2734225.822270916,
+        "completed_utc": "2026-08-08T08:56:52.398304+00:00",
+        "poll_sha256": "d09862e0d7071ffd0216e34d908b587c0451c1a04993b75aa66a15eb6ea05af4",
+        "sequence": 3,
+        "verdict": "drift"
+      }
+    },
+    {
+      "adapter_error_polls": 0,
+      "cadence_seconds": 5.0,
+      "cause_to_first_alert_seconds": 4.528380958363414,
+      "cause_to_first_exact_seconds": 4.528380958363414,
+      "cause_to_two_poll_exact_seconds": 9.551730582956225,
+      "effect_to_first_exact_seconds": 4.413203583098948,
+      "exact_correct": true,
+      "expected_class_set": [
+        "policy"
+      ],
+      "first_alert": {
+        "actual_start_mono": 2734228.527172791,
+        "actual_start_utc": "2026-08-08T08:56:55.103230+00:00",
+        "class_set": [
+          "policy"
+        ],
+        "completed_mono": 2734228.767716083,
+        "completed_utc": "2026-08-08T08:56:55.343780+00:00",
+        "poll_sha256": "fca81bca9466150115a1fe2c9b02de063c3cc019001d01d747281a47283c63ef",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "first_exact": {
+        "actual_start_mono": 2734228.527172791,
+        "actual_start_utc": "2026-08-08T08:56:55.103230+00:00",
+        "class_set": [
+          "policy"
+        ],
+        "completed_mono": 2734228.767716083,
+        "completed_utc": "2026-08-08T08:56:55.343780+00:00",
+        "poll_sha256": "fca81bca9466150115a1fe2c9b02de063c3cc019001d01d747281a47283c63ef",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "observer_id": "431ff4b0-43b7-4f6b-848d-5ab52e533a9c",
+      "pid": 67121,
+      "polls": 5,
+      "post_cause_polls": 4,
+      "pre_cause_polls": 1,
+      "raw_path": "raw/S3/observer-05s.ndjson",
+      "scenario": "S3",
+      "scenario_label": "policy supersession",
+      "two_poll_exact": {
+        "actual_start_mono": 2734233.528110541,
+        "actual_start_utc": "2026-08-08T08:57:00.104222+00:00",
+        "class_set": [
+          "policy"
+        ],
+        "completed_mono": 2734233.791065708,
+        "completed_utc": "2026-08-08T08:57:00.367178+00:00",
+        "poll_sha256": "a53522b97537e32931bead4c62c2460fde5bb4fb2fb733bfa1cd723d321b0110",
+        "sequence": 3,
+        "verdict": "drift"
+      }
+    },
+    {
+      "adapter_error_polls": 0,
+      "cadence_seconds": 10.0,
+      "cause_to_first_alert_seconds": 9.550965750124305,
+      "cause_to_first_exact_seconds": 9.550965750124305,
+      "cause_to_two_poll_exact_seconds": 19.552514208015054,
+      "effect_to_first_exact_seconds": 9.43578837485984,
+      "exact_correct": true,
+      "expected_class_set": [
+        "policy"
+      ],
+      "first_alert": {
+        "actual_start_mono": 2734233.528211083,
+        "actual_start_utc": "2026-08-08T08:57:00.104322+00:00",
+        "class_set": [
+          "policy"
+        ],
+        "completed_mono": 2734233.790300875,
+        "completed_utc": "2026-08-08T08:57:00.366415+00:00",
+        "poll_sha256": "c18ccbf36147b5e8538d5e766ce1963151852a744413e4f83424bfe338d22e57",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "first_exact": {
+        "actual_start_mono": 2734233.528211083,
+        "actual_start_utc": "2026-08-08T08:57:00.104322+00:00",
+        "class_set": [
+          "policy"
+        ],
+        "completed_mono": 2734233.790300875,
+        "completed_utc": "2026-08-08T08:57:00.366415+00:00",
+        "poll_sha256": "c18ccbf36147b5e8538d5e766ce1963151852a744413e4f83424bfe338d22e57",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "observer_id": "346e3bae-e6e8-4aaa-96c5-e227987281f3",
+      "pid": 67122,
+      "polls": 3,
+      "post_cause_polls": 2,
+      "pre_cause_polls": 1,
+      "raw_path": "raw/S3/observer-10s.ndjson",
+      "scenario": "S3",
+      "scenario_label": "policy supersession",
+      "two_poll_exact": {
+        "actual_start_mono": 2734243.534395416,
+        "actual_start_utc": "2026-08-08T08:57:10.110637+00:00",
+        "class_set": [
+          "policy"
+        ],
+        "completed_mono": 2734243.791849333,
+        "completed_utc": "2026-08-08T08:57:10.368052+00:00",
+        "poll_sha256": "19e38bbf046b3729af1b311678108ce7303c322a90626366e99638f49b06714f",
+        "sequence": 3,
+        "verdict": "drift"
+      }
+    }
+  ]
+}

@@ -1,0 +1,189 @@
+{
+  "all_exact": true,
+  "all_two_poll_exact": true,
+  "cause_started_mono": 2734321.144890708,
+  "cause_started_utc": "2026-08-08T08:58:27.721834+00:00",
+  "distinct_observer_ids": 3,
+  "distinct_pids": 3,
+  "effect_observed_mono": 2734321.145337958,
+  "effect_observed_utc": "2026-08-08T08:58:27.722268+00:00",
+  "expected_class_set": [
+    "environment"
+  ],
+  "injection_id": "trace-20260808T085529Z-7e8fc786:S7:4953ce5a-e4ec-4830-8936-5fcd887b312a",
+  "injection_sha256": "9de906630fff1fe1d0a000f81ef40ca39ea8f179742b20ef1bc3e1370d06e076",
+  "observer_processes": 3,
+  "scenario": "S7",
+  "scenario_label": "out-of-band load-balancer change",
+  "schema": "govdrift-trace-scenario-summary/v2",
+  "trajectories": [
+    {
+      "adapter_error_polls": 0,
+      "cadence_seconds": 1.0,
+      "cause_to_first_alert_seconds": 0.4380972501821816,
+      "cause_to_first_exact_seconds": 0.4380972501821816,
+      "cause_to_two_poll_exact_seconds": 1.40113729191944,
+      "effect_to_first_exact_seconds": 0.43765000021085143,
+      "exact_correct": true,
+      "expected_class_set": [
+        "environment"
+      ],
+      "first_alert": {
+        "actual_start_mono": 2734321.319501083,
+        "actual_start_utc": "2026-08-08T08:58:27.896436+00:00",
+        "class_set": [
+          "environment"
+        ],
+        "completed_mono": 2734321.582987958,
+        "completed_utc": "2026-08-08T08:58:28.159930+00:00",
+        "poll_sha256": "477d46bcdd7b765242c90f229b7a1e13b54868a8c05c6120a02222e57aaac16e",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "first_exact": {
+        "actual_start_mono": 2734321.319501083,
+        "actual_start_utc": "2026-08-08T08:58:27.896436+00:00",
+        "class_set": [
+          "environment"
+        ],
+        "completed_mono": 2734321.582987958,
+        "completed_utc": "2026-08-08T08:58:28.159930+00:00",
+        "poll_sha256": "477d46bcdd7b765242c90f229b7a1e13b54868a8c05c6120a02222e57aaac16e",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "observer_id": "79e7af14-ef13-4020-912c-12e2822cdf56",
+      "pid": 68701,
+      "polls": 21,
+      "post_cause_polls": 20,
+      "pre_cause_polls": 1,
+      "raw_path": "raw/S7/observer-01s.ndjson",
+      "scenario": "S7",
+      "scenario_label": "out-of-band load-balancer change",
+      "two_poll_exact": {
+        "actual_start_mono": 2734322.325314666,
+        "actual_start_utc": "2026-08-08T08:58:28.902263+00:00",
+        "class_set": [
+          "environment"
+        ],
+        "completed_mono": 2734322.546028,
+        "completed_utc": "2026-08-08T08:58:29.122978+00:00",
+        "poll_sha256": "5596df27b07548a65cfd45d048e95df893cf4f096b1b5a3decc7abe3d787d6ba",
+        "sequence": 3,
+        "verdict": "drift"
+      }
+    },
+    {
+      "adapter_error_polls": 0,
+      "cadence_seconds": 5.0,
+      "cause_to_first_alert_seconds": 4.397787000052631,
+      "cause_to_first_exact_seconds": 4.397787000052631,
+      "cause_to_two_poll_exact_seconds": 9.406706917099655,
+      "effect_to_first_exact_seconds": 4.397339750081301,
+      "exact_correct": true,
+      "expected_class_set": [
+        "environment"
+      ],
+      "first_alert": {
+        "actual_start_mono": 2734325.321894375,
+        "actual_start_utc": "2026-08-08T08:58:31.898873+00:00",
+        "class_set": [
+          "environment"
+        ],
+        "completed_mono": 2734325.542677708,
+        "completed_utc": "2026-08-08T08:58:32.119655+00:00",
+        "poll_sha256": "f4f379417579123b1a491db52961e04fe53c4768872b23144b4496db69c0490a",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "first_exact": {
+        "actual_start_mono": 2734325.321894375,
+        "actual_start_utc": "2026-08-08T08:58:31.898873+00:00",
+        "class_set": [
+          "environment"
+        ],
+        "completed_mono": 2734325.542677708,
+        "completed_utc": "2026-08-08T08:58:32.119655+00:00",
+        "poll_sha256": "f4f379417579123b1a491db52961e04fe53c4768872b23144b4496db69c0490a",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "observer_id": "23e5015a-35b5-4793-ba89-8ed01f3f4c81",
+      "pid": 68702,
+      "polls": 5,
+      "post_cause_polls": 4,
+      "pre_cause_polls": 1,
+      "raw_path": "raw/S7/observer-05s.ndjson",
+      "scenario": "S7",
+      "scenario_label": "out-of-band load-balancer change",
+      "two_poll_exact": {
+        "actual_start_mono": 2734330.326487625,
+        "actual_start_utc": "2026-08-08T08:58:36.903515+00:00",
+        "class_set": [
+          "environment"
+        ],
+        "completed_mono": 2734330.551597625,
+        "completed_utc": "2026-08-08T08:58:37.128622+00:00",
+        "poll_sha256": "f43a6b09bddb2fe2b63ce0728a7b3479c2264a16ab48a88bab3b77a0c66a9a30",
+        "sequence": 3,
+        "verdict": "drift"
+      }
+    },
+    {
+      "adapter_error_polls": 0,
+      "cadence_seconds": 10.0,
+      "cause_to_first_alert_seconds": 9.406711167190224,
+      "cause_to_first_exact_seconds": 9.406711167190224,
+      "cause_to_two_poll_exact_seconds": 19.463604500051588,
+      "effect_to_first_exact_seconds": 9.406263917218894,
+      "exact_correct": true,
+      "expected_class_set": [
+        "environment"
+      ],
+      "first_alert": {
+        "actual_start_mono": 2734330.324050666,
+        "actual_start_utc": "2026-08-08T08:58:36.901094+00:00",
+        "class_set": [
+          "environment"
+        ],
+        "completed_mono": 2734330.551601875,
+        "completed_utc": "2026-08-08T08:58:37.128626+00:00",
+        "poll_sha256": "a1dc7fb04d3086c50a3fc9aea926c9e8028965438b0e9d56a2bb2b2a2a5bef3a",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "first_exact": {
+        "actual_start_mono": 2734330.324050666,
+        "actual_start_utc": "2026-08-08T08:58:36.901094+00:00",
+        "class_set": [
+          "environment"
+        ],
+        "completed_mono": 2734330.551601875,
+        "completed_utc": "2026-08-08T08:58:37.128626+00:00",
+        "poll_sha256": "a1dc7fb04d3086c50a3fc9aea926c9e8028965438b0e9d56a2bb2b2a2a5bef3a",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "observer_id": "02d80d8e-6559-4fff-b3bf-87a67037b116",
+      "pid": 68703,
+      "polls": 3,
+      "post_cause_polls": 2,
+      "pre_cause_polls": 1,
+      "raw_path": "raw/S7/observer-10s.ndjson",
+      "scenario": "S7",
+      "scenario_label": "out-of-band load-balancer change",
+      "two_poll_exact": {
+        "actual_start_mono": 2734340.326758,
+        "actual_start_utc": "2026-08-08T08:58:46.903882+00:00",
+        "class_set": [
+          "environment"
+        ],
+        "completed_mono": 2734340.608495208,
+        "completed_utc": "2026-08-08T08:58:47.185616+00:00",
+        "poll_sha256": "a9c4b793c47df94c305af638cc79917b2cc5a0b5b3c59fb6a22ac53a4d78d66d",
+        "sequence": 3,
+        "verdict": "drift"
+      }
+    }
+  ]
+}

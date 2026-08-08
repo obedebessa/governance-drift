@@ -113,7 +113,7 @@
     },
     {
       "scenario": "S9",
-      "injection": "approval-record deletion",
+      "injection": "continuing-authorization live-status evidence loss",
       "expected_class": "evidence",
       "evaluator_tier": "T2",
       "baseline_consistent": true,

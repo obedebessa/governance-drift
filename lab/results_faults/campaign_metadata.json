@@ -1,0 +1,75 @@
+{
+  "campaign": "controlled localhost TCP evidence transport",
+  "scope": "two real TCP hops on 127.0.0.1; deterministic record faults; not production",
+  "seed": 20260808,
+  "source_sha256": {
+    "run_fault_experiment.py": "16a202fe1e1aa2cd1379b16e1f33000f448b8463a047ba72f7b11166c3e6219d",
+    "evidence_gateway.py": "5351edd1ee3531db6752a2af32b7be99aa199b38743f2bee02e6212bd5d7e2ea"
+  },
+  "subject": "cluster-a/payments/payments#uid-demo-001",
+  "streams": [
+    "authorization",
+    "basis",
+    "configuration",
+    "intent",
+    "inventory",
+    "lineage",
+    "policy"
+  ],
+  "dependencies": {
+    "configuration": [
+      "configuration"
+    ],
+    "policy": [
+      "policy",
+      "basis"
+    ],
+    "authorization": [
+      "authorization",
+      "lineage",
+      "basis"
+    ],
+    "intent": [
+      "intent",
+      "authorization",
+      "basis"
+    ],
+    "environment": [
+      "inventory",
+      "basis"
+    ]
+  },
+  "profiles": [
+    "baseline",
+    "delay_jitter",
+    "record_drop",
+    "duplicate",
+    "reorder",
+    "stale_replay",
+    "outage",
+    "delay_drop",
+    "dependency_masking"
+  ],
+  "delay_jitter_base_ms": 50,
+  "delay_jitter_offsets_ms": [
+    0,
+    5,
+    -5,
+    -10,
+    10
+  ],
+  "delay_jitter_schedule_ms": [
+    50,
+    55,
+    45,
+    40,
+    60
+  ],
+  "combined_delay_ms": 35,
+  "delivery_timestamp_semantics": "delivered_at is absent on the sender wire envelope and stamped at the gateway from the controlled receiver clock",
+  "recovery_latency_semantics": "analyzer derives logical and monotonic-wall deltas from the fault evaluation to its first linked consistent evaluation; wall values are descriptive lab observations",
+  "transport_semantics": {
+    "tcp_failure": "connection failure followed by application retry of the unchanged envelope",
+    "record_drop": "complete application record discarded by relay; TCP cannot recover it"
+  }
+}

@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: git-server
+  namespace: cross-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: git-server
+  template:
+    metadata:
+      labels:
+        app: git-server
+    spec:
+      initContainers:
+        - name: seed-repository
+          image: alpine/git@sha256:729da2347ce652f30476b064198577fe12e1147e58499be9f343039343ef2cee
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-ceu"]
+          args:
+            - |
+              rm -rf /work /site/repo.git
+              mkdir -p /work/manifests /site
+              cp /seed/workload.yaml /work/manifests/deployment.yaml
+              git -C /work init --initial-branch=main
+              git -C /work config user.name govdrift-cross
+              git -C /work config user.email laboratory@example.invalid
+              git -C /work add manifests/deployment.yaml
+              git -C /work commit -m 'pinned cross-stack workload'
+              git clone --bare /work /site/repo.git
+              git --git-dir=/site/repo.git update-server-info
+          resources:
+            requests:
+              cpu: 5m
+              memory: 8Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+          volumeMounts:
+            - name: seed
+              mountPath: /seed
+              readOnly: true
+            - name: site
+              mountPath: /site
+      containers:
+        - name: git-daemon
+          image: quay.io/argoproj/argocd:v3.4.2
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-ceu"]
+          args:
+            - |
+              exec git daemon --verbose --reuseaddr --base-path=/site --export-all --listen=0.0.0.0 --port=9418 /site/repo.git
+          env:
+            - name: GIT_CONFIG_COUNT
+              value: "1"
+            - name: GIT_CONFIG_KEY_0
+              value: safe.directory
+            - name: GIT_CONFIG_VALUE_0
+              value: /site/repo.git
+          ports:
+            - name: git
+              containerPort: 9418
+          readinessProbe:
+            tcpSocket:
+              port: git
+            initialDelaySeconds: 1
+            periodSeconds: 1
+          resources:
+            requests:
+              cpu: 5m
+              memory: 8Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+          volumeMounts:
+            - name: site
+              mountPath: /site
+              readOnly: true
+      volumes:
+        - name: seed
+          configMap:
+            name: git-seed
+        - name: site
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: git-server
+  namespace: cross-system
+spec:
+  selector:
+    app: git-server
+  ports:
+    - name: git
+      port: 9418
+      targetPort: git

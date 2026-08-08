@@ -1,0 +1,133 @@
+{
+  "adapter_error_polls": 0,
+  "cadences_seconds": [
+    1.0,
+    5.0,
+    10.0
+  ],
+  "campaign_id": "trace-20260808T085529Z-7e8fc786",
+  "cause_to_first_exact_seconds": {
+    "maximum": 9.826962042134255,
+    "median": 4.464629833120853,
+    "minimum": 0.4380972501821816,
+    "p95_nearest_rank": 9.764251166954637
+  },
+  "cause_to_two_poll_exact_seconds": {
+    "maximum": 19.823323416989297,
+    "median": 9.522095125168562,
+    "minimum": 1.40113729191944,
+    "p95_nearest_rank": 19.81145262531936
+  },
+  "completed_utc": "2026-08-08T08:59:33.445886+00:00",
+  "deployment": "payments-trace",
+  "distinct_observer_processes_across_windows": 27,
+  "exact_trajectories": 27,
+  "expected_trajectories": 27,
+  "experimental_unit": "one injected scenario episode",
+  "experimental_units_injected_episodes": 9,
+  "interpretation": "Positive trace replication with nine experimental units (injected scenario episodes). The 27 correlated audit trajectories are observational units from three cadence observers per episode, not 27 statistically independent experimental units.",
+  "latency_aggregation_scope": "descriptive pooled across 27 correlated observational trajectories",
+  "namespace": "govdrift-trace",
+  "observational_unit": "one scenario-by-observer-cadence trajectory",
+  "observational_units_trajectories": 27,
+  "scenario_ids": [
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6",
+    "S7",
+    "S8",
+    "S9"
+  ],
+  "scenario_summaries": [
+    {
+      "all_exact": true,
+      "all_two_poll_exact": true,
+      "distinct_pids": 3,
+      "expected_class_set": [
+        "configuration"
+      ],
+      "scenario": "S1"
+    },
+    {
+      "all_exact": true,
+      "all_two_poll_exact": true,
+      "distinct_pids": 3,
+      "expected_class_set": [
+        "authorization"
+      ],
+      "scenario": "S2"
+    },
+    {
+      "all_exact": true,
+      "all_two_poll_exact": true,
+      "distinct_pids": 3,
+      "expected_class_set": [
+        "policy"
+      ],
+      "scenario": "S3"
+    },
+    {
+      "all_exact": true,
+      "all_two_poll_exact": true,
+      "distinct_pids": 3,
+      "expected_class_set": [
+        "authorization"
+      ],
+      "scenario": "S4"
+    },
+    {
+      "all_exact": true,
+      "all_two_poll_exact": true,
+      "distinct_pids": 3,
+      "expected_class_set": [
+        "environment"
+      ],
+      "scenario": "S5"
+    },
+    {
+      "all_exact": true,
+      "all_two_poll_exact": true,
+      "distinct_pids": 3,
+      "expected_class_set": [
+        "authorization",
+        "intent"
+      ],
+      "scenario": "S6"
+    },
+    {
+      "all_exact": true,
+      "all_two_poll_exact": true,
+      "distinct_pids": 3,
+      "expected_class_set": [
+        "environment"
+      ],
+      "scenario": "S7"
+    },
+    {
+      "all_exact": true,
+      "all_two_poll_exact": true,
+      "distinct_pids": 3,
+      "expected_class_set": [
+        "authorization"
+      ],
+      "scenario": "S8"
+    },
+    {
+      "all_exact": true,
+      "all_two_poll_exact": true,
+      "distinct_pids": 3,
+      "expected_class_set": [
+        "evidence"
+      ],
+      "scenario": "S9"
+    }
+  ],
+  "scenarios": 9,
+  "scenarios_all_exact": 9,
+  "schema": "govdrift-trace-campaign-summary/v2",
+  "two_poll_exact_trajectories": 27,
+  "trajectories": 27
+}

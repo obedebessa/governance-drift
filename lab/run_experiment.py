@@ -29,8 +29,29 @@ SCENARIOS = [
     ("S6", "unapproved Git rollback", "intent", "T2"),
     ("S7", "out-of-band LB change", "environment", "T4"),
     ("S8", "approval subject mismatch", "authorization", "T3"),
-    ("S9", "approval-record deletion", "evidence", "T2"),
+    ("S9", "continuing-authorization live-status evidence loss", "evidence", "T2"),
 ]
+
+
+def locked_image(tagged_reference: str) -> str:
+    lock = json.loads((LAB / "image-lock.json").read_text())
+    return lock["images"][tagged_reference]
+
+
+def ensure_locked_baseline_subject() -> None:
+    """Cover the pinned artifact identity across registry imageID projections.
+
+    Container runtimes may report either the pinned upstream digest or the
+    single-platform digest materialized by the local registry. The bootstrap
+    records the latter from the first Pod; each reset also retains the former
+    from the immutable image lock. Both identify the same approved pinned
+    artifact and neither admits the alternate image.
+    """
+    path = RUNTIME / "approvals/APR-1.json"
+    approval = json.loads(path.read_text())
+    pinned = locked_image("nginx:1.27-alpine").rsplit("@", 1)[-1]
+    approval["subjects"] = sorted(set(approval.get("subjects", [])) | {pinned})
+    path.write_text(json.dumps(approval, indent=2) + "\n")
 
 
 def run(*args: str, cwd: Path | None = None, env: dict[str, str] | None = None) -> str:
@@ -115,10 +136,16 @@ def reset_baseline() -> None:
     shutil.rmtree(RUNTIME / "approvals", ignore_errors=True)
     (RUNTIME / "approvals").mkdir()
     shutil.copy2(RUNTIME / "APR-1.baseline.json", RUNTIME / "approvals/APR-1.json")
+    ensure_locked_baseline_subject()
+    shutil.rmtree(RUNTIME / "proofs", ignore_errors=True)
+    (RUNTIME / "proofs").mkdir()
     shutil.copy2(RUNTIME / "cloud-inventory.baseline.json", RUNTIME / "cloud-inventory.json")
     shutil.rmtree(RUNTIME / "_deleted", ignore_errors=True)
     kubectl("apply", "-f", str(LAB / "policies/kyverno-policy-v7.yaml"))
-    run("docker", "tag", "nginx:1.27-alpine", "localhost:5001/governance-demo:1.0")
+    run(
+        "docker", "tag", locked_image("nginx:1.27-alpine"),
+        "localhost:5001/governance-demo:1.0",
+    )
     run("docker", "push", "localhost:5001/governance-demo:1.0")
     trigger_flux()
     wait_rollout()
@@ -128,10 +155,10 @@ def reset_baseline() -> None:
     # instead, forcing imagePullPolicy=Always to materialize the restored tag.
     kubectl("-n", "payments", "delete", "pod", "-l", "app=payments", "--wait=true")
     wait_rollout()
-    wait_consistent()
     # Each independent experimental reset materializes a fresh immutable
     # admitted-basis snapshot from the restored approval proof and state.
     run("bash", str(LAB / "snapshot.sh"))
+    wait_consistent()
 
 
 def inject(scenario: str) -> float:

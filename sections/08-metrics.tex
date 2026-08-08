@@ -2,39 +2,99 @@
 \label{sec:metrics}
 
 We evaluate six candidate metrics against grounding in the model,
-operationalizability, and incentive safety, committing in advance to
-rejecting what cannot be justified.
+operationalizability, and incentive safety, using the explicit rule that an
+unjustified proposal is rejected rather than retained for convenience.
 
 \begin{metricdef}[Governance Drift Distance, GDD]
 \label{met:gdd}
 \emph{Proposed as}: a scalar distance between approved and operational
 state. \emph{Verdict: rejected as primitive; adopted as vector.} By
 \cref{sec:model-vector}, the primitive report is
-$(\GDsub(t),\ObsMask(t))$; a scalar GDD is legitimate only as a
+$\bigl(\GDsub(u,\theta),\ObsMask_{\mu}(u,\theta;T)\bigr)$; a scalar GDD is legitimate only as a
 published-weight composite over the decidable substantive components, with
 coverage reported separately and the weights understood as policy. It never
 substitutes for the component-resolved report. (This mirrors the model's
 rejection of a scalar distance and is the suite's structural decision.)
 \end{metricdef}
 
-\begin{metricdef}[Drift Detection Latency, DDL]
+\begin{metricdef}[First-alert, Exact-set Completion, and Stable-VCL]
 \label{met:ddl}
 Per class and tier: detection time minus drift onset---in events for
-closed-world evaluation (measured in \cref{sec:study}: 0--1 events at the
+closed-world evaluation (measured in \cref{sec:study}: 0 events at the
 correct tier; 22.6 for naive comparison on S1), in wall-clock for the
 laboratory. \emph{Verdict: adopted.} Let $t_{\mathrm{inject}}$ be command
-initiation, $t_{\mathrm{onset}}$ the instant the operational relation first
-becomes inconsistent, $t_{\mathrm{detect}}$ the first correct verdict, and
-$t_{\mathrm{evidence}}$ completion of the evidence bundle supporting that
-verdict. We report actuation latency
+initiation and select the episode- and class-specific
+$t_{\mathrm{onset}}\in\{t^{\mathrm{sub}}_{k,j},t^{\mathrm{evd}}_{k,j}\}$
+from \cref{def:gd}: the former begins substantive divergence and the latter
+begins evidence failure. Let $t_{\mathrm{first}}$ be the first honest polar
+alert or undecidable evidence verdict. Let $\mathcal P$ be the protocol's
+declared completion projection---the class-set projection in our experiments,
+or the identity for a full-vector target---and let $\mathcal T^*$ be its
+declared target. Then $t_{\mathrm{complete}}$ is the first report satisfying
+$\mathcal P(\mathcal V)=\mathcal T^*$, and $t_{\mathrm{evidence}}$ is completion
+of the atomic bundle supporting that report. For a declared episode cut
+$\theta^*$, Stable-VCL measures finality of a target-valued bundle explicitly
+labeled historical as-of-$\theta^*$, not currentness at
+$t_{\mathrm{stable}}$. For a candidate publication time $c$, let
+$\mathcal R_{u,\theta^*}[c,T]$ contain the bundle published at $c$ and every
+subsequent evaluator revision of that unit and cut induced by a processed
+arrival admissible to $\theta^*$ through $T$, whether or not the revision is
+emitted as a report. Write $\mathrm{Published}^{H}_{\mathcal T^*}(c)$ when the
+bundle published at $c$ is explicitly historical and has that unit, cut, and
+target projection. Write $\mathrm{Sealed}_{u,\theta^*}(T)$ only when every
+relevant watermark event and every received record behind those watermarks
+that is admissible to $\theta^*$ has been processed and materialized in the
+evaluator state by $T$, and the resulting historical bundle is sealed. We then
+define
+\[
+\begin{gathered}
+\begin{aligned}
+\mathrm{TargetHeld}(c,T)&\Longleftrightarrow
+ \forall\mathcal V\in\mathcal R_{u,\theta^*}[c,T],\\[-0.25ex]
+&\hspace{3.5em}\mathcal P(\mathcal V)=\mathcal T^*
+\end{aligned}\\[0.4ex]
+t_{\mathrm{stable}}
+=\inf\left\{T\ \middle|\
+ \begin{gathered}
+ \exists c\in[t_{\mathrm{complete}},T]:
+     \mathrm{Published}^{H}_{\mathcal T^*}(c),\\
+ \mathrm{TargetHeld}(c,T),\quad
+     \mathrm{Sealed}_{u,\theta^*}(T),\\
+ \displaystyle\bigwedge_j\mathrm{AdmCut}_j(u,\theta^*;T)
+ \end{gathered}
+ \right\}.
+\end{gathered}
+\]
+An admissible arrival that changes the projection away from $\mathcal T^*$
+invalidates the current Stable-VCL completion candidate; the next matching
+bundle starts a new candidate interval. If no target-valued candidate reaches
+the sealed condition, Stable-VCL is right-censored. This restart rule does not
+rewrite the separately reported first-completion ESC. Because the target is
+preserved through every same-cut revision from $c$ to sealing and every
+required source watermark has passed $\theta^*$, no later record admissible to
+that cut can revise the sealed target vector; later cuts are new evaluations,
+not revisions of this one. We report actuation latency
 $t_{\mathrm{onset}}-t_{\mathrm{inject}}$, DDL
-$t_{\mathrm{detect}}-t_{\mathrm{onset}}$, end-to-end latency
-$t_{\mathrm{detect}}-t_{\mathrm{inject}}$, and time-to-evidence (TTE)
-$t_{\mathrm{evidence}}-t_{\mathrm{onset}}$ separately. Onset must be defined
-per class (e.g., expiry instant for exception drift); the definition ships
-with the metric. The original one-pass table measured injection-to-verdict
-and is retained only as a legacy observation in the artifact, not relabeled
-as DDL.
+$t_{\mathrm{first}}-t_{\mathrm{onset}}$, protocol exact-set completion
+latency $\mathrm{ESC}=t_{\mathrm{complete}}-t_{\mathrm{onset}}$, diagnostic gap
+$\mathrm{DG}=t_{\mathrm{complete}}-t_{\mathrm{first}}$, end-to-end latency
+$t_{\mathrm{first}}-t_{\mathrm{inject}}$, and time-to-evidence (TTE)
+$t_{\mathrm{evidence}}-t_{\mathrm{onset}}$ separately. Stable vector-completion
+latency is $\mathrm{Stable\mbox{-}VCL}=t_{\mathrm{stable}}-
+t_{\mathrm{onset}}$; its stable diagnostic gap is
+$t_{\mathrm{stable}}-t_{\mathrm{first}}$. In a controlled experiment,
+first completeness is equality to the class-set target specified in the
+frozen campaign protocol. The laboratory reports this provisional
+protocol-conditioned quantity as ESC, not VCL or Stable-VCL. Finality for the
+declared episode requires the cut and watermarks
+above; without them Stable-VCL is right-censored and the historical-finality
+claim is undecidable, never inferred from a quiet period. A separate verdict
+labeled current must satisfy
+$\bigwedge_j\mathrm{CurCut}_j(u,\theta;T)$ at its own observation time. Onset
+must declare its episode, class, and kind (e.g., the expiry instant is the
+substantive onset for exception drift, whereas loss of required status is an
+evidence onset); the definition ships with the metric. The original one-pass table measured injection-to-verdict and is
+retained only as a legacy observation in the artifact, not relabeled as DDL.
 \end{metricdef}
 
 \begin{metricdef}[Unapproved Change Ratio, UCR]
@@ -44,11 +104,14 @@ covered by a valid authorization basis at the time of effect. \emph{Verdict:
 adopted, with an evidence caveat}: UCR is computable only where approvals are
 recorded durably; where they are not, UCR's denominator is measurable but its
 numerator degrades to undecidable, and the metric must report the undecidable
-mass separately through $\ObsMask$ rather than folding it into either pole.
+mass separately through the relevant entry of
+$\ObsMask_{\mu}(u,\theta;T)$ rather than folding it into either pole.
 With $N$ observed changes, $U$ known unapproved changes, and $Q$
 undecidable changes, report the identification interval
 $\mathrm{UCR}_{\min}=U/N$ and
-$\mathrm{UCR}_{\max}=(U+Q)/N$ rather than a fabricated point estimate.
+$\mathrm{UCR}_{\max}=(U+Q)/N$ rather than a fabricated point estimate. If
+$N=0$, both endpoints are undefined: report that no change exposure was
+observed, not a zero UCR.
 \end{metricdef}
 
 \begin{metricdef}[Policy-Version Divergence, PVD]
@@ -64,46 +127,113 @@ compare equal to one cosmetic control.
 
 \begin{metricdef}[Authorization Drift Ratio, ADR]
 \label{met:adr}
-Fraction of authorization dependencies currently relied upon in an
-estate whose instruments are expired, revoked, or subject-mismatched while still relied
-upon---S2/S8-type conditions as a standing estate measurement.
-\emph{Verdict: adopted}; it is directly computable from T2/T3 evidence and
-is the metric that makes ``exception hygiene'' a number.
+Let $E_A(t)$ be the set of active authorization-dependency edges
+$e=(u,\eta,\rho)$ from an operational effect $\eta$ to one authorization
+obligation $\rho$. For each edge, let $\mathcal M_e$ be the family of
+inclusion-minimal instrument sets that can satisfy that obligation. Alternatives
+therefore do not become extra denominator items. Under the three-valued
+semantics of \cref{sec:model-states}, including subject and scope coverage,
+define
+\[
+v_e(t)=\bigvee_{M\in\mathcal M_e}\ \bigwedge_{a\in M}
+\mathrm{Applicable}(a,\tau_e,t).
+\]
+Thus one true minimal satisfying set covers the edge; the edge is false only
+when every alternative is false, and is $\bot$ when no alternative is known
+true and at least one remains undecidable. If the edge or its minimal-set
+family cannot itself be established, set $v_e=\bot$. Let $N=|E_A|$, $F$ be the number
+of false edges, $Q$ the number of $\bot$ edges, and $D=N-Q$. Report
+\[
+\mathrm{ADR}_{\mathrm{dec}}=F/D,\qquad
+\mathrm{ADR\mbox{-}coverage}=D/N,
+\]
+with the identification interval
+$[F/N,(F+Q)/N]$ over all active edges; a zero denominator is undefined, not
+zero. \emph{Verdict: adopted.} The denominator is dependency edges, never raw
+approval rows or the number of alternative minimal satisfying sets, so
+duplicate or redundant instruments cannot improve ADR mechanically.
 \end{metricdef}
 
 \begin{metricdef}[Governance Conformance Coverage, GCC]
 \label{met:gcc}
-Fraction of running deployments for which governance consistency is
-\emph{evaluable at all}---i.e., an admitted basis exists, and every
-component divergence can be computed from available streams. \emph{Verdict:
-adopted, and placed first in reporting order}: coverage bounds the meaning of
-every other metric (a superb ADR over 20\% GCC is a statement about 20\% of
-the estate), and low GCC is itself the actionable finding that approved-state
-recording is missing.
+Let $X(T)$ be the running deployments at observation time $T$, let $u_x$ be
+the stable unit reference for $x$, and let $\theta_x(T)$ be its declared
+current logical cut. A deployment is operationally evaluable exactly when a
+unique admitted basis exists and every component satisfies both its evidence
+contract and its current-cut contract:
+\[
+\begin{aligned}
+\mathrm{Eval}_{\mathrm{cur}}(x,T)\Longleftrightarrow{}
+&B_x(\theta_x(T))\neq\bot\\
+&\land\bigwedge_{j\in J}
+ o_{\mathrm{current},j}(u_x,\theta_x(T);T)=1\\
+&\land\bigwedge_{j\in J}
+ \mathrm{CurCut}_j(u_x,\theta_x(T);T),\\
+\mathrm{GCC}_{\mathrm{cur}}(T)&=
+ \frac{\sum_{x\in X(T)}\mathbf 1[\mathrm{Eval}_{\mathrm{cur}}(x,T)]}
+ {|X(T)|}.
+\end{aligned}
+\]
+If $|X(T)|=0$, $\mathrm{GCC}_{\mathrm{cur}}$ is undefined, not zero. This is
+the operational GCC headline; an admissible but stale historical cut cannot
+enter its numerator.
+
+Historical audit coverage is a separate estimand. For a declared target set
+$\Theta=\{(x,\theta_x)\}$ and audit observation time $T$, replace
+$\mathrm{CurCut}$ above by $\mathrm{AdmCut}$ and the current mask by the
+historical mask:
+\[
+\begin{aligned}
+\mathrm{Eval}_{\mathrm{hist}}(x,\theta_x;T)\Longleftrightarrow{}
+&B_x(\theta_x)\neq\bot\\
+&\land\bigwedge_{j\in J}
+ o_{\mathrm{historical},j}(u_x,\theta_x;T)=1\\
+&\land\bigwedge_{j\in J}\mathrm{AdmCut}_j(u_x,\theta_x;T),\\
+\mathrm{GCC}_{\mathrm{hist}}(\Theta;T)&=
+ \frac{\sum_{(x,\theta_x)\in\Theta}
+ \mathbf 1[\mathrm{Eval}_{\mathrm{hist}}(x,\theta_x;T)]}{|\Theta|}.
+\end{aligned}
+\]
+It is undefined for $|\Theta|=0$ and must be labeled with both target cuts and
+audit observation time; it is never presented as current coverage.
+\emph{Verdict: adopted, and placed first in reporting order}: coverage bounds
+the meaning of every other metric (a superb ADR over 20\% current GCC is a
+statement about 20\% of the running estate). Low GCC means that at least one
+required evidence contract failed---basis selection, identity linkage,
+source presence, completeness, integrity, authentication, freshness, health,
+or temporal-cut closure. Missing approved-state recording is one important
+cause, not the definition of the failure.
 \end{metricdef}
 
-Reporting discipline: GCC first; then the class-resolved vector metrics (DDL
-per tier, UCR with undecidable mass, PVD as set/age, ADR); composites last,
-weights published. The gaming surfaces are the usual ones---weakening policy
-lowers PVD; widening approvals lowers UCR---and, as in any governance
-measurement, the counters are meaningful only jointly with the policy and
-approval baselines they are computed against.
+Reporting discipline: current GCC first; any historical GCC next and labeled
+with its target cuts and audit time; then the class-resolved vector metrics
+(DDL per tier, ESC for protocol targets, Stable-VCL only with its
+cut-and-watermark qualification, UCR with
+undecidable mass, PVD as set/age, ADR with edge coverage and bounds);
+composites last, weights published. The gaming surfaces are the usual
+ones---weakening policy lowers PVD; widening approvals lowers UCR---and, as in
+any governance measurement, the counters are meaningful only jointly with
+the policy and approval baselines they are computed against.
 
 \subsection{What the Present Data Can and Cannot Instantiate}
-The live campaign identifies DDL directly and exercises GCC semantics, but it
-does not instantiate estate-level GCC because its units are observations, not
-running deployments. All 60 S9 cadence observations intentionally fail the
-approval evidence contract, so observation-level full-vector evaluability is
-480/540 (88.9\%) in the scenario-balanced positive set and 543/543 polls in
-the benign controls. This is a contract exercise, not an estate estimate.
+The live campaign identifies DDL and exercises component-mask behavior. It
+instantiates neither GCC estimand defined above: its units are repeated
+observations rather than a running-deployment estate, and its synchronous
+readers do not claim the per-component current-cut/watermark contract. Each of
+the 60 S9 cadence observations intentionally fails the current-authorization
+live-status contract while retaining immutable execution proof. The resulting
+480/540 (88.9\%) is protocol-level class-set evaluability in the balanced
+positive set, not GCC. Separately, the post-stabilization benign-control
+campaign recorded 543/543 evaluable polls. Both are contract exercises, not
+estate coverage estimates.
 UCR, PVD, and ADR are not
 reported from these injections: their denominators are deployment populations
-or naturally occurring change and authorization populations, whereas this
-case-control design fixes scenario counts by construction. Relabeling those
-fractions as operational rates would manufacture prevalence.
+or naturally occurring change and authorization-dependency edges, whereas
+this case-control design fixes scenario counts by construction. Relabeling
+those fractions as operational rates would manufacture prevalence.
 
-For an estate, aggregate only after reporting GCC: compute each metric over
-evaluable deployments, retain unevaluable mass separately, and stratify by
-service criticality, environment, and evidence tier. A fleet-wide scalar may
-then be a published-weight summary, but it must not erase class counts or let
-a high-coverage low-risk stratum conceal an unevaluable critical stratum.
+For an estate, aggregate only after reporting current GCC: compute each metric
+over evaluable deployments, retain unevaluable mass separately, and stratify
+by service criticality, environment, and evidence tier. A fleet-wide scalar
+may then be a published-weight summary, but it must not erase class counts or
+let a high-coverage low-risk stratum conceal an unevaluable critical stratum.

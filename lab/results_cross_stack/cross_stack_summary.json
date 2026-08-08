@@ -1,0 +1,86 @@
+{
+  "campaign": "bounded Argo CD + Gatekeeper cross-stack replication",
+  "cluster": "govdrift-cross",
+  "versions": {
+    "argocd": "v3.4.2",
+    "gatekeeper": "v3.22.2"
+  },
+  "profiles": [
+    {
+      "scenario": "S1",
+      "expected_set": "configuration",
+      "surface": "argocd-native",
+      "repetitions": 5,
+      "exact_sets": 5,
+      "median_operational_onset_to_first_honest_seconds": 0.206765,
+      "min_operational_onset_to_first_honest_seconds": 0.183438,
+      "max_operational_onset_to_first_honest_seconds": 0.880384,
+      "epistemic_alert_observations": 5,
+      "median_first_epistemic_alert_seconds": 0.206765,
+      "median_first_substantive_alert_seconds": 0.645707,
+      "median_exact_latency_seconds": 1.676624,
+      "native_cross_stack_component_replication": true
+    },
+    {
+      "scenario": "S3",
+      "expected_set": "policy",
+      "surface": "gatekeeper-native",
+      "repetitions": 5,
+      "exact_sets": 5,
+      "median_operational_onset_to_first_honest_seconds": 0.156506,
+      "min_operational_onset_to_first_honest_seconds": 0.141988,
+      "max_operational_onset_to_first_honest_seconds": 0.332091,
+      "epistemic_alert_observations": 5,
+      "median_first_epistemic_alert_seconds": 0.156506,
+      "median_first_substantive_alert_seconds": 1.6594,
+      "median_exact_latency_seconds": 1.6594,
+      "native_cross_stack_component_replication": true
+    },
+    {
+      "scenario": "S4",
+      "expected_set": "authorization",
+      "surface": "shared-artifact-adapter",
+      "repetitions": 5,
+      "exact_sets": 5,
+      "median_operational_onset_to_first_honest_seconds": 0.21545,
+      "min_operational_onset_to_first_honest_seconds": 0.186795,
+      "max_operational_onset_to_first_honest_seconds": 0.240291,
+      "epistemic_alert_observations": 3,
+      "median_first_epistemic_alert_seconds": 0.216292,
+      "median_first_substantive_alert_seconds": 0.21545,
+      "median_exact_latency_seconds": 0.650497,
+      "native_cross_stack_component_replication": false
+    }
+  ],
+  "aggregate": {
+    "observations": 15,
+    "exact_sets": 15,
+    "slices": 3,
+    "repetitions_per_slice": 5,
+    "native_cross_stack_slices": 2,
+    "shared_adapter_slices": 1,
+    "baseline_restorations_succeeded": 15,
+    "post_restoration_differences": 0,
+    "final_undecidable_observations": 0,
+    "api_read_errors": 0,
+    "cleanup_verified": true,
+    "stop_rule_triggered": false
+  },
+  "resource_maxima": {
+    "host_cpu_percent": 80.71,
+    "host_memory_pressure_used_percent": 67.0,
+    "node_cpu_normalized_percent": 24.644,
+    "node_memory_percent_of_docker_vm": 28.43
+  },
+  "descriptive_comparison": {
+    "S1": "Argo CD reproduced the desired/live configuration distinction previously exercised through Flux.",
+    "S3": "Gatekeeper dry-run background audit reproduced the current-policy violation path with the evaluated object UID embedded by the controlled Rego rule.",
+    "S4": "The running-digest observation reused the shared T3 adapter and is not independent Argo CD/Gatekeeper authorization validation.",
+    "inference": "Descriptive concordance on three bounded slices only. No equivalence, non-inferiority, prevalence, reliability, or production-performance test was performed."
+  },
+  "unsupported_components": {
+    "intent": "not evaluated",
+    "environment": "not evaluated",
+    "general_authorization": "not independently evaluated; S4 is a shared digest adapter"
+  }
+}

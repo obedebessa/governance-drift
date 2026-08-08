@@ -7,4 +7,4 @@ S5,IAM expansion,environment,T4,True,drift,environment,0.229,True
 S6,unapproved Git rollback,intent,T2,True,drift,intent,6.915,True
 S7,out-of-band LB change,environment,T4,True,drift,environment,0.265,True
 S8,approval subject mismatch,authorization,T3,True,drift,authorization,0.194,True
-S9,approval-record deletion,evidence,T2,True,undecidable,evidence,0.146,True
+S9,continuing-authorization live-status evidence loss,evidence,T2,True,undecidable,evidence,0.146,True

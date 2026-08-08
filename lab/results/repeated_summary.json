@@ -120,11 +120,11 @@
       "n": 20,
       "detection_rate": 1.0,
       "exact_set_accuracy": 1.0,
-      "actuation_median_seconds": 0.01439264602959156,
-      "ddl_median_seconds": 0.39543622895143926,
-      "ddl_p95_seconds": 0.5942036672495306,
-      "end_to_end_median_seconds": 0.4102407705504447,
-      "tte_median_seconds": 0.39548233337700367
+      "actuation_median_seconds": 0.011387833626940846,
+      "ddl_median_seconds": 0.423191771376878,
+      "ddl_p95_seconds": 0.6240432080812752,
+      "end_to_end_median_seconds": 0.4354534591548145,
+      "tte_median_seconds": 0.42324154172092676
     }
   ],
   "cadence": [
@@ -133,7 +133,7 @@
       "runs": 180,
       "detection_rate": 1.0,
       "exact_set_accuracy": 1.0,
-      "ddl_median_seconds": 0.47498045838437974,
+      "ddl_median_seconds": 0.48037862475030124,
       "ddl_p95_seconds": 10.079467582982033
     },
     {
@@ -141,7 +141,7 @@
       "runs": 180,
       "detection_rate": 0.9944444444444445,
       "exact_set_accuracy": 1.0,
-      "ddl_median_seconds": 1.4447976043447852,
+      "ddl_median_seconds": 1.4545333748683333,
       "ddl_p95_seconds": 10.469048666767776
     },
     {
@@ -149,7 +149,7 @@
       "runs": 180,
       "detection_rate": 0.9944444444444445,
       "exact_set_accuracy": 1.0,
-      "ddl_median_seconds": 6.263379353797063,
+      "ddl_median_seconds": 6.254320750012994,
       "ddl_p95_seconds": 14.612647665664554
     }
   ],
@@ -203,8 +203,8 @@
       "epistemic_polls": 0
     }
   ],
-  "vector_metrics": {
-    "exact_set_accuracy_all": 0.9962962962962963,
+  "class_set_metrics": {
+    "unconditional_exact_class_set_success": 0.9962962962962963,
     "exact_set_accuracy_conditional": 1.0,
     "hamming_loss": 0.0006172839506172839,
     "per_component": [

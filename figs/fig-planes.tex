@@ -1,10 +1,10 @@
 % Approved intent vs runtime reality (single column, resized)
 \begin{tikzpicture}[node distance=3.2mm and 4mm]
-  % approval event
-  \node[human, minimum width=22mm] (appr) at (0,0)
-    {approval history\\{\smlbl $t_0<t_1<\cdots<t_k$}};
+  % approval and activation events
+  \node[human, minimum width=24mm] (appr) at (0,0)
+    {approval + activation\\history\\{\smlbl $t_i^{\rm app}\leq t_i^{\rm act}$}};
   \node[attn, below=2.5mm of appr, minimum width=20mm] (snap)
-    {$G^{(0)}\to\cdots\to B_x(t)$\\{\smlbl $m_B,\delta_B,\dig(\pi_B),A_B^{\rm proof},\iota_B,\sigma_B$}};
+    {activated $G^{(i)}\to B_x(t)$\\{\smlbl $m_B,\delta_B,\dig(\pi_B),A_B^{\rm proof},\iota_B,\sigma_B$}};
 
   % runtime plane
   \node[stage, right=8mm of appr, minimum width=17mm] (r1)
@@ -26,7 +26,7 @@
     {intent\\{\smlbl $\Int(t)$}};
   \node[lbl, below=1mm of g2] {\textbf{governance plane}};
 
-  \draw[eflow] (appr.east) -- (r1.west);
+  \draw[eflow] (appr.east) -- node[lbl, above, pos=0.52]{activation} (r1.west);
   \draw[eflow] (snap.east) -- (g1.west);
 
   % the gap

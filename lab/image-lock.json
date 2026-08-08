@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "captured_utc": "2026-08-08T00:00:00Z",
+  "architecture": "linux/arm64",
+  "images": {
+    "kindest/node:v1.36.1": "kindest/node@sha256:3489c7674813ba5d8b1a9977baea8a6e553784dab7b84759d1014dbd78f7ebd5",
+    "registry:2": "registry@sha256:a3d8aaa63ed8681a604f1dea0aa03f100d5895b6a58ace528858a7b332415373",
+    "python:3.12-slim": "python@sha256:229a2c5bfa27522db7815ea81f9bed70af17ccb9de9fc7ad142b1877b5830d36",
+    "nginx:1.27-alpine": "nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10",
+    "nginx:1.26-alpine": "nginx@sha256:1eadbb07820339e8bbfed18c771691970baee292ec4ab2558f1453d26153e22d",
+    "ghcr.io/fluxcd/helm-controller:v1.6.3": "ghcr.io/fluxcd/helm-controller@sha256:16ada99456385100698a5d7adf90aba8a2089d987ab541c9566b6d7b0e897038",
+    "ghcr.io/fluxcd/image-automation-controller:v1.2.4": "ghcr.io/fluxcd/image-automation-controller@sha256:0286cbba95a2606a006e370052cb642f4370cb42ceea8353b5cba922cf47770c",
+    "ghcr.io/fluxcd/image-reflector-controller:v1.2.4": "ghcr.io/fluxcd/image-reflector-controller@sha256:d63550296dc9a6c2b7c9246cb7ef6e52d7469d5b104cd329622301b46971e255",
+    "ghcr.io/fluxcd/kustomize-controller:v1.9.4": "ghcr.io/fluxcd/kustomize-controller@sha256:2b8bec54ffb6caf421bd2a6c005d27f567d5dd4db7feb55794fb51fcabd69b8f",
+    "ghcr.io/fluxcd/notification-controller:v1.9.3": "ghcr.io/fluxcd/notification-controller@sha256:071c351a0fb163eeb6a2bb82f1e894f51b6b0734216d2e97d3d99c9ab9d710b9",
+    "ghcr.io/fluxcd/source-controller:v1.9.4": "ghcr.io/fluxcd/source-controller@sha256:8a8ed0a57b8b86f561d5a4309a69f65e62f0cebe4de8801593c5ff35a3bc3c23",
+    "ghcr.io/fluxcd/source-watcher:v2.2.3": "ghcr.io/fluxcd/source-watcher@sha256:40f35415a78f4514aea41cf4d6dd299d59bc646eb4a73365eac831c8ced2445a",
+    "reg.kyverno.io/kyverno/kyvernopre:v1.18.2": "reg.kyverno.io/kyverno/kyvernopre@sha256:cd8cb4a31d25b3992734fb8f24a90ef691c90ce49338c89bea96792160eacb98",
+    "reg.kyverno.io/kyverno/kyverno:v1.18.2": "reg.kyverno.io/kyverno/kyverno@sha256:0a540e2ddf74d0d2d3d45f9ef248d7dbc96576accdbcc6a2dd7eaff9fea56504",
+    "reg.kyverno.io/kyverno/background-controller:v1.18.2": "reg.kyverno.io/kyverno/background-controller@sha256:d62566ce41bd0d4a32bf2cf44b9ebfc02c36374f821f83070890287f62f68671",
+    "reg.kyverno.io/kyverno/cleanup-controller:v1.18.2": "reg.kyverno.io/kyverno/cleanup-controller@sha256:b0395d29ae332276e6910eb40418be9bc127c068d659f90aa1bcddd6be99ccb4",
+    "reg.kyverno.io/kyverno/reports-controller:v1.18.2": "reg.kyverno.io/kyverno/reports-controller@sha256:f09cf305170014e191b94e1c54f5be73163d8824eefad49349675c4efe43159a"
+  }
+}

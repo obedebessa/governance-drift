@@ -1,0 +1,51 @@
+{
+  "cluster": "govdrift-cross",
+  "cleanup_started_utc": "2026-08-08T08:54:42.017216+00:00",
+  "target_scope": "only govdrift-cross",
+  "delete_attempted": true,
+  "delete_returncode": 0,
+  "verified_absent": true,
+  "cleanup_proof": {
+    "verify_before": {
+      "command": [
+        "kind",
+        "get",
+        "clusters"
+      ],
+      "returncode": 0,
+      "stdout": "govdrift-cross\ngovdrift-lab\n",
+      "stderr": "",
+      "clusters": [
+        "govdrift-cross",
+        "govdrift-lab"
+      ]
+    },
+    "delete": {
+      "command": [
+        "kind",
+        "delete",
+        "cluster",
+        "--name",
+        "govdrift-cross"
+      ],
+      "attempted": true,
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Deleting cluster \"govdrift-cross\" ...\nDeleted nodes: [\"govdrift-cross-control-plane\"]\n"
+    },
+    "verify_after": {
+      "command": [
+        "kind",
+        "get",
+        "clusters"
+      ],
+      "returncode": 0,
+      "stdout": "govdrift-lab\n",
+      "stderr": "",
+      "clusters": [
+        "govdrift-lab"
+      ]
+    }
+  },
+  "cleanup_completed_utc": "2026-08-08T08:54:43.158815+00:00"
+}

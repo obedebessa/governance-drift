@@ -1,0 +1,21 @@
+{
+  "id": "APR-TRACE-BASE",
+  "kind": "deployment-authorization",
+  "mode": "continuing",
+  "revisions": [
+    "e70b66c648ff83eee791e3f5487c9ba11a7d66af"
+  ],
+  "revocation_effect": "prospective",
+  "revoked": false,
+  "subject": "deployment/payments-trace",
+  "subjects": [
+    "sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10"
+  ],
+  "unit_ref": {
+    "cluster": "kind-govdrift-lab",
+    "kind": "Deployment",
+    "name": "payments-trace",
+    "namespace": "govdrift-trace"
+  },
+  "valid_at_execution": true
+}

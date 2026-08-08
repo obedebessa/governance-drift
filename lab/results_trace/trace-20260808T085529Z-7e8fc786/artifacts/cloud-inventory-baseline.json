@@ -1,0 +1,15 @@
+{
+  "iam": {
+    "actions": [
+      "logs:PutLogEvents"
+    ],
+    "wildcard": false
+  },
+  "load_balancer": {
+    "listeners": [
+      443
+    ],
+    "tls_policy": "TLS-1-3-2025"
+  },
+  "region": "us-east-1"
+}

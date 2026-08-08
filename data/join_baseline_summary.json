@@ -4,31 +4,78 @@
   "joined_exact": 1.0,
   "local_union_false_alarm_events": 0,
   "semantic_probes": {
-    "same_current_policy_failure_with_admitted_basis": {
+    "aborted_does_not_replace": {
       "local_union": [
-        "policy"
+        "G4"
       ],
       "joined": [
-        "policy"
+        "G3"
       ]
     },
-    "same_current_policy_failure_without_admitted_basis": {
+    "activated_successor_replaces": {
       "local_union": [
-        "policy"
+        "G4"
       ],
       "joined": [
-        "evidence"
+        "G4"
       ]
     },
-    "missing_live_status_continuing_authorization": {
+    "approved_nonstandard_environment": {
+      "local_union": [
+        "environment"
+      ],
+      "joined": []
+    },
+    "missing_live_continuing": {
       "local_union": [],
       "joined": [
         "evidence"
       ]
     },
-    "missing_live_source_one_shot_with_retained_proof": {
+    "missing_live_one_shot": {
       "local_union": [],
       "joined": []
+    },
+    "parallel_activation_is_ambiguous": {
+      "local_union": [
+        "G4"
+      ],
+      "joined": [
+        "evidence"
+      ]
+    },
+    "pending_does_not_replace": {
+      "local_union": [
+        "G4"
+      ],
+      "joined": [
+        "G3"
+      ]
+    },
+    "policy_with_basis": {
+      "local_union": [
+        "policy"
+      ],
+      "joined": [
+        "policy"
+      ]
+    },
+    "policy_without_basis": {
+      "local_union": [
+        "policy"
+      ],
+      "joined": [
+        "evidence"
+      ]
+    },
+    "unapproved_rollback": {
+      "local_union": [
+        "authorization"
+      ],
+      "joined": [
+        "intent",
+        "authorization"
+      ]
     }
   }
 }

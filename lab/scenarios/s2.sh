@@ -9,6 +9,7 @@ LAB="$(cd "$(dirname "$0")/.." && pwd)"
 RUNTIME="$LAB/runtime"
 NOW=$(date -u +%s)
 EXPIRY=$((NOW + ${EXPIRY_SECONDS:-14400}))
+REVISION=$(git -C "$RUNTIME/work" rev-parse HEAD)
 
 cat > "$RUNTIME/approvals/EXC-1.json" <<EOF
 {
@@ -16,12 +17,18 @@ cat > "$RUNTIME/approvals/EXC-1.json" <<EOF
   "kind": "emergency-exception",
   "mode": "temporary-exception",
   "subject": "deployment/payments",
+  "subjects": ["deployment/payments"],
+  "revisions": ["$REVISION"],
   "basis": "incident-4711",
   "granted_utc": $NOW,
+  "valid_at_execution": true,
   "expires_utc": $EXPIRY,
   "revoked": false
 }
 EOF
+mkdir -p "$RUNTIME/proofs"
+cp "$RUNTIME/approvals/EXC-1.json" "$RUNTIME/proofs/EXC-1.json"
+chmod a-w "$RUNTIME/proofs/EXC-1.json"
 echo "$(date -u +%FT%TZ) INJECT s2 grant EXC-1 expires=$EXPIRY" >> "$RUNTIME/log/injections.log"
 
 # the emergency change the exception covers (privileged debug sidecar):

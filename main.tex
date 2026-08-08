@@ -6,6 +6,12 @@
 % base article class (content transplants directly into IEEEtran /
 % llncs / elsarticle for submission).
 % =====================================================================
+\newif\ifanonymoussubmission
+\ifdefined\GOVDRIFTANONYMOUS
+  \anonymoussubmissiontrue
+\else
+  \anonymoussubmissionfalse
+\fi
 \documentclass[10pt,twocolumn]{article}
 \PassOptionsToPackage{hyphens}{url}
 
@@ -34,6 +40,16 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{url}
 \usepackage[capitalize,noabbrev]{cleveref}
+\hypersetup{
+  pdftitle={Governance Drift: Measuring Divergence Between Approved Intent and Operational Reality in Cloud-Native Systems},
+  pdfsubject={History-anchored governance-drift measurement in cloud-native systems},
+  pdfkeywords={governance drift, configuration drift, GitOps, cloud governance, Kubernetes}
+}
+\ifanonymoussubmission
+  \hypersetup{pdfauthor={}}
+\else
+  \hypersetup{pdfauthor={Obede Bessa Rocha da Silva}}
+\fi
 
 \renewcommand{\thesection}{\Roman{section}}
 \renewcommand{\thesubsection}{\thesection-\Alph{subsection}}
@@ -125,15 +141,19 @@
 Governance Drift: Measuring Divergence Between Approved\\[2pt]
 Intent and Operational Reality in Cloud-Native Systems\par}
 \vspace{14pt}
-{\fontsize{11}{13}\selectfont Obede Bessa\par}
-\vspace{2pt}
-{\fontsize{9}{11}\selectfont Independent Researcher \;---\; obedebessa@gmail.com\par}
+\ifanonymoussubmission
+  {\fontsize{11}{13}\selectfont Anonymous Author(s)\par}
+\else
+  {\fontsize{11}{13}\selectfont Obede Bessa\par}
+  \vspace{2pt}
+  {\fontsize{9}{11}\selectfont Independent Researcher \;---\; obedebessa@gmail.com\par}
+\fi
 \vspace{16pt}
 \end{center}
 }]
 
 % ------------------------- abstract ----------------------------------
-\noindent\textbf{\textit{Abstract}---Configuration drift is a two-place, memoryless comparison of desired and observed configuration. We define \emph{governance drift} as a three-place, history-anchored relation: operational reality diverges from its current governance context and the immutable basis under which it was approved, or the evidence needed to decide that relation is lost. A resource can match Git while violating current policy, relying on expired authority, or running unapproved content. We contribute a five-component governance-divergence vector plus an epistemic mask; an append-only approval-snapshot model; separation and tier-minimality results; and a cumulative detection architecture. In a twelve-scenario closed world, complete-set scoring realizes the predicted staircase; an independent union of plane-local signals exactly diagnoses 9/12 scenario sets versus 12/12 for the admitted-basis join. In a pinned Kind/Flux/Kyverno laboratory, nine scenarios were each repeated 20 times at randomized-phase 0.5-, 2-, and 10-second cadences. The evaluator detected 538/540 observations with 100\% conditional exact-set accuracy; a cluster bootstrap over 180 injections gives a 95\% interval of 98.89--100\% for aggregate detection. Twenty benign windows produced 0/543 poll alarms. A secondary live extension completed the exact vectors in 45/45 compound observations, and a 30-minute benign soak produced 0 alarms or epistemic warnings in 4,680 polls. Separate actuation, detection, vector-completion, and evidence clocks retain two transient misses and asynchronous partial diagnoses. This bounded execution demonstrates realizability on one stack with file-backed governance streams; it does not estimate prevalence, production effectiveness, transport reliability, or transfer.}
+\noindent\textbf{\textit{Abstract}---Configuration drift compares desired and observed configuration; it cannot decide whether a running system remains covered by what authorized it. We define \emph{governance drift} as a history-anchored relation among operational reality, current governance context, and a unique activated approval basis. The model separates five substantive components from epistemic observability and specifies stable identity, activation and supersession, and admissible temporal cuts. In a twelve-scenario closed world, a cumulative ablation raises unconditional exact-vector success from 75.0\% for plane-local signals to 100\% for the admitted-basis join. On a version-pinned Kind/Flux/Kyverno stack, 180 injections yielded 538/540 detections and 538/538 exact provisional class sets conditional on detection; 777 benign-transition polls produced no policy, authorization, intent, or environment drift, and all 60 trajectories ended provisionally consistent. A process-isolated audit reached the exact target in 27/27 correlated trajectories: cause-start-to-first-exact completion had median 4.465~s (P95 9.764), and cause-start-to-second-consecutive-exact completion had median 9.522~s (P95 19.811), without a Stable-VCL claim. A separate Argo CD/Gatekeeper replication produced 15/15 exact projected singleton classifications over declared components: S1 configuration and S3 policy used native paths, whereas S4 authorization reused the shared digest adapter. This is neither complete-vector validation nor cross-stack equivalence. The results demonstrate bounded semantic realizability and safe uncertainty handling, not natural prevalence or production effectiveness.}
 
 \vspace{4pt}
 \noindent\textbf{\textit{Index Terms}---Governance drift, configuration drift, GitOps, policy as code, cloud governance, Kubernetes, continuous compliance, DevOps, distributed systems.}
@@ -149,7 +169,11 @@ Intent and Operational Reality in Cloud-Native Systems\par}
 \input{sections/08-metrics}
 \input{sections/09-related}
 \input{sections/10-discussion}
-\input{sections/10a-availability}
+\ifanonymoussubmission
+  \input{sections/10a-availability-anonymous}
+\else
+  \input{sections/10a-availability}
+\fi
 \input{sections/11-conclusion}
 
 \bibliographystyle{ieeetr}

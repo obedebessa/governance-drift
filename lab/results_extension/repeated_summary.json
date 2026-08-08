@@ -8,11 +8,11 @@
       "n": 5,
       "detection_rate": 1.0,
       "exact_set_accuracy": 1.0,
-      "actuation_median_seconds": 2.677542040590197,
-      "ddl_median_seconds": 0.40163445798680186,
-      "ddl_p95_seconds": 0.8141454998403788,
-      "end_to_end_median_seconds": 3.20807212498039,
-      "tte_median_seconds": 0.40167566668242216
+      "actuation_median_seconds": 2.867113416083157,
+      "ddl_median_seconds": 0.3913962496444583,
+      "ddl_p95_seconds": 1.0933362087234855,
+      "end_to_end_median_seconds": 3.253064041957259,
+      "tte_median_seconds": 0.39144566701725125
     },
     {
       "scenario": "S11",
@@ -22,25 +22,25 @@
       "n": 5,
       "detection_rate": 1.0,
       "exact_set_accuracy": 1.0,
-      "actuation_median_seconds": 1.6754063749685884,
-      "ddl_median_seconds": 0.5166808343492448,
-      "ddl_p95_seconds": 0.679178707767278,
-      "end_to_end_median_seconds": 2.170094999950379,
-      "tte_median_seconds": 0.5167445000261068
+      "actuation_median_seconds": 1.5224602092057467,
+      "ddl_median_seconds": 0.5619263746775687,
+      "ddl_p95_seconds": 0.6980017079040408,
+      "end_to_end_median_seconds": 1.9817537502385676,
+      "tte_median_seconds": 0.5619831667281687
     },
     {
       "scenario": "S12",
-      "expected_class_set": "evidence",
-      "observed_class_set": "evidence",
-      "observed_first_priority": "evidence",
+      "expected_class_set": "intent|evidence",
+      "observed_class_set": "intent|evidence",
+      "observed_first_priority": "intent",
       "n": 5,
       "detection_rate": 1.0,
       "exact_set_accuracy": 1.0,
-      "actuation_median_seconds": 7.202294999733567,
-      "ddl_median_seconds": 0.3453392921946943,
-      "ddl_p95_seconds": 0.4640048327855766,
-      "end_to_end_median_seconds": 7.584675459191203,
-      "tte_median_seconds": 0.3453745422884822
+      "actuation_median_seconds": 5.940370291937143,
+      "ddl_median_seconds": 0.4500288753770292,
+      "ddl_p95_seconds": 0.572457917034626,
+      "end_to_end_median_seconds": 6.455911499913782,
+      "tte_median_seconds": 0.45007120817899704
     }
   ],
   "cadence": [
@@ -49,24 +49,24 @@
       "runs": 15,
       "detection_rate": 1.0,
       "exact_set_accuracy": 1.0,
-      "ddl_median_seconds": 0.4213133747689426,
-      "ddl_p95_seconds": 0.8141454998403788
+      "ddl_median_seconds": 0.4500288753770292,
+      "ddl_p95_seconds": 1.0933362087234855
     },
     {
       "cadence_seconds": 2.0,
       "runs": 15,
       "detection_rate": 1.0,
       "exact_set_accuracy": 1.0,
-      "ddl_median_seconds": 1.6127403751015663,
-      "ddl_p95_seconds": 2.158978749997914
+      "ddl_median_seconds": 1.6297968327999115,
+      "ddl_p95_seconds": 2.2698476249352098
     },
     {
       "cadence_seconds": 10.0,
       "runs": 15,
       "detection_rate": 1.0,
       "exact_set_accuracy": 1.0,
-      "ddl_median_seconds": 4.207121124956757,
-      "ddl_p95_seconds": 8.495680917054415
+      "ddl_median_seconds": 4.301298749633133,
+      "ddl_p95_seconds": 8.579337249975652
     }
   ],
   "controls": [
@@ -119,8 +119,8 @@
       "epistemic_polls": 0
     }
   ],
-  "vector_metrics": {
-    "exact_set_accuracy_all": 1.0,
+  "class_set_metrics": {
+    "unconditional_exact_class_set_success": 1.0,
     "exact_set_accuracy_conditional": 1.0,
     "hamming_loss": 0.0,
     "per_component": [
@@ -150,7 +150,7 @@
       },
       {
         "component": "intent",
-        "tp": 0,
+        "tp": 15,
         "fp": 0,
         "fn": 0,
         "precision": 1.0,

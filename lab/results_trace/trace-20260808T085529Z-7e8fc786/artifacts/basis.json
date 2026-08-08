@@ -1,0 +1,44 @@
+{
+  "approval": {
+    "id": "APR-TRACE-BASE",
+    "kind": "deployment-authorization",
+    "mode": "continuing",
+    "revisions": [
+      "e70b66c648ff83eee791e3f5487c9ba11a7d66af"
+    ],
+    "revocation_effect": "prospective",
+    "revoked": false,
+    "subject": "deployment/payments-trace",
+    "subjects": [
+      "sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10"
+    ],
+    "unit_ref": {
+      "cluster": "kind-govdrift-lab",
+      "kind": "Deployment",
+      "name": "payments-trace",
+      "namespace": "govdrift-trace"
+    },
+    "valid_at_execution": true
+  },
+  "baseline_revision": "e70b66c648ff83eee791e3f5487c9ba11a7d66af",
+  "basis_id": "trace-20260808T085529Z-7e8fc786:baseline",
+  "captured_utc": "2026-08-08T08:56:02.140584+00:00",
+  "deployment_ref": "nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10",
+  "inventory": {
+    "iam": {
+      "actions": [
+        "logs:PutLogEvents"
+      ],
+      "wildcard": false
+    },
+    "load_balancer": {
+      "listeners": [
+        443
+      ],
+      "tls_policy": "TLS-1-3-2025"
+    },
+    "region": "us-east-1"
+  },
+  "policy_version": "pi-7",
+  "schema": "govdrift-trace-basis/v1"
+}

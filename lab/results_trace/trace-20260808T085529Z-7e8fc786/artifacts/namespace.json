@@ -1,0 +1,11 @@
+{
+  "apiVersion": "v1",
+  "kind": "Namespace",
+  "metadata": {
+    "labels": {
+      "app.kubernetes.io/managed-by": "govdrift-trace",
+      "govdrift.io/campaign": "trace-20260808T085529Z-7e8fc786"
+    },
+    "name": "govdrift-trace"
+  }
+}

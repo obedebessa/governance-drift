@@ -1,0 +1,4462 @@
+{
+  "captured_utc": "2026-08-08T08:59:32.938366+00:00",
+  "context": "kind-govdrift-lab",
+  "flux_deployments": {
+    "apiVersion": "v1",
+    "items": [
+      {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/revision": "1",
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"labels\":{\"app.kubernetes.io/component\":\"helm-controller\",\"app.kubernetes.io/instance\":\"flux-system\",\"app.kubernetes.io/part-of\":\"flux\",\"control-plane\":\"controller\"},\"name\":\"helm-controller\",\"namespace\":\"flux-system\"},\"spec\":{\"replicas\":1,\"selector\":{\"matchLabels\":{\"app\":\"helm-controller\"}},\"template\":{\"metadata\":{\"annotations\":{\"prometheus.io/port\":\"8080\",\"prometheus.io/scrape\":\"true\"},\"labels\":{\"app\":\"helm-controller\",\"app.kubernetes.io/component\":\"helm-controller\",\"app.kubernetes.io/instance\":\"flux-system\",\"app.kubernetes.io/part-of\":\"flux\"}},\"spec\":{\"containers\":[{\"args\":[\"--events-addr=http://notification-controller.flux-system.svc.cluster.local./\",\"--watch-all-namespaces\",\"--log-level=info\",\"--log-encoding=json\",\"--enable-leader-election\"],\"env\":[{\"name\":\"RUNTIME_NAMESPACE\",\"valueFrom\":{\"fieldRef\":{\"fieldPath\":\"metadata.namespace\"}}},{\"name\":\"GOMEMLIMIT\",\"valueFrom\":{\"resourceFieldRef\":{\"containerName\":\"manager\",\"resource\":\"limits.memory\"}}}],\"image\":\"ghcr.io/fluxcd/helm-controller:v1.6.3\",\"imagePullPolicy\":\"IfNotPresent\",\"livenessProbe\":{\"httpGet\":{\"path\":\"/healthz\",\"port\":\"healthz\"}},\"name\":\"manager\",\"ports\":[{\"containerPort\":8080,\"name\":\"http-prom\",\"protocol\":\"TCP\"},{\"containerPort\":9440,\"name\":\"healthz\",\"protocol\":\"TCP\"}],\"readinessProbe\":{\"httpGet\":{\"path\":\"/readyz\",\"port\":\"healthz\"}},\"resources\":{\"limits\":{\"cpu\":\"1000m\",\"memory\":\"1Gi\"},\"requests\":{\"cpu\":\"100m\",\"memory\":\"64Mi\"}},\"securityContext\":{\"allowPrivilegeEscalation\":false,\"capabilities\":{\"drop\":[\"ALL\"]},\"readOnlyRootFilesystem\":true,\"runAsNonRoot\":true,\"seccompProfile\":{\"type\":\"RuntimeDefault\"}},\"volumeMounts\":[{\"mountPath\":\"/tmp\",\"name\":\"temp\"}]}],\"priorityClassName\":\"system-cluster-critical\",\"securityContext\":{\"fsGroup\":1337},\"serviceAccountName\":\"helm-controller\",\"terminationGracePeriodSeconds\":600,\"volumes\":[{\"emptyDir\":{},\"name\":\"temp\"}]}}}}\n"
+          },
+          "creationTimestamp": "2026-08-07T17:56:44Z",
+          "generation": 2,
+          "labels": {
+            "app.kubernetes.io/component": "helm-controller",
+            "app.kubernetes.io/instance": "flux-system",
+            "app.kubernetes.io/part-of": "flux",
+            "control-plane": "controller"
+          },
+          "name": "helm-controller",
+          "namespace": "flux-system",
+          "resourceVersion": "788",
+          "uid": "7fa59daf-1262-4b8d-80b4-d992022dd44f"
+        },
+        "spec": {
+          "progressDeadlineSeconds": 600,
+          "replicas": 0,
+          "revisionHistoryLimit": 10,
+          "selector": {
+            "matchLabels": {
+              "app": "helm-controller"
+            }
+          },
+          "strategy": {
+            "rollingUpdate": {
+              "maxSurge": "25%",
+              "maxUnavailable": "25%"
+            },
+            "type": "RollingUpdate"
+          },
+          "template": {
+            "metadata": {
+              "annotations": {
+                "prometheus.io/port": "8080",
+                "prometheus.io/scrape": "true"
+              },
+              "labels": {
+                "app": "helm-controller",
+                "app.kubernetes.io/component": "helm-controller",
+                "app.kubernetes.io/instance": "flux-system",
+                "app.kubernetes.io/part-of": "flux"
+              }
+            },
+            "spec": {
+              "containers": [
+                {
+                  "args": [
+                    "--events-addr=http://notification-controller.flux-system.svc.cluster.local./",
+                    "--watch-all-namespaces",
+                    "--log-level=info",
+                    "--log-encoding=json",
+                    "--enable-leader-election"
+                  ],
+                  "env": [
+                    {
+                      "name": "RUNTIME_NAMESPACE",
+                      "valueFrom": {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.namespace"
+                        }
+                      }
+                    },
+                    {
+                      "name": "GOMEMLIMIT",
+                      "valueFrom": {
+                        "resourceFieldRef": {
+                          "containerName": "manager",
+                          "divisor": "0",
+                          "resource": "limits.memory"
+                        }
+                      }
+                    }
+                  ],
+                  "image": "ghcr.io/fluxcd/helm-controller:v1.6.3",
+                  "imagePullPolicy": "IfNotPresent",
+                  "livenessProbe": {
+                    "failureThreshold": 3,
+                    "httpGet": {
+                      "path": "/healthz",
+                      "port": "healthz",
+                      "scheme": "HTTP"
+                    },
+                    "periodSeconds": 10,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 1
+                  },
+                  "name": "manager",
+                  "ports": [
+                    {
+                      "containerPort": 8080,
+                      "name": "http-prom",
+                      "protocol": "TCP"
+                    },
+                    {
+                      "containerPort": 9440,
+                      "name": "healthz",
+                      "protocol": "TCP"
+                    }
+                  ],
+                  "readinessProbe": {
+                    "failureThreshold": 3,
+                    "httpGet": {
+                      "path": "/readyz",
+                      "port": "healthz",
+                      "scheme": "HTTP"
+                    },
+                    "periodSeconds": 10,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 1
+                  },
+                  "resources": {
+                    "limits": {
+                      "cpu": "1",
+                      "memory": "1Gi"
+                    },
+                    "requests": {
+                      "cpu": "100m",
+                      "memory": "64Mi"
+                    }
+                  },
+                  "securityContext": {
+                    "allowPrivilegeEscalation": false,
+                    "capabilities": {
+                      "drop": [
+                        "ALL"
+                      ]
+                    },
+                    "readOnlyRootFilesystem": true,
+                    "runAsNonRoot": true,
+                    "seccompProfile": {
+                      "type": "RuntimeDefault"
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File",
+                  "volumeMounts": [
+                    {
+                      "mountPath": "/tmp",
+                      "name": "temp"
+                    }
+                  ]
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "priorityClassName": "system-cluster-critical",
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {
+                "fsGroup": 1337
+              },
+              "serviceAccount": "helm-controller",
+              "serviceAccountName": "helm-controller",
+              "terminationGracePeriodSeconds": 600,
+              "volumes": [
+                {
+                  "emptyDir": {},
+                  "name": "temp"
+                }
+              ]
+            }
+          }
+        },
+        "status": {
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-08-07T17:56:44Z",
+              "lastUpdateTime": "2026-08-07T17:56:44Z",
+              "message": "Deployment has minimum availability.",
+              "reason": "MinimumReplicasAvailable",
+              "status": "True",
+              "type": "Available"
+            },
+            {
+              "lastTransitionTime": "2026-08-07T17:56:44Z",
+              "lastUpdateTime": "2026-08-07T17:56:44Z",
+              "message": "ReplicaSet \"helm-controller-6fdc5d4c7b\" has successfully progressed.",
+              "reason": "NewReplicaSetAvailable",
+              "status": "True",
+              "type": "Progressing"
+            }
+          ],
+          "observedGeneration": 2,
+          "terminatingReplicas": 0
+        }
+      },
+      {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/revision": "1",
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"labels\":{\"app.kubernetes.io/component\":\"image-automation-controller\",\"app.kubernetes.io/instance\":\"flux-system\",\"app.kubernetes.io/part-of\":\"flux\",\"control-plane\":\"controller\"},\"name\":\"image-automation-controller\",\"namespace\":\"flux-system\"},\"spec\":{\"replicas\":1,\"selector\":{\"matchLabels\":{\"app\":\"image-automation-controller\"}},\"template\":{\"metadata\":{\"annotations\":{\"prometheus.io/port\":\"8080\",\"prometheus.io/scrape\":\"true\"},\"labels\":{\"app\":\"image-automation-controller\",\"app.kubernetes.io/component\":\"image-automation-controller\",\"app.kubernetes.io/instance\":\"flux-system\",\"app.kubernetes.io/part-of\":\"flux\"}},\"spec\":{\"containers\":[{\"args\":[\"--events-addr=http://notification-controller.flux-system.svc.cluster.local./\",\"--watch-all-namespaces\",\"--log-level=info\",\"--log-encoding=json\",\"--enable-leader-election\"],\"env\":[{\"name\":\"RUNTIME_NAMESPACE\",\"valueFrom\":{\"fieldRef\":{\"fieldPath\":\"metadata.namespace\"}}},{\"name\":\"GOMEMLIMIT\",\"valueFrom\":{\"resourceFieldRef\":{\"containerName\":\"manager\",\"resource\":\"limits.memory\"}}}],\"image\":\"ghcr.io/fluxcd/image-automation-controller:v1.2.4\",\"imagePullPolicy\":\"IfNotPresent\",\"livenessProbe\":{\"httpGet\":{\"path\":\"/healthz\",\"port\":\"healthz\"}},\"name\":\"manager\",\"ports\":[{\"containerPort\":8080,\"name\":\"http-prom\",\"protocol\":\"TCP\"},{\"containerPort\":9440,\"name\":\"healthz\",\"protocol\":\"TCP\"}],\"readinessProbe\":{\"httpGet\":{\"path\":\"/readyz\",\"port\":\"healthz\"}},\"resources\":{\"limits\":{\"cpu\":\"1000m\",\"memory\":\"1Gi\"},\"requests\":{\"cpu\":\"100m\",\"memory\":\"64Mi\"}},\"securityContext\":{\"allowPrivilegeEscalation\":false,\"capabilities\":{\"drop\":[\"ALL\"]},\"readOnlyRootFilesystem\":true,\"runAsNonRoot\":true,\"seccompProfile\":{\"type\":\"RuntimeDefault\"}},\"volumeMounts\":[{\"mountPath\":\"/tmp\",\"name\":\"temp\"}]}],\"securityContext\":{\"fsGroup\":1337},\"serviceAccountName\":\"image-automation-controller\",\"terminationGracePeriodSeconds\":10,\"volumes\":[{\"emptyDir\":{},\"name\":\"temp\"}]}}}}\n"
+          },
+          "creationTimestamp": "2026-08-07T17:56:44Z",
+          "generation": 2,
+          "labels": {
+            "app.kubernetes.io/component": "image-automation-controller",
+            "app.kubernetes.io/instance": "flux-system",
+            "app.kubernetes.io/part-of": "flux",
+            "control-plane": "controller"
+          },
+          "name": "image-automation-controller",
+          "namespace": "flux-system",
+          "resourceVersion": "807",
+          "uid": "7b0a0811-6b22-465e-a7bd-19bc05356e22"
+        },
+        "spec": {
+          "progressDeadlineSeconds": 600,
+          "replicas": 0,
+          "revisionHistoryLimit": 10,
+          "selector": {
+            "matchLabels": {
+              "app": "image-automation-controller"
+            }
+          },
+          "strategy": {
+            "rollingUpdate": {
+              "maxSurge": "25%",
+              "maxUnavailable": "25%"
+            },
+            "type": "RollingUpdate"
+          },
+          "template": {
+            "metadata": {
+              "annotations": {
+                "prometheus.io/port": "8080",
+                "prometheus.io/scrape": "true"
+              },
+              "labels": {
+                "app": "image-automation-controller",
+                "app.kubernetes.io/component": "image-automation-controller",
+                "app.kubernetes.io/instance": "flux-system",
+                "app.kubernetes.io/part-of": "flux"
+              }
+            },
+            "spec": {
+              "containers": [
+                {
+                  "args": [
+                    "--events-addr=http://notification-controller.flux-system.svc.cluster.local./",
+                    "--watch-all-namespaces",
+                    "--log-level=info",
+                    "--log-encoding=json",
+                    "--enable-leader-election"
+                  ],
+                  "env": [
+                    {
+                      "name": "RUNTIME_NAMESPACE",
+                      "valueFrom": {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.namespace"
+                        }
+                      }
+                    },
+                    {
+                      "name": "GOMEMLIMIT",
+                      "valueFrom": {
+                        "resourceFieldRef": {
+                          "containerName": "manager",
+                          "divisor": "0",
+                          "resource": "limits.memory"
+                        }
+                      }
+                    }
+                  ],
+                  "image": "ghcr.io/fluxcd/image-automation-controller:v1.2.4",
+                  "imagePullPolicy": "IfNotPresent",
+                  "livenessProbe": {
+                    "failureThreshold": 3,
+                    "httpGet": {
+                      "path": "/healthz",
+                      "port": "healthz",
+                      "scheme": "HTTP"
+                    },
+                    "periodSeconds": 10,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 1
+                  },
+                  "name": "manager",
+                  "ports": [
+                    {
+                      "containerPort": 8080,
+                      "name": "http-prom",
+                      "protocol": "TCP"
+                    },
+                    {
+                      "containerPort": 9440,
+                      "name": "healthz",
+                      "protocol": "TCP"
+                    }
+                  ],
+                  "readinessProbe": {
+                    "failureThreshold": 3,
+                    "httpGet": {
+                      "path": "/readyz",
+                      "port": "healthz",
+                      "scheme": "HTTP"
+                    },
+                    "periodSeconds": 10,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 1
+                  },
+                  "resources": {
+                    "limits": {
+                      "cpu": "1",
+                      "memory": "1Gi"
+                    },
+                    "requests": {
+                      "cpu": "100m",
+                      "memory": "64Mi"
+                    }
+                  },
+                  "securityContext": {
+                    "allowPrivilegeEscalation": false,
+                    "capabilities": {
+                      "drop": [
+                        "ALL"
+                      ]
+                    },
+                    "readOnlyRootFilesystem": true,
+                    "runAsNonRoot": true,
+                    "seccompProfile": {
+                      "type": "RuntimeDefault"
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File",
+                  "volumeMounts": [
+                    {
+                      "mountPath": "/tmp",
+                      "name": "temp"
+                    }
+                  ]
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {
+                "fsGroup": 1337
+              },
+              "serviceAccount": "image-automation-controller",
+              "serviceAccountName": "image-automation-controller",
+              "terminationGracePeriodSeconds": 10,
+              "volumes": [
+                {
+                  "emptyDir": {},
+                  "name": "temp"
+                }
+              ]
+            }
+          }
+        },
+        "status": {
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-08-07T17:56:44Z",
+              "lastUpdateTime": "2026-08-07T17:56:44Z",
+              "message": "Deployment has minimum availability.",
+              "reason": "MinimumReplicasAvailable",
+              "status": "True",
+              "type": "Available"
+            },
+            {
+              "lastTransitionTime": "2026-08-07T17:56:44Z",
+              "lastUpdateTime": "2026-08-07T17:56:44Z",
+              "message": "ReplicaSet \"image-automation-controller-6c48cc7cb5\" has successfully progressed.",
+              "reason": "NewReplicaSetAvailable",
+              "status": "True",
+              "type": "Progressing"
+            }
+          ],
+          "observedGeneration": 2,
+          "terminatingReplicas": 0
+        }
+      },
+      {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/revision": "1",
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"labels\":{\"app.kubernetes.io/component\":\"image-reflector-controller\",\"app.kubernetes.io/instance\":\"flux-system\",\"app.kubernetes.io/part-of\":\"flux\",\"control-plane\":\"controller\"},\"name\":\"image-reflector-controller\",\"namespace\":\"flux-system\"},\"spec\":{\"replicas\":1,\"selector\":{\"matchLabels\":{\"app\":\"image-reflector-controller\"}},\"template\":{\"metadata\":{\"annotations\":{\"prometheus.io/port\":\"8080\",\"prometheus.io/scrape\":\"true\"},\"labels\":{\"app\":\"image-reflector-controller\",\"app.kubernetes.io/component\":\"image-reflector-controller\",\"app.kubernetes.io/instance\":\"flux-system\",\"app.kubernetes.io/part-of\":\"flux\"}},\"spec\":{\"containers\":[{\"args\":[\"--events-addr=http://notification-controller.flux-system.svc.cluster.local./\",\"--watch-all-namespaces\",\"--log-level=info\",\"--log-encoding=json\",\"--enable-leader-election\"],\"env\":[{\"name\":\"RUNTIME_NAMESPACE\",\"valueFrom\":{\"fieldRef\":{\"fieldPath\":\"metadata.namespace\"}}},{\"name\":\"GOMEMLIMIT\",\"valueFrom\":{\"resourceFieldRef\":{\"containerName\":\"manager\",\"resource\":\"limits.memory\"}}}],\"image\":\"ghcr.io/fluxcd/image-reflector-controller:v1.2.4\",\"imagePullPolicy\":\"IfNotPresent\",\"livenessProbe\":{\"httpGet\":{\"path\":\"/healthz\",\"port\":\"healthz\"}},\"name\":\"manager\",\"ports\":[{\"containerPort\":8080,\"name\":\"http-prom\",\"protocol\":\"TCP\"},{\"containerPort\":9440,\"name\":\"healthz\",\"protocol\":\"TCP\"}],\"readinessProbe\":{\"httpGet\":{\"path\":\"/readyz\",\"port\":\"healthz\"}},\"resources\":{\"limits\":{\"cpu\":\"1000m\",\"memory\":\"1Gi\"},\"requests\":{\"cpu\":\"100m\",\"memory\":\"64Mi\"}},\"securityContext\":{\"allowPrivilegeEscalation\":false,\"capabilities\":{\"drop\":[\"ALL\"]},\"readOnlyRootFilesystem\":true,\"runAsNonRoot\":true,\"seccompProfile\":{\"type\":\"RuntimeDefault\"}},\"volumeMounts\":[{\"mountPath\":\"/tmp\",\"name\":\"temp\"},{\"mountPath\":\"/data\",\"name\":\"data\"}]}],\"securityContext\":{\"fsGroup\":1337},\"serviceAccountName\":\"image-reflector-controller\",\"terminationGracePeriodSeconds\":10,\"volumes\":[{\"emptyDir\":{},\"name\":\"temp\"},{\"emptyDir\":{},\"name\":\"data\"}]}}}}\n"
+          },
+          "creationTimestamp": "2026-08-07T17:56:44Z",
+          "generation": 2,
+          "labels": {
+            "app.kubernetes.io/component": "image-reflector-controller",
+            "app.kubernetes.io/instance": "flux-system",
+            "app.kubernetes.io/part-of": "flux",
+            "control-plane": "controller"
+          },
+          "name": "image-reflector-controller",
+          "namespace": "flux-system",
+          "resourceVersion": "771",
+          "uid": "4f216e05-2bd8-4fb2-b628-ac88fca925e3"
+        },
+        "spec": {
+          "progressDeadlineSeconds": 600,
+          "replicas": 0,
+          "revisionHistoryLimit": 10,
+          "selector": {
+            "matchLabels": {
+              "app": "image-reflector-controller"
+            }
+          },
+          "strategy": {
+            "rollingUpdate": {
+              "maxSurge": "25%",
+              "maxUnavailable": "25%"
+            },
+            "type": "RollingUpdate"
+          },
+          "template": {
+            "metadata": {
+              "annotations": {
+                "prometheus.io/port": "8080",
+                "prometheus.io/scrape": "true"
+              },
+              "labels": {
+                "app": "image-reflector-controller",
+                "app.kubernetes.io/component": "image-reflector-controller",
+                "app.kubernetes.io/instance": "flux-system",
+                "app.kubernetes.io/part-of": "flux"
+              }
+            },
+            "spec": {
+              "containers": [
+                {
+                  "args": [
+                    "--events-addr=http://notification-controller.flux-system.svc.cluster.local./",
+                    "--watch-all-namespaces",
+                    "--log-level=info",
+                    "--log-encoding=json",
+                    "--enable-leader-election"
+                  ],
+                  "env": [
+                    {
+                      "name": "RUNTIME_NAMESPACE",
+                      "valueFrom": {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.namespace"
+                        }
+                      }
+                    },
+                    {
+                      "name": "GOMEMLIMIT",
+                      "valueFrom": {
+                        "resourceFieldRef": {
+                          "containerName": "manager",
+                          "divisor": "0",
+                          "resource": "limits.memory"
+                        }
+                      }
+                    }
+                  ],
+                  "image": "ghcr.io/fluxcd/image-reflector-controller:v1.2.4",
+                  "imagePullPolicy": "IfNotPresent",
+                  "livenessProbe": {
+                    "failureThreshold": 3,
+                    "httpGet": {
+                      "path": "/healthz",
+                      "port": "healthz",
+                      "scheme": "HTTP"
+                    },
+                    "periodSeconds": 10,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 1
+                  },
+                  "name": "manager",
+                  "ports": [
+                    {
+                      "containerPort": 8080,
+                      "name": "http-prom",
+                      "protocol": "TCP"
+                    },
+                    {
+                      "containerPort": 9440,
+                      "name": "healthz",
+                      "protocol": "TCP"
+                    }
+                  ],
+                  "readinessProbe": {
+                    "failureThreshold": 3,
+                    "httpGet": {
+                      "path": "/readyz",
+                      "port": "healthz",
+                      "scheme": "HTTP"
+                    },
+                    "periodSeconds": 10,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 1
+                  },
+                  "resources": {
+                    "limits": {
+                      "cpu": "1",
+                      "memory": "1Gi"
+                    },
+                    "requests": {
+                      "cpu": "100m",
+                      "memory": "64Mi"
+                    }
+                  },
+                  "securityContext": {
+                    "allowPrivilegeEscalation": false,
+                    "capabilities": {
+                      "drop": [
+                        "ALL"
+                      ]
+                    },
+                    "readOnlyRootFilesystem": true,
+                    "runAsNonRoot": true,
+                    "seccompProfile": {
+                      "type": "RuntimeDefault"
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File",
+                  "volumeMounts": [
+                    {
+                      "mountPath": "/tmp",
+                      "name": "temp"
+                    },
+                    {
+                      "mountPath": "/data",
+                      "name": "data"
+                    }
+                  ]
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {
+                "fsGroup": 1337
+              },
+              "serviceAccount": "image-reflector-controller",
+              "serviceAccountName": "image-reflector-controller",
+              "terminationGracePeriodSeconds": 10,
+              "volumes": [
+                {
+                  "emptyDir": {},
+                  "name": "temp"
+                },
+                {
+                  "emptyDir": {},
+                  "name": "data"
+                }
+              ]
+            }
+          }
+        },
+        "status": {
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-08-07T17:56:44Z",
+              "lastUpdateTime": "2026-08-07T17:56:44Z",
+              "message": "Deployment has minimum availability.",
+              "reason": "MinimumReplicasAvailable",
+              "status": "True",
+              "type": "Available"
+            },
+            {
+              "lastTransitionTime": "2026-08-07T17:56:44Z",
+              "lastUpdateTime": "2026-08-07T17:56:45Z",
+              "message": "ReplicaSet \"image-reflector-controller-f7696f9ff\" has successfully progressed.",
+              "reason": "NewReplicaSetAvailable",
+              "status": "True",
+              "type": "Progressing"
+            }
+          ],
+          "observedGeneration": 2,
+          "terminatingReplicas": 0
+        }
+      },
+      {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/revision": "1",
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"labels\":{\"app.kubernetes.io/component\":\"kustomize-controller\",\"app.kubernetes.io/instance\":\"flux-system\",\"app.kubernetes.io/part-of\":\"flux\",\"control-plane\":\"controller\"},\"name\":\"kustomize-controller\",\"namespace\":\"flux-system\"},\"spec\":{\"replicas\":1,\"selector\":{\"matchLabels\":{\"app\":\"kustomize-controller\"}},\"template\":{\"metadata\":{\"annotations\":{\"prometheus.io/port\":\"8080\",\"prometheus.io/scrape\":\"true\"},\"labels\":{\"app\":\"kustomize-controller\",\"app.kubernetes.io/component\":\"kustomize-controller\",\"app.kubernetes.io/instance\":\"flux-system\",\"app.kubernetes.io/part-of\":\"flux\"}},\"spec\":{\"containers\":[{\"args\":[\"--events-addr=http://notification-controller.flux-system.svc.cluster.local./\",\"--watch-all-namespaces\",\"--log-level=info\",\"--log-encoding=json\",\"--enable-leader-election\"],\"env\":[{\"name\":\"RUNTIME_NAMESPACE\",\"valueFrom\":{\"fieldRef\":{\"fieldPath\":\"metadata.namespace\"}}},{\"name\":\"GOMEMLIMIT\",\"valueFrom\":{\"resourceFieldRef\":{\"containerName\":\"manager\",\"resource\":\"limits.memory\"}}}],\"image\":\"ghcr.io/fluxcd/kustomize-controller:v1.9.4\",\"imagePullPolicy\":\"IfNotPresent\",\"livenessProbe\":{\"httpGet\":{\"path\":\"/healthz\",\"port\":\"healthz\"}},\"name\":\"manager\",\"ports\":[{\"containerPort\":8080,\"name\":\"http-prom\",\"protocol\":\"TCP\"},{\"containerPort\":9440,\"name\":\"healthz\",\"protocol\":\"TCP\"}],\"readinessProbe\":{\"httpGet\":{\"path\":\"/readyz\",\"port\":\"healthz\"}},\"resources\":{\"limits\":{\"cpu\":\"1000m\",\"memory\":\"1Gi\"},\"requests\":{\"cpu\":\"100m\",\"memory\":\"64Mi\"}},\"securityContext\":{\"allowPrivilegeEscalation\":false,\"capabilities\":{\"drop\":[\"ALL\"]},\"readOnlyRootFilesystem\":true,\"runAsNonRoot\":true,\"seccompProfile\":{\"type\":\"RuntimeDefault\"}},\"volumeMounts\":[{\"mountPath\":\"/tmp\",\"name\":\"temp\"}]}],\"priorityClassName\":\"system-cluster-critical\",\"securityContext\":{\"fsGroup\":1337},\"serviceAccountName\":\"kustomize-controller\",\"terminationGracePeriodSeconds\":60,\"volumes\":[{\"emptyDir\":{},\"name\":\"temp\"}]}}}}\n"
+          },
+          "creationTimestamp": "2026-08-07T17:56:44Z",
+          "generation": 1,
+          "labels": {
+            "app.kubernetes.io/component": "kustomize-controller",
+            "app.kubernetes.io/instance": "flux-system",
+            "app.kubernetes.io/part-of": "flux",
+            "control-plane": "controller"
+          },
+          "name": "kustomize-controller",
+          "namespace": "flux-system",
+          "resourceVersion": "751",
+          "uid": "c24094ec-7c93-432b-989a-ea833a2cf8c5"
+        },
+        "spec": {
+          "progressDeadlineSeconds": 600,
+          "replicas": 1,
+          "revisionHistoryLimit": 10,
+          "selector": {
+            "matchLabels": {
+              "app": "kustomize-controller"
+            }
+          },
+          "strategy": {
+            "rollingUpdate": {
+              "maxSurge": "25%",
+              "maxUnavailable": "25%"
+            },
+            "type": "RollingUpdate"
+          },
+          "template": {
+            "metadata": {
+              "annotations": {
+                "prometheus.io/port": "8080",
+                "prometheus.io/scrape": "true"
+              },
+              "labels": {
+                "app": "kustomize-controller",
+                "app.kubernetes.io/component": "kustomize-controller",
+                "app.kubernetes.io/instance": "flux-system",
+                "app.kubernetes.io/part-of": "flux"
+              }
+            },
+            "spec": {
+              "containers": [
+                {
+                  "args": [
+                    "--events-addr=http://notification-controller.flux-system.svc.cluster.local./",
+                    "--watch-all-namespaces",
+                    "--log-level=info",
+                    "--log-encoding=json",
+                    "--enable-leader-election"
+                  ],
+                  "env": [
+                    {
+                      "name": "RUNTIME_NAMESPACE",
+                      "valueFrom": {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.namespace"
+                        }
+                      }
+                    },
+                    {
+                      "name": "GOMEMLIMIT",
+                      "valueFrom": {
+                        "resourceFieldRef": {
+                          "containerName": "manager",
+                          "divisor": "0",
+                          "resource": "limits.memory"
+                        }
+                      }
+                    }
+                  ],
+                  "image": "ghcr.io/fluxcd/kustomize-controller:v1.9.4",
+                  "imagePullPolicy": "IfNotPresent",
+                  "livenessProbe": {
+                    "failureThreshold": 3,
+                    "httpGet": {
+                      "path": "/healthz",
+                      "port": "healthz",
+                      "scheme": "HTTP"
+                    },
+                    "periodSeconds": 10,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 1
+                  },
+                  "name": "manager",
+                  "ports": [
+                    {
+                      "containerPort": 8080,
+                      "name": "http-prom",
+                      "protocol": "TCP"
+                    },
+                    {
+                      "containerPort": 9440,
+                      "name": "healthz",
+                      "protocol": "TCP"
+                    }
+                  ],
+                  "readinessProbe": {
+                    "failureThreshold": 3,
+                    "httpGet": {
+                      "path": "/readyz",
+                      "port": "healthz",
+                      "scheme": "HTTP"
+                    },
+                    "periodSeconds": 10,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 1
+                  },
+                  "resources": {
+                    "limits": {
+                      "cpu": "1",
+                      "memory": "1Gi"
+                    },
+                    "requests": {
+                      "cpu": "100m",
+                      "memory": "64Mi"
+                    }
+                  },
+                  "securityContext": {
+                    "allowPrivilegeEscalation": false,
+                    "capabilities": {
+                      "drop": [
+                        "ALL"
+                      ]
+                    },
+                    "readOnlyRootFilesystem": true,
+                    "runAsNonRoot": true,
+                    "seccompProfile": {
+                      "type": "RuntimeDefault"
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File",
+                  "volumeMounts": [
+                    {
+                      "mountPath": "/tmp",
+                      "name": "temp"
+                    }
+                  ]
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "priorityClassName": "system-cluster-critical",
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {
+                "fsGroup": 1337
+              },
+              "serviceAccount": "kustomize-controller",
+              "serviceAccountName": "kustomize-controller",
+              "terminationGracePeriodSeconds": 60,
+              "volumes": [
+                {
+                  "emptyDir": {},
+                  "name": "temp"
+                }
+              ]
+            }
+          }
+        },
+        "status": {
+          "availableReplicas": 1,
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-08-07T17:56:45Z",
+              "lastUpdateTime": "2026-08-07T17:56:45Z",
+              "message": "Deployment has minimum availability.",
+              "reason": "MinimumReplicasAvailable",
+              "status": "True",
+              "type": "Available"
+            },
+            {
+              "lastTransitionTime": "2026-08-07T17:56:44Z",
+              "lastUpdateTime": "2026-08-07T17:56:45Z",
+              "message": "ReplicaSet \"kustomize-controller-5b5cdbf4bc\" has successfully progressed.",
+              "reason": "NewReplicaSetAvailable",
+              "status": "True",
+              "type": "Progressing"
+            }
+          ],
+          "observedGeneration": 1,
+          "readyReplicas": 1,
+          "replicas": 1,
+          "terminatingReplicas": 0,
+          "updatedReplicas": 1
+        }
+      },
+      {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/revision": "1",
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"labels\":{\"app.kubernetes.io/component\":\"notification-controller\",\"app.kubernetes.io/instance\":\"flux-system\",\"app.kubernetes.io/part-of\":\"flux\",\"control-plane\":\"controller\"},\"name\":\"notification-controller\",\"namespace\":\"flux-system\"},\"spec\":{\"replicas\":1,\"selector\":{\"matchLabels\":{\"app\":\"notification-controller\"}},\"template\":{\"metadata\":{\"annotations\":{\"prometheus.io/port\":\"8080\",\"prometheus.io/scrape\":\"true\"},\"labels\":{\"app\":\"notification-controller\",\"app.kubernetes.io/component\":\"notification-controller\",\"app.kubernetes.io/instance\":\"flux-system\",\"app.kubernetes.io/part-of\":\"flux\"}},\"spec\":{\"containers\":[{\"args\":[\"--watch-all-namespaces\",\"--log-level=info\",\"--log-encoding=json\",\"--enable-leader-election\"],\"env\":[{\"name\":\"RUNTIME_NAMESPACE\",\"valueFrom\":{\"fieldRef\":{\"fieldPath\":\"metadata.namespace\"}}},{\"name\":\"GOMEMLIMIT\",\"valueFrom\":{\"resourceFieldRef\":{\"containerName\":\"manager\",\"resource\":\"limits.memory\"}}}],\"image\":\"ghcr.io/fluxcd/notification-controller:v1.9.3\",\"imagePullPolicy\":\"IfNotPresent\",\"livenessProbe\":{\"httpGet\":{\"path\":\"/healthz\",\"port\":\"healthz\"}},\"name\":\"manager\",\"ports\":[{\"containerPort\":9090,\"name\":\"http\",\"protocol\":\"TCP\"},{\"containerPort\":9292,\"name\":\"http-webhook\",\"protocol\":\"TCP\"},{\"containerPort\":8080,\"name\":\"http-prom\",\"protocol\":\"TCP\"},{\"containerPort\":9440,\"name\":\"healthz\",\"protocol\":\"TCP\"}],\"readinessProbe\":{\"httpGet\":{\"path\":\"/readyz\",\"port\":\"healthz\"}},\"resources\":{\"limits\":{\"cpu\":\"1000m\",\"memory\":\"1Gi\"},\"requests\":{\"cpu\":\"100m\",\"memory\":\"64Mi\"}},\"securityContext\":{\"allowPrivilegeEscalation\":false,\"capabilities\":{\"drop\":[\"ALL\"]},\"readOnlyRootFilesystem\":true,\"runAsNonRoot\":true,\"seccompProfile\":{\"type\":\"RuntimeDefault\"}},\"volumeMounts\":[{\"mountPath\":\"/tmp\",\"name\":\"temp\"}]}],\"securityContext\":{\"fsGroup\":1337},\"serviceAccountName\":\"notification-controller\",\"terminationGracePeriodSeconds\":10,\"volumes\":[{\"emptyDir\":{},\"name\":\"temp\"}]}}}}\n"
+          },
+          "creationTimestamp": "2026-08-07T17:56:44Z",
+          "generation": 3,
+          "labels": {
+            "app.kubernetes.io/component": "notification-controller",
+            "app.kubernetes.io/instance": "flux-system",
+            "app.kubernetes.io/part-of": "flux",
+            "control-plane": "controller"
+          },
+          "name": "notification-controller",
+          "namespace": "flux-system",
+          "resourceVersion": "8488",
+          "uid": "903e6c86-5b11-4182-b7a2-f3f727629ae8"
+        },
+        "spec": {
+          "progressDeadlineSeconds": 600,
+          "replicas": 1,
+          "revisionHistoryLimit": 10,
+          "selector": {
+            "matchLabels": {
+              "app": "notification-controller"
+            }
+          },
+          "strategy": {
+            "rollingUpdate": {
+              "maxSurge": "25%",
+              "maxUnavailable": "25%"
+            },
+            "type": "RollingUpdate"
+          },
+          "template": {
+            "metadata": {
+              "annotations": {
+                "prometheus.io/port": "8080",
+                "prometheus.io/scrape": "true"
+              },
+              "labels": {
+                "app": "notification-controller",
+                "app.kubernetes.io/component": "notification-controller",
+                "app.kubernetes.io/instance": "flux-system",
+                "app.kubernetes.io/part-of": "flux"
+              }
+            },
+            "spec": {
+              "containers": [
+                {
+                  "args": [
+                    "--watch-all-namespaces",
+                    "--log-level=info",
+                    "--log-encoding=json",
+                    "--enable-leader-election"
+                  ],
+                  "env": [
+                    {
+                      "name": "RUNTIME_NAMESPACE",
+                      "valueFrom": {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.namespace"
+                        }
+                      }
+                    },
+                    {
+                      "name": "GOMEMLIMIT",
+                      "valueFrom": {
+                        "resourceFieldRef": {
+                          "containerName": "manager",
+                          "divisor": "0",
+                          "resource": "limits.memory"
+                        }
+                      }
+                    }
+                  ],
+                  "image": "ghcr.io/fluxcd/notification-controller:v1.9.3",
+                  "imagePullPolicy": "IfNotPresent",
+                  "livenessProbe": {
+                    "failureThreshold": 3,
+                    "httpGet": {
+                      "path": "/healthz",
+                      "port": "healthz",
+                      "scheme": "HTTP"
+                    },
+                    "periodSeconds": 10,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 1
+                  },
+                  "name": "manager",
+                  "ports": [
+                    {
+                      "containerPort": 9090,
+                      "name": "http",
+                      "protocol": "TCP"
+                    },
+                    {
+                      "containerPort": 9292,
+                      "name": "http-webhook",
+                      "protocol": "TCP"
+                    },
+                    {
+                      "containerPort": 8080,
+                      "name": "http-prom",
+                      "protocol": "TCP"
+                    },
+                    {
+                      "containerPort": 9440,
+                      "name": "healthz",
+                      "protocol": "TCP"
+                    }
+                  ],
+                  "readinessProbe": {
+                    "failureThreshold": 3,
+                    "httpGet": {
+                      "path": "/readyz",
+                      "port": "healthz",
+                      "scheme": "HTTP"
+                    },
+                    "periodSeconds": 10,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 1
+                  },
+                  "resources": {
+                    "limits": {
+                      "cpu": "1",
+                      "memory": "1Gi"
+                    },
+                    "requests": {
+                      "cpu": "100m",
+                      "memory": "64Mi"
+                    }
+                  },
+                  "securityContext": {
+                    "allowPrivilegeEscalation": false,
+                    "capabilities": {
+                      "drop": [
+                        "ALL"
+                      ]
+                    },
+                    "readOnlyRootFilesystem": true,
+                    "runAsNonRoot": true,
+                    "seccompProfile": {
+                      "type": "RuntimeDefault"
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File",
+                  "volumeMounts": [
+                    {
+                      "mountPath": "/tmp",
+                      "name": "temp"
+                    }
+                  ]
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {
+                "fsGroup": 1337
+              },
+              "serviceAccount": "notification-controller",
+              "serviceAccountName": "notification-controller",
+              "terminationGracePeriodSeconds": 10,
+              "volumes": [
+                {
+                  "emptyDir": {},
+                  "name": "temp"
+                }
+              ]
+            }
+          }
+        },
+        "status": {
+          "availableReplicas": 1,
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-08-07T17:56:44Z",
+              "lastUpdateTime": "2026-08-07T17:56:45Z",
+              "message": "ReplicaSet \"notification-controller-6db75b6b4b\" has successfully progressed.",
+              "reason": "NewReplicaSetAvailable",
+              "status": "True",
+              "type": "Progressing"
+            },
+            {
+              "lastTransitionTime": "2026-08-07T18:23:44Z",
+              "lastUpdateTime": "2026-08-07T18:23:44Z",
+              "message": "Deployment has minimum availability.",
+              "reason": "MinimumReplicasAvailable",
+              "status": "True",
+              "type": "Available"
+            }
+          ],
+          "observedGeneration": 3,
+          "readyReplicas": 1,
+          "replicas": 1,
+          "terminatingReplicas": 0,
+          "updatedReplicas": 1
+        }
+      },
+      {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/revision": "1",
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"labels\":{\"app.kubernetes.io/component\":\"source-controller\",\"app.kubernetes.io/instance\":\"flux-system\",\"app.kubernetes.io/part-of\":\"flux\",\"control-plane\":\"controller\"},\"name\":\"source-controller\",\"namespace\":\"flux-system\"},\"spec\":{\"replicas\":1,\"selector\":{\"matchLabels\":{\"app\":\"source-controller\"}},\"strategy\":{\"type\":\"Recreate\"},\"template\":{\"metadata\":{\"annotations\":{\"prometheus.io/port\":\"8080\",\"prometheus.io/scrape\":\"true\"},\"labels\":{\"app\":\"source-controller\",\"app.kubernetes.io/component\":\"source-controller\",\"app.kubernetes.io/instance\":\"flux-system\",\"app.kubernetes.io/part-of\":\"flux\"}},\"spec\":{\"containers\":[{\"args\":[\"--events-addr=http://notification-controller.flux-system.svc.cluster.local./\",\"--watch-all-namespaces\",\"--log-level=info\",\"--log-encoding=json\",\"--enable-leader-election\",\"--storage-path=/data\",\"--storage-adv-addr=source-controller.$(RUNTIME_NAMESPACE).svc.cluster.local.\"],\"env\":[{\"name\":\"RUNTIME_NAMESPACE\",\"valueFrom\":{\"fieldRef\":{\"fieldPath\":\"metadata.namespace\"}}},{\"name\":\"TUF_ROOT\",\"value\":\"/tmp/.sigstore\"},{\"name\":\"GOMEMLIMIT\",\"valueFrom\":{\"resourceFieldRef\":{\"containerName\":\"manager\",\"resource\":\"limits.memory\"}}}],\"image\":\"ghcr.io/fluxcd/source-controller:v1.9.4\",\"imagePullPolicy\":\"IfNotPresent\",\"livenessProbe\":{\"httpGet\":{\"path\":\"/healthz\",\"port\":\"healthz\"}},\"name\":\"manager\",\"ports\":[{\"containerPort\":9090,\"name\":\"http\",\"protocol\":\"TCP\"},{\"containerPort\":8080,\"name\":\"http-prom\",\"protocol\":\"TCP\"},{\"containerPort\":9440,\"name\":\"healthz\",\"protocol\":\"TCP\"}],\"readinessProbe\":{\"httpGet\":{\"path\":\"/\",\"port\":\"http\"}},\"resources\":{\"limits\":{\"cpu\":\"1000m\",\"memory\":\"1Gi\"},\"requests\":{\"cpu\":\"50m\",\"memory\":\"64Mi\"}},\"securityContext\":{\"allowPrivilegeEscalation\":false,\"capabilities\":{\"drop\":[\"ALL\"]},\"readOnlyRootFilesystem\":true,\"runAsNonRoot\":true,\"seccompProfile\":{\"type\":\"RuntimeDefault\"}},\"volumeMounts\":[{\"mountPath\":\"/data\",\"name\":\"data\"},{\"mountPath\":\"/tmp\",\"name\":\"tmp\"}]}],\"priorityClassName\":\"system-cluster-critical\",\"securityContext\":{\"fsGroup\":1337},\"serviceAccountName\":\"source-controller\",\"terminationGracePeriodSeconds\":10,\"volumes\":[{\"emptyDir\":{},\"name\":\"data\"},{\"emptyDir\":{},\"name\":\"tmp\"}]}}}}\n"
+          },
+          "creationTimestamp": "2026-08-07T17:56:44Z",
+          "generation": 1,
+          "labels": {
+            "app.kubernetes.io/component": "source-controller",
+            "app.kubernetes.io/instance": "flux-system",
+            "app.kubernetes.io/part-of": "flux",
+            "control-plane": "controller"
+          },
+          "name": "source-controller",
+          "namespace": "flux-system",
+          "resourceVersion": "812",
+          "uid": "5ea9bf40-fe1a-4005-bcea-2dc63f4a5350"
+        },
+        "spec": {
+          "progressDeadlineSeconds": 600,
+          "replicas": 1,
+          "revisionHistoryLimit": 10,
+          "selector": {
+            "matchLabels": {
+              "app": "source-controller"
+            }
+          },
+          "strategy": {
+            "type": "Recreate"
+          },
+          "template": {
+            "metadata": {
+              "annotations": {
+                "prometheus.io/port": "8080",
+                "prometheus.io/scrape": "true"
+              },
+              "labels": {
+                "app": "source-controller",
+                "app.kubernetes.io/component": "source-controller",
+                "app.kubernetes.io/instance": "flux-system",
+                "app.kubernetes.io/part-of": "flux"
+              }
+            },
+            "spec": {
+              "containers": [
+                {
+                  "args": [
+                    "--events-addr=http://notification-controller.flux-system.svc.cluster.local./",
+                    "--watch-all-namespaces",
+                    "--log-level=info",
+                    "--log-encoding=json",
+                    "--enable-leader-election",
+                    "--storage-path=/data",
+                    "--storage-adv-addr=source-controller.$(RUNTIME_NAMESPACE).svc.cluster.local."
+                  ],
+                  "env": [
+                    {
+                      "name": "RUNTIME_NAMESPACE",
+                      "valueFrom": {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.namespace"
+                        }
+                      }
+                    },
+                    {
+                      "name": "TUF_ROOT",
+                      "value": "/tmp/.sigstore"
+                    },
+                    {
+                      "name": "GOMEMLIMIT",
+                      "valueFrom": {
+                        "resourceFieldRef": {
+                          "containerName": "manager",
+                          "divisor": "0",
+                          "resource": "limits.memory"
+                        }
+                      }
+                    }
+                  ],
+                  "image": "ghcr.io/fluxcd/source-controller:v1.9.4",
+                  "imagePullPolicy": "IfNotPresent",
+                  "livenessProbe": {
+                    "failureThreshold": 3,
+                    "httpGet": {
+                      "path": "/healthz",
+                      "port": "healthz",
+                      "scheme": "HTTP"
+                    },
+                    "periodSeconds": 10,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 1
+                  },
+                  "name": "manager",
+                  "ports": [
+                    {
+                      "containerPort": 9090,
+                      "name": "http",
+                      "protocol": "TCP"
+                    },
+                    {
+                      "containerPort": 8080,
+                      "name": "http-prom",
+                      "protocol": "TCP"
+                    },
+                    {
+                      "containerPort": 9440,
+                      "name": "healthz",
+                      "protocol": "TCP"
+                    }
+                  ],
+                  "readinessProbe": {
+                    "failureThreshold": 3,
+                    "httpGet": {
+                      "path": "/",
+                      "port": "http",
+                      "scheme": "HTTP"
+                    },
+                    "periodSeconds": 10,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 1
+                  },
+                  "resources": {
+                    "limits": {
+                      "cpu": "1",
+                      "memory": "1Gi"
+                    },
+                    "requests": {
+                      "cpu": "50m",
+                      "memory": "64Mi"
+                    }
+                  },
+                  "securityContext": {
+                    "allowPrivilegeEscalation": false,
+                    "capabilities": {
+                      "drop": [
+                        "ALL"
+                      ]
+                    },
+                    "readOnlyRootFilesystem": true,
+                    "runAsNonRoot": true,
+                    "seccompProfile": {
+                      "type": "RuntimeDefault"
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File",
+                  "volumeMounts": [
+                    {
+                      "mountPath": "/data",
+                      "name": "data"
+                    },
+                    {
+                      "mountPath": "/tmp",
+                      "name": "tmp"
+                    }
+                  ]
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "priorityClassName": "system-cluster-critical",
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {
+                "fsGroup": 1337
+              },
+              "serviceAccount": "source-controller",
+              "serviceAccountName": "source-controller",
+              "terminationGracePeriodSeconds": 10,
+              "volumes": [
+                {
+                  "emptyDir": {},
+                  "name": "data"
+                },
+                {
+                  "emptyDir": {},
+                  "name": "tmp"
+                }
+              ]
+            }
+          }
+        },
+        "status": {
+          "availableReplicas": 1,
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-08-07T17:56:55Z",
+              "lastUpdateTime": "2026-08-07T17:56:55Z",
+              "message": "Deployment has minimum availability.",
+              "reason": "MinimumReplicasAvailable",
+              "status": "True",
+              "type": "Available"
+            },
+            {
+              "lastTransitionTime": "2026-08-07T17:56:44Z",
+              "lastUpdateTime": "2026-08-07T17:56:55Z",
+              "message": "ReplicaSet \"source-controller-76dbdf465\" has successfully progressed.",
+              "reason": "NewReplicaSetAvailable",
+              "status": "True",
+              "type": "Progressing"
+            }
+          ],
+          "observedGeneration": 1,
+          "readyReplicas": 1,
+          "replicas": 1,
+          "terminatingReplicas": 0,
+          "updatedReplicas": 1
+        }
+      },
+      {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/revision": "1",
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"labels\":{\"app.kubernetes.io/component\":\"source-watcher\",\"app.kubernetes.io/instance\":\"flux-system\",\"app.kubernetes.io/part-of\":\"flux\",\"control-plane\":\"controller\"},\"name\":\"source-watcher\",\"namespace\":\"flux-system\"},\"spec\":{\"replicas\":1,\"selector\":{\"matchLabels\":{\"app\":\"source-watcher\"}},\"strategy\":{\"type\":\"Recreate\"},\"template\":{\"metadata\":{\"annotations\":{\"prometheus.io/port\":\"8080\",\"prometheus.io/scrape\":\"true\"},\"labels\":{\"app\":\"source-watcher\",\"app.kubernetes.io/component\":\"source-watcher\",\"app.kubernetes.io/instance\":\"flux-system\",\"app.kubernetes.io/part-of\":\"flux\"}},\"spec\":{\"containers\":[{\"args\":[\"--events-addr=http://notification-controller.flux-system.svc.cluster.local./\",\"--watch-all-namespaces\",\"--log-level=info\",\"--log-encoding=json\",\"--enable-leader-election\",\"--storage-path=/data\",\"--storage-adv-addr=source-watcher.$(RUNTIME_NAMESPACE).svc.cluster.local.\"],\"env\":[{\"name\":\"RUNTIME_NAMESPACE\",\"valueFrom\":{\"fieldRef\":{\"fieldPath\":\"metadata.namespace\"}}},{\"name\":\"GOMEMLIMIT\",\"valueFrom\":{\"resourceFieldRef\":{\"containerName\":\"manager\",\"resource\":\"limits.memory\"}}}],\"image\":\"ghcr.io/fluxcd/source-watcher:v2.2.3\",\"imagePullPolicy\":\"IfNotPresent\",\"livenessProbe\":{\"httpGet\":{\"path\":\"/healthz\",\"port\":\"healthz\"}},\"name\":\"manager\",\"ports\":[{\"containerPort\":9090,\"name\":\"http\",\"protocol\":\"TCP\"},{\"containerPort\":8080,\"name\":\"http-prom\",\"protocol\":\"TCP\"},{\"containerPort\":9440,\"name\":\"healthz\",\"protocol\":\"TCP\"}],\"readinessProbe\":{\"httpGet\":{\"path\":\"/\",\"port\":\"http\"}},\"resources\":{\"limits\":{\"cpu\":\"1000m\",\"memory\":\"1Gi\"},\"requests\":{\"cpu\":\"50m\",\"memory\":\"64Mi\"}},\"securityContext\":{\"allowPrivilegeEscalation\":false,\"capabilities\":{\"drop\":[\"ALL\"]},\"readOnlyRootFilesystem\":true,\"runAsNonRoot\":true,\"seccompProfile\":{\"type\":\"RuntimeDefault\"}},\"volumeMounts\":[{\"mountPath\":\"/data\",\"name\":\"data\"},{\"mountPath\":\"/tmp\",\"name\":\"tmp\"}]}],\"priorityClassName\":\"system-cluster-critical\",\"securityContext\":{\"fsGroup\":1337},\"serviceAccountName\":\"source-watcher\",\"terminationGracePeriodSeconds\":10,\"volumes\":[{\"emptyDir\":{},\"name\":\"data\"},{\"emptyDir\":{},\"name\":\"tmp\"}]}}}}\n"
+          },
+          "creationTimestamp": "2026-08-07T17:56:44Z",
+          "generation": 2,
+          "labels": {
+            "app.kubernetes.io/component": "source-watcher",
+            "app.kubernetes.io/instance": "flux-system",
+            "app.kubernetes.io/part-of": "flux",
+            "control-plane": "controller"
+          },
+          "name": "source-watcher",
+          "namespace": "flux-system",
+          "resourceVersion": "1138",
+          "uid": "18e6e44d-f71a-48da-a491-5e2154a35861"
+        },
+        "spec": {
+          "progressDeadlineSeconds": 600,
+          "replicas": 0,
+          "revisionHistoryLimit": 10,
+          "selector": {
+            "matchLabels": {
+              "app": "source-watcher"
+            }
+          },
+          "strategy": {
+            "type": "Recreate"
+          },
+          "template": {
+            "metadata": {
+              "annotations": {
+                "prometheus.io/port": "8080",
+                "prometheus.io/scrape": "true"
+              },
+              "labels": {
+                "app": "source-watcher",
+                "app.kubernetes.io/component": "source-watcher",
+                "app.kubernetes.io/instance": "flux-system",
+                "app.kubernetes.io/part-of": "flux"
+              }
+            },
+            "spec": {
+              "containers": [
+                {
+                  "args": [
+                    "--events-addr=http://notification-controller.flux-system.svc.cluster.local./",
+                    "--watch-all-namespaces",
+                    "--log-level=info",
+                    "--log-encoding=json",
+                    "--enable-leader-election",
+                    "--storage-path=/data",
+                    "--storage-adv-addr=source-watcher.$(RUNTIME_NAMESPACE).svc.cluster.local."
+                  ],
+                  "env": [
+                    {
+                      "name": "RUNTIME_NAMESPACE",
+                      "valueFrom": {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.namespace"
+                        }
+                      }
+                    },
+                    {
+                      "name": "GOMEMLIMIT",
+                      "valueFrom": {
+                        "resourceFieldRef": {
+                          "containerName": "manager",
+                          "divisor": "0",
+                          "resource": "limits.memory"
+                        }
+                      }
+                    }
+                  ],
+                  "image": "ghcr.io/fluxcd/source-watcher:v2.2.3",
+                  "imagePullPolicy": "IfNotPresent",
+                  "livenessProbe": {
+                    "failureThreshold": 3,
+                    "httpGet": {
+                      "path": "/healthz",
+                      "port": "healthz",
+                      "scheme": "HTTP"
+                    },
+                    "periodSeconds": 10,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 1
+                  },
+                  "name": "manager",
+                  "ports": [
+                    {
+                      "containerPort": 9090,
+                      "name": "http",
+                      "protocol": "TCP"
+                    },
+                    {
+                      "containerPort": 8080,
+                      "name": "http-prom",
+                      "protocol": "TCP"
+                    },
+                    {
+                      "containerPort": 9440,
+                      "name": "healthz",
+                      "protocol": "TCP"
+                    }
+                  ],
+                  "readinessProbe": {
+                    "failureThreshold": 3,
+                    "httpGet": {
+                      "path": "/",
+                      "port": "http",
+                      "scheme": "HTTP"
+                    },
+                    "periodSeconds": 10,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 1
+                  },
+                  "resources": {
+                    "limits": {
+                      "cpu": "1",
+                      "memory": "1Gi"
+                    },
+                    "requests": {
+                      "cpu": "50m",
+                      "memory": "64Mi"
+                    }
+                  },
+                  "securityContext": {
+                    "allowPrivilegeEscalation": false,
+                    "capabilities": {
+                      "drop": [
+                        "ALL"
+                      ]
+                    },
+                    "readOnlyRootFilesystem": true,
+                    "runAsNonRoot": true,
+                    "seccompProfile": {
+                      "type": "RuntimeDefault"
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File",
+                  "volumeMounts": [
+                    {
+                      "mountPath": "/data",
+                      "name": "data"
+                    },
+                    {
+                      "mountPath": "/tmp",
+                      "name": "tmp"
+                    }
+                  ]
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "priorityClassName": "system-cluster-critical",
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {
+                "fsGroup": 1337
+              },
+              "serviceAccount": "source-watcher",
+              "serviceAccountName": "source-watcher",
+              "terminationGracePeriodSeconds": 10,
+              "volumes": [
+                {
+                  "emptyDir": {},
+                  "name": "data"
+                },
+                {
+                  "emptyDir": {},
+                  "name": "tmp"
+                }
+              ]
+            }
+          }
+        },
+        "status": {
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-08-07T17:56:45Z",
+              "lastUpdateTime": "2026-08-07T17:56:45Z",
+              "message": "Deployment has minimum availability.",
+              "reason": "MinimumReplicasAvailable",
+              "status": "True",
+              "type": "Available"
+            },
+            {
+              "lastTransitionTime": "2026-08-07T17:56:44Z",
+              "lastUpdateTime": "2026-08-07T17:56:45Z",
+              "message": "ReplicaSet \"source-watcher-74cbd94b76\" has successfully progressed.",
+              "reason": "NewReplicaSetAvailable",
+              "status": "True",
+              "type": "Progressing"
+            }
+          ],
+          "observedGeneration": 2,
+          "terminatingReplicas": 0
+        }
+      }
+    ],
+    "kind": "List",
+    "metadata": {
+      "resourceVersion": ""
+    }
+  },
+  "git_revisions": {
+    "baseline": "e70b66c648ff83eee791e3f5487c9ba11a7d66af",
+    "predecessor": "0d57cd910d0652b71347ac4d32e620f724339435"
+  },
+  "host": {
+    "docker_version": "{\"Client\":{\"Version\":\"29.1.3\",\"ApiVersion\":\"1.52\",\"DefaultAPIVersion\":\"1.52\",\"GitCommit\":\"f52814d\",\"GoVersion\":\"go1.25.5\",\"Os\":\"darwin\",\"Arch\":\"arm64\",\"BuildTime\":\"Fri Dec 12 14:48:46 2025\",\"Context\":\"desktop-linux\"},\"Server\":{\"Platform\":{\"Name\":\"Docker Desktop 4.57.0 (215387)\"},\"Version\":\"29.1.3\",\"ApiVersion\":\"1.52\",\"MinAPIVersion\":\"1.44\",\"Os\":\"linux\",\"Arch\":\"arm64\",\"Components\":[{\"Name\":\"Engine\",\"Version\":\"29.1.3\",\"Details\":{\"ApiVersion\":\"1.52\",\"Arch\":\"arm64\",\"BuildTime\":\"Fri Dec 12 14:50:40 2025\",\"Experimental\":\"false\",\"GitCommit\":\"fbf3ed2\",\"GoVersion\":\"go1.25.5\",\"KernelVersion\":\"6.12.54-linuxkit\",\"MinAPIVersion\":\"1.44\",\"Os\":\"linux\"}},{\"Name\":\"containerd\",\"Version\":\"v2.2.1\",\"Details\":{\"GitCommit\":\"dea7da592f5d1d2b7755e3a161be07f43fad8f75\"}},{\"Name\":\"runc\",\"Version\":\"1.3.4\",\"Details\":{\"GitCommit\":\"v1.3.4-0-gd6d73eb8\"}},{\"Name\":\"docker-init\",\"Version\":\"0.19.0\",\"Details\":{\"GitCommit\":\"de40ad0\"}}],\"GitCommit\":\"fbf3ed2\",\"GoVersion\":\"go1.25.5\",\"KernelVersion\":\"6.12.54-linuxkit\",\"BuildTime\":\"2025-12-12T14:50:40.000000000+00:00\"}}",
+    "platform": "Darwin Obedes-MacBook-Pro.local 25.5.0 Darwin Kernel Version 25.5.0: Mon Apr 27 20:41:15 PDT 2026; root:xnu-12377.121.6~2/RELEASE_ARM64_T6041 arm64",
+    "python": "3.11.9 (main, Aug  1 2025, 15:49:42) [Clang 14.0.3 (clang-1403.0.22.14.1)]"
+  },
+  "image_references": {
+    "alternate": "nginx@sha256:1eadbb07820339e8bbfed18c771691970baee292ec4ab2558f1453d26153e22d",
+    "baseline": "nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10",
+    "python": "python@sha256:229a2c5bfa27522db7815ea81f9bed70af17ccb9de9fc7ad142b1877b5830d36"
+  },
+  "kubernetes_version": {
+    "clientVersion": {
+      "buildDate": "2026-07-22T18:07:38Z",
+      "compiler": "gc",
+      "gitCommit": "0f29094e5b73085e3802ecc1298ecae13866bfe6",
+      "gitTreeState": "clean",
+      "gitVersion": "v1.36.3",
+      "goVersion": "go1.26.5",
+      "major": "1",
+      "minor": "36",
+      "platform": "darwin/arm64"
+    },
+    "kustomizeVersion": "v5.8.1",
+    "serverVersion": {
+      "buildDate": "2026-05-12T09:51:34Z",
+      "compiler": "gc",
+      "emulationMajor": "1",
+      "emulationMinor": "36",
+      "gitCommit": "756939600b9a7180fc2df6550a4585b638875e67",
+      "gitTreeState": "clean",
+      "gitVersion": "v1.36.1",
+      "goVersion": "go1.26.2",
+      "major": "1",
+      "minCompatibilityMajor": "1",
+      "minCompatibilityMinor": "35",
+      "minor": "36",
+      "platform": "linux/arm64"
+    }
+  },
+  "kyverno_deployments": {
+    "apiVersion": "v1",
+    "items": [
+      {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/revision": "1"
+          },
+          "creationTimestamp": "2026-08-07T17:56:57Z",
+          "generation": 1,
+          "labels": {
+            "app.kubernetes.io/component": "admission-controller",
+            "app.kubernetes.io/instance": "kyverno",
+            "app.kubernetes.io/name": "kyverno-admission-controller",
+            "app.kubernetes.io/part-of": "kyverno",
+            "app.kubernetes.io/version": "v1.18.2"
+          },
+          "name": "kyverno-admission-controller",
+          "namespace": "kyverno",
+          "resourceVersion": "1176",
+          "uid": "8b14366a-7f5e-413e-a3d3-a99def6d2795"
+        },
+        "spec": {
+          "progressDeadlineSeconds": 600,
+          "replicas": 1,
+          "revisionHistoryLimit": 10,
+          "selector": {
+            "matchLabels": {
+              "app.kubernetes.io/component": "admission-controller",
+              "app.kubernetes.io/instance": "kyverno",
+              "app.kubernetes.io/part-of": "kyverno"
+            }
+          },
+          "strategy": {
+            "rollingUpdate": {
+              "maxSurge": 1,
+              "maxUnavailable": "40%"
+            },
+            "type": "RollingUpdate"
+          },
+          "template": {
+            "metadata": {
+              "labels": {
+                "app.kubernetes.io/component": "admission-controller",
+                "app.kubernetes.io/instance": "kyverno",
+                "app.kubernetes.io/name": "kyverno-admission-controller",
+                "app.kubernetes.io/part-of": "kyverno",
+                "app.kubernetes.io/version": "v1.18.2"
+              }
+            },
+            "spec": {
+              "affinity": {
+                "podAntiAffinity": {
+                  "preferredDuringSchedulingIgnoredDuringExecution": [
+                    {
+                      "podAffinityTerm": {
+                        "labelSelector": {
+                          "matchExpressions": [
+                            {
+                              "key": "app.kubernetes.io/component",
+                              "operator": "In",
+                              "values": [
+                                "admission-controller"
+                              ]
+                            }
+                          ]
+                        },
+                        "topologyKey": "kubernetes.io/hostname"
+                      },
+                      "weight": 1
+                    }
+                  ]
+                }
+              },
+              "automountServiceAccountToken": true,
+              "containers": [
+                {
+                  "args": [
+                    "--caSecretName=kyverno-svc.kyverno.svc.kyverno-tls-ca",
+                    "--tlsSecretName=kyverno-svc.kyverno.svc.kyverno-tls-pair",
+                    "--tlsKeyAlgorithm=RSA",
+                    "--backgroundServiceAccountName=system:serviceaccount:kyverno:kyverno-background-controller",
+                    "--reportsServiceAccountName=system:serviceaccount:kyverno:kyverno-reports-controller",
+                    "--servicePort=443",
+                    "--webhookServerPort=9443",
+                    "--resyncPeriod=15m",
+                    "--crdWatcher=false",
+                    "--disableMetrics=false",
+                    "--otelConfig=prometheus",
+                    "--metricsPort=8000",
+                    "--admissionReports=true",
+                    "--maxAdmissionReports=1000",
+                    "--autoUpdateWebhooks=true",
+                    "--enableConfigMapCaching=true",
+                    "--controllerRuntimeMetricsAddress=:8080",
+                    "--enableDeferredLoading=true",
+                    "--dumpPayload=false",
+                    "--forceFailurePolicyIgnore=false",
+                    "--generateValidatingAdmissionPolicy=true",
+                    "--generateMutatingAdmissionPolicy=false",
+                    "--dumpPatches=false",
+                    "--maxAPICallResponseLength=2000000",
+                    "--apiCallTimeout=30s",
+                    "--loggingFormat=text",
+                    "--v=2",
+                    "--omitEvents=PolicyApplied,PolicySkipped",
+                    "--enablePolicyException=false",
+                    "--protectManagedResources=false",
+                    "--allowInsecureRegistry=false",
+                    "--registryCredentialHelpers=default,google,amazon,azure,github",
+                    "--enableReporting=validate,mutate,mutateExisting,imageVerify,generate"
+                  ],
+                  "env": [
+                    {
+                      "name": "INIT_CONFIG",
+                      "value": "kyverno"
+                    },
+                    {
+                      "name": "METRICS_CONFIG",
+                      "value": "kyverno-metrics"
+                    },
+                    {
+                      "name": "KYVERNO_NAMESPACE",
+                      "valueFrom": {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.namespace"
+                        }
+                      }
+                    },
+                    {
+                      "name": "KYVERNO_POD_NAME",
+                      "valueFrom": {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.name"
+                        }
+                      }
+                    },
+                    {
+                      "name": "KYVERNO_SERVICEACCOUNT_NAME",
+                      "value": "kyverno-admission-controller"
+                    },
+                    {
+                      "name": "KYVERNO_ROLE_NAME",
+                      "value": "kyverno:admission-controller"
+                    },
+                    {
+                      "name": "KYVERNO_SVC",
+                      "value": "kyverno-svc"
+                    },
+                    {
+                      "name": "TUF_ROOT",
+                      "value": "/.sigstore"
+                    },
+                    {
+                      "name": "KYVERNO_DEPLOYMENT",
+                      "value": "kyverno-admission-controller"
+                    }
+                  ],
+                  "image": "reg.kyverno.io/kyverno/kyverno:v1.18.2",
+                  "imagePullPolicy": "IfNotPresent",
+                  "livenessProbe": {
+                    "failureThreshold": 2,
+                    "httpGet": {
+                      "path": "/health/liveness",
+                      "port": 9443,
+                      "scheme": "HTTPS"
+                    },
+                    "initialDelaySeconds": 15,
+                    "periodSeconds": 30,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 5
+                  },
+                  "name": "kyverno",
+                  "ports": [
+                    {
+                      "containerPort": 9443,
+                      "name": "https",
+                      "protocol": "TCP"
+                    },
+                    {
+                      "containerPort": 8000,
+                      "name": "metrics-port",
+                      "protocol": "TCP"
+                    }
+                  ],
+                  "readinessProbe": {
+                    "failureThreshold": 6,
+                    "httpGet": {
+                      "path": "/health/readiness",
+                      "port": 9443,
+                      "scheme": "HTTPS"
+                    },
+                    "initialDelaySeconds": 5,
+                    "periodSeconds": 10,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 5
+                  },
+                  "resources": {
+                    "limits": {
+                      "memory": "384Mi"
+                    },
+                    "requests": {
+                      "cpu": "100m",
+                      "memory": "128Mi"
+                    }
+                  },
+                  "securityContext": {
+                    "allowPrivilegeEscalation": false,
+                    "capabilities": {
+                      "drop": [
+                        "ALL"
+                      ]
+                    },
+                    "privileged": false,
+                    "readOnlyRootFilesystem": true,
+                    "runAsGroup": 65534,
+                    "runAsNonRoot": true,
+                    "runAsUser": 65534,
+                    "seccompProfile": {
+                      "type": "RuntimeDefault"
+                    }
+                  },
+                  "startupProbe": {
+                    "failureThreshold": 20,
+                    "httpGet": {
+                      "path": "/health/liveness",
+                      "port": 9443,
+                      "scheme": "HTTPS"
+                    },
+                    "initialDelaySeconds": 2,
+                    "periodSeconds": 6,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 1
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File",
+                  "volumeMounts": [
+                    {
+                      "mountPath": "/.sigstore",
+                      "name": "sigstore"
+                    },
+                    {
+                      "mountPath": "/var/run/secrets/kyverno/apicall",
+                      "name": "apicall-token",
+                      "readOnly": true
+                    }
+                  ]
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "initContainers": [
+                {
+                  "args": [
+                    "--loggingFormat=text",
+                    "--v=2",
+                    "--openreportsEnabled=false"
+                  ],
+                  "env": [
+                    {
+                      "name": "KYVERNO_SERVICEACCOUNT_NAME",
+                      "value": "kyverno-admission-controller"
+                    },
+                    {
+                      "name": "KYVERNO_ROLE_NAME",
+                      "value": "kyverno:admission-controller"
+                    },
+                    {
+                      "name": "INIT_CONFIG",
+                      "value": "kyverno"
+                    },
+                    {
+                      "name": "METRICS_CONFIG",
+                      "value": "kyverno-metrics"
+                    },
+                    {
+                      "name": "KYVERNO_NAMESPACE",
+                      "valueFrom": {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.namespace"
+                        }
+                      }
+                    },
+                    {
+                      "name": "KYVERNO_POD_NAME",
+                      "valueFrom": {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.name"
+                        }
+                      }
+                    },
+                    {
+                      "name": "KYVERNO_DEPLOYMENT",
+                      "value": "kyverno-admission-controller"
+                    },
+                    {
+                      "name": "KYVERNO_SVC",
+                      "value": "kyverno-svc"
+                    }
+                  ],
+                  "image": "reg.kyverno.io/kyverno/kyvernopre:v1.18.2",
+                  "imagePullPolicy": "IfNotPresent",
+                  "name": "kyverno-pre",
+                  "resources": {
+                    "limits": {
+                      "cpu": "100m",
+                      "memory": "256Mi"
+                    },
+                    "requests": {
+                      "cpu": "10m",
+                      "memory": "64Mi"
+                    }
+                  },
+                  "securityContext": {
+                    "allowPrivilegeEscalation": false,
+                    "capabilities": {
+                      "drop": [
+                        "ALL"
+                      ]
+                    },
+                    "privileged": false,
+                    "readOnlyRootFilesystem": true,
+                    "runAsGroup": 65534,
+                    "runAsNonRoot": true,
+                    "runAsUser": 65534,
+                    "seccompProfile": {
+                      "type": "RuntimeDefault"
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File"
+                }
+              ],
+              "nodeSelector": {
+                "kubernetes.io/os": "linux"
+              },
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {},
+              "serviceAccount": "kyverno-admission-controller",
+              "serviceAccountName": "kyverno-admission-controller",
+              "terminationGracePeriodSeconds": 30,
+              "volumes": [
+                {
+                  "emptyDir": {},
+                  "name": "sigstore"
+                },
+                {
+                  "name": "apicall-token",
+                  "projected": {
+                    "defaultMode": 292,
+                    "sources": [
+                      {
+                        "serviceAccountToken": {
+                          "audience": "kyverno-svc.kyverno.io",
+                          "expirationSeconds": 3600,
+                          "path": "token"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "status": {
+          "availableReplicas": 1,
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-08-07T17:57:09Z",
+              "lastUpdateTime": "2026-08-07T17:57:09Z",
+              "message": "Deployment has minimum availability.",
+              "reason": "MinimumReplicasAvailable",
+              "status": "True",
+              "type": "Available"
+            },
+            {
+              "lastTransitionTime": "2026-08-07T17:56:57Z",
+              "lastUpdateTime": "2026-08-07T17:57:09Z",
+              "message": "ReplicaSet \"kyverno-admission-controller-656b594944\" has successfully progressed.",
+              "reason": "NewReplicaSetAvailable",
+              "status": "True",
+              "type": "Progressing"
+            }
+          ],
+          "observedGeneration": 1,
+          "readyReplicas": 1,
+          "replicas": 1,
+          "terminatingReplicas": 0,
+          "updatedReplicas": 1
+        }
+      },
+      {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/revision": "1"
+          },
+          "creationTimestamp": "2026-08-07T17:56:57Z",
+          "generation": 1,
+          "labels": {
+            "app.kubernetes.io/component": "background-controller",
+            "app.kubernetes.io/instance": "kyverno",
+            "app.kubernetes.io/name": "kyverno-background-controller",
+            "app.kubernetes.io/part-of": "kyverno",
+            "app.kubernetes.io/version": "v1.18.2"
+          },
+          "name": "kyverno-background-controller",
+          "namespace": "kyverno",
+          "resourceVersion": "1059",
+          "uid": "83c79c1b-71d3-4adb-823c-d008ef13ff6c"
+        },
+        "spec": {
+          "progressDeadlineSeconds": 600,
+          "replicas": 1,
+          "revisionHistoryLimit": 10,
+          "selector": {
+            "matchLabels": {
+              "app.kubernetes.io/component": "background-controller",
+              "app.kubernetes.io/instance": "kyverno",
+              "app.kubernetes.io/part-of": "kyverno"
+            }
+          },
+          "strategy": {
+            "rollingUpdate": {
+              "maxSurge": 1,
+              "maxUnavailable": "40%"
+            },
+            "type": "RollingUpdate"
+          },
+          "template": {
+            "metadata": {
+              "labels": {
+                "app.kubernetes.io/component": "background-controller",
+                "app.kubernetes.io/instance": "kyverno",
+                "app.kubernetes.io/name": "kyverno-background-controller",
+                "app.kubernetes.io/part-of": "kyverno",
+                "app.kubernetes.io/version": "v1.18.2"
+              }
+            },
+            "spec": {
+              "affinity": {
+                "podAntiAffinity": {
+                  "preferredDuringSchedulingIgnoredDuringExecution": [
+                    {
+                      "podAffinityTerm": {
+                        "labelSelector": {
+                          "matchExpressions": [
+                            {
+                              "key": "app.kubernetes.io/component",
+                              "operator": "In",
+                              "values": [
+                                "background-controller"
+                              ]
+                            }
+                          ]
+                        },
+                        "topologyKey": "kubernetes.io/hostname"
+                      },
+                      "weight": 1
+                    }
+                  ]
+                }
+              },
+              "automountServiceAccountToken": true,
+              "containers": [
+                {
+                  "args": [
+                    "--disableMetrics=false",
+                    "--otelConfig=prometheus",
+                    "--metricsPort=8000",
+                    "--resyncPeriod=15m",
+                    "--enableConfigMapCaching=true",
+                    "--controllerRuntimeMetricsAddress=:8080",
+                    "--enableDeferredLoading=true",
+                    "--maxAPICallResponseLength=2000000",
+                    "--apiCallTimeout=30s",
+                    "--loggingFormat=text",
+                    "--v=2",
+                    "--omitEvents=PolicyApplied,PolicySkipped",
+                    "--enablePolicyException=false",
+                    "--enableReporting=validate,mutate,mutateExisting,imageVerify,generate"
+                  ],
+                  "env": [
+                    {
+                      "name": "KYVERNO_SERVICEACCOUNT_NAME",
+                      "value": "kyverno-background-controller"
+                    },
+                    {
+                      "name": "KYVERNO_DEPLOYMENT",
+                      "value": "kyverno-background-controller"
+                    },
+                    {
+                      "name": "INIT_CONFIG",
+                      "value": "kyverno"
+                    },
+                    {
+                      "name": "METRICS_CONFIG",
+                      "value": "kyverno-metrics"
+                    },
+                    {
+                      "name": "KYVERNO_POD_NAME",
+                      "valueFrom": {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.name"
+                        }
+                      }
+                    },
+                    {
+                      "name": "KYVERNO_NAMESPACE",
+                      "valueFrom": {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.namespace"
+                        }
+                      }
+                    }
+                  ],
+                  "image": "reg.kyverno.io/kyverno/background-controller:v1.18.2",
+                  "imagePullPolicy": "IfNotPresent",
+                  "name": "controller",
+                  "ports": [
+                    {
+                      "containerPort": 9443,
+                      "name": "https",
+                      "protocol": "TCP"
+                    },
+                    {
+                      "containerPort": 8000,
+                      "name": "metrics",
+                      "protocol": "TCP"
+                    }
+                  ],
+                  "resources": {
+                    "limits": {
+                      "memory": "128Mi"
+                    },
+                    "requests": {
+                      "cpu": "100m",
+                      "memory": "64Mi"
+                    }
+                  },
+                  "securityContext": {
+                    "allowPrivilegeEscalation": false,
+                    "capabilities": {
+                      "drop": [
+                        "ALL"
+                      ]
+                    },
+                    "privileged": false,
+                    "readOnlyRootFilesystem": true,
+                    "runAsGroup": 65534,
+                    "runAsNonRoot": true,
+                    "runAsUser": 65534,
+                    "seccompProfile": {
+                      "type": "RuntimeDefault"
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File",
+                  "volumeMounts": [
+                    {
+                      "mountPath": "/var/run/secrets/kyverno/apicall",
+                      "name": "apicall-token",
+                      "readOnly": true
+                    }
+                  ]
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "nodeSelector": {
+                "kubernetes.io/os": "linux"
+              },
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {},
+              "serviceAccount": "kyverno-background-controller",
+              "serviceAccountName": "kyverno-background-controller",
+              "terminationGracePeriodSeconds": 30,
+              "volumes": [
+                {
+                  "name": "apicall-token",
+                  "projected": {
+                    "defaultMode": 292,
+                    "sources": [
+                      {
+                        "serviceAccountToken": {
+                          "audience": "kyverno-svc.kyverno.io",
+                          "expirationSeconds": 3600,
+                          "path": "token"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "status": {
+          "availableReplicas": 1,
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-08-07T17:56:57Z",
+              "lastUpdateTime": "2026-08-07T17:56:57Z",
+              "message": "Deployment has minimum availability.",
+              "reason": "MinimumReplicasAvailable",
+              "status": "True",
+              "type": "Available"
+            },
+            {
+              "lastTransitionTime": "2026-08-07T17:56:57Z",
+              "lastUpdateTime": "2026-08-07T17:56:57Z",
+              "message": "ReplicaSet \"kyverno-background-controller-59bd999b84\" has successfully progressed.",
+              "reason": "NewReplicaSetAvailable",
+              "status": "True",
+              "type": "Progressing"
+            }
+          ],
+          "observedGeneration": 1,
+          "readyReplicas": 1,
+          "replicas": 1,
+          "terminatingReplicas": 0,
+          "updatedReplicas": 1
+        }
+      },
+      {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/revision": "1"
+          },
+          "creationTimestamp": "2026-08-07T17:56:57Z",
+          "generation": 2,
+          "labels": {
+            "app.kubernetes.io/component": "cleanup-controller",
+            "app.kubernetes.io/instance": "kyverno",
+            "app.kubernetes.io/name": "kyverno-cleanup-controller",
+            "app.kubernetes.io/part-of": "kyverno",
+            "app.kubernetes.io/version": "v1.18.2"
+          },
+          "name": "kyverno-cleanup-controller",
+          "namespace": "kyverno",
+          "resourceVersion": "1083",
+          "uid": "57031232-8df9-4854-8aca-ca71729437f6"
+        },
+        "spec": {
+          "progressDeadlineSeconds": 600,
+          "replicas": 0,
+          "revisionHistoryLimit": 10,
+          "selector": {
+            "matchLabels": {
+              "app.kubernetes.io/component": "cleanup-controller",
+              "app.kubernetes.io/instance": "kyverno",
+              "app.kubernetes.io/part-of": "kyverno"
+            }
+          },
+          "strategy": {
+            "rollingUpdate": {
+              "maxSurge": 1,
+              "maxUnavailable": "40%"
+            },
+            "type": "RollingUpdate"
+          },
+          "template": {
+            "metadata": {
+              "labels": {
+                "app.kubernetes.io/component": "cleanup-controller",
+                "app.kubernetes.io/instance": "kyverno",
+                "app.kubernetes.io/name": "kyverno-cleanup-controller",
+                "app.kubernetes.io/part-of": "kyverno",
+                "app.kubernetes.io/version": "v1.18.2"
+              }
+            },
+            "spec": {
+              "affinity": {
+                "podAntiAffinity": {
+                  "preferredDuringSchedulingIgnoredDuringExecution": [
+                    {
+                      "podAffinityTerm": {
+                        "labelSelector": {
+                          "matchExpressions": [
+                            {
+                              "key": "app.kubernetes.io/component",
+                              "operator": "In",
+                              "values": [
+                                "cleanup-controller"
+                              ]
+                            }
+                          ]
+                        },
+                        "topologyKey": "kubernetes.io/hostname"
+                      },
+                      "weight": 1
+                    }
+                  ]
+                }
+              },
+              "automountServiceAccountToken": true,
+              "containers": [
+                {
+                  "args": [
+                    "--caSecretName=kyverno-cleanup-controller.kyverno.svc.kyverno-tls-ca",
+                    "--tlsSecretName=kyverno-cleanup-controller.kyverno.svc.kyverno-tls-pair",
+                    "--tlsKeyAlgorithm=RSA",
+                    "--servicePort=443",
+                    "--resyncPeriod=15m",
+                    "--cleanupServerPort=9443",
+                    "--disableMetrics=false",
+                    "--otelConfig=prometheus",
+                    "--metricsPort=8000",
+                    "--enableDeferredLoading=true",
+                    "--dumpPayload=false",
+                    "--maxAPICallResponseLength=2000000",
+                    "--apiCallTimeout=30s",
+                    "--loggingFormat=text",
+                    "--v=2",
+                    "--protectManagedResources=false",
+                    "--ttlReconciliationInterval=1m"
+                  ],
+                  "env": [
+                    {
+                      "name": "KYVERNO_DEPLOYMENT",
+                      "value": "kyverno-cleanup-controller"
+                    },
+                    {
+                      "name": "INIT_CONFIG",
+                      "value": "kyverno"
+                    },
+                    {
+                      "name": "METRICS_CONFIG",
+                      "value": "kyverno-metrics"
+                    },
+                    {
+                      "name": "KYVERNO_POD_NAME",
+                      "valueFrom": {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.name"
+                        }
+                      }
+                    },
+                    {
+                      "name": "KYVERNO_SERVICEACCOUNT_NAME",
+                      "value": "kyverno-cleanup-controller"
+                    },
+                    {
+                      "name": "KYVERNO_ROLE_NAME",
+                      "value": "kyverno:cleanup-controller"
+                    },
+                    {
+                      "name": "KYVERNO_NAMESPACE",
+                      "valueFrom": {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.namespace"
+                        }
+                      }
+                    },
+                    {
+                      "name": "KYVERNO_SVC",
+                      "value": "kyverno-cleanup-controller"
+                    }
+                  ],
+                  "image": "reg.kyverno.io/kyverno/cleanup-controller:v1.18.2",
+                  "imagePullPolicy": "IfNotPresent",
+                  "livenessProbe": {
+                    "failureThreshold": 2,
+                    "httpGet": {
+                      "path": "/health/liveness",
+                      "port": 9443,
+                      "scheme": "HTTPS"
+                    },
+                    "initialDelaySeconds": 15,
+                    "periodSeconds": 30,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 5
+                  },
+                  "name": "controller",
+                  "ports": [
+                    {
+                      "containerPort": 9443,
+                      "name": "https",
+                      "protocol": "TCP"
+                    },
+                    {
+                      "containerPort": 8000,
+                      "name": "metrics",
+                      "protocol": "TCP"
+                    }
+                  ],
+                  "readinessProbe": {
+                    "failureThreshold": 6,
+                    "httpGet": {
+                      "path": "/health/readiness",
+                      "port": 9443,
+                      "scheme": "HTTPS"
+                    },
+                    "initialDelaySeconds": 5,
+                    "periodSeconds": 10,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 5
+                  },
+                  "resources": {
+                    "limits": {
+                      "memory": "128Mi"
+                    },
+                    "requests": {
+                      "cpu": "100m",
+                      "memory": "64Mi"
+                    }
+                  },
+                  "securityContext": {
+                    "allowPrivilegeEscalation": false,
+                    "capabilities": {
+                      "drop": [
+                        "ALL"
+                      ]
+                    },
+                    "privileged": false,
+                    "readOnlyRootFilesystem": true,
+                    "runAsGroup": 65534,
+                    "runAsNonRoot": true,
+                    "runAsUser": 65534,
+                    "seccompProfile": {
+                      "type": "RuntimeDefault"
+                    }
+                  },
+                  "startupProbe": {
+                    "failureThreshold": 20,
+                    "httpGet": {
+                      "path": "/health/liveness",
+                      "port": 9443,
+                      "scheme": "HTTPS"
+                    },
+                    "initialDelaySeconds": 2,
+                    "periodSeconds": 6,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 1
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File",
+                  "volumeMounts": [
+                    {
+                      "mountPath": "/var/run/secrets/kyverno/apicall",
+                      "name": "apicall-token",
+                      "readOnly": true
+                    }
+                  ]
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "nodeSelector": {
+                "kubernetes.io/os": "linux"
+              },
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {},
+              "serviceAccount": "kyverno-cleanup-controller",
+              "serviceAccountName": "kyverno-cleanup-controller",
+              "terminationGracePeriodSeconds": 30,
+              "volumes": [
+                {
+                  "name": "apicall-token",
+                  "projected": {
+                    "defaultMode": 292,
+                    "sources": [
+                      {
+                        "serviceAccountToken": {
+                          "audience": "kyverno-svc.kyverno.io",
+                          "expirationSeconds": 3600,
+                          "path": "token"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "status": {
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-08-07T17:56:57Z",
+              "lastUpdateTime": "2026-08-07T17:56:57Z",
+              "message": "Deployment has minimum availability.",
+              "reason": "MinimumReplicasAvailable",
+              "status": "True",
+              "type": "Available"
+            },
+            {
+              "lastTransitionTime": "2026-08-07T17:56:57Z",
+              "lastUpdateTime": "2026-08-07T17:56:57Z",
+              "message": "ReplicaSet \"kyverno-cleanup-controller-657f9dd6d5\" has successfully progressed.",
+              "reason": "NewReplicaSetAvailable",
+              "status": "True",
+              "type": "Progressing"
+            }
+          ],
+          "observedGeneration": 2,
+          "terminatingReplicas": 0
+        }
+      },
+      {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/revision": "1"
+          },
+          "creationTimestamp": "2026-08-07T17:56:57Z",
+          "generation": 1,
+          "labels": {
+            "app.kubernetes.io/component": "reports-controller",
+            "app.kubernetes.io/instance": "kyverno",
+            "app.kubernetes.io/name": "kyverno-reports-controller",
+            "app.kubernetes.io/part-of": "kyverno",
+            "app.kubernetes.io/version": "v1.18.2"
+          },
+          "name": "kyverno-reports-controller",
+          "namespace": "kyverno",
+          "resourceVersion": "1075",
+          "uid": "f2ff1a47-633e-4b7f-a60d-53c0b19c99b2"
+        },
+        "spec": {
+          "progressDeadlineSeconds": 600,
+          "replicas": 1,
+          "revisionHistoryLimit": 10,
+          "selector": {
+            "matchLabels": {
+              "app.kubernetes.io/component": "reports-controller",
+              "app.kubernetes.io/instance": "kyverno",
+              "app.kubernetes.io/part-of": "kyverno"
+            }
+          },
+          "strategy": {
+            "rollingUpdate": {
+              "maxSurge": 1,
+              "maxUnavailable": "40%"
+            },
+            "type": "RollingUpdate"
+          },
+          "template": {
+            "metadata": {
+              "labels": {
+                "app.kubernetes.io/component": "reports-controller",
+                "app.kubernetes.io/instance": "kyverno",
+                "app.kubernetes.io/name": "kyverno-reports-controller",
+                "app.kubernetes.io/part-of": "kyverno",
+                "app.kubernetes.io/version": "v1.18.2"
+              }
+            },
+            "spec": {
+              "affinity": {
+                "podAntiAffinity": {
+                  "preferredDuringSchedulingIgnoredDuringExecution": [
+                    {
+                      "podAffinityTerm": {
+                        "labelSelector": {
+                          "matchExpressions": [
+                            {
+                              "key": "app.kubernetes.io/component",
+                              "operator": "In",
+                              "values": [
+                                "reports-controller"
+                              ]
+                            }
+                          ]
+                        },
+                        "topologyKey": "kubernetes.io/hostname"
+                      },
+                      "weight": 1
+                    }
+                  ]
+                }
+              },
+              "automountServiceAccountToken": true,
+              "containers": [
+                {
+                  "args": [
+                    "--disableMetrics=false",
+                    "--openreportsEnabled=false",
+                    "--otelConfig=prometheus",
+                    "--metricsPort=8000",
+                    "--resyncPeriod=15m",
+                    "--admissionReports=true",
+                    "--aggregateReports=true",
+                    "--policyReports=true",
+                    "--validatingAdmissionPolicyReports=true",
+                    "--mutatingAdmissionPolicyReports=false",
+                    "--backgroundScan=true",
+                    "--backgroundScanWorkers=2",
+                    "--backgroundScanInterval=1h",
+                    "--skipResourceFilters=true",
+                    "--enableConfigMapCaching=true",
+                    "--enableDeferredLoading=true",
+                    "--maxAPICallResponseLength=2000000",
+                    "--apiCallTimeout=30s",
+                    "--loggingFormat=text",
+                    "--v=2",
+                    "--omitEvents=PolicyApplied,PolicySkipped",
+                    "--enablePolicyException=false",
+                    "--allowInsecureRegistry=false",
+                    "--registryCredentialHelpers=default,google,amazon,azure,github",
+                    "--enableReporting=validate,mutate,mutateExisting,imageVerify,generate"
+                  ],
+                  "env": [
+                    {
+                      "name": "KYVERNO_SERVICEACCOUNT_NAME",
+                      "value": "kyverno-reports-controller"
+                    },
+                    {
+                      "name": "KYVERNO_DEPLOYMENT",
+                      "value": "kyverno-reports-controller"
+                    },
+                    {
+                      "name": "INIT_CONFIG",
+                      "value": "kyverno"
+                    },
+                    {
+                      "name": "METRICS_CONFIG",
+                      "value": "kyverno-metrics"
+                    },
+                    {
+                      "name": "KYVERNO_POD_NAME",
+                      "valueFrom": {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.name"
+                        }
+                      }
+                    },
+                    {
+                      "name": "KYVERNO_NAMESPACE",
+                      "valueFrom": {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.namespace"
+                        }
+                      }
+                    },
+                    {
+                      "name": "TUF_ROOT",
+                      "value": "/.sigstore"
+                    }
+                  ],
+                  "image": "reg.kyverno.io/kyverno/reports-controller:v1.18.2",
+                  "imagePullPolicy": "IfNotPresent",
+                  "name": "controller",
+                  "ports": [
+                    {
+                      "containerPort": 9443,
+                      "name": "https",
+                      "protocol": "TCP"
+                    },
+                    {
+                      "containerPort": 8000,
+                      "name": "metrics",
+                      "protocol": "TCP"
+                    }
+                  ],
+                  "resources": {
+                    "limits": {
+                      "memory": "128Mi"
+                    },
+                    "requests": {
+                      "cpu": "100m",
+                      "memory": "64Mi"
+                    }
+                  },
+                  "securityContext": {
+                    "allowPrivilegeEscalation": false,
+                    "capabilities": {
+                      "drop": [
+                        "ALL"
+                      ]
+                    },
+                    "privileged": false,
+                    "readOnlyRootFilesystem": true,
+                    "runAsGroup": 65534,
+                    "runAsNonRoot": true,
+                    "runAsUser": 65534,
+                    "seccompProfile": {
+                      "type": "RuntimeDefault"
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File",
+                  "volumeMounts": [
+                    {
+                      "mountPath": "/.sigstore",
+                      "name": "sigstore"
+                    },
+                    {
+                      "mountPath": "/var/run/secrets/kyverno/apicall",
+                      "name": "apicall-token",
+                      "readOnly": true
+                    }
+                  ]
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "nodeSelector": {
+                "kubernetes.io/os": "linux"
+              },
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {},
+              "serviceAccount": "kyverno-reports-controller",
+              "serviceAccountName": "kyverno-reports-controller",
+              "terminationGracePeriodSeconds": 30,
+              "volumes": [
+                {
+                  "emptyDir": {},
+                  "name": "sigstore"
+                },
+                {
+                  "name": "apicall-token",
+                  "projected": {
+                    "defaultMode": 292,
+                    "sources": [
+                      {
+                        "serviceAccountToken": {
+                          "audience": "kyverno-svc.kyverno.io",
+                          "expirationSeconds": 3600,
+                          "path": "token"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "status": {
+          "availableReplicas": 1,
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-08-07T17:56:57Z",
+              "lastUpdateTime": "2026-08-07T17:56:57Z",
+              "message": "Deployment has minimum availability.",
+              "reason": "MinimumReplicasAvailable",
+              "status": "True",
+              "type": "Available"
+            },
+            {
+              "lastTransitionTime": "2026-08-07T17:56:57Z",
+              "lastUpdateTime": "2026-08-07T17:56:57Z",
+              "message": "ReplicaSet \"kyverno-reports-controller-746c796cf8\" has successfully progressed.",
+              "reason": "NewReplicaSetAvailable",
+              "status": "True",
+              "type": "Progressing"
+            }
+          ],
+          "observedGeneration": 1,
+          "readyReplicas": 1,
+          "replicas": 1,
+          "terminatingReplicas": 0,
+          "updatedReplicas": 1
+        }
+      }
+    ],
+    "kind": "List",
+    "metadata": {
+      "resourceVersion": ""
+    }
+  },
+  "nodes": {
+    "apiVersion": "v1",
+    "items": [
+      {
+        "apiVersion": "v1",
+        "kind": "Node",
+        "metadata": {
+          "annotations": {
+            "node.alpha.kubernetes.io/ttl": "0",
+            "volumes.kubernetes.io/controller-managed-attach-detach": "true"
+          },
+          "creationTimestamp": "2026-08-07T17:56:13Z",
+          "labels": {
+            "beta.kubernetes.io/arch": "arm64",
+            "beta.kubernetes.io/os": "linux",
+            "kubernetes.io/arch": "arm64",
+            "kubernetes.io/hostname": "govdrift-lab-control-plane",
+            "kubernetes.io/os": "linux",
+            "node-role.kubernetes.io/control-plane": ""
+          },
+          "name": "govdrift-lab-control-plane",
+          "resourceVersion": "262241",
+          "uid": "77282687-3ad2-4221-9d11-bc8e9621611f"
+        },
+        "spec": {
+          "podCIDR": "10.244.0.0/24",
+          "podCIDRs": [
+            "10.244.0.0/24"
+          ],
+          "providerID": "kind://docker/govdrift-lab/govdrift-lab-control-plane"
+        },
+        "status": {
+          "addresses": [
+            {
+              "address": "172.18.0.2",
+              "type": "InternalIP"
+            },
+            {
+              "address": "govdrift-lab-control-plane",
+              "type": "Hostname"
+            }
+          ],
+          "allocatable": {
+            "cpu": "16",
+            "ephemeral-storage": "954976684Ki",
+            "hugepages-1Gi": "0",
+            "hugepages-2Mi": "0",
+            "hugepages-32Mi": "0",
+            "hugepages-64Ki": "0",
+            "memory": "8024028Ki",
+            "pods": "110"
+          },
+          "capacity": {
+            "cpu": "16",
+            "ephemeral-storage": "954976684Ki",
+            "hugepages-1Gi": "0",
+            "hugepages-2Mi": "0",
+            "hugepages-32Mi": "0",
+            "hugepages-64Ki": "0",
+            "memory": "8024028Ki",
+            "pods": "110"
+          },
+          "conditions": [
+            {
+              "lastHeartbeatTime": "2026-08-08T08:56:20Z",
+              "lastTransitionTime": "2026-08-07T17:56:12Z",
+              "message": "kubelet has sufficient memory available",
+              "reason": "KubeletHasSufficientMemory",
+              "status": "False",
+              "type": "MemoryPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-08-08T08:56:20Z",
+              "lastTransitionTime": "2026-08-07T17:56:12Z",
+              "message": "kubelet has no disk pressure",
+              "reason": "KubeletHasNoDiskPressure",
+              "status": "False",
+              "type": "DiskPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-08-08T08:56:20Z",
+              "lastTransitionTime": "2026-08-07T17:56:12Z",
+              "message": "kubelet has sufficient PID available",
+              "reason": "KubeletHasSufficientPID",
+              "status": "False",
+              "type": "PIDPressure"
+            },
+            {
+              "lastHeartbeatTime": "2026-08-08T08:56:20Z",
+              "lastTransitionTime": "2026-08-07T17:56:34Z",
+              "message": "kubelet is posting ready status",
+              "reason": "KubeletReady",
+              "status": "True",
+              "type": "Ready"
+            }
+          ],
+          "daemonEndpoints": {
+            "kubeletEndpoint": {
+              "Port": 10250
+            }
+          },
+          "declaredFeatures": [
+            "ExtendWebSocketsToKubelet",
+            "InPlacePodLevelResourcesVerticalScaling",
+            "InPlacePodVerticalScalingInitContainers",
+            "RestartAllContainersOnContainerExits"
+          ],
+          "features": {
+            "supplementalGroupsPolicy": true
+          },
+          "images": [
+            {
+              "names": [
+                "docker.io/library/import-2026-06-02@sha256:e323e9cc96bda6e0b3d49bc2558a6d4af30273a256e18fe69c970f549ca18192",
+                "registry.k8s.io/kube-apiserver-arm64:v1.36.1",
+                "registry.k8s.io/kube-apiserver:v1.36.1"
+              ],
+              "sizeBytes": 89920374
+            },
+            {
+              "names": [
+                "docker.io/library/import-2026-06-02@sha256:83e4c9a1483100194e929e8075ed88e1634b784538579805b81f61bef00cc6ae",
+                "registry.k8s.io/kube-proxy-arm64:v1.36.1",
+                "registry.k8s.io/kube-proxy:v1.36.1"
+              ],
+              "sizeBytes": 80900326
+            },
+            {
+              "names": [
+                "docker.io/library/import-2026-06-02@sha256:ebf066f959e8e672ecbe20fbc4d48c8e0534b1c4074c7b7c840189e96984c9ba",
+                "registry.k8s.io/kube-controller-manager-arm64:v1.36.1",
+                "registry.k8s.io/kube-controller-manager:v1.36.1"
+              ],
+              "sizeBytes": 80156381
+            },
+            {
+              "names": [
+                "ghcr.io/fluxcd/kustomize-controller:v1.9.4"
+              ],
+              "sizeBytes": 67043897
+            },
+            {
+              "names": [
+                "ghcr.io/fluxcd/source-controller:v1.9.4"
+              ],
+              "sizeBytes": 60205099
+            },
+            {
+              "names": [
+                "docker.io/library/import-2026-06-02@sha256:611443e0c4043c8aed8ce2284f7058830427df365a336718d070238dcb5ddd74",
+                "registry.k8s.io/kube-scheduler-arm64:v1.36.1",
+                "registry.k8s.io/kube-scheduler:v1.36.1"
+              ],
+              "sizeBytes": 57349853
+            },
+            {
+              "names": [
+                "ghcr.io/fluxcd/notification-controller@sha256:071c351a0fb163eeb6a2bb82f1e894f51b6b0734216d2e97d3d99c9ab9d710b9",
+                "ghcr.io/fluxcd/notification-controller:v1.9.3"
+              ],
+              "sizeBytes": 48409243
+            },
+            {
+              "names": [
+                "ghcr.io/fluxcd/helm-controller@sha256:16ada99456385100698a5d7adf90aba8a2089d987ab541c9566b6d7b0e897038",
+                "ghcr.io/fluxcd/helm-controller:v1.6.3"
+              ],
+              "sizeBytes": 47857685
+            },
+            {
+              "names": [
+                "reg.kyverno.io/kyverno/kyverno:v1.18.2"
+              ],
+              "sizeBytes": 40622028
+            },
+            {
+              "names": [
+                "ghcr.io/fluxcd/image-automation-controller@sha256:0286cbba95a2606a006e370052cb642f4370cb42ceea8353b5cba922cf47770c",
+                "ghcr.io/fluxcd/image-automation-controller:v1.2.4"
+              ],
+              "sizeBytes": 40591419
+            },
+            {
+              "names": [
+                "reg.kyverno.io/kyverno/background-controller:v1.18.2"
+              ],
+              "sizeBytes": 39859528
+            },
+            {
+              "names": [
+                "reg.kyverno.io/kyverno/reports-controller:v1.18.2"
+              ],
+              "sizeBytes": 39551192
+            },
+            {
+              "names": [
+                "ghcr.io/fluxcd/image-reflector-controller@sha256:d63550296dc9a6c2b7c9246cb7ef6e52d7469d5b104cd329622301b46971e255",
+                "ghcr.io/fluxcd/image-reflector-controller:v1.2.4"
+              ],
+              "sizeBytes": 39018869
+            },
+            {
+              "names": [
+                "reg.kyverno.io/kyverno/kyvernopre:v1.18.2"
+              ],
+              "sizeBytes": 36172822
+            },
+            {
+              "names": [
+                "docker.io/kindest/kindnetd:v20260528-9350166c"
+              ],
+              "sizeBytes": 35645853
+            },
+            {
+              "names": [
+                "ghcr.io/fluxcd/source-watcher@sha256:40f35415a78f4514aea41cf4d6dd299d59bc646eb4a73365eac831c8ced2445a",
+                "ghcr.io/fluxcd/source-watcher:v2.2.3"
+              ],
+              "sizeBytes": 31260104
+            },
+            {
+              "names": [
+                "docker.io/library/nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10",
+                "localhost:5001/governance-demo@sha256:63ffc0d1f14e4082b832c6a42e606e9a0384a526f16ddd720af7c1f018f2f7c4",
+                "localhost:5001/governance-demo:1.0"
+              ],
+              "sizeBytes": 21821908
+            },
+            {
+              "names": [
+                "docker.io/library/nginx@sha256:1eadbb07820339e8bbfed18c771691970baee292ec4ab2558f1453d26153e22d",
+                "localhost:5001/governance-demo@sha256:ff46cb25cc983d80478cb27d6997ff243001b45eeeb58dffebe615897bceb4f3",
+                "localhost:5001/governance-demo:alternate"
+              ],
+              "sizeBytes": 21626871
+            },
+            {
+              "names": [
+                "registry.k8s.io/etcd:3.6.8-0"
+              ],
+              "sizeBytes": 21145439
+            },
+            {
+              "names": [
+                "registry.k8s.io/coredns/coredns:v1.14.2"
+              ],
+              "sizeBytes": 20766250
+            },
+            {
+              "names": [
+                "docker.io/kindest/local-path-provisioner:v20260521-9fb22683"
+              ],
+              "sizeBytes": 14213900
+            },
+            {
+              "names": [
+                "docker.io/kindest/local-path-helper:v20260131-7181c60a"
+              ],
+              "sizeBytes": 2740462
+            },
+            {
+              "names": [
+                "registry.k8s.io/pause:3.10"
+              ],
+              "sizeBytes": 267933
+            }
+          ],
+          "nodeInfo": {
+            "architecture": "arm64",
+            "bootID": "3e9d37e9-074e-41b9-bf42-7feee9ea32a5",
+            "containerRuntimeVersion": "containerd://2.3.1",
+            "kernelVersion": "6.12.54-linuxkit",
+            "kubeProxyVersion": "",
+            "kubeletVersion": "v1.36.1",
+            "machineID": "62c688711b3d48bd8203b3020eb4c546",
+            "operatingSystem": "linux",
+            "osImage": "Debian GNU/Linux 13 (trixie)",
+            "swap": {
+              "capacity": 1073737728
+            },
+            "systemUUID": "62c688711b3d48bd8203b3020eb4c546"
+          },
+          "runtimeHandlers": [
+            {
+              "features": {
+                "recursiveReadOnlyMounts": true,
+                "userNamespaces": true
+              },
+              "name": ""
+            },
+            {
+              "features": {
+                "recursiveReadOnlyMounts": true,
+                "userNamespaces": true
+              },
+              "name": "runc"
+            },
+            {
+              "features": {
+                "recursiveReadOnlyMounts": true,
+                "userNamespaces": true
+              },
+              "name": "test-handler"
+            }
+          ]
+        }
+      }
+    ],
+    "kind": "List",
+    "metadata": {
+      "resourceVersion": ""
+    }
+  },
+  "trace_namespace": {
+    "apiVersion": "v1",
+    "kind": "Namespace",
+    "metadata": {
+      "annotations": {
+        "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Namespace\",\"metadata\":{\"annotations\":{},\"labels\":{\"app.kubernetes.io/managed-by\":\"govdrift-trace\",\"govdrift.io/campaign\":\"trace-20260808T085529Z-7e8fc786\"},\"name\":\"govdrift-trace\"}}\n"
+      },
+      "creationTimestamp": "2026-08-08T08:55:33Z",
+      "labels": {
+        "app.kubernetes.io/managed-by": "govdrift-trace",
+        "govdrift.io/campaign": "trace-20260808T085529Z-7e8fc786",
+        "kubernetes.io/metadata.name": "govdrift-trace"
+      },
+      "name": "govdrift-trace",
+      "resourceVersion": "261902",
+      "uid": "d12435f6-b38f-441c-9d79-86d3284b079e"
+    },
+    "spec": {
+      "finalizers": [
+        "kubernetes"
+      ]
+    },
+    "status": {
+      "phase": "Active"
+    }
+  },
+  "trace_resources": {
+    "apiVersion": "v1",
+    "items": [
+      {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "metadata": {
+          "annotations": {
+            "kubectl.kubernetes.io/restartedAt": "2026-08-08T04:59:10-04:00"
+          },
+          "creationTimestamp": "2026-08-08T08:59:10Z",
+          "generateName": "payments-trace-68c84f676f-",
+          "generation": 1,
+          "labels": {
+            "app": "payments-trace",
+            "pod-template-hash": "68c84f676f"
+          },
+          "name": "payments-trace-68c84f676f-4h6hp",
+          "namespace": "govdrift-trace",
+          "ownerReferences": [
+            {
+              "apiVersion": "apps/v1",
+              "blockOwnerDeletion": true,
+              "controller": true,
+              "kind": "ReplicaSet",
+              "name": "payments-trace-68c84f676f",
+              "uid": "f6fbe9ae-3a09-4092-98a9-706a9ed72008"
+            }
+          ],
+          "resourceVersion": "263712",
+          "uid": "07fe5b5c-ad24-4b21-aa2d-e91d546d594a"
+        },
+        "spec": {
+          "containers": [
+            {
+              "env": [
+                {
+                  "name": "APP_VERSION",
+                  "value": "v2-approved"
+                }
+              ],
+              "image": "nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10",
+              "imagePullPolicy": "IfNotPresent",
+              "name": "payments-trace",
+              "resources": {
+                "limits": {
+                  "cpu": "100m",
+                  "memory": "64Mi"
+                },
+                "requests": {
+                  "cpu": "25m",
+                  "memory": "16Mi"
+                }
+              },
+              "terminationMessagePath": "/dev/termination-log",
+              "terminationMessagePolicy": "File",
+              "volumeMounts": [
+                {
+                  "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                  "name": "kube-api-access-pbrvc",
+                  "readOnly": true
+                }
+              ]
+            }
+          ],
+          "dnsPolicy": "ClusterFirst",
+          "enableServiceLinks": true,
+          "nodeName": "govdrift-lab-control-plane",
+          "preemptionPolicy": "PreemptLowerPriority",
+          "priority": 0,
+          "restartPolicy": "Always",
+          "schedulerName": "default-scheduler",
+          "securityContext": {},
+          "serviceAccount": "default",
+          "serviceAccountName": "default",
+          "terminationGracePeriodSeconds": 30,
+          "tolerations": [
+            {
+              "effect": "NoExecute",
+              "key": "node.kubernetes.io/not-ready",
+              "operator": "Exists",
+              "tolerationSeconds": 300
+            },
+            {
+              "effect": "NoExecute",
+              "key": "node.kubernetes.io/unreachable",
+              "operator": "Exists",
+              "tolerationSeconds": 300
+            }
+          ],
+          "volumes": [
+            {
+              "name": "kube-api-access-pbrvc",
+              "projected": {
+                "defaultMode": 420,
+                "sources": [
+                  {
+                    "serviceAccountToken": {
+                      "expirationSeconds": 3607,
+                      "path": "token"
+                    }
+                  },
+                  {
+                    "configMap": {
+                      "items": [
+                        {
+                          "key": "ca.crt",
+                          "path": "ca.crt"
+                        }
+                      ],
+                      "name": "kube-root-ca.crt"
+                    }
+                  },
+                  {
+                    "downwardAPI": {
+                      "items": [
+                        {
+                          "fieldRef": {
+                            "apiVersion": "v1",
+                            "fieldPath": "metadata.namespace"
+                          },
+                          "path": "namespace"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "status": {
+          "allocatedResources": {
+            "cpu": "25m",
+            "memory": "16Mi"
+          },
+          "conditions": [
+            {
+              "lastProbeTime": null,
+              "lastTransitionTime": "2026-08-08T08:59:11Z",
+              "observedGeneration": 1,
+              "status": "True",
+              "type": "PodReadyToStartContainers"
+            },
+            {
+              "lastProbeTime": null,
+              "lastTransitionTime": "2026-08-08T08:59:10Z",
+              "observedGeneration": 1,
+              "status": "True",
+              "type": "Initialized"
+            },
+            {
+              "lastProbeTime": null,
+              "lastTransitionTime": "2026-08-08T08:59:11Z",
+              "observedGeneration": 1,
+              "status": "True",
+              "type": "Ready"
+            },
+            {
+              "lastProbeTime": null,
+              "lastTransitionTime": "2026-08-08T08:59:11Z",
+              "observedGeneration": 1,
+              "status": "True",
+              "type": "ContainersReady"
+            },
+            {
+              "lastProbeTime": null,
+              "lastTransitionTime": "2026-08-08T08:59:10Z",
+              "observedGeneration": 1,
+              "status": "True",
+              "type": "PodScheduled"
+            }
+          ],
+          "containerStatuses": [
+            {
+              "allocatedResources": {
+                "cpu": "25m",
+                "memory": "16Mi"
+              },
+              "containerID": "containerd://aa4474b217cf6c203cd423abe2f0cd65da3e2c51ff006646ed8bd46f3916653c",
+              "image": "localhost:5001/governance-demo:1.0",
+              "imageID": "docker.io/library/nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10",
+              "lastState": {},
+              "name": "payments-trace",
+              "ready": true,
+              "resources": {
+                "limits": {
+                  "cpu": "100m",
+                  "memory": "64Mi"
+                },
+                "requests": {
+                  "cpu": "25m",
+                  "memory": "16Mi"
+                }
+              },
+              "restartCount": 0,
+              "started": true,
+              "state": {
+                "running": {
+                  "startedAt": "2026-08-08T08:59:11Z"
+                }
+              },
+              "user": {
+                "linux": {
+                  "gid": 0,
+                  "supplementalGroups": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    6,
+                    10,
+                    11,
+                    20,
+                    26,
+                    27
+                  ],
+                  "uid": 0
+                }
+              },
+              "volumeMounts": [
+                {
+                  "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                  "name": "kube-api-access-pbrvc",
+                  "readOnly": true,
+                  "recursiveReadOnly": "Disabled"
+                }
+              ]
+            }
+          ],
+          "hostIP": "172.18.0.2",
+          "hostIPs": [
+            {
+              "ip": "172.18.0.2"
+            }
+          ],
+          "observedGeneration": 1,
+          "phase": "Running",
+          "podIP": "10.244.0.22",
+          "podIPs": [
+            {
+              "ip": "10.244.0.22"
+            }
+          ],
+          "qosClass": "Burstable",
+          "resources": {
+            "limits": {
+              "cpu": "100m",
+              "memory": "64Mi"
+            },
+            "requests": {
+              "cpu": "25m",
+              "memory": "16Mi"
+            }
+          },
+          "startTime": "2026-08-08T08:59:10Z"
+        }
+      },
+      {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/revision": "20"
+          },
+          "creationTimestamp": "2026-08-08T08:55:56Z",
+          "generation": 34,
+          "labels": {
+            "app": "payments-trace",
+            "env": "prod",
+            "kustomize.toolkit.fluxcd.io/name": "trace-workload",
+            "kustomize.toolkit.fluxcd.io/namespace": "govdrift-trace",
+            "team-owner": "platform"
+          },
+          "name": "payments-trace",
+          "namespace": "govdrift-trace",
+          "resourceVersion": "263726",
+          "uid": "56aed303-702e-4516-bfbb-25cd24639027"
+        },
+        "spec": {
+          "progressDeadlineSeconds": 600,
+          "replicas": 1,
+          "revisionHistoryLimit": 10,
+          "selector": {
+            "matchLabels": {
+              "app": "payments-trace"
+            }
+          },
+          "strategy": {
+            "rollingUpdate": {
+              "maxSurge": "25%",
+              "maxUnavailable": "25%"
+            },
+            "type": "RollingUpdate"
+          },
+          "template": {
+            "metadata": {
+              "annotations": {
+                "kubectl.kubernetes.io/restartedAt": "2026-08-08T04:59:10-04:00"
+              },
+              "labels": {
+                "app": "payments-trace"
+              }
+            },
+            "spec": {
+              "containers": [
+                {
+                  "env": [
+                    {
+                      "name": "APP_VERSION",
+                      "value": "v2-approved"
+                    }
+                  ],
+                  "image": "nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10",
+                  "imagePullPolicy": "IfNotPresent",
+                  "name": "payments-trace",
+                  "resources": {
+                    "limits": {
+                      "cpu": "100m",
+                      "memory": "64Mi"
+                    },
+                    "requests": {
+                      "cpu": "25m",
+                      "memory": "16Mi"
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File"
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {},
+              "terminationGracePeriodSeconds": 30
+            }
+          }
+        },
+        "status": {
+          "availableReplicas": 1,
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-08-08T08:55:57Z",
+              "lastUpdateTime": "2026-08-08T08:55:57Z",
+              "message": "Deployment has minimum availability.",
+              "reason": "MinimumReplicasAvailable",
+              "status": "True",
+              "type": "Available"
+            },
+            {
+              "lastTransitionTime": "2026-08-08T08:55:56Z",
+              "lastUpdateTime": "2026-08-08T08:59:11Z",
+              "message": "ReplicaSet \"payments-trace-68c84f676f\" has successfully progressed.",
+              "reason": "NewReplicaSetAvailable",
+              "status": "True",
+              "type": "Progressing"
+            }
+          ],
+          "observedGeneration": 34,
+          "readyReplicas": 1,
+          "replicas": 1,
+          "terminatingReplicas": 0,
+          "updatedReplicas": 1
+        }
+      },
+      {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/desired-replicas": "1",
+            "deployment.kubernetes.io/max-replicas": "2",
+            "deployment.kubernetes.io/revision": "17"
+          },
+          "creationTimestamp": "2026-08-08T08:58:24Z",
+          "generation": 2,
+          "labels": {
+            "app": "payments-trace",
+            "pod-template-hash": "58d99c4987"
+          },
+          "name": "payments-trace-58d99c4987",
+          "namespace": "govdrift-trace",
+          "ownerReferences": [
+            {
+              "apiVersion": "apps/v1",
+              "blockOwnerDeletion": true,
+              "controller": true,
+              "kind": "Deployment",
+              "name": "payments-trace",
+              "uid": "56aed303-702e-4516-bfbb-25cd24639027"
+            }
+          ],
+          "resourceVersion": "263575",
+          "uid": "e23e8635-1c08-4f3a-b7e9-4126d2f9765b"
+        },
+        "spec": {
+          "replicas": 0,
+          "selector": {
+            "matchLabels": {
+              "app": "payments-trace",
+              "pod-template-hash": "58d99c4987"
+            }
+          },
+          "template": {
+            "metadata": {
+              "annotations": {
+                "kubectl.kubernetes.io/restartedAt": "2026-08-08T04:58:24-04:00"
+              },
+              "labels": {
+                "app": "payments-trace",
+                "pod-template-hash": "58d99c4987"
+              }
+            },
+            "spec": {
+              "containers": [
+                {
+                  "env": [
+                    {
+                      "name": "APP_VERSION",
+                      "value": "v2-approved"
+                    }
+                  ],
+                  "image": "nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10",
+                  "imagePullPolicy": "IfNotPresent",
+                  "name": "payments-trace",
+                  "resources": {
+                    "limits": {
+                      "cpu": "100m",
+                      "memory": "64Mi"
+                    },
+                    "requests": {
+                      "cpu": "25m",
+                      "memory": "16Mi"
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File"
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {},
+              "terminationGracePeriodSeconds": 30
+            }
+          }
+        },
+        "status": {
+          "observedGeneration": 2,
+          "replicas": 0,
+          "terminatingReplicas": 0
+        }
+      },
+      {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/desired-replicas": "1",
+            "deployment.kubernetes.io/max-replicas": "2",
+            "deployment.kubernetes.io/revision": "14"
+          },
+          "creationTimestamp": "2026-08-08T08:57:56Z",
+          "generation": 2,
+          "labels": {
+            "app": "payments-trace",
+            "pod-template-hash": "5b68b7fbf7"
+          },
+          "name": "payments-trace-5b68b7fbf7",
+          "namespace": "govdrift-trace",
+          "ownerReferences": [
+            {
+              "apiVersion": "apps/v1",
+              "blockOwnerDeletion": true,
+              "controller": true,
+              "kind": "Deployment",
+              "name": "payments-trace",
+              "uid": "56aed303-702e-4516-bfbb-25cd24639027"
+            }
+          ],
+          "resourceVersion": "263176",
+          "uid": "4993735f-3d2a-498c-b1de-4a655b2f5103"
+        },
+        "spec": {
+          "replicas": 0,
+          "selector": {
+            "matchLabels": {
+              "app": "payments-trace",
+              "pod-template-hash": "5b68b7fbf7"
+            }
+          },
+          "template": {
+            "metadata": {
+              "annotations": {
+                "kubectl.kubernetes.io/restartedAt": "2026-08-08T04:57:56-04:00"
+              },
+              "labels": {
+                "app": "payments-trace",
+                "pod-template-hash": "5b68b7fbf7"
+              }
+            },
+            "spec": {
+              "containers": [
+                {
+                  "env": [
+                    {
+                      "name": "APP_VERSION",
+                      "value": "v2-approved"
+                    }
+                  ],
+                  "image": "nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10",
+                  "imagePullPolicy": "IfNotPresent",
+                  "name": "payments-trace",
+                  "resources": {
+                    "limits": {
+                      "cpu": "100m",
+                      "memory": "64Mi"
+                    },
+                    "requests": {
+                      "cpu": "25m",
+                      "memory": "16Mi"
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File"
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {},
+              "terminationGracePeriodSeconds": 30
+            }
+          }
+        },
+        "status": {
+          "observedGeneration": 2,
+          "replicas": 0,
+          "terminatingReplicas": 0
+        }
+      },
+      {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/desired-replicas": "1",
+            "deployment.kubernetes.io/max-replicas": "2",
+            "deployment.kubernetes.io/revision": "19",
+            "deployment.kubernetes.io/revision-history": "1,5,9,13,16"
+          },
+          "creationTimestamp": "2026-08-08T08:55:56Z",
+          "generation": 10,
+          "labels": {
+            "app": "payments-trace",
+            "pod-template-hash": "5cd4f7979d"
+          },
+          "name": "payments-trace-5cd4f7979d",
+          "namespace": "govdrift-trace",
+          "ownerReferences": [
+            {
+              "apiVersion": "apps/v1",
+              "blockOwnerDeletion": true,
+              "controller": true,
+              "kind": "Deployment",
+              "name": "payments-trace",
+              "uid": "56aed303-702e-4516-bfbb-25cd24639027"
+            }
+          ],
+          "resourceVersion": "263725",
+          "uid": "9bab12de-1b7f-4b42-a683-6d7aa8ea01a0"
+        },
+        "spec": {
+          "replicas": 0,
+          "selector": {
+            "matchLabels": {
+              "app": "payments-trace",
+              "pod-template-hash": "5cd4f7979d"
+            }
+          },
+          "template": {
+            "metadata": {
+              "labels": {
+                "app": "payments-trace",
+                "pod-template-hash": "5cd4f7979d"
+              }
+            },
+            "spec": {
+              "containers": [
+                {
+                  "env": [
+                    {
+                      "name": "APP_VERSION",
+                      "value": "v2-approved"
+                    }
+                  ],
+                  "image": "nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10",
+                  "imagePullPolicy": "IfNotPresent",
+                  "name": "payments-trace",
+                  "resources": {
+                    "limits": {
+                      "cpu": "100m",
+                      "memory": "64Mi"
+                    },
+                    "requests": {
+                      "cpu": "25m",
+                      "memory": "16Mi"
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File"
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {},
+              "terminationGracePeriodSeconds": 30
+            }
+          }
+        },
+        "status": {
+          "observedGeneration": 10,
+          "replicas": 0,
+          "terminatingReplicas": 0
+        }
+      },
+      {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/desired-replicas": "1",
+            "deployment.kubernetes.io/max-replicas": "2",
+            "deployment.kubernetes.io/revision": "8"
+          },
+          "creationTimestamp": "2026-08-08T08:56:48Z",
+          "generation": 2,
+          "labels": {
+            "app": "payments-trace",
+            "pod-template-hash": "5cd8f7f7c6"
+          },
+          "name": "payments-trace-5cd8f7f7c6",
+          "namespace": "govdrift-trace",
+          "ownerReferences": [
+            {
+              "apiVersion": "apps/v1",
+              "blockOwnerDeletion": true,
+              "controller": true,
+              "kind": "Deployment",
+              "name": "payments-trace",
+              "uid": "56aed303-702e-4516-bfbb-25cd24639027"
+            }
+          ],
+          "resourceVersion": "262557",
+          "uid": "df8b32a0-fc5d-40dd-8cfa-9d634fc1177f"
+        },
+        "spec": {
+          "replicas": 0,
+          "selector": {
+            "matchLabels": {
+              "app": "payments-trace",
+              "pod-template-hash": "5cd8f7f7c6"
+            }
+          },
+          "template": {
+            "metadata": {
+              "annotations": {
+                "emergency-debug": "EXC-TRACE-S2",
+                "kubectl.kubernetes.io/restartedAt": "2026-08-08T04:56:48-04:00"
+              },
+              "labels": {
+                "app": "payments-trace",
+                "pod-template-hash": "5cd8f7f7c6"
+              }
+            },
+            "spec": {
+              "containers": [
+                {
+                  "env": [
+                    {
+                      "name": "APP_VERSION",
+                      "value": "v2-approved"
+                    }
+                  ],
+                  "image": "nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10",
+                  "imagePullPolicy": "IfNotPresent",
+                  "name": "payments-trace",
+                  "resources": {
+                    "limits": {
+                      "cpu": "100m",
+                      "memory": "64Mi"
+                    },
+                    "requests": {
+                      "cpu": "25m",
+                      "memory": "16Mi"
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File"
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {},
+              "terminationGracePeriodSeconds": 30
+            }
+          }
+        },
+        "status": {
+          "observedGeneration": 2,
+          "replicas": 0,
+          "terminatingReplicas": 0
+        }
+      },
+      {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/desired-replicas": "1",
+            "deployment.kubernetes.io/max-replicas": "2",
+            "deployment.kubernetes.io/revision": "18"
+          },
+          "creationTimestamp": "2026-08-08T08:58:47Z",
+          "generation": 2,
+          "labels": {
+            "app": "payments-trace",
+            "pod-template-hash": "5cf5d885cb"
+          },
+          "name": "payments-trace-5cf5d885cb",
+          "namespace": "govdrift-trace",
+          "ownerReferences": [
+            {
+              "apiVersion": "apps/v1",
+              "blockOwnerDeletion": true,
+              "controller": true,
+              "kind": "Deployment",
+              "name": "payments-trace",
+              "uid": "56aed303-702e-4516-bfbb-25cd24639027"
+            }
+          ],
+          "resourceVersion": "263571",
+          "uid": "a86c48d2-b921-4322-90fa-8127c59779e0"
+        },
+        "spec": {
+          "replicas": 0,
+          "selector": {
+            "matchLabels": {
+              "app": "payments-trace",
+              "pod-template-hash": "5cf5d885cb"
+            }
+          },
+          "template": {
+            "metadata": {
+              "annotations": {
+                "kubectl.kubernetes.io/restartedAt": "2026-08-08T04:58:47-04:00"
+              },
+              "labels": {
+                "app": "payments-trace",
+                "pod-template-hash": "5cf5d885cb"
+              }
+            },
+            "spec": {
+              "containers": [
+                {
+                  "env": [
+                    {
+                      "name": "APP_VERSION",
+                      "value": "v2-approved"
+                    }
+                  ],
+                  "image": "nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10",
+                  "imagePullPolicy": "IfNotPresent",
+                  "name": "payments-trace",
+                  "resources": {
+                    "limits": {
+                      "cpu": "100m",
+                      "memory": "64Mi"
+                    },
+                    "requests": {
+                      "cpu": "25m",
+                      "memory": "16Mi"
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File"
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {},
+              "terminationGracePeriodSeconds": 30
+            }
+          }
+        },
+        "status": {
+          "observedGeneration": 2,
+          "replicas": 0,
+          "terminatingReplicas": 0
+        }
+      },
+      {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/desired-replicas": "1",
+            "deployment.kubernetes.io/max-replicas": "2",
+            "deployment.kubernetes.io/revision": "12"
+          },
+          "creationTimestamp": "2026-08-08T08:57:34Z",
+          "generation": 2,
+          "labels": {
+            "app": "payments-trace",
+            "pod-template-hash": "5d77fcbbfc"
+          },
+          "name": "payments-trace-5d77fcbbfc",
+          "namespace": "govdrift-trace",
+          "ownerReferences": [
+            {
+              "apiVersion": "apps/v1",
+              "blockOwnerDeletion": true,
+              "controller": true,
+              "kind": "Deployment",
+              "name": "payments-trace",
+              "uid": "56aed303-702e-4516-bfbb-25cd24639027"
+            }
+          ],
+          "resourceVersion": "262957",
+          "uid": "3594402a-3e10-4b4a-b90d-b492be6e5466"
+        },
+        "spec": {
+          "replicas": 0,
+          "selector": {
+            "matchLabels": {
+              "app": "payments-trace",
+              "pod-template-hash": "5d77fcbbfc"
+            }
+          },
+          "template": {
+            "metadata": {
+              "annotations": {
+                "kubectl.kubernetes.io/restartedAt": "2026-08-08T04:57:34-04:00"
+              },
+              "labels": {
+                "app": "payments-trace",
+                "pod-template-hash": "5d77fcbbfc"
+              }
+            },
+            "spec": {
+              "containers": [
+                {
+                  "env": [
+                    {
+                      "name": "APP_VERSION",
+                      "value": "v2-approved"
+                    }
+                  ],
+                  "image": "nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10",
+                  "imagePullPolicy": "IfNotPresent",
+                  "name": "payments-trace",
+                  "resources": {
+                    "limits": {
+                      "cpu": "100m",
+                      "memory": "64Mi"
+                    },
+                    "requests": {
+                      "cpu": "25m",
+                      "memory": "16Mi"
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File"
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {},
+              "terminationGracePeriodSeconds": 30
+            }
+          }
+        },
+        "status": {
+          "observedGeneration": 2,
+          "replicas": 0,
+          "terminatingReplicas": 0
+        }
+      },
+      {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/desired-replicas": "1",
+            "deployment.kubernetes.io/max-replicas": "2",
+            "deployment.kubernetes.io/revision": "20"
+          },
+          "creationTimestamp": "2026-08-08T08:59:10Z",
+          "generation": 1,
+          "labels": {
+            "app": "payments-trace",
+            "pod-template-hash": "68c84f676f"
+          },
+          "name": "payments-trace-68c84f676f",
+          "namespace": "govdrift-trace",
+          "ownerReferences": [
+            {
+              "apiVersion": "apps/v1",
+              "blockOwnerDeletion": true,
+              "controller": true,
+              "kind": "Deployment",
+              "name": "payments-trace",
+              "uid": "56aed303-702e-4516-bfbb-25cd24639027"
+            }
+          ],
+          "resourceVersion": "263713",
+          "uid": "f6fbe9ae-3a09-4092-98a9-706a9ed72008"
+        },
+        "spec": {
+          "replicas": 1,
+          "selector": {
+            "matchLabels": {
+              "app": "payments-trace",
+              "pod-template-hash": "68c84f676f"
+            }
+          },
+          "template": {
+            "metadata": {
+              "annotations": {
+                "kubectl.kubernetes.io/restartedAt": "2026-08-08T04:59:10-04:00"
+              },
+              "labels": {
+                "app": "payments-trace",
+                "pod-template-hash": "68c84f676f"
+              }
+            },
+            "spec": {
+              "containers": [
+                {
+                  "env": [
+                    {
+                      "name": "APP_VERSION",
+                      "value": "v2-approved"
+                    }
+                  ],
+                  "image": "nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10",
+                  "imagePullPolicy": "IfNotPresent",
+                  "name": "payments-trace",
+                  "resources": {
+                    "limits": {
+                      "cpu": "100m",
+                      "memory": "64Mi"
+                    },
+                    "requests": {
+                      "cpu": "25m",
+                      "memory": "16Mi"
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File"
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {},
+              "terminationGracePeriodSeconds": 30
+            }
+          }
+        },
+        "status": {
+          "availableReplicas": 1,
+          "fullyLabeledReplicas": 1,
+          "observedGeneration": 1,
+          "readyReplicas": 1,
+          "replicas": 1,
+          "terminatingReplicas": 0
+        }
+      },
+      {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/desired-replicas": "1",
+            "deployment.kubernetes.io/max-replicas": "2",
+            "deployment.kubernetes.io/revision": "10"
+          },
+          "creationTimestamp": "2026-08-08T08:57:11Z",
+          "generation": 2,
+          "labels": {
+            "app": "payments-trace",
+            "pod-template-hash": "6b76599bd"
+          },
+          "name": "payments-trace-6b76599bd",
+          "namespace": "govdrift-trace",
+          "ownerReferences": [
+            {
+              "apiVersion": "apps/v1",
+              "blockOwnerDeletion": true,
+              "controller": true,
+              "kind": "Deployment",
+              "name": "payments-trace",
+              "uid": "56aed303-702e-4516-bfbb-25cd24639027"
+            }
+          ],
+          "resourceVersion": "262780",
+          "uid": "85d4456f-b8a4-4785-ab21-3b55962270ce"
+        },
+        "spec": {
+          "replicas": 0,
+          "selector": {
+            "matchLabels": {
+              "app": "payments-trace",
+              "pod-template-hash": "6b76599bd"
+            }
+          },
+          "template": {
+            "metadata": {
+              "annotations": {
+                "kubectl.kubernetes.io/restartedAt": "2026-08-08T04:57:11-04:00"
+              },
+              "labels": {
+                "app": "payments-trace",
+                "pod-template-hash": "6b76599bd"
+              }
+            },
+            "spec": {
+              "containers": [
+                {
+                  "env": [
+                    {
+                      "name": "APP_VERSION",
+                      "value": "v2-approved"
+                    }
+                  ],
+                  "image": "nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10",
+                  "imagePullPolicy": "IfNotPresent",
+                  "name": "payments-trace",
+                  "resources": {
+                    "limits": {
+                      "cpu": "100m",
+                      "memory": "64Mi"
+                    },
+                    "requests": {
+                      "cpu": "25m",
+                      "memory": "16Mi"
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File"
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {},
+              "terminationGracePeriodSeconds": 30
+            }
+          }
+        },
+        "status": {
+          "observedGeneration": 2,
+          "replicas": 0,
+          "terminatingReplicas": 0
+        }
+      },
+      {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/desired-replicas": "1",
+            "deployment.kubernetes.io/max-replicas": "2",
+            "deployment.kubernetes.io/revision": "11"
+          },
+          "creationTimestamp": "2026-08-08T08:57:14Z",
+          "generation": 2,
+          "labels": {
+            "app": "payments-trace",
+            "pod-template-hash": "6bddf64459"
+          },
+          "name": "payments-trace-6bddf64459",
+          "namespace": "govdrift-trace",
+          "ownerReferences": [
+            {
+              "apiVersion": "apps/v1",
+              "blockOwnerDeletion": true,
+              "controller": true,
+              "kind": "Deployment",
+              "name": "payments-trace",
+              "uid": "56aed303-702e-4516-bfbb-25cd24639027"
+            }
+          ],
+          "resourceVersion": "262953",
+          "uid": "b336c376-8006-4600-87ee-67305eb71ec9"
+        },
+        "spec": {
+          "replicas": 0,
+          "selector": {
+            "matchLabels": {
+              "app": "payments-trace",
+              "pod-template-hash": "6bddf64459"
+            }
+          },
+          "template": {
+            "metadata": {
+              "annotations": {
+                "kubectl.kubernetes.io/restartedAt": "2026-08-08T04:57:14-04:00"
+              },
+              "labels": {
+                "app": "payments-trace",
+                "pod-template-hash": "6bddf64459"
+              }
+            },
+            "spec": {
+              "containers": [
+                {
+                  "env": [
+                    {
+                      "name": "APP_VERSION",
+                      "value": "v2-approved"
+                    }
+                  ],
+                  "image": "nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10",
+                  "imagePullPolicy": "IfNotPresent",
+                  "name": "payments-trace",
+                  "resources": {
+                    "limits": {
+                      "cpu": "100m",
+                      "memory": "64Mi"
+                    },
+                    "requests": {
+                      "cpu": "25m",
+                      "memory": "16Mi"
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File"
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {},
+              "terminationGracePeriodSeconds": 30
+            }
+          }
+        },
+        "status": {
+          "observedGeneration": 2,
+          "replicas": 0,
+          "terminatingReplicas": 0
+        }
+      },
+      {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/desired-replicas": "1",
+            "deployment.kubernetes.io/max-replicas": "2",
+            "deployment.kubernetes.io/revision": "15"
+          },
+          "creationTimestamp": "2026-08-08T08:57:59Z",
+          "generation": 2,
+          "labels": {
+            "app": "payments-trace",
+            "pod-template-hash": "845b85fd45"
+          },
+          "name": "payments-trace-845b85fd45",
+          "namespace": "govdrift-trace",
+          "ownerReferences": [
+            {
+              "apiVersion": "apps/v1",
+              "blockOwnerDeletion": true,
+              "controller": true,
+              "kind": "Deployment",
+              "name": "payments-trace",
+              "uid": "56aed303-702e-4516-bfbb-25cd24639027"
+            }
+          ],
+          "resourceVersion": "263335",
+          "uid": "785f365c-3c41-4e61-b844-0ab4903cdfd2"
+        },
+        "spec": {
+          "replicas": 0,
+          "selector": {
+            "matchLabels": {
+              "app": "payments-trace",
+              "pod-template-hash": "845b85fd45"
+            }
+          },
+          "template": {
+            "metadata": {
+              "labels": {
+                "app": "payments-trace",
+                "pod-template-hash": "845b85fd45"
+              }
+            },
+            "spec": {
+              "containers": [
+                {
+                  "env": [
+                    {
+                      "name": "APP_VERSION",
+                      "value": "v1-predecessor"
+                    }
+                  ],
+                  "image": "nginx@sha256:1eadbb07820339e8bbfed18c771691970baee292ec4ab2558f1453d26153e22d",
+                  "imagePullPolicy": "IfNotPresent",
+                  "name": "payments-trace",
+                  "resources": {
+                    "limits": {
+                      "cpu": "100m",
+                      "memory": "64Mi"
+                    },
+                    "requests": {
+                      "cpu": "25m",
+                      "memory": "16Mi"
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File"
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {},
+              "terminationGracePeriodSeconds": 30
+            }
+          }
+        },
+        "status": {
+          "observedGeneration": 2,
+          "replicas": 0,
+          "terminatingReplicas": 0
+        }
+      },
+      {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "metadata": {
+          "annotations": {
+            "deployment.kubernetes.io/desired-replicas": "1",
+            "deployment.kubernetes.io/max-replicas": "2",
+            "deployment.kubernetes.io/revision": "7"
+          },
+          "creationTimestamp": "2026-08-08T08:56:28Z",
+          "generation": 2,
+          "labels": {
+            "app": "payments-trace",
+            "pod-template-hash": "867654bf9c"
+          },
+          "name": "payments-trace-867654bf9c",
+          "namespace": "govdrift-trace",
+          "ownerReferences": [
+            {
+              "apiVersion": "apps/v1",
+              "blockOwnerDeletion": true,
+              "controller": true,
+              "kind": "Deployment",
+              "name": "payments-trace",
+              "uid": "56aed303-702e-4516-bfbb-25cd24639027"
+            }
+          ],
+          "resourceVersion": "262561",
+          "uid": "7315f9e9-708e-412a-81ea-4b80bfd82703"
+        },
+        "spec": {
+          "replicas": 0,
+          "selector": {
+            "matchLabels": {
+              "app": "payments-trace",
+              "pod-template-hash": "867654bf9c"
+            }
+          },
+          "template": {
+            "metadata": {
+              "annotations": {
+                "emergency-debug": "EXC-TRACE-S2",
+                "kubectl.kubernetes.io/restartedAt": "2026-08-08T04:56:25-04:00"
+              },
+              "labels": {
+                "app": "payments-trace",
+                "pod-template-hash": "867654bf9c"
+              }
+            },
+            "spec": {
+              "containers": [
+                {
+                  "env": [
+                    {
+                      "name": "APP_VERSION",
+                      "value": "v2-approved"
+                    }
+                  ],
+                  "image": "nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10",
+                  "imagePullPolicy": "IfNotPresent",
+                  "name": "payments-trace",
+                  "resources": {
+                    "limits": {
+                      "cpu": "100m",
+                      "memory": "64Mi"
+                    },
+                    "requests": {
+                      "cpu": "25m",
+                      "memory": "16Mi"
+                    }
+                  },
+                  "terminationMessagePath": "/dev/termination-log",
+                  "terminationMessagePolicy": "File"
+                }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {},
+              "terminationGracePeriodSeconds": 30
+            }
+          }
+        },
+        "status": {
+          "observedGeneration": 2,
+          "replicas": 0,
+          "terminatingReplicas": 0
+        }
+      },
+      {
+        "apiVersion": "kustomize.toolkit.fluxcd.io/v1",
+        "kind": "Kustomization",
+        "metadata": {
+          "annotations": {
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"kustomize.toolkit.fluxcd.io/v1\",\"kind\":\"Kustomization\",\"metadata\":{\"annotations\":{},\"name\":\"trace-workload\",\"namespace\":\"govdrift-trace\"},\"spec\":{\"interval\":\"1h\",\"path\":\"./workload\",\"prune\":true,\"retryInterval\":\"10s\",\"sourceRef\":{\"kind\":\"GitRepository\",\"name\":\"trace-source\"},\"targetNamespace\":\"govdrift-trace\",\"timeout\":\"2m\",\"wait\":true}}\n",
+            "reconcile.fluxcd.io/requestedAt": "6ba053a9-efc7-4274-a873-ae520e0f4475"
+          },
+          "creationTimestamp": "2026-08-08T08:55:33Z",
+          "finalizers": [
+            "finalizers.fluxcd.io"
+          ],
+          "generation": 1,
+          "name": "trace-workload",
+          "namespace": "govdrift-trace",
+          "resourceVersion": "263697",
+          "uid": "a8f20c88-81f4-429f-9318-62db55b86ecf"
+        },
+        "spec": {
+          "force": false,
+          "interval": "1h",
+          "path": "./workload",
+          "prune": true,
+          "retryInterval": "10s",
+          "sourceRef": {
+            "kind": "GitRepository",
+            "name": "trace-source"
+          },
+          "targetNamespace": "govdrift-trace",
+          "timeout": "2m",
+          "wait": true
+        },
+        "status": {
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-08-08T08:59:10Z",
+              "message": "Applied revision: master@sha1:e70b66c648ff83eee791e3f5487c9ba11a7d66af",
+              "observedGeneration": 1,
+              "reason": "ReconciliationSucceeded",
+              "status": "True",
+              "type": "Ready"
+            },
+            {
+              "lastTransitionTime": "2026-08-08T08:59:10Z",
+              "message": "Health check passed in 18.046667ms",
+              "observedGeneration": 1,
+              "reason": "Succeeded",
+              "status": "True",
+              "type": "Healthy"
+            }
+          ],
+          "history": [
+            {
+              "digest": "sha256:29d338ca765605fdc73cc631f287ae7f9f39242d9838d2f84d811d8be06fda1a",
+              "firstReconciled": "2026-08-08T08:56:01Z",
+              "lastReconciled": "2026-08-08T08:59:10Z",
+              "lastReconciledDuration": "141.972416ms",
+              "lastReconciledStatus": "ReconciliationSucceeded",
+              "metadata": {
+                "revision": "master@sha1:e70b66c648ff83eee791e3f5487c9ba11a7d66af"
+              },
+              "totalReconciliations": 12
+            },
+            {
+              "digest": "sha256:b2dd6e1068e7f604091d6745e6a280b4999f150edf60ebf3b271e8f4458eb603",
+              "firstReconciled": "2026-08-08T08:58:04Z",
+              "lastReconciled": "2026-08-08T08:58:04Z",
+              "lastReconciledDuration": "88.31625ms",
+              "lastReconciledStatus": "ReconciliationSucceeded",
+              "metadata": {
+                "revision": "master@sha1:0d57cd910d0652b71347ac4d32e620f724339435"
+              },
+              "totalReconciliations": 2
+            }
+          ],
+          "inventory": {
+            "entries": [
+              {
+                "id": "govdrift-trace_payments-trace_apps_Deployment",
+                "v": "v1"
+              }
+            ]
+          },
+          "lastAppliedRevision": "master@sha1:e70b66c648ff83eee791e3f5487c9ba11a7d66af",
+          "lastAttemptedRevision": "master@sha1:e70b66c648ff83eee791e3f5487c9ba11a7d66af",
+          "lastHandledReconcileAt": "6ba053a9-efc7-4274-a873-ae520e0f4475",
+          "observedGeneration": 1
+        }
+      },
+      {
+        "apiVersion": "source.toolkit.fluxcd.io/v1",
+        "kind": "GitRepository",
+        "metadata": {
+          "annotations": {
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"source.toolkit.fluxcd.io/v1\",\"kind\":\"GitRepository\",\"metadata\":{\"annotations\":{},\"name\":\"trace-source\",\"namespace\":\"govdrift-trace\"},\"spec\":{\"interval\":\"1h\",\"ref\":{\"branch\":\"master\"},\"url\":\"http://govdrift-trace-git:8000/cgi-bin/git/remote.git\"}}\n",
+            "reconcile.fluxcd.io/requestedAt": "6ba053a9-efc7-4274-a873-ae520e0f4475"
+          },
+          "creationTimestamp": "2026-08-08T08:55:33Z",
+          "finalizers": [
+            "finalizers.fluxcd.io"
+          ],
+          "generation": 1,
+          "name": "trace-source",
+          "namespace": "govdrift-trace",
+          "resourceVersion": "263672",
+          "uid": "fe7900d6-5b06-48ef-bd06-abb229d81360"
+        },
+        "spec": {
+          "interval": "1h",
+          "ref": {
+            "branch": "master"
+          },
+          "timeout": "60s",
+          "url": "http://govdrift-trace-git:8000/cgi-bin/git/remote.git"
+        },
+        "status": {
+          "artifact": {
+            "digest": "sha256:d24c9fbac7ef511926827740801dab5220dbf368a392228ab605c026c339d5b5",
+            "lastUpdateTime": "2026-08-08T08:58:19Z",
+            "path": "gitrepository/govdrift-trace/trace-source/e70b66c648ff83eee791e3f5487c9ba11a7d66af.tar.gz",
+            "revision": "master@sha1:e70b66c648ff83eee791e3f5487c9ba11a7d66af",
+            "size": 614,
+            "url": "http://source-controller.flux-system.svc.cluster.local./gitrepository/govdrift-trace/trace-source/e70b66c648ff83eee791e3f5487c9ba11a7d66af.tar.gz"
+          },
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-08-08T08:58:19Z",
+              "message": "stored artifact for revision 'master@sha1:e70b66c648ff83eee791e3f5487c9ba11a7d66af'",
+              "observedGeneration": 1,
+              "reason": "Succeeded",
+              "status": "True",
+              "type": "Ready"
+            },
+            {
+              "lastTransitionTime": "2026-08-08T08:58:19Z",
+              "message": "stored artifact for revision 'master@sha1:e70b66c648ff83eee791e3f5487c9ba11a7d66af'",
+              "observedGeneration": 1,
+              "reason": "Succeeded",
+              "status": "True",
+              "type": "ArtifactInStorage"
+            }
+          ],
+          "lastHandledReconcileAt": "6ba053a9-efc7-4274-a873-ae520e0f4475",
+          "observedGeneration": 1
+        }
+      }
+    ],
+    "kind": "List",
+    "metadata": {
+      "resourceVersion": ""
+    }
+  }
+}

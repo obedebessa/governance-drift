@@ -13,6 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "lab/results/repeated_observations.csv"
+OUTPUT = ROOT / "lab/results/uncertainty_summary.json"
 SEED = 20260807
 RESAMPLES = 50_000
 
@@ -29,21 +30,28 @@ def wilson(successes: int, total: int) -> tuple[float, float]:
 rows = list(csv.DictReader(SOURCE.open()))
 by_cadence: dict[str, list[bool]] = defaultdict(list)
 by_injection: dict[tuple[str, str], list[bool]] = defaultdict(list)
+by_scenario: dict[str, list[float]] = defaultdict(list)
 for row in rows:
     hit = row["detection_rate_hit"] == "True"
     by_cadence[row["cadence_seconds"]].append(hit)
     by_injection[(row["repeat"], row["scenario"])].append(hit)
 
-clusters = [sum(values) / len(values) for values in by_injection.values()]
+for (_, scenario), values in by_injection.items():
+    by_scenario[scenario].append(sum(values) / len(values))
+clusters = [value for values in by_scenario.values() for value in values]
 rng = random.Random(SEED)
 bootstrap = []
 for _ in range(RESAMPLES):
-    sample = [clusters[rng.randrange(len(clusters))] for _ in clusters]
-    bootstrap.append(sum(sample) / len(sample))
+    stratum_means = []
+    for values in by_scenario.values():
+        sample = [values[rng.randrange(len(values))] for _ in values]
+        stratum_means.append(sum(sample) / len(sample))
+    bootstrap.append(sum(stratum_means) / len(stratum_means))
 bootstrap.sort()
 
 result = {
     "experimental_units": len(clusters),
+    "estimand": "macro-average detection over the balanced nine-scenario experimental mixture",
     "cadence_wilson_95": {
         cadence: {
             "successes": sum(values),
@@ -53,12 +61,21 @@ result = {
         }
         for cadence, values in sorted(by_cadence.items(), key=lambda item: float(item[0]))
     },
-    "aggregate_cluster_bootstrap_95": {
-        "estimate": sum(clusters) / len(clusters),
+    "scenario_detection": {
+        scenario: {
+            "injections": len(values),
+            "cadence_observations_detected": int(round(sum(values) * 3)),
+            "cadence_observations_total": len(values) * 3,
+        }
+        for scenario, values in sorted(by_scenario.items())
+    },
+    "scenario_stratified_cluster_bootstrap_95": {
+        "estimate": sum(sum(values) / len(values) for values in by_scenario.values()) / len(by_scenario),
         "lower": bootstrap[int(0.025 * RESAMPLES)],
         "upper": bootstrap[int(0.975 * RESAMPLES) - 1],
         "resamples": RESAMPLES,
         "seed": SEED,
     },
 }
+OUTPUT.write_text(json.dumps(result, indent=2) + "\n")
 print(json.dumps(result, indent=2))
