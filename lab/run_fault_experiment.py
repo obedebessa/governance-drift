@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import random
 import threading
@@ -33,6 +34,7 @@ SEED = 20260808
 SUBJECT = "cluster-a/payments/payments#uid-demo-001"
 STREAMS = tuple(sorted({item for values in STREAM_DEPENDENCIES.values() for item in values}))
 RESULTS = Path(__file__).resolve().parent / "results_faults"
+LAB = Path(__file__).resolve().parent
 
 
 def consistent_payload(stream: str, sequence: int) -> dict[str, Any]:
@@ -586,6 +588,10 @@ def main() -> int:
         "campaign": "controlled localhost TCP evidence transport",
         "scope": "two real TCP hops on 127.0.0.1; deterministic record faults; not production",
         "seed": SEED,
+        "source_sha256": {
+            "run_fault_experiment.py": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+            "evidence_gateway.py": hashlib.sha256((LAB / "evidence_gateway.py").read_bytes()).hexdigest(),
+        },
         "subject": SUBJECT,
         "streams": list(STREAMS),
         "dependencies": {key: list(value) for key, value in STREAM_DEPENDENCIES.items()},

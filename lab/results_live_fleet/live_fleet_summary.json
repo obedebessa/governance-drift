@@ -73,77 +73,77 @@
     "container_image": "localhost:5001/governance-demo:1.0",
     "initial_node_stats": {
       "available": true,
-      "utc": "2026-08-08T05:47:19.145605+00:00",
-      "cpu_percent": 18.69,
-      "memory_percent": 30.41,
-      "memory_usage": "2.327GiB / 7.652GiB",
-      "pids": "495"
+      "utc": "2026-08-08T09:01:03.949812+00:00",
+      "cpu_percent": 25.59,
+      "memory_percent": 31.2,
+      "memory_usage": "2.388GiB / 7.652GiB",
+      "pids": "498"
     }
   },
   "resource_checks": [
     {
       "available": true,
-      "utc": "2026-08-08T05:47:24.840237+00:00",
-      "cpu_percent": 20.01,
-      "memory_percent": 33.28,
-      "memory_usage": "2.547GiB / 7.652GiB",
-      "pids": "808",
+      "utc": "2026-08-08T09:01:08.558142+00:00",
+      "cpu_percent": 18.24,
+      "memory_percent": 34.02,
+      "memory_usage": "2.603GiB / 7.652GiB",
+      "pids": "809",
       "stage": "n=10-ready"
     },
     {
       "available": true,
-      "utc": "2026-08-08T05:47:33.021222+00:00",
-      "cpu_percent": 20.0,
-      "memory_percent": 34.34,
-      "memory_usage": "2.628GiB / 7.652GiB",
-      "pids": "865",
+      "utc": "2026-08-08T09:01:12.404030+00:00",
+      "cpu_percent": 19.72,
+      "memory_percent": 34.4,
+      "memory_usage": "2.632GiB / 7.652GiB",
+      "pids": "866",
       "stage": "n=10-post-scale"
     },
     {
       "available": true,
-      "utc": "2026-08-08T05:47:38.840578+00:00",
-      "cpu_percent": 38.43,
-      "memory_percent": 34.93,
-      "memory_usage": "2.673GiB / 7.652GiB",
-      "pids": "872",
+      "utc": "2026-08-08T09:01:18.210363+00:00",
+      "cpu_percent": 50.56,
+      "memory_percent": 34.56,
+      "memory_usage": "2.645GiB / 7.652GiB",
+      "pids": "868",
       "stage": "n=10-post-restart"
     },
     {
       "available": true,
-      "utc": "2026-08-08T05:47:51.006152+00:00",
-      "cpu_percent": 23.23,
-      "memory_percent": 45.99,
-      "memory_usage": "3.519GiB / 7.652GiB",
-      "pids": "1984",
+      "utc": "2026-08-08T09:01:31.700914+00:00",
+      "cpu_percent": 35.23,
+      "memory_percent": 44.29,
+      "memory_usage": "3.39GiB / 7.652GiB",
+      "pids": "1975",
       "stage": "n=50-ready"
     },
     {
       "available": true,
-      "utc": "2026-08-08T05:47:57.726959+00:00",
-      "cpu_percent": 26.09,
-      "memory_percent": 48.51,
-      "memory_usage": "3.712GiB / 7.652GiB",
-      "pids": "2287",
+      "utc": "2026-08-08T09:01:36.380430+00:00",
+      "cpu_percent": 33.16,
+      "memory_percent": 46.78,
+      "memory_usage": "3.58GiB / 7.652GiB",
+      "pids": "2278",
       "stage": "n=50-post-scale"
     },
     {
       "available": true,
-      "utc": "2026-08-08T05:48:08.882162+00:00",
-      "cpu_percent": 84.87,
-      "memory_percent": 49.12,
-      "memory_usage": "3.759GiB / 7.652GiB",
-      "pids": "2272",
+      "utc": "2026-08-08T09:01:47.491723+00:00",
+      "cpu_percent": 49.15,
+      "memory_percent": 46.84,
+      "memory_usage": "3.584GiB / 7.652GiB",
+      "pids": "2276",
       "stage": "n=50-post-restart"
     }
   ],
   "cleanup": {
     "attempted": true,
     "namespace": "govdrift-fleet",
-    "started_utc": "2026-08-08T05:52:11.172314+00:00",
+    "started_utc": "2026-08-08T09:05:50.421055+00:00",
     "returncode": 0,
     "stdout": "namespace \"govdrift-fleet\" deleted",
     "stderr": "",
-    "completed_utc": "2026-08-08T05:52:29.336971+00:00",
+    "completed_utc": "2026-08-08T09:06:08.309072+00:00",
     "namespace_absent_after": true
   },
   "sizes": [
@@ -156,32 +156,32 @@
         "post-restart": 6
       },
       "fetch_ms": {
-        "p50": 53.611625000000004,
-        "p95": 76.68796665,
-        "mean": 56.361843750000006
+        "p50": 52.1986455,
+        "p95": 59.17480065000001,
+        "mean": 53.471687599999996
       },
       "parse_ms": {
-        "p50": 0.690354,
-        "p95": 0.9701619000000007,
-        "mean": 0.7439937
+        "p50": 0.6523335,
+        "p95": 0.7896452000000003,
+        "mean": 0.69464995
       },
       "core_ms": {
-        "p50": 0.09918750000000001,
-        "p95": 0.1451375,
-        "mean": 0.107752
+        "p50": 0.1011045,
+        "p95": 0.17194555000000003,
+        "mean": 0.1094042
       },
       "total_ms": {
-        "p50": 54.388229,
-        "p95": 78.61038365000002,
-        "mean": 57.220016699999995
+        "p50": 53.0115415,
+        "p95": 59.95075835,
+        "mean": 54.28855205
       },
-      "units_per_second_median": 183.8844225466444,
+      "units_per_second_median": 188.65943005291763,
       "active_pods_min": 10,
       "active_pods_max": 12,
       "active_containers_min": 20,
       "active_containers_max": 24,
-      "response_bytes_p50": 235251.0,
-      "response_bytes_p95": 251041.90000000002,
+      "response_bytes_p50": 235083.0,
+      "response_bytes_p95": 250828.0,
       "exact_vectors": 200,
       "expected_vectors": 200,
       "api_errors": 0,
@@ -189,9 +189,9 @@
       "modeled_api_list_operations": 40,
       "policy_fanout_units": 2,
       "policy_fanout_core_ms": {
-        "p50": 0.030792,
-        "p95": 0.040630950000000006,
-        "mean": 0.03267705
+        "p50": 0.0311875,
+        "p95": 0.0374545,
+        "mean": 0.0318814
       },
       "policy_fanout_exact_total": 40,
       "policy_fanout_expected_total": 40
@@ -205,32 +205,32 @@
         "post-restart": 6
       },
       "fetch_ms": {
-        "p50": 101.54291649999999,
-        "p95": 111.81223365000001,
-        "mean": 101.56786665
+        "p50": 105.4509375,
+        "p95": 183.6512417,
+        "mean": 115.7251272
       },
       "parse_ms": {
-        "p50": 2.7799995,
-        "p95": 4.6236482500000005,
-        "mean": 3.03135825
+        "p50": 2.934292,
+        "p95": 4.64851635,
+        "mean": 3.0401499999999997
       },
       "core_ms": {
-        "p50": 0.324229,
-        "p95": 0.42324375000000003,
-        "mean": 0.34020195
+        "p50": 0.332375,
+        "p95": 0.4146357500000001,
+        "mean": 0.3441666
       },
       "total_ms": {
-        "p50": 104.9151455,
-        "p95": 115.26045864999999,
-        "mean": 104.9494833
+        "p50": 108.606937,
+        "p95": 187.75103510000002,
+        "mean": 119.11705199999999
       },
-      "units_per_second_median": 476.57570713299947,
+      "units_per_second_median": 460.6587104523594,
       "active_pods_min": 50,
       "active_pods_max": 60,
       "active_containers_min": 100,
       "active_containers_max": 120,
-      "response_bytes_p50": 1176598.0,
-      "response_bytes_p95": 1224923.0,
+      "response_bytes_p50": 1175767.0,
+      "response_bytes_p95": 1179285.0,
       "exact_vectors": 1000,
       "expected_vectors": 1000,
       "api_errors": 0,
@@ -238,9 +238,9 @@
       "modeled_api_list_operations": 40,
       "policy_fanout_units": 10,
       "policy_fanout_core_ms": {
-        "p50": 0.0995005,
-        "p95": 0.11027885,
-        "mean": 0.10141675000000001
+        "p50": 0.102354,
+        "p95": 0.13625625000000005,
+        "mean": 0.10923540000000001
       },
       "policy_fanout_exact_total": 200,
       "policy_fanout_expected_total": 200

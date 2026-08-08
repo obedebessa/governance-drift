@@ -1,7 +1,7 @@
 {
   "title": "Governance Drift: Reproducibility Package",
   "upload_type": "software",
-  "description": "Draft deposit metadata for the Governance Drift v1.6.0 candidate: manuscript source, closed-world detector study, separately implemented no-join baseline, canonical results, and bounded Kubernetes/GitOps laboratories. The primary live campaign retains 538/540 detections with 538/538 exact provisional class-set classifications conditional on detection under a sequential-snapshot laboratory assumption, plus 45/45 exact provisional compound class sets. The candidate adds activation-safe basis-selection probes at B4 (separate from the frozen primary live campaign), admissible temporal-cut tests, transition-inclusive controls, a nine-episode/27-process trace audit with two-poll exact persistence, localhost transport faults, scaling benchmarks, a live multi-Deployment adapter path, and a pending Argo CD/Gatekeeper frozen rerun limited to projected singleton classifications over declared evaluated components. Only configuration and policy use native second-stack surfaces; authorization retains the shared digest adapter, and intent/environment are not evaluated there. These results demonstrate bounded semantic realizability and within-laboratory behavior, not natural occurrence, field prevalence, production effectiveness, equivalence, or production reliability. No v1.6.0 DOI or release tag is claimed until the candidate is frozen and verified.",
+  "description": "Prerelease deposit metadata for the frozen Governance Drift v1.6.0 candidate: manuscript source, closed-world detector study, separately implemented no-join baseline, canonical results, and bounded Kubernetes/GitOps laboratories. The primary live campaign retains 538/540 detections with 538/538 exact provisional class-set classifications conditional on detection under a sequential-snapshot laboratory assumption, plus 45/45 exact provisional compound class sets. The candidate adds activation-safe basis-selection probes at B4 (separate from the frozen primary live campaign), admissible temporal-cut tests, transition-inclusive controls, a nine-episode/27-process trace audit with 27/27 exact trajectories and two-poll exact persistence across 261 polls, localhost transport faults, scaling benchmarks, a live multi-Deployment adapter path, and a completed Argo CD/Gatekeeper campaign with 15/15 exact projected singleton classifications over declared evaluated components. Only configuration and policy use native second-stack surfaces; authorization retains the shared digest adapter, and intent/environment are not evaluated there. These results demonstrate bounded semantic realizability and within-laboratory behavior, not natural occurrence, field prevalence, production effectiveness, equivalence, or production reliability. The identifier 10.5281/zenodo.21847543 is reserved for v1.6.0 but is not claimed as a public or citable DOI until the verified deposit is published; no release tag is yet claimed.",
   "creators": [
     {
       "name": "Bessa Rocha da Silva, Obede",
@@ -10,7 +10,7 @@
   ],
   "access_right": "open",
   "license": "mit-license",
-  "version": "1.6.0-rc.1",
+  "version": "1.6.0",
   "keywords": [
     "governance drift",
     "configuration drift",

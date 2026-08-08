@@ -1,14 +1,17 @@
 \section{Data and Code Availability}
 \label{sec:availability}
 
-A venue-specific sanitized reproducibility bundle containing manuscript
-source, reference implementations, executable tests, raw observations,
-analysis scripts, and generated tables will be produced for review through the
-selected venue's artifact channel. The identified working tree and its public
-archive are \emph{not} suitable for double-blind review because capture-host
-paths and identified provenance may reveal authorship. The sanitized bundle
-will remove those identifiers while preserving commands, hashes, relationships
-among records, and machine-readable platform/seed metadata. Repository, DOI,
-release tag, author identity, and identifying commit metadata are withheld from
-this review build and may be restored only under the venue's camera-ready
-policy.
+The supplied deterministic builder produces a venue-specific, text-only
+sanitized reproducibility bundle containing manuscript source, reference
+implementations, executable tests, raw observations, analysis scripts, and
+generated tables for the selected venue's artifact channel. The identified
+working tree and its public archive are \emph{not} suitable for double-blind
+review because capture-host paths and identified provenance may reveal
+authorship. Sanitization removes those identifiers while retaining scientific
+values, commands, record relationships, and machine-readable platform/seed
+metadata. Because redaction necessarily changes bytes, the review bundle does
+not pretend to preserve the identified artifact's embedded byte hashes: it
+ships a new authoritative deterministic manifest and discloses that boundary.
+Repository, DOI, release tag, author identity, and identifying commit metadata
+are withheld from this review build and may be restored only under the venue's
+camera-ready policy.

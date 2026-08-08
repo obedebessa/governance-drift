@@ -35,11 +35,15 @@ attest its activation; cancellation marks it aborted. Persist both events
 durably and independently of the delivery
 platforms. This is the architecture's one hard prerequisite: without a
 recorded approval basis there is nothing to drift \emph{from}; where such
-records are absent or decayed, only the basis-dependent components and the
-total governance verdict degrade to undecidable (their entries of $\ObsMask$
-are zero). The desired/observed configuration component remains comparable
-when its own evidence contract is satisfied; the evaluator must report this
-partial result rather than either total consistency or total ignorance.
+records are absent or decayed, the basis-dependent entries of
+$\ObsMask_{\mu}(u,\theta;T)$ are zero and those components are undecidable. If
+no independently evaluated component is known nonzero, the total status is
+undecidable; if configuration or another independently established component
+is known nonzero, the total status is inconsistent because known inconsistency
+precedes unknown evidence. The desired/observed configuration component remains
+comparable when its own evidence contract is satisfied; the evaluator must
+report this partial vector and mask rather than either total consistency or
+total ignorance.
 Conflicting activated maxima also fail closed instead of being
 ordered by approval timestamp (\cref{prop:basis-selection}).
 
@@ -69,7 +73,7 @@ plainly; the difference is the reference (the approval event's recorded
 assumptions rather than a benchmark) and the joined, class-resolved verdict.
 
 \textbf{Evaluator.} A continuous process (or scheduled sweep) computing
-$\GD(t)$ per deployment: cheap incremental checks on context-change events
+$\GD_{\mu}(u,\theta;T)$ per deployment: cheap incremental checks on context-change events
 (policy revision published, exception clock elapsed, registry event), using
 event-triggered recomputation where a source exposes deltas and scheduled or
 background re-evaluation where it does not. Several scenarios

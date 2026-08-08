@@ -45,22 +45,27 @@ snapshots formal $\Cons$ evaluations.
 Additional campaigns bound the implementation claim instead of inflating it.
 A nine-episode audit ran 27 separate observer processes and retained 261 raw
 polls; all 27 correlated trajectories reached the exact expected class set and
-then two-poll exact persistence, with zero adapter error. A real two-hop localhost transport campaign passed
+then two-poll exact persistence, with zero adapter error. Cause-start-to-first-exact
+completion had median 4.465~s (nearest-rank P95 9.764), while
+cause-start-to-two-poll exact persistence had median 9.522~s (P95 19.811); the
+latter is not watermark-qualified Stable-VCL. A real two-hop localhost transport campaign passed
 all eleven fault-state safety checks. The in-memory batch core remained exact
 through 1,000 units, and the live object path completed a 50-Deployment target
 spanning 50--60 Pods and 100--120 containers; the 100-Deployment target hit
-its declared readiness stop and contributed no timing sample. A pending bounded
-second-stack rerun will report projected singleton classifications over its
-declared evaluated components: Argo CD and Gatekeeper provide the native S1
-configuration and S3 policy paths, while S4 retains the shared digest adapter;
-intent and environment are not evaluated there, and frozen counts remain
-\texttt{CROSS\_TBD}.
+its declared readiness stop and contributed no timing sample. The bounded Argo
+CD/Gatekeeper replication produced 15/15 exact projected singleton
+classifications over declared evaluated components. S1 configuration and S3
+policy used native second-stack paths; S4 retained the shared digest adapter,
+and intent and environment were not evaluated. These results do not constitute
+complete-vector validation, independent S4 authorization validation, or
+cross-stack equivalence.
 
 These results answer RQ0 under explicit conditions: governance drift is
 representable as a component-resolved vector; configuration remains comparable
-from desired and observed state, whereas basis-dependent components and total
-governance conformance are measurable only where the admitted basis and their
-required evidence exist. Detection reaches only the depth of the maintained
+from desired and observed state, whereas basis-dependent components are
+measurable only where the admitted basis and their required evidence exist.
+Missing basis evidence prevents total consistency but does not erase a known
+inconsistency in another component. Detection reaches only the depth of the maintained
 evidence tiers. The results demonstrate semantic realizability,
 safe uncertainty handling, and bounded behavior within the reported conditions.
 They do not estimate natural occurrence, organizational prevalence,

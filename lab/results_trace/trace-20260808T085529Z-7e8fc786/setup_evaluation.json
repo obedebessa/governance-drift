@@ -1,0 +1,76 @@
+{
+  "class": null,
+  "class_set": [],
+  "components": {
+    "authorization": "consistent",
+    "configuration": "consistent",
+    "environment": "consistent",
+    "intent": "consistent",
+    "policy": "consistent"
+  },
+  "detail": "",
+  "details": {
+    "authorization": [],
+    "configuration": [],
+    "environment": [],
+    "intent": [],
+    "policy": []
+  },
+  "drift_set": [],
+  "evaluation_completed_mono": 2734175.798709791,
+  "evaluation_started_mono": 2734175.567064583,
+  "evidence_drift": false,
+  "input_fingerprint_sha256": "d69c4fd56f339d96365d42c625f5806f09ddd7ae269d4791b2765ce23084543c",
+  "inputs": {
+    "authorization_files": {
+      "approvals": {
+        "APR-TRACE-BASE.json": {
+          "bytes": 536,
+          "sha256": "874f431c8ac7eed9a5d5ae2789516a0cdd8540b8f731b50ec5b674f7ac977853"
+        }
+      },
+      "proofs": {}
+    },
+    "basis": {
+      "basis_id": "trace-20260808T085529Z-7e8fc786:baseline",
+      "sha256": "8609e4f27f75ba74c993eac0ad08c2eaceffe97c21e2029a0e9cdb99ca590105"
+    },
+    "configuration": {
+      "deployment_uid": "56aed303-702e-4516-bfbb-25cd24639027",
+      "desired_file_sha256": "8c69ac164fc6da6bb6803d40628e7cc827d0a3e78fc4c26c96a60e8e4448b5ca",
+      "desired_projection_sha256": "4495b6dc96372a449c7eea95ecbfe307b3f829b4294492380773cc260cab87e2",
+      "generation": 1,
+      "observed_projection_sha256": "4495b6dc96372a449c7eea95ecbfe307b3f829b4294492380773cc260cab87e2",
+      "resource_version": "262052"
+    },
+    "deployment": "payments-trace",
+    "environment": {
+      "inventory_sha256": "09caa25f2306a7f8a8b6a2deb27d386444f0cd7e49c9c227abae50247ab1f659",
+      "violations": []
+    },
+    "git_revision": "e70b66c648ff83eee791e3f5487c9ba11a7d66af",
+    "namespace": "govdrift-trace",
+    "pods": [
+      {
+        "image_ids": [
+          "sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10"
+        ],
+        "name": "payments-trace-5cd4f7979d-7dnlw",
+        "phase": "Running",
+        "resource_version": "262050",
+        "uid": "510440be-3b6c-42b2-8a68-929470b95d21"
+      }
+    ],
+    "policy": {
+      "approved_version": "pi-7",
+      "live_version": "pi-7",
+      "policy_reports_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "resource_version": "261906",
+      "uid": "f4a5ee12-f155-4b7c-8a29-e5351faf120f"
+    },
+    "runtime": "/var/folders/hh/d9swhw0d1c7660vy4v9qv6_h0000gn/T/govdrift-trace-20260808T085529Z-7e8fc786-lmznhsc6"
+  },
+  "schema": "govdrift-trace-evaluation/v1",
+  "undecidable_components": [],
+  "verdict": "consistent"
+}

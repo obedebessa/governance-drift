@@ -1,0 +1,42 @@
+{
+  "cadences_seconds": [
+    1.0,
+    5.0,
+    10.0
+  ],
+  "campaign_id": "trace-20260808T085529Z-7e8fc786",
+  "expected": {
+    "S1": [
+      "configuration"
+    ],
+    "S2": [
+      "authorization"
+    ],
+    "S3": [
+      "policy"
+    ],
+    "S4": [
+      "authorization"
+    ],
+    "S5": [
+      "environment"
+    ],
+    "S6": [
+      "authorization",
+      "intent"
+    ],
+    "S7": [
+      "environment"
+    ],
+    "S8": [
+      "authorization"
+    ],
+    "S9": [
+      "evidence"
+    ]
+  },
+  "results": "/Users/obede/Library/Mobile Documents/com~apple~CloudDocs/EB-1 Vencedor/Scholarly Articles/09_Governance_Drift/lab/results_trace/trace-20260808T085529Z-7e8fc786",
+  "schema": "govdrift-trace-campaign/v1",
+  "started_utc": "2026-08-08T08:55:29.397879+00:00",
+  "temporary_runtime": "/var/folders/hh/d9swhw0d1c7660vy4v9qv6_h0000gn/T/govdrift-trace-20260808T085529Z-7e8fc786-lmznhsc6"
+}

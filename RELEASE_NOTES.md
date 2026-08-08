@@ -20,27 +20,35 @@
 - Executes a real-process trace audit for S1--S9: nine injected episodes,
   27 correlated 1/5/10-second trajectories, 261 raw polls, 27/27 exact outcomes
   and 27/27 with two-poll exact persistence, zero adapter errors, and a verified
-  133-file manifest. The two-poll check is not watermark-qualified persistence.
+  133-file manifest. Cause-to-first-exact median/P95 is 4.465/9.764 seconds;
+  two-poll exact-persistence median/P95 is 9.522/19.811 seconds. The two-poll
+  check is not watermark-qualified persistence.
 - Exercises nine deterministic profiles through a real two-hop localhost TCP
   path: 636 events, 25 vector evaluations, and eleven fault-state checks with
   zero safety or component-local masking failure.
 - Adds a 960-sample in-memory batched-join scaling campaign and a live Kind
-  multi-Deployment adapter campaign. The completed 50-unit target spans
-  50--60 Pods and 100--120 containers with 1,200/1,200 exact per-unit and
-  240/240 exact nested decisions; the 100-unit target is excluded after its
-  declared readiness stop.
+  multi-Deployment adapter campaign. At 1,000 in-memory units, full-sweep
+  P50/P95/P99 is 6.067/6.881/6.927 ms. Across the completed 10- and 50-unit
+  live targets, 1,200/1,200 per-unit and 240/240 nested decisions are exact;
+  the 50-unit phase spans 50--60 Pods and 100--120 containers. The 100-unit
+  target is excluded after its declared readiness stop.
 - Adds a bounded Argo CD v3.4.2/Gatekeeper v3.22.2 replication: five
-  repetitions each of S1, S3, and S4 report exact projected singleton
-  classifications only over declared evaluated components. Counts for the
-  UID-emitting frozen rerun remain `CROSS_TBD`. S1/S3 use native
+  repetitions each of S1, S3, and S4 yield 15/15 exact projected singleton
+  classifications over declared evaluated components. Median
+  first-honest/first-substantive/exact-set-completion latencies are
+  0.207/0.646/1.677 seconds for S1, 0.157/1.659/1.659 for S3, and
+  0.215/0.215/0.650 for S4. All 15 baseline restorations succeed, with zero
+  post-restoration differences, API-read errors, or final undecidable outcomes;
+  the stop rule is not triggered and cleanup is verified. S1/S3 use native
   second-stack surfaces; S4 remains the shared digest adapter, and
   intent/environment are not evaluated.
 - Broadens and bounds the related-work review, acknowledges prior uses of the
   exact term, adds a reproducible inclusion ledger, and narrows novelty to the
   deployment-level three-place relation and its executable semantics.
 - Prepares the manuscript, source-and-data snapshot, raw traces, validators,
-  and release-hash workflow. No v1.6.0 tag or Zenodo record is claimed until
-  the candidate is frozen and the aggregate verifier passes.
+  and release-hash workflow. The candidate results are frozen, but no v1.6.0
+  tag or public Zenodo record is claimed until the PDF, packages, aggregate
+  verification, and release hashes pass and the reserved deposit is published.
 
 ## v1.5.0 — 2026-08-08
 

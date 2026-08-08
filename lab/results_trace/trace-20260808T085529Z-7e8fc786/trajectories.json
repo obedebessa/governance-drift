@@ -1,0 +1,1527 @@
+[
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 1.0,
+    "cause_to_first_alert_seconds": 0.4619809999130666,
+    "cause_to_first_exact_seconds": 1.4893691656179726,
+    "cause_to_stable_exact_seconds": 2.514237249735743,
+    "effect_to_first_exact_seconds": 0.711253915913403,
+    "exact_correct": true,
+    "expected_class_set": [
+      "configuration"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734179.036857541,
+      "actual_start_utc": "2026-08-08T08:56:05.612451+00:00",
+      "class_set": [
+        "configuration",
+        "evidence"
+      ],
+      "completed_mono": 2734179.240265625,
+      "completed_utc": "2026-08-08T08:56:05.815861+00:00",
+      "poll_sha256": "93e4849523e079899d8511847f6bdee456839c94e906de7fda4ebc494ba05279",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734180.03994,
+      "actual_start_utc": "2026-08-08T08:56:06.615539+00:00",
+      "class_set": [
+        "configuration"
+      ],
+      "completed_mono": 2734180.267653791,
+      "completed_utc": "2026-08-08T08:56:06.843258+00:00",
+      "poll_sha256": "e06a6a3128f1a262ffe4b7f62e43e8c8c49639b5bc7b7703aa9e664340308fb5",
+      "sequence": 3,
+      "verdict": "drift"
+    },
+    "observer_id": "14130085-7439-4f0e-9d71-9062f38c80ce",
+    "pid": 66353,
+    "polls": 21,
+    "post_cause_polls": 20,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S1/observer-01s.ndjson",
+    "scenario": "S1",
+    "scenario_label": "manual in-cluster configuration change",
+    "stable_exact": {
+      "actual_start_mono": 2734181.04429625,
+      "actual_start_utc": "2026-08-08T08:56:07.619906+00:00",
+      "class_set": [
+        "configuration"
+      ],
+      "completed_mono": 2734181.292521875,
+      "completed_utc": "2026-08-08T08:56:07.868138+00:00",
+      "poll_sha256": "81acab3e7c9b87114641eab896b7ea1331fad94f37111b86df303ebdcf2d9998",
+      "sequence": 4,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 5.0,
+    "cause_to_first_alert_seconds": 4.478262249846011,
+    "cause_to_first_exact_seconds": 4.478262249846011,
+    "cause_to_stable_exact_seconds": 9.500850207637995,
+    "effect_to_first_exact_seconds": 3.700147000141442,
+    "exact_correct": true,
+    "expected_class_set": [
+      "configuration"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734183.036351083,
+      "actual_start_utc": "2026-08-08T08:56:09.611978+00:00",
+      "class_set": [
+        "configuration"
+      ],
+      "completed_mono": 2734183.256546875,
+      "completed_utc": "2026-08-08T08:56:09.832177+00:00",
+      "poll_sha256": "78173468a35cbc1be0d556f85cedc0d08bf0713913e121f7ba7cb8955feae9e5",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734183.036351083,
+      "actual_start_utc": "2026-08-08T08:56:09.611978+00:00",
+      "class_set": [
+        "configuration"
+      ],
+      "completed_mono": 2734183.256546875,
+      "completed_utc": "2026-08-08T08:56:09.832177+00:00",
+      "poll_sha256": "78173468a35cbc1be0d556f85cedc0d08bf0713913e121f7ba7cb8955feae9e5",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "observer_id": "65e80936-1a4d-4061-ab29-5b03bb40ca7f",
+    "pid": 66354,
+    "polls": 5,
+    "post_cause_polls": 4,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S1/observer-05s.ndjson",
+    "scenario": "S1",
+    "scenario_label": "manual in-cluster configuration change",
+    "stable_exact": {
+      "actual_start_mono": 2734188.036562875,
+      "actual_start_utc": "2026-08-08T08:56:14.612245+00:00",
+      "class_set": [
+        "configuration"
+      ],
+      "completed_mono": 2734188.279134833,
+      "completed_utc": "2026-08-08T08:56:14.854815+00:00",
+      "poll_sha256": "81b0a896a001816089025b1e6b1ca04f8b507c4511bcd4ad29e06832850123a3",
+      "sequence": 3,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 10.0,
+    "cause_to_first_alert_seconds": 9.500680207740515,
+    "cause_to_first_exact_seconds": 9.500680207740515,
+    "cause_to_stable_exact_seconds": 19.479959500022233,
+    "effect_to_first_exact_seconds": 8.722564958035946,
+    "exact_correct": true,
+    "expected_class_set": [
+      "configuration"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734188.045947333,
+      "actual_start_utc": "2026-08-08T08:56:14.621680+00:00",
+      "class_set": [
+        "configuration"
+      ],
+      "completed_mono": 2734188.278964833,
+      "completed_utc": "2026-08-08T08:56:14.854644+00:00",
+      "poll_sha256": "ff400c82de017d27778cab38e0cb29f2560fe7360a34557f1cc6d4b8c9479027",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734188.045947333,
+      "actual_start_utc": "2026-08-08T08:56:14.621680+00:00",
+      "class_set": [
+        "configuration"
+      ],
+      "completed_mono": 2734188.278964833,
+      "completed_utc": "2026-08-08T08:56:14.854644+00:00",
+      "poll_sha256": "ff400c82de017d27778cab38e0cb29f2560fe7360a34557f1cc6d4b8c9479027",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "observer_id": "68150b05-8fa2-4408-9ba7-09449dc9863b",
+    "pid": 66355,
+    "polls": 3,
+    "post_cause_polls": 2,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S1/observer-10s.ndjson",
+    "scenario": "S1",
+    "scenario_label": "manual in-cluster configuration change",
+    "stable_exact": {
+      "actual_start_mono": 2734198.037803833,
+      "actual_start_utc": "2026-08-08T08:56:24.613612+00:00",
+      "class_set": [
+        "configuration"
+      ],
+      "completed_mono": 2734198.258244125,
+      "completed_utc": "2026-08-08T08:56:24.834016+00:00",
+      "poll_sha256": "1f5d6a8434360411ca92d33c6a9a9225fe25b1301bd34419d110ffe92c1cfc8a",
+      "sequence": 3,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 1.0,
+    "cause_to_first_alert_seconds": 0.5217690421268344,
+    "cause_to_first_exact_seconds": 0.5217690421268344,
+    "cause_to_stable_exact_seconds": 1.5710450829938054,
+    "effect_to_first_exact_seconds": 0.5190897919237614,
+    "exact_correct": true,
+    "expected_class_set": [
+      "authorization"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734208.892053416,
+      "actual_start_utc": "2026-08-08T08:56:35.467924+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734209.093888375,
+      "completed_utc": "2026-08-08T08:56:35.669766+00:00",
+      "poll_sha256": "a7df0fad7114ce8ee8eca820ed08df238a30b47f04562cd0e80c613cfacd386f",
+      "sequence": 9,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734208.892053416,
+      "actual_start_utc": "2026-08-08T08:56:35.467924+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734209.093888375,
+      "completed_utc": "2026-08-08T08:56:35.669766+00:00",
+      "poll_sha256": "a7df0fad7114ce8ee8eca820ed08df238a30b47f04562cd0e80c613cfacd386f",
+      "sequence": 9,
+      "verdict": "drift"
+    },
+    "observer_id": "4d62b8c2-7216-468c-beba-cc07de65174e",
+    "pid": 66620,
+    "polls": 21,
+    "post_cause_polls": 13,
+    "pre_cause_polls": 8,
+    "raw_path": "raw/S2/observer-01s.ndjson",
+    "scenario": "S2",
+    "scenario_label": "expired temporary exception with persistent effect",
+    "stable_exact": {
+      "actual_start_mono": 2734209.891915041,
+      "actual_start_utc": "2026-08-08T08:56:36.467801+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734210.143164416,
+      "completed_utc": "2026-08-08T08:56:36.719051+00:00",
+      "poll_sha256": "221a2bb90fcbb521a29d0bc0b2261b223db6fb6a46d9717f8a28dafe2261a1c6",
+      "sequence": 10,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 5.0,
+    "cause_to_first_alert_seconds": 2.614408750087023,
+    "cause_to_first_exact_seconds": 2.614408750087023,
+    "cause_to_stable_exact_seconds": 7.591322417370975,
+    "effect_to_first_exact_seconds": 2.6117294998839498,
+    "exact_correct": true,
+    "expected_class_set": [
+      "authorization"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734210.8924295,
+      "actual_start_utc": "2026-08-08T08:56:37.468417+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734211.186528083,
+      "completed_utc": "2026-08-08T08:56:37.762425+00:00",
+      "poll_sha256": "2d83c21b6b8dbd8fd8ed38955c9df51a9a51aa0e4b5c3afa30913a3333572003",
+      "sequence": 3,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734210.8924295,
+      "actual_start_utc": "2026-08-08T08:56:37.468417+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734211.186528083,
+      "completed_utc": "2026-08-08T08:56:37.762425+00:00",
+      "poll_sha256": "2d83c21b6b8dbd8fd8ed38955c9df51a9a51aa0e4b5c3afa30913a3333572003",
+      "sequence": 3,
+      "verdict": "drift"
+    },
+    "observer_id": "8fdf95f5-9fe6-4e75-9885-5c115389c4be",
+    "pid": 66621,
+    "polls": 5,
+    "post_cause_polls": 3,
+    "pre_cause_polls": 2,
+    "raw_path": "raw/S2/observer-05s.ndjson",
+    "scenario": "S2",
+    "scenario_label": "expired temporary exception with persistent effect",
+    "stable_exact": {
+      "actual_start_mono": 2734215.890470041,
+      "actual_start_utc": "2026-08-08T08:56:42.466420+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734216.16344175,
+      "completed_utc": "2026-08-08T08:56:42.739383+00:00",
+      "poll_sha256": "9bc2a1d0ba173933418b6a3af471712e9936d2b179374633349f61491be6fee2",
+      "sequence": 4,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 10.0,
+    "cause_to_first_alert_seconds": 2.6144388751126826,
+    "cause_to_first_exact_seconds": 2.6144388751126826,
+    "cause_to_stable_exact_seconds": 12.612919582985342,
+    "effect_to_first_exact_seconds": 2.6117596249096096,
+    "exact_correct": true,
+    "expected_class_set": [
+      "authorization"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734210.885485958,
+      "actual_start_utc": "2026-08-08T08:56:37.461492+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734211.186558208,
+      "completed_utc": "2026-08-08T08:56:37.762454+00:00",
+      "poll_sha256": "8eabd02952e6b0c406ae76d5c88cad2806f9407707c29c539a74d480c94c955f",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734210.885485958,
+      "actual_start_utc": "2026-08-08T08:56:37.461492+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734211.186558208,
+      "completed_utc": "2026-08-08T08:56:37.762454+00:00",
+      "poll_sha256": "8eabd02952e6b0c406ae76d5c88cad2806f9407707c29c539a74d480c94c955f",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "observer_id": "87c1a638-7d88-4009-b446-9254c576ddcc",
+    "pid": 66622,
+    "polls": 3,
+    "post_cause_polls": 2,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S2/observer-10s.ndjson",
+    "scenario": "S2",
+    "scenario_label": "expired temporary exception with persistent effect",
+    "stable_exact": {
+      "actual_start_mono": 2734220.886044416,
+      "actual_start_utc": "2026-08-08T08:56:47.462070+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734221.185038916,
+      "completed_utc": "2026-08-08T08:56:47.761029+00:00",
+      "poll_sha256": "11eda9ea64e05a5f1dace560651da19833f88adbe10ed55db51b531d0d9a969a",
+      "sequence": 3,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 1.0,
+    "cause_to_first_alert_seconds": 0.4847245002165437,
+    "cause_to_first_exact_seconds": 0.4847245002165437,
+    "cause_to_stable_exact_seconds": 1.5829357909969985,
+    "effect_to_first_exact_seconds": 0.36954712495207787,
+    "exact_correct": true,
+    "expected_class_set": [
+      "policy"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734224.532468666,
+      "actual_start_utc": "2026-08-08T08:56:51.108488+00:00",
+      "class_set": [
+        "policy"
+      ],
+      "completed_mono": 2734224.724059625,
+      "completed_utc": "2026-08-08T08:56:51.300084+00:00",
+      "poll_sha256": "15ed1e7fdbbd6ec42b7b5940c97ed1a49cc77f6dc18d82b566dbef06116a9274",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734224.532468666,
+      "actual_start_utc": "2026-08-08T08:56:51.108488+00:00",
+      "class_set": [
+        "policy"
+      ],
+      "completed_mono": 2734224.724059625,
+      "completed_utc": "2026-08-08T08:56:51.300084+00:00",
+      "poll_sha256": "15ed1e7fdbbd6ec42b7b5940c97ed1a49cc77f6dc18d82b566dbef06116a9274",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "observer_id": "5e694498-a900-4892-8da4-b6250f48f572",
+    "pid": 67120,
+    "polls": 21,
+    "post_cause_polls": 20,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S3/observer-01s.ndjson",
+    "scenario": "S3",
+    "scenario_label": "policy supersession",
+    "stable_exact": {
+      "actual_start_mono": 2734225.532547458,
+      "actual_start_utc": "2026-08-08T08:56:52.108579+00:00",
+      "class_set": [
+        "policy"
+      ],
+      "completed_mono": 2734225.822270916,
+      "completed_utc": "2026-08-08T08:56:52.398304+00:00",
+      "poll_sha256": "d09862e0d7071ffd0216e34d908b587c0451c1a04993b75aa66a15eb6ea05af4",
+      "sequence": 3,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 5.0,
+    "cause_to_first_alert_seconds": 4.528380958363414,
+    "cause_to_first_exact_seconds": 4.528380958363414,
+    "cause_to_stable_exact_seconds": 9.551730582956225,
+    "effect_to_first_exact_seconds": 4.413203583098948,
+    "exact_correct": true,
+    "expected_class_set": [
+      "policy"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734228.527172791,
+      "actual_start_utc": "2026-08-08T08:56:55.103230+00:00",
+      "class_set": [
+        "policy"
+      ],
+      "completed_mono": 2734228.767716083,
+      "completed_utc": "2026-08-08T08:56:55.343780+00:00",
+      "poll_sha256": "fca81bca9466150115a1fe2c9b02de063c3cc019001d01d747281a47283c63ef",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734228.527172791,
+      "actual_start_utc": "2026-08-08T08:56:55.103230+00:00",
+      "class_set": [
+        "policy"
+      ],
+      "completed_mono": 2734228.767716083,
+      "completed_utc": "2026-08-08T08:56:55.343780+00:00",
+      "poll_sha256": "fca81bca9466150115a1fe2c9b02de063c3cc019001d01d747281a47283c63ef",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "observer_id": "431ff4b0-43b7-4f6b-848d-5ab52e533a9c",
+    "pid": 67121,
+    "polls": 5,
+    "post_cause_polls": 4,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S3/observer-05s.ndjson",
+    "scenario": "S3",
+    "scenario_label": "policy supersession",
+    "stable_exact": {
+      "actual_start_mono": 2734233.528110541,
+      "actual_start_utc": "2026-08-08T08:57:00.104222+00:00",
+      "class_set": [
+        "policy"
+      ],
+      "completed_mono": 2734233.791065708,
+      "completed_utc": "2026-08-08T08:57:00.367178+00:00",
+      "poll_sha256": "a53522b97537e32931bead4c62c2460fde5bb4fb2fb733bfa1cd723d321b0110",
+      "sequence": 3,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 10.0,
+    "cause_to_first_alert_seconds": 9.550965750124305,
+    "cause_to_first_exact_seconds": 9.550965750124305,
+    "cause_to_stable_exact_seconds": 19.552514208015054,
+    "effect_to_first_exact_seconds": 9.43578837485984,
+    "exact_correct": true,
+    "expected_class_set": [
+      "policy"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734233.528211083,
+      "actual_start_utc": "2026-08-08T08:57:00.104322+00:00",
+      "class_set": [
+        "policy"
+      ],
+      "completed_mono": 2734233.790300875,
+      "completed_utc": "2026-08-08T08:57:00.366415+00:00",
+      "poll_sha256": "c18ccbf36147b5e8538d5e766ce1963151852a744413e4f83424bfe338d22e57",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734233.528211083,
+      "actual_start_utc": "2026-08-08T08:57:00.104322+00:00",
+      "class_set": [
+        "policy"
+      ],
+      "completed_mono": 2734233.790300875,
+      "completed_utc": "2026-08-08T08:57:00.366415+00:00",
+      "poll_sha256": "c18ccbf36147b5e8538d5e766ce1963151852a744413e4f83424bfe338d22e57",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "observer_id": "346e3bae-e6e8-4aaa-96c5-e227987281f3",
+    "pid": 67122,
+    "polls": 3,
+    "post_cause_polls": 2,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S3/observer-10s.ndjson",
+    "scenario": "S3",
+    "scenario_label": "policy supersession",
+    "stable_exact": {
+      "actual_start_mono": 2734243.534395416,
+      "actual_start_utc": "2026-08-08T08:57:10.110637+00:00",
+      "class_set": [
+        "policy"
+      ],
+      "completed_mono": 2734243.791849333,
+      "completed_utc": "2026-08-08T08:57:10.368052+00:00",
+      "poll_sha256": "19e38bbf046b3729af1b311678108ce7303c322a90626366e99638f49b06714f",
+      "sequence": 3,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 1.0,
+    "cause_to_first_alert_seconds": 0.6753414575941861,
+    "cause_to_first_exact_seconds": 1.70191245758906,
+    "cause_to_stable_exact_seconds": 2.6909422078169882,
+    "effect_to_first_exact_seconds": 0.9879579995758832,
+    "exact_correct": true,
+    "expected_class_set": [
+      "authorization"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734248.383278083,
+      "actual_start_utc": "2026-08-08T08:57:14.959530+00:00",
+      "class_set": [
+        "evidence"
+      ],
+      "completed_mono": 2734248.585446791,
+      "completed_utc": "2026-08-08T08:57:15.161696+00:00",
+      "poll_sha256": "18bea3e4f86438171259fb1470c060cbb3b4100273fe45b7fe37915a3ba80acf",
+      "sequence": 3,
+      "verdict": "undecidable"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734249.37999125,
+      "actual_start_utc": "2026-08-08T08:57:15.956249+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734249.612017791,
+      "completed_utc": "2026-08-08T08:57:16.188277+00:00",
+      "poll_sha256": "2e031dc47db3db85f7e222de7eb83e73d7c6206c4c5b6085c60568388d104f6a",
+      "sequence": 4,
+      "verdict": "drift"
+    },
+    "observer_id": "da5e6545-049a-4ca6-b643-6693a38386e5",
+    "pid": 67382,
+    "polls": 21,
+    "post_cause_polls": 19,
+    "pre_cause_polls": 2,
+    "raw_path": "raw/S4/observer-01s.ndjson",
+    "scenario": "S4",
+    "scenario_label": "admission-time artifact substitution",
+    "stable_exact": {
+      "actual_start_mono": 2734250.385598916,
+      "actual_start_utc": "2026-08-08T08:57:16.961862+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734250.601047541,
+      "completed_utc": "2026-08-08T08:57:17.177314+00:00",
+      "poll_sha256": "bc6e5768c6d5ce668271b52688881341940949b76990e8daa66834cc7439a4aa",
+      "sequence": 5,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 5.0,
+    "cause_to_first_alert_seconds": 3.7428575418889523,
+    "cause_to_first_exact_seconds": 3.7428575418889523,
+    "cause_to_stable_exact_seconds": 8.734106166753918,
+    "effect_to_first_exact_seconds": 3.0289030838757753,
+    "exact_correct": true,
+    "expected_class_set": [
+      "authorization"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734251.378989416,
+      "actual_start_utc": "2026-08-08T08:57:17.955279+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734251.652962875,
+      "completed_utc": "2026-08-08T08:57:18.229244+00:00",
+      "poll_sha256": "8abab17ac284baead8ef0ab9c8d9bfd5adfcdd247657a540e3ceb6a506a1fe79",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734251.378989416,
+      "actual_start_utc": "2026-08-08T08:57:17.955279+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734251.652962875,
+      "completed_utc": "2026-08-08T08:57:18.229244+00:00",
+      "poll_sha256": "8abab17ac284baead8ef0ab9c8d9bfd5adfcdd247657a540e3ceb6a506a1fe79",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "observer_id": "e2db24ed-a78c-48d8-9830-669f2b887103",
+    "pid": 67383,
+    "polls": 5,
+    "post_cause_polls": 4,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S4/observer-05s.ndjson",
+    "scenario": "S4",
+    "scenario_label": "admission-time artifact substitution",
+    "stable_exact": {
+      "actual_start_mono": 2734256.384533291,
+      "actual_start_utc": "2026-08-08T08:57:22.960854+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734256.6442115,
+      "completed_utc": "2026-08-08T08:57:23.220542+00:00",
+      "poll_sha256": "1a3d8db6deee2616d6de96de572295efa413e1a102998bbaf51993749bf1af79",
+      "sequence": 3,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 10.0,
+    "cause_to_first_alert_seconds": 8.734104041941464,
+    "cause_to_first_exact_seconds": 8.734104041941464,
+    "cause_to_stable_exact_seconds": 18.778162207920104,
+    "effect_to_first_exact_seconds": 8.020149583928287,
+    "exact_correct": true,
+    "expected_class_set": [
+      "authorization"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734256.383185625,
+      "actual_start_utc": "2026-08-08T08:57:22.959511+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734256.644209375,
+      "completed_utc": "2026-08-08T08:57:23.220538+00:00",
+      "poll_sha256": "0f62f51f1c7462d892444403748831ebfbd680498f111db8db1885e689b9141e",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734256.383185625,
+      "actual_start_utc": "2026-08-08T08:57:22.959511+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734256.644209375,
+      "completed_utc": "2026-08-08T08:57:23.220538+00:00",
+      "poll_sha256": "0f62f51f1c7462d892444403748831ebfbd680498f111db8db1885e689b9141e",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "observer_id": "e6e3f808-3d07-4d84-9b64-3b8df87c4722",
+    "pid": 67384,
+    "polls": 3,
+    "post_cause_polls": 2,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S4/observer-10s.ndjson",
+    "scenario": "S4",
+    "scenario_label": "admission-time artifact substitution",
+    "stable_exact": {
+      "actual_start_mono": 2734266.379815041,
+      "actual_start_utc": "2026-08-08T08:57:32.956244+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734266.688267541,
+      "completed_utc": "2026-08-08T08:57:33.264694+00:00",
+      "poll_sha256": "084c595b1d28aaf2d0e3edc88a77512379f30bdeec3c2e999aef8da97d87458a",
+      "sequence": 3,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 1.0,
+    "cause_to_first_alert_seconds": 0.4715793328359723,
+    "cause_to_first_exact_seconds": 0.4715793328359723,
+    "cause_to_stable_exact_seconds": 1.4986188751645386,
+    "effect_to_first_exact_seconds": 0.47114524990320206,
+    "exact_correct": true,
+    "expected_class_set": [
+      "environment"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734270.363221958,
+      "actual_start_utc": "2026-08-08T08:57:36.939676+00:00",
+      "class_set": [
+        "environment"
+      ],
+      "completed_mono": 2734270.594307041,
+      "completed_utc": "2026-08-08T08:57:37.170764+00:00",
+      "poll_sha256": "2c552f3c2171b4b0ab6f82539b9f9218c22c2a3e70d570f6b734b63844095088",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734270.363221958,
+      "actual_start_utc": "2026-08-08T08:57:36.939676+00:00",
+      "class_set": [
+        "environment"
+      ],
+      "completed_mono": 2734270.594307041,
+      "completed_utc": "2026-08-08T08:57:37.170764+00:00",
+      "poll_sha256": "2c552f3c2171b4b0ab6f82539b9f9218c22c2a3e70d570f6b734b63844095088",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "observer_id": "7f8e0016-185d-46c2-bbfb-e437caaa6426",
+    "pid": 67896,
+    "polls": 21,
+    "post_cause_polls": 20,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S5/observer-01s.ndjson",
+    "scenario": "S5",
+    "scenario_label": "IAM authorization-surface expansion",
+    "stable_exact": {
+      "actual_start_mono": 2734271.366601875,
+      "actual_start_utc": "2026-08-08T08:57:37.943074+00:00",
+      "class_set": [
+        "environment"
+      ],
+      "completed_mono": 2734271.621346583,
+      "completed_utc": "2026-08-08T08:57:38.197814+00:00",
+      "poll_sha256": "2fa89890750e234adabb96a3f66bf6cd447aae1718ec3647a9a330acfd70b7ef",
+      "sequence": 3,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 5.0,
+    "cause_to_first_alert_seconds": 4.464629833120853,
+    "cause_to_first_exact_seconds": 4.464629833120853,
+    "cause_to_stable_exact_seconds": 9.522095125168562,
+    "effect_to_first_exact_seconds": 4.4641957501880825,
+    "exact_correct": true,
+    "expected_class_set": [
+      "environment"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734274.369058625,
+      "actual_start_utc": "2026-08-08T08:57:40.945550+00:00",
+      "class_set": [
+        "environment"
+      ],
+      "completed_mono": 2734274.587357541,
+      "completed_utc": "2026-08-08T08:57:41.163853+00:00",
+      "poll_sha256": "7db0155224518465a805c245f2129c7194d36d4ec336e920e2dac5c41fd70aa4",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734274.369058625,
+      "actual_start_utc": "2026-08-08T08:57:40.945550+00:00",
+      "class_set": [
+        "environment"
+      ],
+      "completed_mono": 2734274.587357541,
+      "completed_utc": "2026-08-08T08:57:41.163853+00:00",
+      "poll_sha256": "7db0155224518465a805c245f2129c7194d36d4ec336e920e2dac5c41fd70aa4",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "observer_id": "9a0aa2af-0e56-44b3-92f4-15c0d4f9759d",
+    "pid": 67897,
+    "polls": 5,
+    "post_cause_polls": 4,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S5/observer-05s.ndjson",
+    "scenario": "S5",
+    "scenario_label": "IAM authorization-surface expansion",
+    "stable_exact": {
+      "actual_start_mono": 2734279.363008083,
+      "actual_start_utc": "2026-08-08T08:57:45.939566+00:00",
+      "class_set": [
+        "environment"
+      ],
+      "completed_mono": 2734279.644822833,
+      "completed_utc": "2026-08-08T08:57:46.221369+00:00",
+      "poll_sha256": "f322f4c16469481df16480acb5a38570c25f9dc3832b6bb76b7b2af7b35c4c3d",
+      "sequence": 3,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 10.0,
+    "cause_to_first_alert_seconds": 9.523719583172351,
+    "cause_to_first_exact_seconds": 9.523719583172351,
+    "cause_to_stable_exact_seconds": 19.507925250101835,
+    "effect_to_first_exact_seconds": 9.52328550023958,
+    "exact_correct": true,
+    "expected_class_set": [
+      "environment"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734279.372631125,
+      "actual_start_utc": "2026-08-08T08:57:45.949185+00:00",
+      "class_set": [
+        "environment"
+      ],
+      "completed_mono": 2734279.646447291,
+      "completed_utc": "2026-08-08T08:57:46.223000+00:00",
+      "poll_sha256": "2e0fcfdceddfef65539bdb21d3b538852aede5fdad656cc919b3cef532894966",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734279.372631125,
+      "actual_start_utc": "2026-08-08T08:57:45.949185+00:00",
+      "class_set": [
+        "environment"
+      ],
+      "completed_mono": 2734279.646447291,
+      "completed_utc": "2026-08-08T08:57:46.223000+00:00",
+      "poll_sha256": "2e0fcfdceddfef65539bdb21d3b538852aede5fdad656cc919b3cef532894966",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "observer_id": "158bd7ae-a78f-4d71-97fc-210dfb6056f0",
+    "pid": 67898,
+    "polls": 3,
+    "post_cause_polls": 2,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S5/observer-10s.ndjson",
+    "scenario": "S5",
+    "scenario_label": "IAM authorization-surface expansion",
+    "stable_exact": {
+      "actual_start_mono": 2734289.371655333,
+      "actual_start_utc": "2026-08-08T08:57:55.948288+00:00",
+      "class_set": [
+        "environment"
+      ],
+      "completed_mono": 2734289.630652958,
+      "completed_utc": "2026-08-08T08:57:56.207294+00:00",
+      "poll_sha256": "43007bf046c210ffdf34fb49b200a0de94bee274ea90f4a915c4c25d577d47f1",
+      "sequence": 3,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 1.0,
+    "cause_to_first_alert_seconds": 0.4935862082056701,
+    "cause_to_first_exact_seconds": 1.4706835001707077,
+    "cause_to_stable_exact_seconds": 2.4887599172070622,
+    "effect_to_first_exact_seconds": -4.092311542015523,
+    "exact_correct": true,
+    "expected_class_set": [
+      "authorization",
+      "intent"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734293.059487291,
+      "actual_start_utc": "2026-08-08T08:57:59.636156+00:00",
+      "class_set": [
+        "intent",
+        "evidence"
+      ],
+      "completed_mono": 2734293.278468416,
+      "completed_utc": "2026-08-08T08:57:59.855141+00:00",
+      "poll_sha256": "c7ea6edff60f4c21f000938e657c06e3cbd0f627497b3f5f8afa53717df350d8",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734294.051834625,
+      "actual_start_utc": "2026-08-08T08:58:00.628515+00:00",
+      "class_set": [
+        "authorization",
+        "intent"
+      ],
+      "completed_mono": 2734294.255565708,
+      "completed_utc": "2026-08-08T08:58:00.832247+00:00",
+      "poll_sha256": "fb8fddf4674236517b3c985db2e0042b08b97942b786bedbca3dcdcdaf914272",
+      "sequence": 3,
+      "verdict": "drift"
+    },
+    "observer_id": "be7cf006-655d-400d-90bb-bf9032b13b7a",
+    "pid": 68152,
+    "polls": 21,
+    "post_cause_polls": 20,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S6/observer-01s.ndjson",
+    "scenario": "S6",
+    "scenario_label": "unapproved Git rollback followed by Flux convergence",
+    "stable_exact": {
+      "actual_start_mono": 2734295.052147958,
+      "actual_start_utc": "2026-08-08T08:58:01.628835+00:00",
+      "class_set": [
+        "authorization",
+        "intent"
+      ],
+      "completed_mono": 2734295.273642125,
+      "completed_utc": "2026-08-08T08:58:01.850335+00:00",
+      "poll_sha256": "fedac653fb1584cc35e43fedf77b17f03230a02a96b719e4a2c62040b11d57e4",
+      "sequence": 4,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 5.0,
+    "cause_to_first_alert_seconds": 4.539520208258182,
+    "cause_to_first_exact_seconds": 4.539520208258182,
+    "cause_to_stable_exact_seconds": 9.547788083087653,
+    "effect_to_first_exact_seconds": -1.0234748339280486,
+    "exact_correct": true,
+    "expected_class_set": [
+      "authorization",
+      "intent"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734297.05430125,
+      "actual_start_utc": "2026-08-08T08:58:03.631008+00:00",
+      "class_set": [
+        "authorization",
+        "intent"
+      ],
+      "completed_mono": 2734297.324402416,
+      "completed_utc": "2026-08-08T08:58:03.901113+00:00",
+      "poll_sha256": "47f031cb51a047ce3f7e204f5a2735240988f0336c8a074f775ec624690a375b",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734297.05430125,
+      "actual_start_utc": "2026-08-08T08:58:03.631008+00:00",
+      "class_set": [
+        "authorization",
+        "intent"
+      ],
+      "completed_mono": 2734297.324402416,
+      "completed_utc": "2026-08-08T08:58:03.901113+00:00",
+      "poll_sha256": "47f031cb51a047ce3f7e204f5a2735240988f0336c8a074f775ec624690a375b",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "observer_id": "f17378a2-ff31-485c-8547-0840aefa696a",
+    "pid": 68153,
+    "polls": 5,
+    "post_cause_polls": 4,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S6/observer-05s.ndjson",
+    "scenario": "S6",
+    "scenario_label": "unapproved Git rollback followed by Flux convergence",
+    "stable_exact": {
+      "actual_start_mono": 2734302.057016041,
+      "actual_start_utc": "2026-08-08T08:58:08.633776+00:00",
+      "class_set": [
+        "authorization",
+        "intent"
+      ],
+      "completed_mono": 2734302.332670291,
+      "completed_utc": "2026-08-08T08:58:08.909427+00:00",
+      "poll_sha256": "7ea6f6d6f8981f89fc165698a00385cfd52f6dd5eb4d8be24651971d36670aaa",
+      "sequence": 3,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 10.0,
+    "cause_to_first_alert_seconds": 9.547744458075613,
+    "cause_to_first_exact_seconds": 9.547744458075613,
+    "cause_to_stable_exact_seconds": 19.499972583260387,
+    "effect_to_first_exact_seconds": 3.9847494158893824,
+    "exact_correct": true,
+    "expected_class_set": [
+      "authorization",
+      "intent"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734302.057043375,
+      "actual_start_utc": "2026-08-08T08:58:08.633798+00:00",
+      "class_set": [
+        "authorization",
+        "intent"
+      ],
+      "completed_mono": 2734302.332626666,
+      "completed_utc": "2026-08-08T08:58:08.909384+00:00",
+      "poll_sha256": "b9b9f6dbbe60a8272579a5483dcaafcf463acd3308bdabc33f31980f69fd363a",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734302.057043375,
+      "actual_start_utc": "2026-08-08T08:58:08.633798+00:00",
+      "class_set": [
+        "authorization",
+        "intent"
+      ],
+      "completed_mono": 2734302.332626666,
+      "completed_utc": "2026-08-08T08:58:08.909384+00:00",
+      "poll_sha256": "b9b9f6dbbe60a8272579a5483dcaafcf463acd3308bdabc33f31980f69fd363a",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "observer_id": "28293017-cebf-4f3d-a044-46e07be9bf69",
+    "pid": 68154,
+    "polls": 3,
+    "post_cause_polls": 2,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S6/observer-10s.ndjson",
+    "scenario": "S6",
+    "scenario_label": "unapproved Git rollback followed by Flux convergence",
+    "stable_exact": {
+      "actual_start_mono": 2734312.050007833,
+      "actual_start_utc": "2026-08-08T08:58:18.626896+00:00",
+      "class_set": [
+        "authorization",
+        "intent"
+      ],
+      "completed_mono": 2734312.284854791,
+      "completed_utc": "2026-08-08T08:58:18.861706+00:00",
+      "poll_sha256": "7baadb38db6bdfa323efffd0fe45c7308493efb1dd2baec51bd11b2931ff2ba2",
+      "sequence": 3,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 1.0,
+    "cause_to_first_alert_seconds": 0.4380972501821816,
+    "cause_to_first_exact_seconds": 0.4380972501821816,
+    "cause_to_stable_exact_seconds": 1.40113729191944,
+    "effect_to_first_exact_seconds": 0.43765000021085143,
+    "exact_correct": true,
+    "expected_class_set": [
+      "environment"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734321.319501083,
+      "actual_start_utc": "2026-08-08T08:58:27.896436+00:00",
+      "class_set": [
+        "environment"
+      ],
+      "completed_mono": 2734321.582987958,
+      "completed_utc": "2026-08-08T08:58:28.159930+00:00",
+      "poll_sha256": "477d46bcdd7b765242c90f229b7a1e13b54868a8c05c6120a02222e57aaac16e",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734321.319501083,
+      "actual_start_utc": "2026-08-08T08:58:27.896436+00:00",
+      "class_set": [
+        "environment"
+      ],
+      "completed_mono": 2734321.582987958,
+      "completed_utc": "2026-08-08T08:58:28.159930+00:00",
+      "poll_sha256": "477d46bcdd7b765242c90f229b7a1e13b54868a8c05c6120a02222e57aaac16e",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "observer_id": "79e7af14-ef13-4020-912c-12e2822cdf56",
+    "pid": 68701,
+    "polls": 21,
+    "post_cause_polls": 20,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S7/observer-01s.ndjson",
+    "scenario": "S7",
+    "scenario_label": "out-of-band load-balancer change",
+    "stable_exact": {
+      "actual_start_mono": 2734322.325314666,
+      "actual_start_utc": "2026-08-08T08:58:28.902263+00:00",
+      "class_set": [
+        "environment"
+      ],
+      "completed_mono": 2734322.546028,
+      "completed_utc": "2026-08-08T08:58:29.122978+00:00",
+      "poll_sha256": "5596df27b07548a65cfd45d048e95df893cf4f096b1b5a3decc7abe3d787d6ba",
+      "sequence": 3,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 5.0,
+    "cause_to_first_alert_seconds": 4.397787000052631,
+    "cause_to_first_exact_seconds": 4.397787000052631,
+    "cause_to_stable_exact_seconds": 9.406706917099655,
+    "effect_to_first_exact_seconds": 4.397339750081301,
+    "exact_correct": true,
+    "expected_class_set": [
+      "environment"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734325.321894375,
+      "actual_start_utc": "2026-08-08T08:58:31.898873+00:00",
+      "class_set": [
+        "environment"
+      ],
+      "completed_mono": 2734325.542677708,
+      "completed_utc": "2026-08-08T08:58:32.119655+00:00",
+      "poll_sha256": "f4f379417579123b1a491db52961e04fe53c4768872b23144b4496db69c0490a",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734325.321894375,
+      "actual_start_utc": "2026-08-08T08:58:31.898873+00:00",
+      "class_set": [
+        "environment"
+      ],
+      "completed_mono": 2734325.542677708,
+      "completed_utc": "2026-08-08T08:58:32.119655+00:00",
+      "poll_sha256": "f4f379417579123b1a491db52961e04fe53c4768872b23144b4496db69c0490a",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "observer_id": "23e5015a-35b5-4793-ba89-8ed01f3f4c81",
+    "pid": 68702,
+    "polls": 5,
+    "post_cause_polls": 4,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S7/observer-05s.ndjson",
+    "scenario": "S7",
+    "scenario_label": "out-of-band load-balancer change",
+    "stable_exact": {
+      "actual_start_mono": 2734330.326487625,
+      "actual_start_utc": "2026-08-08T08:58:36.903515+00:00",
+      "class_set": [
+        "environment"
+      ],
+      "completed_mono": 2734330.551597625,
+      "completed_utc": "2026-08-08T08:58:37.128622+00:00",
+      "poll_sha256": "f43a6b09bddb2fe2b63ce0728a7b3479c2264a16ab48a88bab3b77a0c66a9a30",
+      "sequence": 3,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 10.0,
+    "cause_to_first_alert_seconds": 9.406711167190224,
+    "cause_to_first_exact_seconds": 9.406711167190224,
+    "cause_to_stable_exact_seconds": 19.463604500051588,
+    "effect_to_first_exact_seconds": 9.406263917218894,
+    "exact_correct": true,
+    "expected_class_set": [
+      "environment"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734330.324050666,
+      "actual_start_utc": "2026-08-08T08:58:36.901094+00:00",
+      "class_set": [
+        "environment"
+      ],
+      "completed_mono": 2734330.551601875,
+      "completed_utc": "2026-08-08T08:58:37.128626+00:00",
+      "poll_sha256": "a1dc7fb04d3086c50a3fc9aea926c9e8028965438b0e9d56a2bb2b2a2a5bef3a",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734330.324050666,
+      "actual_start_utc": "2026-08-08T08:58:36.901094+00:00",
+      "class_set": [
+        "environment"
+      ],
+      "completed_mono": 2734330.551601875,
+      "completed_utc": "2026-08-08T08:58:37.128626+00:00",
+      "poll_sha256": "a1dc7fb04d3086c50a3fc9aea926c9e8028965438b0e9d56a2bb2b2a2a5bef3a",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "observer_id": "02d80d8e-6559-4fff-b3bf-87a67037b116",
+    "pid": 68703,
+    "polls": 3,
+    "post_cause_polls": 2,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S7/observer-10s.ndjson",
+    "scenario": "S7",
+    "scenario_label": "out-of-band load-balancer change",
+    "stable_exact": {
+      "actual_start_mono": 2734340.326758,
+      "actual_start_utc": "2026-08-08T08:58:46.903882+00:00",
+      "class_set": [
+        "environment"
+      ],
+      "completed_mono": 2734340.608495208,
+      "completed_utc": "2026-08-08T08:58:47.185616+00:00",
+      "poll_sha256": "a9c4b793c47df94c305af638cc79917b2cc5a0b5b3c59fb6a22ac53a4d78d66d",
+      "sequence": 3,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 1.0,
+    "cause_to_first_alert_seconds": 0.7549060420133173,
+    "cause_to_first_exact_seconds": 0.7549060420133173,
+    "cause_to_stable_exact_seconds": 1.775371250230819,
+    "effect_to_first_exact_seconds": 0.7544259577989578,
+    "exact_correct": true,
+    "expected_class_set": [
+      "authorization"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734344.150521166,
+      "actual_start_utc": "2026-08-08T08:58:50.727675+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734344.371482208,
+      "completed_utc": "2026-08-08T08:58:50.948638+00:00",
+      "poll_sha256": "7c3ec572424ddc96234ec828a96ed25da075ac1b820d1dcde1d1bf5170595d48",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734344.150521166,
+      "actual_start_utc": "2026-08-08T08:58:50.727675+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734344.371482208,
+      "completed_utc": "2026-08-08T08:58:50.948638+00:00",
+      "poll_sha256": "7c3ec572424ddc96234ec828a96ed25da075ac1b820d1dcde1d1bf5170595d48",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "observer_id": "6931df3f-9e5b-4ba8-9b47-e994e0efaba9",
+    "pid": 68944,
+    "polls": 21,
+    "post_cause_polls": 20,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S8/observer-01s.ndjson",
+    "scenario": "S8",
+    "scenario_label": "live authorization identity mismatch",
+    "stable_exact": {
+      "actual_start_mono": 2734345.147787833,
+      "actual_start_utc": "2026-08-08T08:58:51.724954+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734345.391947416,
+      "completed_utc": "2026-08-08T08:58:51.969113+00:00",
+      "poll_sha256": "4696d962828d88601e5b2041e7031a5127159e493a9c0e0a21b6bbd8970440ff",
+      "sequence": 3,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 5.0,
+    "cause_to_first_alert_seconds": 4.754514084197581,
+    "cause_to_first_exact_seconds": 4.754514084197581,
+    "cause_to_stable_exact_seconds": 9.76486233389005,
+    "effect_to_first_exact_seconds": 4.754033999983221,
+    "exact_correct": true,
+    "expected_class_set": [
+      "authorization"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734348.146033041,
+      "actual_start_utc": "2026-08-08T08:58:54.723233+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734348.37109025,
+      "completed_utc": "2026-08-08T08:58:54.948285+00:00",
+      "poll_sha256": "bb8103bf0fd955af338b8bfc5f470e412f248d918bc43471791c00f7af218869",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734348.146033041,
+      "actual_start_utc": "2026-08-08T08:58:54.723233+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734348.37109025,
+      "completed_utc": "2026-08-08T08:58:54.948285+00:00",
+      "poll_sha256": "bb8103bf0fd955af338b8bfc5f470e412f248d918bc43471791c00f7af218869",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "observer_id": "a7d643ac-4ac3-47d3-9508-5e454865e810",
+    "pid": 68945,
+    "polls": 5,
+    "post_cause_polls": 4,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S8/observer-05s.ndjson",
+    "scenario": "S8",
+    "scenario_label": "live authorization identity mismatch",
+    "stable_exact": {
+      "actual_start_mono": 2734353.144097208,
+      "actual_start_utc": "2026-08-08T08:58:59.721340+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734353.3814385,
+      "completed_utc": "2026-08-08T08:58:59.958680+00:00",
+      "poll_sha256": "4169d39dc7b3f57b8b2e9ba104f9549a7e93672472c4e2d885664b499570a8cb",
+      "sequence": 3,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 10.0,
+    "cause_to_first_alert_seconds": 9.764251166954637,
+    "cause_to_first_exact_seconds": 9.764251166954637,
+    "cause_to_stable_exact_seconds": 19.81145262531936,
+    "effect_to_first_exact_seconds": 9.763771082740277,
+    "exact_correct": true,
+    "expected_class_set": [
+      "authorization"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734353.147882166,
+      "actual_start_utc": "2026-08-08T08:58:59.725119+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734353.380827333,
+      "completed_utc": "2026-08-08T08:58:59.958069+00:00",
+      "poll_sha256": "de14550ca7ea262f7b3013e2f428e37d2f72fca07b4627ceafd4f27763392a80",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734353.147882166,
+      "actual_start_utc": "2026-08-08T08:58:59.725119+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734353.380827333,
+      "completed_utc": "2026-08-08T08:58:59.958069+00:00",
+      "poll_sha256": "de14550ca7ea262f7b3013e2f428e37d2f72fca07b4627ceafd4f27763392a80",
+      "sequence": 2,
+      "verdict": "drift"
+    },
+    "observer_id": "697e8511-3954-47a3-b2d0-0867443fef3e",
+    "pid": 68946,
+    "polls": 3,
+    "post_cause_polls": 2,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S8/observer-10s.ndjson",
+    "scenario": "S8",
+    "scenario_label": "live authorization identity mismatch",
+    "stable_exact": {
+      "actual_start_mono": 2734363.149730958,
+      "actual_start_utc": "2026-08-08T08:59:09.727096+00:00",
+      "class_set": [
+        "authorization"
+      ],
+      "completed_mono": 2734363.428028791,
+      "completed_utc": "2026-08-08T08:59:10.005365+00:00",
+      "poll_sha256": "aac3b30e72c28b8de5aa49018e15fa80f9f2bbb1517dc30c96b246d870ffc549",
+      "sequence": 3,
+      "verdict": "drift"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 1.0,
+    "cause_to_first_alert_seconds": 0.7849837499670684,
+    "cause_to_first_exact_seconds": 0.7849837499670684,
+    "cause_to_stable_exact_seconds": 1.8734812079928815,
+    "effect_to_first_exact_seconds": 0.784407916944474,
+    "exact_correct": true,
+    "expected_class_set": [
+      "evidence"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734366.871129916,
+      "actual_start_utc": "2026-08-08T08:59:13.448494+00:00",
+      "class_set": [
+        "evidence"
+      ],
+      "completed_mono": 2734367.118016208,
+      "completed_utc": "2026-08-08T08:59:13.695389+00:00",
+      "poll_sha256": "312d9fb0a719c41b98bc1b9e90f5068844c12490c8343e1ea2af319e759e7966",
+      "sequence": 2,
+      "verdict": "undecidable"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734366.871129916,
+      "actual_start_utc": "2026-08-08T08:59:13.448494+00:00",
+      "class_set": [
+        "evidence"
+      ],
+      "completed_mono": 2734367.118016208,
+      "completed_utc": "2026-08-08T08:59:13.695389+00:00",
+      "poll_sha256": "312d9fb0a719c41b98bc1b9e90f5068844c12490c8343e1ea2af319e759e7966",
+      "sequence": 2,
+      "verdict": "undecidable"
+    },
+    "observer_id": "14dfb5ec-91ab-452e-b74f-36ac2de0f0ea",
+    "pid": 69428,
+    "polls": 21,
+    "post_cause_polls": 20,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S9/observer-01s.ndjson",
+    "scenario": "S9",
+    "scenario_label": "missing live continuing-authorization status",
+    "stable_exact": {
+      "actual_start_mono": 2734367.868998125,
+      "actual_start_utc": "2026-08-08T08:59:14.446374+00:00",
+      "class_set": [
+        "evidence"
+      ],
+      "completed_mono": 2734368.206513666,
+      "completed_utc": "2026-08-08T08:59:14.783896+00:00",
+      "poll_sha256": "e37f532c7be6ec5f05a845a9cce8896a2576a8d72296a4c3791ba656bf678d05",
+      "sequence": 3,
+      "verdict": "undecidable"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 5.0,
+    "cause_to_first_alert_seconds": 4.8318962077610195,
+    "cause_to_first_exact_seconds": 4.8318962077610195,
+    "cause_to_stable_exact_seconds": 9.828374207951128,
+    "effect_to_first_exact_seconds": 4.831320374738425,
+    "exact_correct": true,
+    "expected_class_set": [
+      "evidence"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734370.875108458,
+      "actual_start_utc": "2026-08-08T08:59:17.452520+00:00",
+      "class_set": [
+        "evidence"
+      ],
+      "completed_mono": 2734371.164928666,
+      "completed_utc": "2026-08-08T08:59:17.742337+00:00",
+      "poll_sha256": "7e56c8d15cf38218e0f88ecd4cf09ce34a9374b267bc457ae7bced8327aebf53",
+      "sequence": 2,
+      "verdict": "undecidable"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734370.875108458,
+      "actual_start_utc": "2026-08-08T08:59:17.452520+00:00",
+      "class_set": [
+        "evidence"
+      ],
+      "completed_mono": 2734371.164928666,
+      "completed_utc": "2026-08-08T08:59:17.742337+00:00",
+      "poll_sha256": "7e56c8d15cf38218e0f88ecd4cf09ce34a9374b267bc457ae7bced8327aebf53",
+      "sequence": 2,
+      "verdict": "undecidable"
+    },
+    "observer_id": "edb6a635-bbae-4eb4-add7-780511858c0d",
+    "pid": 69429,
+    "polls": 5,
+    "post_cause_polls": 4,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S9/observer-05s.ndjson",
+    "scenario": "S9",
+    "scenario_label": "missing live continuing-authorization status",
+    "stable_exact": {
+      "actual_start_mono": 2734375.875479791,
+      "actual_start_utc": "2026-08-08T08:59:22.452936+00:00",
+      "class_set": [
+        "evidence"
+      ],
+      "completed_mono": 2734376.161406666,
+      "completed_utc": "2026-08-08T08:59:22.738869+00:00",
+      "poll_sha256": "fe3a9e94c3a898ef92a73ee5e141efeee0ebac661ae13f12636e7662ff1c25d8",
+      "sequence": 3,
+      "verdict": "undecidable"
+    }
+  },
+  {
+    "adapter_error_polls": 0,
+    "cadence_seconds": 10.0,
+    "cause_to_first_alert_seconds": 9.826962042134255,
+    "cause_to_first_exact_seconds": 9.826962042134255,
+    "cause_to_stable_exact_seconds": 19.823323416989297,
+    "effect_to_first_exact_seconds": 9.82638620911166,
+    "exact_correct": true,
+    "expected_class_set": [
+      "evidence"
+    ],
+    "first_alert": {
+      "actual_start_mono": 2734375.869176208,
+      "actual_start_utc": "2026-08-08T08:59:22.446637+00:00",
+      "class_set": [
+        "evidence"
+      ],
+      "completed_mono": 2734376.1599945,
+      "completed_utc": "2026-08-08T08:59:22.737451+00:00",
+      "poll_sha256": "5c7e34bf8208558fd0a5dfa1cb3c204b16c0df192accee50a9b674ed5f28f4ba",
+      "sequence": 2,
+      "verdict": "undecidable"
+    },
+    "first_exact": {
+      "actual_start_mono": 2734375.869176208,
+      "actual_start_utc": "2026-08-08T08:59:22.446637+00:00",
+      "class_set": [
+        "evidence"
+      ],
+      "completed_mono": 2734376.1599945,
+      "completed_utc": "2026-08-08T08:59:22.737451+00:00",
+      "poll_sha256": "5c7e34bf8208558fd0a5dfa1cb3c204b16c0df192accee50a9b674ed5f28f4ba",
+      "sequence": 2,
+      "verdict": "undecidable"
+    },
+    "observer_id": "86399091-2ee2-4c06-98e7-bc455119bd66",
+    "pid": 69430,
+    "polls": 3,
+    "post_cause_polls": 2,
+    "pre_cause_polls": 1,
+    "raw_path": "raw/S9/observer-10s.ndjson",
+    "scenario": "S9",
+    "scenario_label": "missing live continuing-authorization status",
+    "stable_exact": {
+      "actual_start_mono": 2734385.868093041,
+      "actual_start_utc": "2026-08-08T08:59:32.445669+00:00",
+      "class_set": [
+        "evidence"
+      ],
+      "completed_mono": 2734386.156355875,
+      "completed_utc": "2026-08-08T08:59:32.733907+00:00",
+      "poll_sha256": "17a9c7fd815bdb2930af393642bfab7b0356481de44344068964bbb02c57aa97",
+      "sequence": 3,
+      "verdict": "undecidable"
+    }
+  }
+]

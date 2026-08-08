@@ -95,7 +95,7 @@ configuration drift (\cref{sec:taxonomy}).
 atomic approval snapshots plus separate activation and supersession records,
 stable unit identity, admissible cross-stream temporal cuts, observed state $\Gobs(t)$, time-indexed governance contexts
 $\Pol(t), \Auth(t), \Int(t)$, and a component-wise governance-divergence vector
-$\GDsub(t)$ plus an observability mask $\ObsMask(t)$, with a reasoned rejection of a primitive scalar distance
+$\GDsub(u,\theta)$ plus an observability mask $\ObsMask_{\mu}(u,\theta;T)$, with a reasoned rejection of a primitive scalar distance
 (\cref{sec:model}).
 \item \textbf{Separation results} (analytic): constructed counterexamples and
 a definitional-dependency proposition establishing that configuration
@@ -138,13 +138,16 @@ with 27 separate observer processes and 261 raw polls; nine controlled profiles
 through a two-hop localhost TCP evidence path; an in-memory batched-join
 benchmark through 1,000 units; and a live Kubernetes object-path campaign that
 completed 10- and 50-Deployment targets while enforcing declared stop rules.
-The same section specifies a pending bounded cross-stack rerun on Argo CD and
-Gatekeeper (\cref{sec:lab}); it is designed to exercise the native S1
-configuration and S3 policy paths, while S4 retains the shared artifact
-adapter. Its reportable outputs will be projected singleton classifications
-over those declared evaluated components, not complete formal vectors; frozen
-counts remain \texttt{CROSS\_TBD}. The process-isolated audit requires exact output
-on two consecutive polls; it does not claim watermark-qualified persistence.
+The process-isolated audit reached the exact target in 27/27 correlated
+trajectories. Cause-start-to-first-exact completion had median 4.465~s
+(nearest-rank P95 9.764), and cause-start-to-two-poll exact persistence had
+median 9.522~s (P95 19.811). The latter is only a second consecutive exact poll,
+not watermark-qualified Stable-VCL. A bounded Argo CD/Gatekeeper replication
+(\cref{sec:lab}) produced 15/15 exact projected singleton classifications over
+declared evaluated components. S1 configuration and S3 policy used native
+second-stack paths; S4 reused the shared artifact adapter. Intent and
+environment were not evaluated, so the result is neither a complete formal
+vector evaluation nor a cross-stack equivalence test.
 The separate temporal-cut tests validate the admissibility contract rather
 than retroactively making the sequential live snapshots globally coherent.
 These campaigns

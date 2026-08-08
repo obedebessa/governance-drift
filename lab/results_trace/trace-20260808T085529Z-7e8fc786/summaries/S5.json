@@ -1,0 +1,189 @@
+{
+  "all_exact": true,
+  "all_stable": true,
+  "cause_started_mono": 2734270.122727708,
+  "cause_started_utc": "2026-08-08T08:57:36.699180+00:00",
+  "distinct_observer_ids": 3,
+  "distinct_pids": 3,
+  "effect_observed_mono": 2734270.123161791,
+  "effect_observed_utc": "2026-08-08T08:57:36.699609+00:00",
+  "expected_class_set": [
+    "environment"
+  ],
+  "injection_id": "trace-20260808T085529Z-7e8fc786:S5:b703f219-9e33-4224-93a8-df120ad9c399",
+  "injection_sha256": "f82f621581f90b9dd4c271101ceeec995269059a71e1c184e2580e9f391ac354",
+  "observer_processes": 3,
+  "scenario": "S5",
+  "scenario_label": "IAM authorization-surface expansion",
+  "schema": "govdrift-trace-scenario-summary/v1",
+  "trajectories": [
+    {
+      "adapter_error_polls": 0,
+      "cadence_seconds": 1.0,
+      "cause_to_first_alert_seconds": 0.4715793328359723,
+      "cause_to_first_exact_seconds": 0.4715793328359723,
+      "cause_to_stable_exact_seconds": 1.4986188751645386,
+      "effect_to_first_exact_seconds": 0.47114524990320206,
+      "exact_correct": true,
+      "expected_class_set": [
+        "environment"
+      ],
+      "first_alert": {
+        "actual_start_mono": 2734270.363221958,
+        "actual_start_utc": "2026-08-08T08:57:36.939676+00:00",
+        "class_set": [
+          "environment"
+        ],
+        "completed_mono": 2734270.594307041,
+        "completed_utc": "2026-08-08T08:57:37.170764+00:00",
+        "poll_sha256": "2c552f3c2171b4b0ab6f82539b9f9218c22c2a3e70d570f6b734b63844095088",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "first_exact": {
+        "actual_start_mono": 2734270.363221958,
+        "actual_start_utc": "2026-08-08T08:57:36.939676+00:00",
+        "class_set": [
+          "environment"
+        ],
+        "completed_mono": 2734270.594307041,
+        "completed_utc": "2026-08-08T08:57:37.170764+00:00",
+        "poll_sha256": "2c552f3c2171b4b0ab6f82539b9f9218c22c2a3e70d570f6b734b63844095088",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "observer_id": "7f8e0016-185d-46c2-bbfb-e437caaa6426",
+      "pid": 67896,
+      "polls": 21,
+      "post_cause_polls": 20,
+      "pre_cause_polls": 1,
+      "raw_path": "raw/S5/observer-01s.ndjson",
+      "scenario": "S5",
+      "scenario_label": "IAM authorization-surface expansion",
+      "stable_exact": {
+        "actual_start_mono": 2734271.366601875,
+        "actual_start_utc": "2026-08-08T08:57:37.943074+00:00",
+        "class_set": [
+          "environment"
+        ],
+        "completed_mono": 2734271.621346583,
+        "completed_utc": "2026-08-08T08:57:38.197814+00:00",
+        "poll_sha256": "2fa89890750e234adabb96a3f66bf6cd447aae1718ec3647a9a330acfd70b7ef",
+        "sequence": 3,
+        "verdict": "drift"
+      }
+    },
+    {
+      "adapter_error_polls": 0,
+      "cadence_seconds": 5.0,
+      "cause_to_first_alert_seconds": 4.464629833120853,
+      "cause_to_first_exact_seconds": 4.464629833120853,
+      "cause_to_stable_exact_seconds": 9.522095125168562,
+      "effect_to_first_exact_seconds": 4.4641957501880825,
+      "exact_correct": true,
+      "expected_class_set": [
+        "environment"
+      ],
+      "first_alert": {
+        "actual_start_mono": 2734274.369058625,
+        "actual_start_utc": "2026-08-08T08:57:40.945550+00:00",
+        "class_set": [
+          "environment"
+        ],
+        "completed_mono": 2734274.587357541,
+        "completed_utc": "2026-08-08T08:57:41.163853+00:00",
+        "poll_sha256": "7db0155224518465a805c245f2129c7194d36d4ec336e920e2dac5c41fd70aa4",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "first_exact": {
+        "actual_start_mono": 2734274.369058625,
+        "actual_start_utc": "2026-08-08T08:57:40.945550+00:00",
+        "class_set": [
+          "environment"
+        ],
+        "completed_mono": 2734274.587357541,
+        "completed_utc": "2026-08-08T08:57:41.163853+00:00",
+        "poll_sha256": "7db0155224518465a805c245f2129c7194d36d4ec336e920e2dac5c41fd70aa4",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "observer_id": "9a0aa2af-0e56-44b3-92f4-15c0d4f9759d",
+      "pid": 67897,
+      "polls": 5,
+      "post_cause_polls": 4,
+      "pre_cause_polls": 1,
+      "raw_path": "raw/S5/observer-05s.ndjson",
+      "scenario": "S5",
+      "scenario_label": "IAM authorization-surface expansion",
+      "stable_exact": {
+        "actual_start_mono": 2734279.363008083,
+        "actual_start_utc": "2026-08-08T08:57:45.939566+00:00",
+        "class_set": [
+          "environment"
+        ],
+        "completed_mono": 2734279.644822833,
+        "completed_utc": "2026-08-08T08:57:46.221369+00:00",
+        "poll_sha256": "f322f4c16469481df16480acb5a38570c25f9dc3832b6bb76b7b2af7b35c4c3d",
+        "sequence": 3,
+        "verdict": "drift"
+      }
+    },
+    {
+      "adapter_error_polls": 0,
+      "cadence_seconds": 10.0,
+      "cause_to_first_alert_seconds": 9.523719583172351,
+      "cause_to_first_exact_seconds": 9.523719583172351,
+      "cause_to_stable_exact_seconds": 19.507925250101835,
+      "effect_to_first_exact_seconds": 9.52328550023958,
+      "exact_correct": true,
+      "expected_class_set": [
+        "environment"
+      ],
+      "first_alert": {
+        "actual_start_mono": 2734279.372631125,
+        "actual_start_utc": "2026-08-08T08:57:45.949185+00:00",
+        "class_set": [
+          "environment"
+        ],
+        "completed_mono": 2734279.646447291,
+        "completed_utc": "2026-08-08T08:57:46.223000+00:00",
+        "poll_sha256": "2e0fcfdceddfef65539bdb21d3b538852aede5fdad656cc919b3cef532894966",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "first_exact": {
+        "actual_start_mono": 2734279.372631125,
+        "actual_start_utc": "2026-08-08T08:57:45.949185+00:00",
+        "class_set": [
+          "environment"
+        ],
+        "completed_mono": 2734279.646447291,
+        "completed_utc": "2026-08-08T08:57:46.223000+00:00",
+        "poll_sha256": "2e0fcfdceddfef65539bdb21d3b538852aede5fdad656cc919b3cef532894966",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "observer_id": "158bd7ae-a78f-4d71-97fc-210dfb6056f0",
+      "pid": 67898,
+      "polls": 3,
+      "post_cause_polls": 2,
+      "pre_cause_polls": 1,
+      "raw_path": "raw/S5/observer-10s.ndjson",
+      "scenario": "S5",
+      "scenario_label": "IAM authorization-surface expansion",
+      "stable_exact": {
+        "actual_start_mono": 2734289.371655333,
+        "actual_start_utc": "2026-08-08T08:57:55.948288+00:00",
+        "class_set": [
+          "environment"
+        ],
+        "completed_mono": 2734289.630652958,
+        "completed_utc": "2026-08-08T08:57:56.207294+00:00",
+        "poll_sha256": "43007bf046c210ffdf34fb49b200a0de94bee274ea90f4a915c4c25d577d47f1",
+        "sequence": 3,
+        "verdict": "drift"
+      }
+    }
+  ]
+}

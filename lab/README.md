@@ -40,22 +40,43 @@ image references used by the frozen campaign remain in its raw metadata.
 
 ## Bounded Argo CD + Gatekeeper replication
 
-The reportable cross-stack campaign is being regenerated on a separate
-`govdrift-cross` Kind cluster with Kubernetes v1.36.1, Argo CD v3.4.2, and
-Gatekeeper v3.22.2. Tagged upstream manifests are retained and SHA-256
-verified. Five repetitions each of S1, S3, and S4 will report projected
-singleton classifications only over their declared evaluated components. S1 uses Argo CD's
-native desired/live status; S3 uses a fresh Gatekeeper dry-run background
-audit whose controlled Rego message emits the evaluated Deployment UID; the
-adapter withholds a polar result unless it matches the live UID. S4 reuses the shared T3
-digest adapter and is not independent authorization validation; intent and
-environment are not evaluated.
+The reportable cross-stack campaign ran on a separate `govdrift-cross` Kind
+cluster with Kubernetes v1.36.1, Argo CD v3.4.2, and Gatekeeper v3.22.2.
+Tagged upstream manifests are retained and SHA-256 verified. Five repetitions
+each of S1, S3, and S4 produced 15/15 exact expected singleton class sets over
+the declared evaluated components. S1 uses Argo CD's native desired/live
+status. S3 uses a fresh Gatekeeper dry-run background audit whose controlled
+Rego message emits the evaluated Deployment UID; the adapter withholds a polar
+result unless that engine-emitted UID matches the live UID. This subject join
+covers one controlled Deployment lifetime and does not establish identity
+continuity across resource deletion and recreation. S4 reuses the shared T3
+digest adapter and is not independent authorization validation. Intent and
+environment were not evaluated.
 
-Frozen exact counts, latencies, restoration outcomes, desired/live residuals,
-API errors, stop-rule status, and cleanup are **CROSS_TBD** until the
-UID-emitting rerun passes the analyzer. Superseded results are not used for
-these claims. The eventual comparison remains descriptive, not an equivalence,
-non-inferiority, prevalence, reliability, or production-performance study.
+| Slice | Exact | Median first-honest DDL | Median first substantive | Median ESC |
+|---|---:|---:|---:|---:|
+| S1 configuration / Argo CD native | 5/5 | 0.207 s | 0.646 s | 1.677 s |
+| S3 policy / Gatekeeper native | 5/5 | 0.157 s | 1.659 s | 1.659 s |
+| S4 authorization / shared adapter | 5/5 | 0.215 s | 0.215 s | 0.650 s |
+
+First-honest DDL stops at the first completed non-consistent or undecidable
+evaluation, so it may be epistemic rather than substantive. First epistemic
+alert and first substantive alert are retained separately; ESC stops only when
+all declared evaluated components are decidable and the projected class set is
+exact. All five S1 and all five S3 observations emitted an epistemic alert
+(median 0.207 and 0.157 seconds); three of five S4 observations did so (median
+0.216 seconds among reached observations). The analyzer reconstructs all four
+timings from explicit onset markers and per-poll evaluation completions in the
+raw NDJSON and requires exact agreement with the observations and summary.
+
+All 15 baseline restorations succeeded, with zero leaf-level desired/live
+residuals, zero instrumented API-read errors, and zero undecidable evaluated
+components in the final observations. The sustained resource stop rule did not
+trigger, and the captured pre/delete/post proof verifies cleanup of only
+`govdrift-cross`. The comparison remains descriptive: S1 and S3 are native
+component-path replications, S4 is shared, and the campaign is not an
+equivalence, non-inferiority, prevalence, reliability, or
+production-performance study.
 
 ## Positive scenarios
 
@@ -105,10 +126,10 @@ and zero adapter-error polls. Here the second count means only two-poll exact
 persistence: the second consecutive exact poll. It is not a
 watermark-qualified persistence claim.
 
-Cause-start-to-first-exact completion was descriptively 4.731 seconds at the
-median and 9.834 seconds at nearest-rank P95. Cause-start-to-two-poll exact
+Cause-start-to-first-exact completion was descriptively 4.465 seconds at the
+median and 9.764 seconds at nearest-rank P95. Cause-start-to-two-poll exact
 persistence was
-9.734 and 19.787 seconds, respectively. These are pooled descriptions of 27
+9.522 and 19.811 seconds, respectively. These are pooled descriptions of 27
 correlated trajectories, not DDL, production latency, or independent tail
 estimates. The workload and ephemeral Git-helper references are digest locked.
 S4 uses a namespaced Kyverno admission mutation; S5/S7 use the file-backed
@@ -178,6 +199,12 @@ S6 it is successful Flux convergence to the unapproved revision. The legacy
 one-pass `observations.*` files measured injection-to-verdict and are retained
 for provenance, not relabeled as DDL.
 
+For the cross-stack campaign, `t_first` is explicitly the first honest verdict:
+the earlier available completion among the first epistemic (`undecidable`) and
+first substantive (`inconsistent`) events. Those two event times are also stored
+separately. ESC is later when unresolved evaluated components remain, even if
+the expected substantive singleton has already appeared.
+
 ## Reproduce
 
 Prerequisites: Docker, Kind, `kubectl`, Git, Python 3.10+, `curl`, and enough
@@ -230,9 +257,10 @@ The repeated harness writes:
   NDJSON chains, injection/source hashes, causal event markers, platform and
   cleanup capture, Git bundle, cross-layer summaries, and a complete SHA-256
   manifest; `FINAL_CAMPAIGN` identifies the sole reportable run.
-- `results_cross_stack/` — 15 bounded Argo CD/Gatekeeper observations,
-  complete per-poll trace, upstream and local manifest hashes, resource
-  samples, generated table, and verified cluster-scoped cleanup; ignored
+- `results_cross_stack/` — 15/15 exact projected Argo CD/Gatekeeper
+  observations, explicit onset and evaluation-completion timing, complete
+  per-poll trace, upstream and local manifest hashes, resource samples,
+  generated table, and verified cluster-scoped cleanup; ignored
   `_superseded_*` runs are excluded from the reportable artifact.
 
 To regenerate summaries and LaTeX tables from frozen raw data without a

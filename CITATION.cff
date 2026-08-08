@@ -1,8 +1,8 @@
 cff-version: 1.2.0
-message: "This is pre-release citation metadata; cite the latest archived release until v1.6.0 is published."
+message: "Pre-release metadata for the unpublished v1.6.0 candidate. DOI 10.5281/zenodo.21847543 is reserved but not yet public or citable; cite the latest archived release until publication."
 type: software
 title: "Governance Drift: Reproducibility Package"
-version: 1.6.0-rc.1
+version: 1.6.0
 authors:
   - family-names: "Bessa Rocha da Silva"
     given-names: "Obede"
@@ -19,8 +19,11 @@ abstract: >
   real-process trace auditing, transport faults, live multi-deployment
   evaluation, and a bounded Argo CD/Gatekeeper cross-stack replication. Live
   outputs are provisional class-set classifications under the laboratory
-  snapshot assumption; cross-stack claims are projections over declared
-  evaluated components, with the frozen UID-emitting rerun still pending.
+  snapshot assumption; the completed cross-stack campaign reports 15/15 exact
+  projected singleton classifications over declared evaluated components.
+  Only configuration and policy use native second-stack surfaces;
+  authorization reuses the shared adapter, and intent/environment are not
+  evaluated there.
 keywords:
   - "governance drift"
   - "configuration drift"

@@ -266,8 +266,8 @@ The nine injected episodes yielded 27 correlated observer trajectories and
 261 hash-chained polls. All 27 reached both the exact expected set and two-poll
 exact persistence, and no poll recorded an adapter exception
 (\cref{tab:positive-trace}). Cause-start-to-first-exact completion had median
-4.731~s and nearest-rank P95 9.834~s; cause-start-to-two-poll exact persistence
-had median 9.734~s and nearest-rank P95 19.787~s. These are pooled descriptive
+4.465~s and nearest-rank P95 9.764~s; cause-start-to-two-poll exact persistence
+had median 9.522~s and nearest-rank P95 19.811~s. These are pooled descriptive
 summaries over 27 correlated trajectories, not estimates from 27 independent
 experimental units and not DDL as defined above. The experimental units are
 the nine episodes. The campaign uses one local Kind cluster, explicitly
@@ -453,8 +453,8 @@ and Persistence Are Excluded.}
 \end{table*}
 
 Every sampled vector matched its seeded oracle. At $n=1000$, the full-sweep
-median was 6.048~ms (P95 6.944, P99 7.432), or 165,344 units/s; an all-unit
-fan-out had P95 6.833~ms, while a 100-unit indexed fan-out had P95 0.682~ms.
+median was 6.067~ms (P95 6.881, P99 6.927), or 164,828 units/s; an all-unit
+fan-out had P95 6.197~ms, while a 100-unit indexed fan-out had P95 0.618~ms.
 The call plan is six batched fetches per sweep versus $6n$ for a naive
 per-unit adapter. These numbers are consistent with the $O(n)$ call-count
 analysis and validate exact indexed execution over the tested values of $n$;
@@ -494,8 +494,8 @@ projected provisional decisions under the campaign's phase-separated snapshot,
 with zero
 measured API-command error and no false substantive or epistemic result. At
 $n=50$, fetch dominated: P50/P95 total time was
-104.92/115.26~ms, of which the semantic core used 0.324/0.423~ms. The reported
-477 units/s reflects amortization of fixed \texttt{kubectl} startup, not
+108.61/187.75~ms, of which the semantic core used 0.332/0.415~ms. The reported
+461 units/s reflects amortization of fixed \texttt{kubectl} startup, not
 superlinear capacity.
 
 The requested $n=100$ target did not settle within the declared 240-s
@@ -510,55 +510,72 @@ policy, and inventory services are outside this adapter-path measurement.
 
 \subsection{Bounded Cross-Stack Replication}
 To test whether representative evidence paths survive a change of reconciler
-and policy engine, the v1.6 candidate specifies a frozen rerun on a separate
+and policy engine, we executed a frozen campaign on a separate
 Kind~v0.32.0/Kubernetes~v1.36.1 cluster with Argo CD~v3.4.2~\cite{argocd} and
 Gatekeeper~v3.22.2~\cite{gatekeeper}. Tagged upstream manifests are retained
-and verified by SHA-256. Five repetitions each exercise S1 through native
+and verified by SHA-256. Five repetitions each exercised S1 through native
 Argo CD desired/live status, S3 through a fresh Gatekeeper dry-run
 background-audit violation whose controlled Rego message emits the evaluated
 Deployment UID, and S4 through the existing running-digest/approved-digest
 adapter. The policy adapter accepts a polar result only when that engine-emitted
 UID matches the live Deployment UID; absence or mismatch is undecidable. Every
-repetition begins from an exact empty projected baseline after an explicit Argo
+repetition began from an exact empty projected baseline after an explicit Argo
 sync and leaf-by-leaf desired/live comparison. A 0.5-s poll cadence and declared
-readiness/resource stop rules bound the campaign.
+readiness/resource stop rules bounded the campaign.
 
 \begin{table*}[t]
 \centering
-\caption{Bounded Argo CD/Gatekeeper Cross-Stack Replication Protocol. Results
-Remain \texttt{CROSS\_TBD} Until the UID-Emitting Frozen Rerun and Analyzer
-Validation Complete.}
+\caption{Bounded Argo CD/Gatekeeper Cross-Stack Replication. Exact Is the
+Projected Class-Set Count; DDL, First Substantive Alert, and ESC Are Measured
+from Operational Onset to Evaluation Completion, in Seconds.}
 \label{tab:cross-stack}
 \scriptsize
-\begin{tabular}{@{}lllll@{}}
-\toprule
-Slice & Expected projection & Evidence surface & $n$ & Frozen result \\
-\midrule
-S1 & configuration & Argo CD native & 5 & \texttt{CROSS\_TBD} \\
-S3 & policy & Gatekeeper native & 5 & \texttt{CROSS\_TBD} \\
-S4 & authorization & shared artifact adapter & 5 & \texttt{CROSS\_TBD} \\
-\bottomrule
-\end{tabular}
+\resizebox{\textwidth}{!}{\input{lab/results_cross_stack/table_cross_stack}}
 \end{table*}
 
-No numerical result from the superseded run is carried into
-\cref{tab:cross-stack}. Exact projected singleton classifications, DDL to the
-first honest non-consistent or undecidable verdict, exact-classification
-latency, restoration outcomes, residual desired/live differences, API errors,
-stop-rule status, and cleanup remain \texttt{CROSS\_TBD} until the new raw trace
-passes the analyzer. This prevents the earlier API-derived UID join from being
-reported as evidence for the engine-emitted UID protocol.
+All 15 observations reached the exact expected singleton class set over the
+declared evaluated components (\cref{tab:cross-stack}). The timing distinction
+is material. First-honest DDL ends at the earliest completed evaluation that
+is either substantively inconsistent or epistemically \emph{undecidable}; it
+is therefore the earlier available event on two separately retained clocks, not necessarily a
+class-detection time. First epistemic alert is the first completed evaluation
+with an undecidable evaluated component. First substantive alert is the first
+completed evaluation with an inconsistent evaluated component. ESC ends only
+when every declared evaluated component is decidable and the projected class
+set is exactly the expected singleton; it is first completion, not the
+watermark-qualified Stable-VCL of \cref{met:ddl}.
+
+For S1, median first-honest DDL, first substantive alert, and ESC were
+0.207, 0.646, and 1.677~s; all 5 observations produced an epistemic alert,
+with median 0.207~s. For S3, the corresponding medians were 0.157, 1.659,
+and 1.659~s; again, all 5 first-honest verdicts were epistemic, with median
+0.157~s. For S4 they were 0.215, 0.215, and 0.650~s; 3/5 observations also
+produced an epistemic alert, whose reached-sample median was 0.216~s. These
+latencies are reconstructed directly from the explicit onset marker and each
+poll's evaluation-completion timestamp in the append-only raw trace; the
+analyzer requires equality with the observation rows and generated summary.
+
+All 15 baseline restorations reached \texttt{Succeeded}; the leaf-by-leaf
+pinned desired/live comparison found zero post-restoration differences.
+Instrumented reads recorded zero API errors, every final observation had zero
+undecidable evaluated components, and the sustained resource stop rule did not
+trigger. Cleanup evidence records the exact pre-check, cluster-scoped deletion,
+and post-check and verifies that only \texttt{govdrift-cross} was removed.
 
 The inferential boundary is strict. S1 and S3 are native cross-stack
 component-path replications for configuration and policy. S4 reuses the shared
 T3 digest adapter and is not independent Argo CD/Gatekeeper authorization
-validation; intent and environment were not evaluated. Fifteen controlled
-observations, if admitted by the frozen rerun, can support descriptive
-concordance on these three projected singleton slices, not
+validation; intent and environment were not evaluated. For S3, Gatekeeper's
+violation lacked a structural resource-UID field, so the controlled Rego rule
+emitted the evaluated Deployment UID in its message and the adapter accepted a
+polar result only when it matched the live UID. That join covers the one
+Deployment lifetime exercised here; it does not establish continuation-safe
+identity across deletion and recreation. These 15 controlled observations
+support descriptive concordance on three projected singleton slices, not
 equivalence, non-inferiority, natural prevalence, reliability, or production
-latency. The reportable directory must contain the new frozen raw polls,
-installation trace, upstream manifests, source-state hashes, resource samples,
-analyzer outputs, and cleanup proof before these claims are unmarked.
+latency. The frozen raw polls, injection/onset markers, installation trace,
+upstream manifests, source-state hashes, resource samples, analyzer outputs,
+and cleanup proof are retained under \texttt{lab/results\_cross\_stack/}.
 
 \subsection{Evidence Boundary and Refutation Conditions}
 The repeated execution strengthens the earlier one-pass realizability check
@@ -571,9 +588,9 @@ exercises real TCP delivery but deterministic synthetic records; neither it
 nor the cluster campaign estimates production transport reliability, API
 saturation, or stale-cache races. The cluster campaign estimates a
 distribution only for this
-pinned primary laboratory protocol. The pending bounded Argo CD/Gatekeeper
-rerun is designed to cover only native S1 configuration and S3 policy paths;
-general authorization,
+pinned primary laboratory protocol. The bounded Argo CD/Gatekeeper campaign
+covers native S1 configuration and S3 policy paths; S4 remains a shared digest
+adapter rather than an independent authorization replication. General authorization,
 intent, environment, production-backed approval/inventory services, and full
 cross-stack equivalence remain external-validity work rather than claims
 smuggled into this execution.

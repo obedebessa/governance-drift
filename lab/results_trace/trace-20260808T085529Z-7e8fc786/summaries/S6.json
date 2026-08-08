@@ -1,0 +1,202 @@
+{
+  "all_exact": true,
+  "all_stable": true,
+  "cause_started_mono": 2734292.784882208,
+  "cause_started_utc": "2026-08-08T08:57:59.361550+00:00",
+  "distinct_observer_ids": 3,
+  "distinct_pids": 3,
+  "effect_observed_mono": 2734298.34787725,
+  "effect_observed_utc": "2026-08-08T08:58:04.924592+00:00",
+  "expected_class_set": [
+    "authorization",
+    "intent"
+  ],
+  "injection_id": "trace-20260808T085529Z-7e8fc786:S6:7377d144-f142-4c8e-b6b4-3fcbf692f433",
+  "injection_sha256": "2d729f1b09cd7e565ad4682751a7d4640ec680659a3e9eb10f74108af2b564ca",
+  "observer_processes": 3,
+  "scenario": "S6",
+  "scenario_label": "unapproved Git rollback followed by Flux convergence",
+  "schema": "govdrift-trace-scenario-summary/v1",
+  "trajectories": [
+    {
+      "adapter_error_polls": 0,
+      "cadence_seconds": 1.0,
+      "cause_to_first_alert_seconds": 0.4935862082056701,
+      "cause_to_first_exact_seconds": 1.4706835001707077,
+      "cause_to_stable_exact_seconds": 2.4887599172070622,
+      "effect_to_first_exact_seconds": -4.092311542015523,
+      "exact_correct": true,
+      "expected_class_set": [
+        "authorization",
+        "intent"
+      ],
+      "first_alert": {
+        "actual_start_mono": 2734293.059487291,
+        "actual_start_utc": "2026-08-08T08:57:59.636156+00:00",
+        "class_set": [
+          "intent",
+          "evidence"
+        ],
+        "completed_mono": 2734293.278468416,
+        "completed_utc": "2026-08-08T08:57:59.855141+00:00",
+        "poll_sha256": "c7ea6edff60f4c21f000938e657c06e3cbd0f627497b3f5f8afa53717df350d8",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "first_exact": {
+        "actual_start_mono": 2734294.051834625,
+        "actual_start_utc": "2026-08-08T08:58:00.628515+00:00",
+        "class_set": [
+          "authorization",
+          "intent"
+        ],
+        "completed_mono": 2734294.255565708,
+        "completed_utc": "2026-08-08T08:58:00.832247+00:00",
+        "poll_sha256": "fb8fddf4674236517b3c985db2e0042b08b97942b786bedbca3dcdcdaf914272",
+        "sequence": 3,
+        "verdict": "drift"
+      },
+      "observer_id": "be7cf006-655d-400d-90bb-bf9032b13b7a",
+      "pid": 68152,
+      "polls": 21,
+      "post_cause_polls": 20,
+      "pre_cause_polls": 1,
+      "raw_path": "raw/S6/observer-01s.ndjson",
+      "scenario": "S6",
+      "scenario_label": "unapproved Git rollback followed by Flux convergence",
+      "stable_exact": {
+        "actual_start_mono": 2734295.052147958,
+        "actual_start_utc": "2026-08-08T08:58:01.628835+00:00",
+        "class_set": [
+          "authorization",
+          "intent"
+        ],
+        "completed_mono": 2734295.273642125,
+        "completed_utc": "2026-08-08T08:58:01.850335+00:00",
+        "poll_sha256": "fedac653fb1584cc35e43fedf77b17f03230a02a96b719e4a2c62040b11d57e4",
+        "sequence": 4,
+        "verdict": "drift"
+      }
+    },
+    {
+      "adapter_error_polls": 0,
+      "cadence_seconds": 5.0,
+      "cause_to_first_alert_seconds": 4.539520208258182,
+      "cause_to_first_exact_seconds": 4.539520208258182,
+      "cause_to_stable_exact_seconds": 9.547788083087653,
+      "effect_to_first_exact_seconds": -1.0234748339280486,
+      "exact_correct": true,
+      "expected_class_set": [
+        "authorization",
+        "intent"
+      ],
+      "first_alert": {
+        "actual_start_mono": 2734297.05430125,
+        "actual_start_utc": "2026-08-08T08:58:03.631008+00:00",
+        "class_set": [
+          "authorization",
+          "intent"
+        ],
+        "completed_mono": 2734297.324402416,
+        "completed_utc": "2026-08-08T08:58:03.901113+00:00",
+        "poll_sha256": "47f031cb51a047ce3f7e204f5a2735240988f0336c8a074f775ec624690a375b",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "first_exact": {
+        "actual_start_mono": 2734297.05430125,
+        "actual_start_utc": "2026-08-08T08:58:03.631008+00:00",
+        "class_set": [
+          "authorization",
+          "intent"
+        ],
+        "completed_mono": 2734297.324402416,
+        "completed_utc": "2026-08-08T08:58:03.901113+00:00",
+        "poll_sha256": "47f031cb51a047ce3f7e204f5a2735240988f0336c8a074f775ec624690a375b",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "observer_id": "f17378a2-ff31-485c-8547-0840aefa696a",
+      "pid": 68153,
+      "polls": 5,
+      "post_cause_polls": 4,
+      "pre_cause_polls": 1,
+      "raw_path": "raw/S6/observer-05s.ndjson",
+      "scenario": "S6",
+      "scenario_label": "unapproved Git rollback followed by Flux convergence",
+      "stable_exact": {
+        "actual_start_mono": 2734302.057016041,
+        "actual_start_utc": "2026-08-08T08:58:08.633776+00:00",
+        "class_set": [
+          "authorization",
+          "intent"
+        ],
+        "completed_mono": 2734302.332670291,
+        "completed_utc": "2026-08-08T08:58:08.909427+00:00",
+        "poll_sha256": "7ea6f6d6f8981f89fc165698a00385cfd52f6dd5eb4d8be24651971d36670aaa",
+        "sequence": 3,
+        "verdict": "drift"
+      }
+    },
+    {
+      "adapter_error_polls": 0,
+      "cadence_seconds": 10.0,
+      "cause_to_first_alert_seconds": 9.547744458075613,
+      "cause_to_first_exact_seconds": 9.547744458075613,
+      "cause_to_stable_exact_seconds": 19.499972583260387,
+      "effect_to_first_exact_seconds": 3.9847494158893824,
+      "exact_correct": true,
+      "expected_class_set": [
+        "authorization",
+        "intent"
+      ],
+      "first_alert": {
+        "actual_start_mono": 2734302.057043375,
+        "actual_start_utc": "2026-08-08T08:58:08.633798+00:00",
+        "class_set": [
+          "authorization",
+          "intent"
+        ],
+        "completed_mono": 2734302.332626666,
+        "completed_utc": "2026-08-08T08:58:08.909384+00:00",
+        "poll_sha256": "b9b9f6dbbe60a8272579a5483dcaafcf463acd3308bdabc33f31980f69fd363a",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "first_exact": {
+        "actual_start_mono": 2734302.057043375,
+        "actual_start_utc": "2026-08-08T08:58:08.633798+00:00",
+        "class_set": [
+          "authorization",
+          "intent"
+        ],
+        "completed_mono": 2734302.332626666,
+        "completed_utc": "2026-08-08T08:58:08.909384+00:00",
+        "poll_sha256": "b9b9f6dbbe60a8272579a5483dcaafcf463acd3308bdabc33f31980f69fd363a",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "observer_id": "28293017-cebf-4f3d-a044-46e07be9bf69",
+      "pid": 68154,
+      "polls": 3,
+      "post_cause_polls": 2,
+      "pre_cause_polls": 1,
+      "raw_path": "raw/S6/observer-10s.ndjson",
+      "scenario": "S6",
+      "scenario_label": "unapproved Git rollback followed by Flux convergence",
+      "stable_exact": {
+        "actual_start_mono": 2734312.050007833,
+        "actual_start_utc": "2026-08-08T08:58:18.626896+00:00",
+        "class_set": [
+          "authorization",
+          "intent"
+        ],
+        "completed_mono": 2734312.284854791,
+        "completed_utc": "2026-08-08T08:58:18.861706+00:00",
+        "poll_sha256": "7baadb38db6bdfa323efffd0fe45c7308493efb1dd2baec51bd11b2931ff2ba2",
+        "sequence": 3,
+        "verdict": "drift"
+      }
+    }
+  ]
+}

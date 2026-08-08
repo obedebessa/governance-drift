@@ -2,6 +2,10 @@
   "campaign": "controlled localhost TCP evidence transport",
   "scope": "two real TCP hops on 127.0.0.1; deterministic record faults; not production",
   "seed": 20260808,
+  "source_sha256": {
+    "run_fault_experiment.py": "16a202fe1e1aa2cd1379b16e1f33000f448b8463a047ba72f7b11166c3e6219d",
+    "evidence_gateway.py": "5351edd1ee3531db6752a2af32b7be99aa199b38743f2bee02e6212bd5d7e2ea"
+  },
   "subject": "cluster-a/payments/payments#uid-demo-001",
   "streams": [
     "authorization",

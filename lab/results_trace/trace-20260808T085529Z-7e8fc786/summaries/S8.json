@@ -1,0 +1,189 @@
+{
+  "all_exact": true,
+  "all_stable": true,
+  "cause_started_mono": 2734343.616576166,
+  "cause_started_utc": "2026-08-08T08:58:50.193725+00:00",
+  "distinct_observer_ids": 3,
+  "distinct_pids": 3,
+  "effect_observed_mono": 2734343.61705625,
+  "effect_observed_utc": "2026-08-08T08:58:50.194200+00:00",
+  "expected_class_set": [
+    "authorization"
+  ],
+  "injection_id": "trace-20260808T085529Z-7e8fc786:S8:b7b70330-1ebe-4649-b070-c05b66d19218",
+  "injection_sha256": "0e3c6f8d7ba157f5c721096760243fb1680a7c16a9f37384322f5d5fd26caa75",
+  "observer_processes": 3,
+  "scenario": "S8",
+  "scenario_label": "live authorization identity mismatch",
+  "schema": "govdrift-trace-scenario-summary/v1",
+  "trajectories": [
+    {
+      "adapter_error_polls": 0,
+      "cadence_seconds": 1.0,
+      "cause_to_first_alert_seconds": 0.7549060420133173,
+      "cause_to_first_exact_seconds": 0.7549060420133173,
+      "cause_to_stable_exact_seconds": 1.775371250230819,
+      "effect_to_first_exact_seconds": 0.7544259577989578,
+      "exact_correct": true,
+      "expected_class_set": [
+        "authorization"
+      ],
+      "first_alert": {
+        "actual_start_mono": 2734344.150521166,
+        "actual_start_utc": "2026-08-08T08:58:50.727675+00:00",
+        "class_set": [
+          "authorization"
+        ],
+        "completed_mono": 2734344.371482208,
+        "completed_utc": "2026-08-08T08:58:50.948638+00:00",
+        "poll_sha256": "7c3ec572424ddc96234ec828a96ed25da075ac1b820d1dcde1d1bf5170595d48",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "first_exact": {
+        "actual_start_mono": 2734344.150521166,
+        "actual_start_utc": "2026-08-08T08:58:50.727675+00:00",
+        "class_set": [
+          "authorization"
+        ],
+        "completed_mono": 2734344.371482208,
+        "completed_utc": "2026-08-08T08:58:50.948638+00:00",
+        "poll_sha256": "7c3ec572424ddc96234ec828a96ed25da075ac1b820d1dcde1d1bf5170595d48",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "observer_id": "6931df3f-9e5b-4ba8-9b47-e994e0efaba9",
+      "pid": 68944,
+      "polls": 21,
+      "post_cause_polls": 20,
+      "pre_cause_polls": 1,
+      "raw_path": "raw/S8/observer-01s.ndjson",
+      "scenario": "S8",
+      "scenario_label": "live authorization identity mismatch",
+      "stable_exact": {
+        "actual_start_mono": 2734345.147787833,
+        "actual_start_utc": "2026-08-08T08:58:51.724954+00:00",
+        "class_set": [
+          "authorization"
+        ],
+        "completed_mono": 2734345.391947416,
+        "completed_utc": "2026-08-08T08:58:51.969113+00:00",
+        "poll_sha256": "4696d962828d88601e5b2041e7031a5127159e493a9c0e0a21b6bbd8970440ff",
+        "sequence": 3,
+        "verdict": "drift"
+      }
+    },
+    {
+      "adapter_error_polls": 0,
+      "cadence_seconds": 5.0,
+      "cause_to_first_alert_seconds": 4.754514084197581,
+      "cause_to_first_exact_seconds": 4.754514084197581,
+      "cause_to_stable_exact_seconds": 9.76486233389005,
+      "effect_to_first_exact_seconds": 4.754033999983221,
+      "exact_correct": true,
+      "expected_class_set": [
+        "authorization"
+      ],
+      "first_alert": {
+        "actual_start_mono": 2734348.146033041,
+        "actual_start_utc": "2026-08-08T08:58:54.723233+00:00",
+        "class_set": [
+          "authorization"
+        ],
+        "completed_mono": 2734348.37109025,
+        "completed_utc": "2026-08-08T08:58:54.948285+00:00",
+        "poll_sha256": "bb8103bf0fd955af338b8bfc5f470e412f248d918bc43471791c00f7af218869",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "first_exact": {
+        "actual_start_mono": 2734348.146033041,
+        "actual_start_utc": "2026-08-08T08:58:54.723233+00:00",
+        "class_set": [
+          "authorization"
+        ],
+        "completed_mono": 2734348.37109025,
+        "completed_utc": "2026-08-08T08:58:54.948285+00:00",
+        "poll_sha256": "bb8103bf0fd955af338b8bfc5f470e412f248d918bc43471791c00f7af218869",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "observer_id": "a7d643ac-4ac3-47d3-9508-5e454865e810",
+      "pid": 68945,
+      "polls": 5,
+      "post_cause_polls": 4,
+      "pre_cause_polls": 1,
+      "raw_path": "raw/S8/observer-05s.ndjson",
+      "scenario": "S8",
+      "scenario_label": "live authorization identity mismatch",
+      "stable_exact": {
+        "actual_start_mono": 2734353.144097208,
+        "actual_start_utc": "2026-08-08T08:58:59.721340+00:00",
+        "class_set": [
+          "authorization"
+        ],
+        "completed_mono": 2734353.3814385,
+        "completed_utc": "2026-08-08T08:58:59.958680+00:00",
+        "poll_sha256": "4169d39dc7b3f57b8b2e9ba104f9549a7e93672472c4e2d885664b499570a8cb",
+        "sequence": 3,
+        "verdict": "drift"
+      }
+    },
+    {
+      "adapter_error_polls": 0,
+      "cadence_seconds": 10.0,
+      "cause_to_first_alert_seconds": 9.764251166954637,
+      "cause_to_first_exact_seconds": 9.764251166954637,
+      "cause_to_stable_exact_seconds": 19.81145262531936,
+      "effect_to_first_exact_seconds": 9.763771082740277,
+      "exact_correct": true,
+      "expected_class_set": [
+        "authorization"
+      ],
+      "first_alert": {
+        "actual_start_mono": 2734353.147882166,
+        "actual_start_utc": "2026-08-08T08:58:59.725119+00:00",
+        "class_set": [
+          "authorization"
+        ],
+        "completed_mono": 2734353.380827333,
+        "completed_utc": "2026-08-08T08:58:59.958069+00:00",
+        "poll_sha256": "de14550ca7ea262f7b3013e2f428e37d2f72fca07b4627ceafd4f27763392a80",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "first_exact": {
+        "actual_start_mono": 2734353.147882166,
+        "actual_start_utc": "2026-08-08T08:58:59.725119+00:00",
+        "class_set": [
+          "authorization"
+        ],
+        "completed_mono": 2734353.380827333,
+        "completed_utc": "2026-08-08T08:58:59.958069+00:00",
+        "poll_sha256": "de14550ca7ea262f7b3013e2f428e37d2f72fca07b4627ceafd4f27763392a80",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "observer_id": "697e8511-3954-47a3-b2d0-0867443fef3e",
+      "pid": 68946,
+      "polls": 3,
+      "post_cause_polls": 2,
+      "pre_cause_polls": 1,
+      "raw_path": "raw/S8/observer-10s.ndjson",
+      "scenario": "S8",
+      "scenario_label": "live authorization identity mismatch",
+      "stable_exact": {
+        "actual_start_mono": 2734363.149730958,
+        "actual_start_utc": "2026-08-08T08:59:09.727096+00:00",
+        "class_set": [
+          "authorization"
+        ],
+        "completed_mono": 2734363.428028791,
+        "completed_utc": "2026-08-08T08:59:10.005365+00:00",
+        "poll_sha256": "aac3b30e72c28b8de5aa49018e15fa80f9f2bbb1517dc30c96b246d870ffc549",
+        "sequence": 3,
+        "verdict": "drift"
+      }
+    }
+  ]
+}

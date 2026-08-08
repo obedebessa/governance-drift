@@ -2,7 +2,7 @@
 
 This document records the disposition of the external review that rated
 v1.5.0 at 9.5/10. Every completed result below is tied to executable code or
-frozen raw data; explicitly marked pending items are not claimed as results.
+frozen raw data; unsupported components and stopped targets remain explicit.
 Bounded laboratory observations are not presented as field prevalence,
 production reliability, or independent external validation.
 
@@ -10,11 +10,11 @@ production reliability, or independent external validation.
 
 1. **Activation semantics.** Approval and activation are separate durable
    events. The selected admitted basis is the unique maximal activated,
-   non-aborted snapshot under an explicit `Supersedes` relation. Pending and
-   aborted approvals cannot displace the running basis; incomparable active
-   maxima yield `undecidable`. The v1.6/B4 executable ablation probes cover
-   pending, aborted, successor, and parallel activation; they are separate from
-   the frozen primary live campaign.
+   non-aborted snapshot under an explicit `Supersedes` relation.
+   Approved-but-not-activated and aborted snapshots cannot displace the running
+   basis; incomparable active maxima yield `undecidable`. The v1.6/B4 executable
+   ablation probes cover unactivated, aborted, successor, and parallel
+   activation; they are separate from the frozen primary live campaign.
 2. **Coverage terminology.** Substantive plane consistency is
    `GovPlaneCons`, total five-component consistency is `Cons`, and `GCC` is
    reserved for Governance Conformance Coverage.
@@ -55,13 +55,14 @@ production reliability, or independent external validation.
   checks with zero safety or component-local masking failure.
 - **Scaling:** an in-memory batched-join campaign retains 960 path-specific
   timing samples and separates correlated paths. At 1,000 units, full-sweep
-  P50/P95/P99 is 6.048/6.944/7.432 ms; these are core timings, not Kubernetes
+  P50/P95/P99 is 6.067/6.881/6.927 ms; these are core timings, not Kubernetes
   throughput claims.
 - **Live multi-deployment path:** completed 10- and 50-Deployment targets over
   settled churn. The 50-unit phase spans 50–60 Pods and 100–120 containers;
-  1,200/1,200 repeated per-unit and 240/240 nested decisions are exact with
-  zero measured API-command error. The 100-unit target hit its declared
-  readiness stop and contributes no admitted timing sample.
+  across both completed targets, 1,200/1,200 repeated per-unit and 240/240
+  nested decisions are exact with zero measured API-command error. The
+  100-unit target hit its declared readiness stop and contributes no admitted
+  timing sample.
 - **Transition safety:** twenty benign changes observed from before mutation
   produced 777 polls. No policy, authorization, intent, or environment drift
   was emitted; seven
@@ -74,16 +75,21 @@ production reliability, or independent external validation.
 - **Real-process trace replication:** nine injected scenario episodes were
   observed by three separate 1/5/10-second processes each. All 27 correlated
   trajectories reached the exact expected set and two-poll exact persistence
-  across 261 raw polls, with zero adapter error; 133 manifest entries and
-  cleanup are verified. The two-poll check is not watermark-qualified
-  persistence. This
+  across 261 raw polls, with zero adapter error. Cause-to-first-exact
+  median/P95 is 4.465/9.764 seconds, and two-poll exact-persistence median/P95
+  is 9.522/19.811 seconds; 133 manifest entries and cleanup are verified. The
+  two-poll check is not watermark-qualified persistence. This
   is a bounded trace audit, not 27 independent experiments or a rate estimate.
 - **Second reconciler/policy-engine stack:** the isolated Argo CD
-  v3.4.2/Gatekeeper v3.22.2 rerun will report exact projected singleton
-  classifications only over declared evaluated components for S1, S3, and S4.
-  Its UID-emitting frozen results remain **CROSS_TBD** and are not claimed here.
-  Only S1 configuration and S3 policy are native cross-stack component paths;
-  S4 reuses the shared T3 digest adapter, and intent and environment remain
+  v3.4.2/Gatekeeper v3.22.2 campaign completed five repetitions each of S1,
+  S3, and S4. All 15/15 projected singleton classifications are exact over the
+  declared evaluated components. Median first-honest/first-substantive/ESC
+  latencies are 0.207/0.646/1.677 seconds for S1, 0.157/1.659/1.659 for S3,
+  and 0.215/0.215/0.650 for S4. All 15 baseline restorations succeeded, with
+  zero post-restoration differences, API-read errors, or final undecidable
+  outcomes; the stop rule was not triggered and cleanup was verified. Only S1
+  configuration and S3 policy are native cross-stack component paths; S4
+  reuses the shared T3 digest adapter, and intent and environment remain
   unevaluated. No equivalence or independent-validation claim is made.
 
 ## Remaining boundaries stated rather than hidden

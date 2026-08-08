@@ -1,0 +1,9 @@
+{
+  "completed_utc": "2026-08-08T08:59:49.606107+00:00",
+  "container": "govdrift-trace-git",
+  "container_absent": true,
+  "errors": [],
+  "namespace": "govdrift-trace",
+  "namespace_absent": true,
+  "temporary_runtime_removed": true
+}

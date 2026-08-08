@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import math
 import statistics
@@ -74,6 +75,16 @@ def validate(payload: dict[str, Any], results: Path) -> None:
     for excluded in ("No Kubernetes", "network", "serialization"):
         if excluded not in scope:
             raise SystemExit(f"measurement boundary omits {excluded!r}")
+    expected_sources = {
+        "run_scaling_experiment.py": hashlib.sha256(
+            (ROOT / "lab/run_scaling_experiment.py").read_bytes()
+        ).hexdigest(),
+        "batch_evaluator.py": hashlib.sha256(
+            (ROOT / "lab/batch_evaluator.py").read_bytes()
+        ).hexdigest(),
+    }
+    if payload.get("source_sha256") != expected_sources:
+        raise SystemExit("scaling campaign source hashes do not match the frozen implementation")
     records = payload.get("records", [])
     expected = len(payload["sizes"]) * int(payload["repetitions"]) * len(BENCHMARKS)
     if len(records) != expected:

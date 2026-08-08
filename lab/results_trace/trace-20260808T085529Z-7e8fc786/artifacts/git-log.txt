@@ -1,0 +1,22 @@
+commit e70b66c648ff83eee791e3f5487c9ba11a7d66af (HEAD, origin/master, master)
+Author:     Governance Drift Trace Lab <trace@example.invalid>
+AuthorDate: Sat Aug 8 04:55:30 2026 -0400
+Commit:     Governance Drift Trace Lab <trace@example.invalid>
+CommitDate: Sat Aug 8 04:55:30 2026 -0400
+
+    trace baseline: approved state
+
+ workload/deployment.json | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit 0d57cd910d0652b71347ac4d32e620f724339435
+Author:     Governance Drift Trace Lab <trace@example.invalid>
+AuthorDate: Sat Aug 8 04:55:30 2026 -0400
+Commit:     Governance Drift Trace Lab <trace@example.invalid>
+CommitDate: Sat Aug 8 04:55:30 2026 -0400
+
+    trace predecessor: unapproved rollback target
+
+ workload/deployment.json    | 53 +++++++++++++++++++++++++++++++++++++++++++++
+ workload/kustomization.yaml |  2 ++
+ 2 files changed, 55 insertions(+)

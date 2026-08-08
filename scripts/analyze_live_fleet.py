@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import math
 import statistics
@@ -54,6 +55,16 @@ def validate(payload: dict[str, Any], results: Path) -> None:
     for phrase in ("one Deployment LIST", "one Pod LIST", "not a Flux/Kyverno"):
         if phrase not in scope:
             raise SystemExit(f"measurement boundary omits {phrase!r}")
+    expected_sources = {
+        "run_live_fleet_experiment.py": hashlib.sha256(
+            (ROOT / "lab/run_live_fleet_experiment.py").read_bytes()
+        ).hexdigest(),
+        "batch_evaluator.py": hashlib.sha256(
+            (ROOT / "lab/batch_evaluator.py").read_bytes()
+        ).hexdigest(),
+    }
+    if payload.get("source_sha256") != expected_sources:
+        raise SystemExit("live-fleet campaign source hashes do not match the frozen implementation")
     rows = payload.get("rows", [])
     completed = [int(value) for value in payload.get("completed_sizes", [])]
     expected_sweeps = int(payload["sweeps_per_completed_size"])

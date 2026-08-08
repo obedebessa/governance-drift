@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import statistics
 from collections import defaultdict
@@ -78,6 +79,18 @@ def main() -> int:
     metadata = json.loads((args.results / "campaign_metadata.json").read_text())
     records = load_records(args.results / "fault_events.ndjson")
     require("not production" in metadata.get("scope", ""), "scope must reject production inference")
+    expected_sources = {
+        "run_fault_experiment.py": hashlib.sha256(
+            (ROOT / "lab/run_fault_experiment.py").read_bytes()
+        ).hexdigest(),
+        "evidence_gateway.py": hashlib.sha256(
+            (ROOT / "lab/evidence_gateway.py").read_bytes()
+        ).hexdigest(),
+    }
+    require(
+        metadata.get("source_sha256") == expected_sources,
+        "campaign source hashes do not match the current frozen implementation",
+    )
     require(tuple(metadata.get("profiles", [])) == EXPECTED_PROFILES, "profile set/order changed")
 
     by_profile: dict[str, list[dict[str, Any]]] = defaultdict(list)

@@ -21,8 +21,10 @@ candidate adds activation-safe basis selection, admissible temporal cuts, a B0--
 ablation ladder, transition-inclusive controls, real-process trace auditing,
 a two-hop TCP fault campaign, in-memory scaling, and a live multi-Deployment
 adapter path, plus a bounded Argo CD/Gatekeeper cross-stack replication. The
-candidate is not yet a tagged or archived release; release metadata remains
-provisional until results are frozen and the aggregate verifier passes.
+candidate results are frozen, but this remains an unpublished prerelease: no
+tag or public v1.6.0 archive is claimed until the PDF, source package, and
+release hashes pass final verification and the reserved Zenodo record is
+published.
 
 ## Evidence boundary
 
@@ -44,17 +46,25 @@ configuration-convergence polls, 36 fail-safe epistemic warning polls, and
 60/60 trajectories ending with a provisionally consistent classification. A separate trace audit injected nine
 episodes and used three isolated observer processes per episode: all 27
 correlated trajectories reached the exact expected class set and two-poll
-exact persistence across 261 raw polls, with
-zero adapter error. A live fleet path completed 10- and 50-Deployment targets;
-at the larger size it spanned 50--60 Pods and 100--120 containers and retained
-1,200/1,200 exact per-unit plus 240/240 exact nested decisions. The
+exact persistence across 261 raw polls, with zero adapter error. Cause-to-first
+exact latency had median/P95 4.465/9.764 seconds; the corresponding two-poll
+exact-persistence latency was 9.522/19.811 seconds. The latter is not
+watermark-qualified persistence. A live fleet path completed 10- and
+50-Deployment targets; across those completed targets it retained 1,200/1,200
+exact per-unit and 240/240 exact nested decisions. At 50 Deployments it spanned
+50--60 Pods and 100--120 containers. The
 100-Deployment target hit a declared readiness stop and contributes no
-timing sample. On a separate Kind cluster, the pending frozen rerun specifies
-five repetitions each of S1, S3, and S4 and will report projected singleton
-classifications only over the declared evaluated components. Argo CD and
-Gatekeeper provide the native configuration and policy paths; authorization
+timing sample. On a separate Kind cluster, the frozen Argo CD/Gatekeeper
+campaign completed five repetitions each of S1, S3, and S4: all 15/15 projected
+singleton classifications were exact over the declared evaluated components.
+Median first-honest/first-substantive/exact-set-completion latencies were
+0.207/0.646/1.677 seconds for S1, 0.157/1.659/1.659 for S3, and
+0.215/0.215/0.650 for S4. All 15 baseline restorations succeeded, with zero
+post-restoration differences, API-read errors, or final undecidable outcomes;
+the stop rule was not triggered and cleanup was verified. Argo CD and
+Gatekeeper provide the native configuration and policy paths; S4 authorization
 reuses the shared digest adapter, while intent and environment are not
-evaluated. Cross-stack counts and latencies remain **CROSS_TBD**. The completed data
+evaluated. The completed data
 demonstrate bounded realizability and within-laboratory behavior—not natural
 occurrence, field prevalence, production reliability, or universal
 false-alarm and latency distributions.
@@ -149,15 +159,18 @@ tectonic -X compile main.tex
 ## Citation and release
 
 Candidate citation metadata is provided in `CITATION.cff`; draft Zenodo deposit
-metadata is in `.zenodo.json`. The current v1.6.0 candidate has no release tag
-or version DOI. Version 1.0.0 remains permanently archived at
+metadata is in `.zenodo.json`. The frozen v1.6.0 candidate has no release tag
+or public version DOI. Zenodo has reserved `10.5281/zenodo.21847543` for this
+version, but that identifier is not yet a public or citable record. Version
+1.0.0 remains permanently archived at
 <https://doi.org/10.5281/zenodo.21841459>; version 1.1.0 is archived at
 <https://doi.org/10.5281/zenodo.21842722>; version 1.2.0 is archived at
 <https://doi.org/10.5281/zenodo.21843860>. The concept DOI
 <https://doi.org/10.5281/zenodo.21841458> resolves to the latest version.
 Version 1.5.0 is archived at <https://doi.org/10.5281/zenodo.21845707>. The
-v1.6.0 tag and Zenodo record will be added only after the candidate results,
-PDF, source package, and release hashes are frozen and verified.
+v1.6.0 tag and Zenodo record will be claimed only after the PDF, source
+package, and release hashes are frozen and verified and the deposit is
+published.
 
 ## License
 

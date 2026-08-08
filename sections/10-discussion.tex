@@ -37,11 +37,14 @@ into a false ``consistent'' state.
 \subsection{Limitations}
 \emph{The approved-state prerequisite.} Everything downstream of
 \cref{sec:architecture} assumes an admitted basis $B_x(t)$ was recorded durably; where it was
-not, only basis-dependent components and the total governance verdict degrade
-to undecidable. Configuration remains comparable when its desired/observed
-evidence is available, but it cannot support a total governance-conformance
-claim; the honest headline is component coverage and GCC, not a total drift
-rate. This is a real adoption constraint, not a footnote: estates without
+not, the basis-dependent components are undecidable and total consistency
+cannot be established. If no other component is known nonzero, total status is
+undecidable; if configuration or another independently established component
+is known nonzero, total status is inconsistent because known inconsistency
+precedes unknown evidence. Configuration remains comparable when its
+desired/observed evidence is available, but a clean configuration component
+cannot support a total governance-conformance claim; the honest headline is
+component coverage and GCC, not a total drift rate. This is a real adoption constraint, not a footnote: estates without
 durable approval evidence cannot measure their basis-dependent governance
 relations, and discovering that is arguably the measurement's first value.
 \emph{Bounded live empirics.} The laboratory executed 20 repetitions of each
@@ -55,12 +58,12 @@ epistemic alarm. A transition-inclusive rerun adds 777 per-poll observations:
 zero policy, authorization, intent, or environment drift; seven expected configuration-convergence
 polls, and 36 fail-safe evidence-warning polls; all 60 window--cadence
 trajectories ended with a provisionally consistent classification.
-The pending Argo CD/Gatekeeper rerun will report projected singleton
-classifications only over the declared evaluated components for S1, S3, and
-S4: configuration and policy use native second-stack surfaces; S4 retains the
-shared digest adapter, and intent and environment are unevaluated. Its frozen
-counts remain \texttt{CROSS\_TBD} and do not contribute to the completed-result
-claims. The completed campaigns demonstrate
+The bounded Argo CD/Gatekeeper replication produced 15/15 exact projected
+singleton classifications over the declared evaluated components for S1, S3,
+and S4. Configuration and policy used native second-stack surfaces; S4 retained
+the shared digest adapter, and intent and environment were unevaluated. It is
+therefore neither complete-vector validation nor a cross-stack equivalence or
+independent authorization-validation result. The completed campaigns demonstrate
 bounded realizability and within-laboratory behavior under their reported
 conditions. They do not
 establish natural occurrence, field prevalence, production reliability,

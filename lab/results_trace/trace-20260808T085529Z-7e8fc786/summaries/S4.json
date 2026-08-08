@@ -1,0 +1,189 @@
+{
+  "all_exact": true,
+  "all_stable": true,
+  "cause_started_mono": 2734247.910105333,
+  "cause_started_utc": "2026-08-08T08:57:14.486347+00:00",
+  "distinct_observer_ids": 3,
+  "distinct_pids": 3,
+  "effect_observed_mono": 2734248.624059791,
+  "effect_observed_utc": "2026-08-08T08:57:15.200304+00:00",
+  "expected_class_set": [
+    "authorization"
+  ],
+  "injection_id": "trace-20260808T085529Z-7e8fc786:S4:d7795b34-8f3b-4700-a574-cee92f2f0ac0",
+  "injection_sha256": "4f75da792ee6f8797404cd90dc04bb943e0b71868de21c0bcd02cc8d9a6dd00d",
+  "observer_processes": 3,
+  "scenario": "S4",
+  "scenario_label": "admission-time artifact substitution",
+  "schema": "govdrift-trace-scenario-summary/v1",
+  "trajectories": [
+    {
+      "adapter_error_polls": 0,
+      "cadence_seconds": 1.0,
+      "cause_to_first_alert_seconds": 0.6753414575941861,
+      "cause_to_first_exact_seconds": 1.70191245758906,
+      "cause_to_stable_exact_seconds": 2.6909422078169882,
+      "effect_to_first_exact_seconds": 0.9879579995758832,
+      "exact_correct": true,
+      "expected_class_set": [
+        "authorization"
+      ],
+      "first_alert": {
+        "actual_start_mono": 2734248.383278083,
+        "actual_start_utc": "2026-08-08T08:57:14.959530+00:00",
+        "class_set": [
+          "evidence"
+        ],
+        "completed_mono": 2734248.585446791,
+        "completed_utc": "2026-08-08T08:57:15.161696+00:00",
+        "poll_sha256": "18bea3e4f86438171259fb1470c060cbb3b4100273fe45b7fe37915a3ba80acf",
+        "sequence": 3,
+        "verdict": "undecidable"
+      },
+      "first_exact": {
+        "actual_start_mono": 2734249.37999125,
+        "actual_start_utc": "2026-08-08T08:57:15.956249+00:00",
+        "class_set": [
+          "authorization"
+        ],
+        "completed_mono": 2734249.612017791,
+        "completed_utc": "2026-08-08T08:57:16.188277+00:00",
+        "poll_sha256": "2e031dc47db3db85f7e222de7eb83e73d7c6206c4c5b6085c60568388d104f6a",
+        "sequence": 4,
+        "verdict": "drift"
+      },
+      "observer_id": "da5e6545-049a-4ca6-b643-6693a38386e5",
+      "pid": 67382,
+      "polls": 21,
+      "post_cause_polls": 19,
+      "pre_cause_polls": 2,
+      "raw_path": "raw/S4/observer-01s.ndjson",
+      "scenario": "S4",
+      "scenario_label": "admission-time artifact substitution",
+      "stable_exact": {
+        "actual_start_mono": 2734250.385598916,
+        "actual_start_utc": "2026-08-08T08:57:16.961862+00:00",
+        "class_set": [
+          "authorization"
+        ],
+        "completed_mono": 2734250.601047541,
+        "completed_utc": "2026-08-08T08:57:17.177314+00:00",
+        "poll_sha256": "bc6e5768c6d5ce668271b52688881341940949b76990e8daa66834cc7439a4aa",
+        "sequence": 5,
+        "verdict": "drift"
+      }
+    },
+    {
+      "adapter_error_polls": 0,
+      "cadence_seconds": 5.0,
+      "cause_to_first_alert_seconds": 3.7428575418889523,
+      "cause_to_first_exact_seconds": 3.7428575418889523,
+      "cause_to_stable_exact_seconds": 8.734106166753918,
+      "effect_to_first_exact_seconds": 3.0289030838757753,
+      "exact_correct": true,
+      "expected_class_set": [
+        "authorization"
+      ],
+      "first_alert": {
+        "actual_start_mono": 2734251.378989416,
+        "actual_start_utc": "2026-08-08T08:57:17.955279+00:00",
+        "class_set": [
+          "authorization"
+        ],
+        "completed_mono": 2734251.652962875,
+        "completed_utc": "2026-08-08T08:57:18.229244+00:00",
+        "poll_sha256": "8abab17ac284baead8ef0ab9c8d9bfd5adfcdd247657a540e3ceb6a506a1fe79",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "first_exact": {
+        "actual_start_mono": 2734251.378989416,
+        "actual_start_utc": "2026-08-08T08:57:17.955279+00:00",
+        "class_set": [
+          "authorization"
+        ],
+        "completed_mono": 2734251.652962875,
+        "completed_utc": "2026-08-08T08:57:18.229244+00:00",
+        "poll_sha256": "8abab17ac284baead8ef0ab9c8d9bfd5adfcdd247657a540e3ceb6a506a1fe79",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "observer_id": "e2db24ed-a78c-48d8-9830-669f2b887103",
+      "pid": 67383,
+      "polls": 5,
+      "post_cause_polls": 4,
+      "pre_cause_polls": 1,
+      "raw_path": "raw/S4/observer-05s.ndjson",
+      "scenario": "S4",
+      "scenario_label": "admission-time artifact substitution",
+      "stable_exact": {
+        "actual_start_mono": 2734256.384533291,
+        "actual_start_utc": "2026-08-08T08:57:22.960854+00:00",
+        "class_set": [
+          "authorization"
+        ],
+        "completed_mono": 2734256.6442115,
+        "completed_utc": "2026-08-08T08:57:23.220542+00:00",
+        "poll_sha256": "1a3d8db6deee2616d6de96de572295efa413e1a102998bbaf51993749bf1af79",
+        "sequence": 3,
+        "verdict": "drift"
+      }
+    },
+    {
+      "adapter_error_polls": 0,
+      "cadence_seconds": 10.0,
+      "cause_to_first_alert_seconds": 8.734104041941464,
+      "cause_to_first_exact_seconds": 8.734104041941464,
+      "cause_to_stable_exact_seconds": 18.778162207920104,
+      "effect_to_first_exact_seconds": 8.020149583928287,
+      "exact_correct": true,
+      "expected_class_set": [
+        "authorization"
+      ],
+      "first_alert": {
+        "actual_start_mono": 2734256.383185625,
+        "actual_start_utc": "2026-08-08T08:57:22.959511+00:00",
+        "class_set": [
+          "authorization"
+        ],
+        "completed_mono": 2734256.644209375,
+        "completed_utc": "2026-08-08T08:57:23.220538+00:00",
+        "poll_sha256": "0f62f51f1c7462d892444403748831ebfbd680498f111db8db1885e689b9141e",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "first_exact": {
+        "actual_start_mono": 2734256.383185625,
+        "actual_start_utc": "2026-08-08T08:57:22.959511+00:00",
+        "class_set": [
+          "authorization"
+        ],
+        "completed_mono": 2734256.644209375,
+        "completed_utc": "2026-08-08T08:57:23.220538+00:00",
+        "poll_sha256": "0f62f51f1c7462d892444403748831ebfbd680498f111db8db1885e689b9141e",
+        "sequence": 2,
+        "verdict": "drift"
+      },
+      "observer_id": "e6e3f808-3d07-4d84-9b64-3b8df87c4722",
+      "pid": 67384,
+      "polls": 3,
+      "post_cause_polls": 2,
+      "pre_cause_polls": 1,
+      "raw_path": "raw/S4/observer-10s.ndjson",
+      "scenario": "S4",
+      "scenario_label": "admission-time artifact substitution",
+      "stable_exact": {
+        "actual_start_mono": 2734266.379815041,
+        "actual_start_utc": "2026-08-08T08:57:32.956244+00:00",
+        "class_set": [
+          "authorization"
+        ],
+        "completed_mono": 2734266.688267541,
+        "completed_utc": "2026-08-08T08:57:33.264694+00:00",
+        "poll_sha256": "084c595b1d28aaf2d0e3edc88a77512379f30bdeec3c2e999aef8da97d87458a",
+        "sequence": 3,
+        "verdict": "drift"
+      }
+    }
+  ]
+}
