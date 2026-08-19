@@ -24,6 +24,37 @@ adapter path, plus a bounded Argo CD/Gatekeeper cross-stack replication. The
 release results, source, manuscript, and integrity metadata are frozen under
 tag `v1.6.0` and archived at <https://doi.org/10.5281/zenodo.21847543>.
 
+## Read and cite the paper
+
+- [Read the manuscript (PDF)](output/pdf/governance-drift-v1.6.0.pdf)
+- [Open the permanent Zenodo record](https://doi.org/10.5281/zenodo.21847543)
+- Use GitHub's **Cite this repository** control for automatically generated
+  citation formats. The preferred citation in `CITATION.cff` points to the
+  manuscript; cite the software package separately only when referring to its
+  code, data, or reproducibility materials.
+
+**APA**
+
+> Bessa Rocha da Silva, O. (2026). *Governance Drift: Measuring Divergence
+> Between Approved Intent and Operational Reality in Cloud-Native Systems*
+> (Version 1.6.0) [Preprint]. Zenodo.
+> https://doi.org/10.5281/zenodo.21847543
+
+**BibTeX**
+
+```bibtex
+@techreport{bessa_rocha_da_silva_governance_drift_2026,
+  author  = {Obede Bessa Rocha da Silva},
+  title   = {Governance Drift: Measuring Divergence Between Approved Intent and Operational Reality in Cloud-Native Systems},
+  year    = {2026},
+  month   = aug,
+  version = {1.6.0},
+  doi     = {10.5281/zenodo.21847543},
+  url     = {https://doi.org/10.5281/zenodo.21847543},
+  note    = {Preprint}
+}
+```
+
 ## Evidence boundary
 
 The closed-world study validates detector semantics and evidence-tier
