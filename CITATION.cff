@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use this artifact, cite the archived Governance Drift v1.6.0 release."
+message: "If you use the research findings, cite the manuscript below; cite this software record when referring specifically to the reproducibility package."
 type: software
 title: "Governance Drift: Reproducibility Package"
 version: 1.6.0
@@ -8,6 +8,7 @@ date-released: 2026-08-08
 authors:
   - family-names: "Bessa Rocha da Silva"
     given-names: "Obede"
+    orcid: "https://orcid.org/0009-0001-0787-5710"
     affiliation: "Independent Researcher, Clermont, Florida, United States"
 license: MIT
 repository-code: "https://github.com/obedebessa/governance-drift"
@@ -32,3 +33,15 @@ keywords:
   - "GitOps"
   - "cloud governance"
   - "reproducibility"
+preferred-citation:
+  type: report
+  title: "Governance Drift: Measuring Divergence Between Approved Intent and Operational Reality in Cloud-Native Systems"
+  authors:
+    - family-names: "Bessa Rocha da Silva"
+      given-names: "Obede"
+      orcid: "https://orcid.org/0009-0001-0787-5710"
+  year: 2026
+  month: 8
+  version: "1.6.0"
+  doi: "10.5281/zenodo.21847543"
+  url: "https://doi.org/10.5281/zenodo.21847543"
